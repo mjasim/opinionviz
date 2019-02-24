@@ -1,0 +1,72 @@
+body {
+    margin: 0;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.parentDiv{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    background-color: #DAF7A6;
+}
+
+.emotion{
+    display: flex;
+    width: 10vh;
+    height: 5vh;
+    border:1px;
+    justify-content: center;
+    align-items: center;
+	background-color: brown
+}
+
+.sentiment{
+    width: 80vh;
+    height: 30vh;
+    background-color: brown;
+}
+
+.subjectivity{
+    width: 80vh;
+	height: 30vh;
+}
+
+.popularity{
+    width: 80vh;
+	height: 30vh;
+}
+
+.profanity{
+    width: 80vh;
+	height: 30vh;
+}
+
+.comments{
+    width: 80vh;
+    height: 30vh;
+    overflow: scroll;
+}
+
+.box{
+    width:500px;
+    height:100px;
+    border:1px solid #000;
+}
+
+.bar { fill: steelblue; }
+
+.bars{
+    background-color: brown;
+}
+
+.axis path{
+    fill: none;
+    shape-rendering: crispEdges;
+}
