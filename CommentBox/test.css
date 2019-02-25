@@ -1,0 +1,44 @@
+body {
+    margin: 0;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.parentDiv{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+}
+
+.comments{
+    width: 80vh;
+    height: 30vh;
+    overflow: scroll;
+}
+
+.box{
+    width: 80vh;
+    height: 30vh;
+    overflow: scroll;
+}
+
+.ideaDiv{
+    color:blue;
+    margin: 0 auto;
+}
+
+.taskDiv{
+    color:green;
+    margin: 0 auto;
+}
+
+.commentDiv{
+    color:black;
+    margin-left: 20px
+}
