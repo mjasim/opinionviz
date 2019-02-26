@@ -1,20 +1,31 @@
-// var sentiment = [{}];
-
-// d3.json("communitycrit.json", function (err, json) {
-//   console.log(json)
-//   for (var i in json["ideas"]) {
-//       comments.innerText = comments.innerText + "Proposal: " + json.ideas[i].id + " " + json.ideas[i].name + "\n"
-//       for (var j in json.ideas[i].tasks){
-//           comments.innerText = comments.innerText + "Task: " + json.ideas[i].tasks[j].id + " " + json.ideas[i].tasks[j].name + "\n"
-//           for (var k in json.ideas[i].tasks[j].comments){
-//               comments.innerText = comments.innerText + "\xa0\xa0\xa0\xa0\xa0\xa0" + json.ideas[i].tasks[j].comments[k].comment + "\n\n"
-//           }
-//       }
-//   }
-// });
-
+// Read json file and create commentBox
 d3.json("communitycrit.json", function (err, json) {
-  console.log(json)
+  //console.log(json)
+
+  //fetch proposal_names (row-wise)
+  var proposal_names = get_proposal_names(json)
+  console.log(proposal_names)
+
+  //fetch proposal-wise information (row-wise)
+  var proposal_wise_sentiment_agg = get_proposal_wise_sentiment(json)
+  var proposal_wise_emotion_agg = get_proposal_wise_emotion(json)
+  var proposal_wise_subjectivity_agg = get_proposal_wise_subjectivity(json)
+  var proposal_wise_profanity_agg = get_proposal_wise_profanity(json)
+  //console.log(proposal_wise_sentiment_agg)
+  //console.log(proposal_wise_emotion_agg)
+  //console.log(proposal_wise_subjectivity_agg)
+  //console.log(proposal_wise_profanity_agg)
+
+  // fetch all-proposal information (column-wise)
+  var all_proposal_sentiment_agg = get_all_proposal_sentiment(json)
+  var all_proposal_emotion_agg = get_all_proposal_emotion(json)
+  var all_proposal_subjectivity_agg = get_all_proposal_subjectivity(json)
+  var all_proposal_profanity_agg = get_all_proposal_profanity(json)
+  //console.log(all_proposal_sentiment_agg)
+  //console.log(all_proposal_emotion_agg)
+  //console.log(all_proposal_subjectivity_agg)
+  //console.log(all_proposal_profanity_agg)
+
   var divIdea = []
   var divTask = []
   var divComment = []
@@ -47,22 +58,3 @@ d3.json("communitycrit.json", function (err, json) {
   }
 });
 
-
-//     console.log(json[i].emotion)
-//     if(json[i].sentiment_final == "neutral"){
-//       neutral++;
-//     }
-//     else if(json[i].sentiment_final == "negative"){
-//       negative++;
-//     }
-//     else if(json[i].sentiment_final == "positive"){
-//       positive++;
-//     }
-//   }
-
-//   sentiment['State'] = "sentiment"
-//   sentiment['negative'] = negative
-//   sentiment['neutral'] = neutral
-//   sentiment['positive'] = positive
-//   sentiment['columns'] = ["State", "negative", "neutral", "positive"]
-// });
