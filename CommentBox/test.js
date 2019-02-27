@@ -7,9 +7,13 @@ var filterobj = {
   task_id: null
 }
 
+var data;
+
 // Read json file and create commentBox
 d3.json("communitycrit.json", function (err, json) {
   //console.log(json)
+
+  this.data = json
 
   //------------------- Overview ---------------------//
 
@@ -46,31 +50,32 @@ d3.json("communitycrit.json", function (err, json) {
   //console.log(json)
 
   // fetch filtered comments
-   filterobj.emotion = "Excited"
-   filterobj.sentiment_final = "neutral"
-   filterobj.subjectivity = "Fact"
-   filterobj.idea_id = null
-   filterobj.task_id = null
-   
+  filterobj.emotion = "Excited"
+  filterobj.sentiment_final = "neutral"
+  filterobj.subjectivity = "Fact"
+  filterobj.idea_id = null
+  filterobj.task_id = null
+
   // console.log(json)
 
   // var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
   // console.log(json)
   // console.log(filtered_comment)
   // draw filtered comments
-  
+
   //  draw_filtered_comments(filtered_comment)
 
   // highlight filtered comments
   // CSS
-  
+
   // -------------------- Revision ----------------------//
 
   //console.log(json)
-  
+
   var revision_item_id = 1
-  var issue_revision = save_issue(revision_item_id, json)
-  var criteria_revision = save_criteria(revision_item_id, json)
+  // issue_revision = save_issue(revision_item_id, json)
+  // criteria_revision = save_criteria(revision_item_id, json)
+
 });
 
 // function myFunction(){
@@ -78,3 +83,8 @@ d3.json("communitycrit.json", function (err, json) {
 //   draw_proposal_wise_comments(json, idea_id)
 // }
 
+setTimeout(function f(){
+  //do what you need here
+  save_note(JSON.parse(JSON.stringify(data)))
+  //console.log(data)
+}, 1000);
