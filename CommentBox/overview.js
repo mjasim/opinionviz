@@ -1,10 +1,11 @@
 // Get proposal names
 function get_proposal_names(json){
     var proposal_names = []
+    //console.log(json)
     for (var i in json["ideas"]){
         proposal_names.push({
-            idea_id = json.ideas[i].id,
-            idea_name = json.ideas[i].name
+            idea_id: json.ideas[i].id,
+            idea_name: json.ideas[i].name
         })
     }
     return proposal_names;
@@ -197,7 +198,6 @@ function get_all_proposal_profanity(json) {
     var proposal_profanity_agg = []
     var proposal_wise_profanity_agg = get_proposal_wise_profanity(json)
     profanity_dist = []
-    //console.log(proposal_wise_sentiment_agg)
     for (var i in proposal_wise_profanity_agg){
         profanity_dist = profanity_dist.concat(proposal_wise_profanity_agg[i].profanity_distribution)
     }

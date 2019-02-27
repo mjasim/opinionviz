@@ -1,12 +1,23 @@
+// Global object for filteting 
+var filterobj = {
+  emotion: null,
+  sentiment_final: null,
+  subjectivity: null,
+  idea_id: null,
+  task_id: null
+}
+
 // Read json file and create commentBox
 d3.json("communitycrit.json", function (err, json) {
   //console.log(json)
 
-  //fetch proposal_names (row-wise)
-  var proposal_names = get_proposal_names(json)
-  console.log(proposal_names)
+  //------------------- Overview ---------------------//
 
-  //fetch proposal-wise information (row-wise)
+  // fetch proposal_names (row-wise)
+  var proposal_names = get_proposal_names(json)
+  //console.log(proposal_names)
+
+  // fetch proposal-wise information (row-wise)
   var proposal_wise_sentiment_agg = get_proposal_wise_sentiment(json)
   var proposal_wise_emotion_agg = get_proposal_wise_emotion(json)
   var proposal_wise_subjectivity_agg = get_proposal_wise_subjectivity(json)
@@ -26,35 +37,43 @@ d3.json("communitycrit.json", function (err, json) {
   //console.log(all_proposal_subjectivity_agg)
   //console.log(all_proposal_profanity_agg)
 
-  var divIdea = []
-  var divTask = []
-  var divComment = []
-  for (var i in json["ideas"]) {
-    divIdea[i] = document.createElement("div")
-    divIdea[i].className = "ideaDiv"
-    divIdea[i].id = "ideaDivId-" + json.ideas[i].id
-    var node = document.createTextNode(json.ideas[i].name)
-    divIdea[i].appendChild(node)
-    var element = document.getElementById("parentBox")
-    element.appendChild(divIdea[i])
-    for (var j in json.ideas[i].tasks) {
-      divTask[j] = document.createElement("div")
-      divTask[j].className = "taskDiv"
-      divTask[j].id = "taskDivId-" + json.ideas[i].id + "-" + json.ideas[i].tasks[j].id
-      var node = document.createTextNode(json.ideas[i].tasks[j].name)
-      divTask[j].appendChild(node)
-      var element = document.getElementById(divIdea[i].id)
-      element.appendChild(divTask[j])
-      for (var k in json.ideas[i].tasks[j].comments) {
-        divComment[k] = document.createElement("div")
-        divComment[k].className = "commentDiv"
-        divComment[k].id = "commentDivId-" + json.ideas[i].id + "-" + json.ideas[i].tasks[j].id + " " + json.ideas[i].tasks[j].comments[k].comment_id
-        var node = document.createTextNode(json.ideas[i].tasks[j].comments[k].comment)
-        divComment[k].appendChild(node)
-        var element = document.getElementById(divTask[j].id)
-        element.appendChild(divComment[k])
-      }
-    }
-  }
+  //------------------- Proposal View -----------------//
+
+  // // draw proposal wise comments
+  // var idea_id = prompt("Please enter idea_id");  
+  //var idea_id = 0
+  //draw_proposal_wise_comments(json, idea_id)
+  //console.log(json)
+
+  // fetch filtered comments
+   filterobj.emotion = "Excited"
+   filterobj.sentiment_final = "neutral"
+   filterobj.subjectivity = "Fact"
+   filterobj.idea_id = null
+   filterobj.task_id = null
+   
+  // console.log(json)
+
+  // var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
+  // console.log(json)
+  // console.log(filtered_comment)
+  // draw filtered comments
+  
+  //  draw_filtered_comments(filtered_comment)
+
+  // highlight filtered comments
+  // CSS
+  
+  // -------------------- Revision ----------------------//
+
+  //console.log(json)
+  
+  var revision_item_id = 1
+  var issue_revision = save_issue(revision_item_id, json)
 });
+
+// function myFunction(){
+//   var idea_id = prompt("Please enter idea_id");
+//   draw_proposal_wise_comments(json, idea_id)
+// }
 
