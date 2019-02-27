@@ -15,7 +15,7 @@ function get_proposal_names(json){
 function get_proposal_wise_sentiment(json) {
     var proposal_sentiment_agg = [];
     for (var i in json["ideas"]) {
-        count_negative = 0; count_neutral = 0; count_positive = 0;
+        count_comment = 0, count_negative = 0; count_neutral = 0; count_positive = 0;
         var idea_id = json.ideas[i].id
         for (var j in json.ideas[i].tasks) {
             for (var k in json.ideas[i].tasks[j].comments) {
@@ -30,11 +30,15 @@ function get_proposal_wise_sentiment(json) {
                 }
             }
         }
+        count_comment = count_comment + count_negative + count_neutral + count_positive 
         proposal_sentiment_agg.push({
             key: idea_id,
             negative: count_negative,
             neutral: count_neutral,
-            positive: count_positive
+            positive: count_positive,
+            negative_normalized: count_negative / count_comment,
+            neutral_normalized: count_neutral / count_comment,
+            positive_normalized: count_positive / count_comment
         })
     }
     return proposal_sentiment_agg;
@@ -44,7 +48,7 @@ function get_proposal_wise_sentiment(json) {
 function get_proposal_wise_emotion(json) {
     var proposal_emotion_agg = [];
     for (var i in json["ideas"]) {
-        count_angry = 0; count_fear = 0; count_sad = 0, count_bored = 0, count_happy = 0, count_excited = 0;
+        count_comment = 0, count_angry = 0; count_fear = 0; count_sad = 0, count_bored = 0, count_happy = 0, count_excited = 0;
         var idea_id = json.ideas[i].id
         for (var j in json.ideas[i].tasks) {
             for (var k in json.ideas[i].tasks[j].comments) {
@@ -68,6 +72,7 @@ function get_proposal_wise_emotion(json) {
                 }
             }
         }
+        count_comment = count_angry + count_fear + count_sad + count_bored + count_happy + count_excited
         proposal_emotion_agg.push({
             key: idea_id,
             angry: count_angry,
@@ -75,7 +80,15 @@ function get_proposal_wise_emotion(json) {
             sad: count_sad,
             neutral: count_bored,
             happy: count_happy,
-            excited: count_excited
+            excited: count_excited,
+            angry_normalized: count_angry / count_comment,
+            worried_normalized: count_fear / count_comment,
+            sad_normalized: count_sad / count_comment,
+            neutral_normalized: count_bored / count_comment,
+            happy_normalized: count_happy / count_comment,
+            excited_normalized: count_excited / count_comment,
+            num_comments_normalized: count_comment
+
         })
     }
     return proposal_emotion_agg;
@@ -97,10 +110,13 @@ function get_proposal_wise_subjectivity(json) {
                 }
             }
         }
+        count_comment = count_fact + count_opinion
         proposal_subjectivity_agg.push({
             key: idea_id,
             fact: count_fact,
-            opinion: count_opinion
+            opinion: count_opinion,
+            fact_normalized: count_fact / count_comment,
+            opinion_normalized: count_opinion / count_comment
         })
     }
     return proposal_subjectivity_agg;
@@ -119,6 +135,7 @@ function get_proposal_wise_profanity(json) {
         }
         proposal_profanity_agg.push({
             key: idea_id,
+            profanity_count: profanity_dist.length,
             profanity_distribution: profanity_dist.sort()
         })
     }
@@ -139,9 +156,12 @@ function get_all_proposal_sentiment(json) {
     count_comment = count_comment + count_negative + count_neutral + count_positive
     proposal_sentiment_agg.push({
         key: "sentiment",
-        negative: count_negative / count_comment,
-        neutral: count_neutral / count_comment,
-        positive: count_positive / count_comment,
+        negative: count_negative,
+        neutral: count_neutral,
+        positive: count_positive,
+        negative_normalized: count_negative / count_comment,
+        neutral_normalized: count_neutral / count_comment,
+        positive_normalized: count_positive / count_comment,
         num_comments: count_comment
     })
     return proposal_sentiment_agg;
@@ -163,12 +183,18 @@ function get_all_proposal_emotion(json) {
     count_comment = count_angry + count_fear + count_sad + count_bored + count_happy + count_excited
     proposal_emotion_agg.push({
         key: "emotion",
-        angry: count_angry / count_comment,
-        worried: count_fear / count_comment,
-        sad: count_sad / count_comment,
-        neutral: count_bored / count_comment,
-        happy: count_happy / count_comment,
-        excited: count_excited / count_comment,
+        angry: count_angry,
+        worried: count_fear,
+        sad: count_sad,
+        neutral: count_bored,
+        happy: count_happy,
+        excited: count_excited,
+        angry_normalized: count_angry / count_comment,
+        worried_normalized: count_fear / count_comment,
+        sad_normalized: count_sad / count_comment,
+        neutral_normalized: count_bored / count_comment,
+        happy_normalized: count_happy / count_comment,
+        excited_normalized: count_excited / count_comment,
         num_comments: count_comment
     })
     return proposal_emotion_agg;
@@ -186,8 +212,10 @@ function get_all_proposal_subjectivity(json) {
     count_comment = count_fact + count_opinion
     proposal_subjectivity_agg.push({
         key: "subjectivity",
-        fact: count_fact / count_comment,
-        opinion: count_opinion / count_comment,
+        fact: count_fact,
+        opinion: count_opinion,
+        fact_normalized: count_fact / count_comment,
+        opinion_normalized: count_opinion / count_comment,
         num_comments: count_comment
     })
     return proposal_subjectivity_agg;
@@ -204,7 +232,8 @@ function get_all_proposal_profanity(json) {
     profanity_dist.sort()
     proposal_profanity_agg.push({
         key: "profanity",
-        profanity_distribution: profanity_dist
+        profanity_count: profanity_dist.length,
+        profanity_distribution: profanity_dist 
     })
     return proposal_profanity_agg;
 }

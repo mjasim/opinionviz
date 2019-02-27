@@ -22,20 +22,20 @@ d3.json("communitycrit.json", function (err, json) {
   var proposal_wise_emotion_agg = get_proposal_wise_emotion(json)
   var proposal_wise_subjectivity_agg = get_proposal_wise_subjectivity(json)
   var proposal_wise_profanity_agg = get_proposal_wise_profanity(json)
-  //console.log(proposal_wise_sentiment_agg)
-  //console.log(proposal_wise_emotion_agg)
-  //console.log(proposal_wise_subjectivity_agg)
-  //console.log(proposal_wise_profanity_agg)
+  // console.log(proposal_wise_sentiment_agg)
+  // console.log(proposal_wise_emotion_agg)
+  // console.log(proposal_wise_subjectivity_agg)
+  // console.log(proposal_wise_profanity_agg)
 
   // fetch all-proposal information (column-wise)
   var all_proposal_sentiment_agg = get_all_proposal_sentiment(json)
   var all_proposal_emotion_agg = get_all_proposal_emotion(json)
   var all_proposal_subjectivity_agg = get_all_proposal_subjectivity(json)
   var all_proposal_profanity_agg = get_all_proposal_profanity(json)
-  //console.log(all_proposal_sentiment_agg)
-  //console.log(all_proposal_emotion_agg)
-  //console.log(all_proposal_subjectivity_agg)
-  //console.log(all_proposal_profanity_agg)
+  // console.log(all_proposal_sentiment_agg)
+  // console.log(all_proposal_emotion_agg)
+  // console.log(all_proposal_subjectivity_agg)
+  // console.log(all_proposal_profanity_agg)
 
   //------------------- Proposal View -----------------//
 
@@ -70,6 +70,7 @@ d3.json("communitycrit.json", function (err, json) {
   
   var revision_item_id = 1
   var issue_revision = save_issue(revision_item_id, json)
+  var criteria_revision = save_criteria(revision_item_id, json)
 });
 
 // function myFunction(){

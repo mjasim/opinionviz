@@ -61,18 +61,17 @@ function get_filtered_comment(json, filterobj) {
                     flag = false
                 }
                 if (flag) {
-                    console.log("add comments")
                     comments.push(json.ideas[i].tasks[j].comments[k])
                 }
             }
             if (comments.length) {
-                var tempTask = JSON.parse(JSON.stringify(json.ideas[i].tasks[j]))
+                var tempTask = json.ideas[i].tasks[j]
                 tempTask.comments = comments
                 tasks.push(tempTask)
             }
         }
         if (tasks.length) {
-            var tempidea = JSON.parse(JSON.stringify(json.ideas[i]))
+            var tempidea = json.ideas[i]
             tempidea.tasks = tasks
             ideas.push(tempidea)
         }
