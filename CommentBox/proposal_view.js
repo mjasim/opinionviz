@@ -7,7 +7,9 @@ function draw_proposal_wise_comments(json, idea_id) {
     }
 
     var divTask = []
+    var divQuestion = []
     var divComment = []
+    var prevQuestionId
     var divIdea = document.createElement("div")
     divIdea.className = "ideaDiv"
     divIdea.id = "ideaDivId-" + json.ideas[idea_id].id
@@ -24,8 +26,20 @@ function draw_proposal_wise_comments(json, idea_id) {
         var element = document.getElementById(divIdea.id)
         element.appendChild(divTask[i])
         for (var j in json.ideas[idea_id].tasks[i].comments) {
+            if(json.ideas[idea_id].tasks[i].id == 12){
+                divQuestion[j] = document.createElement("div")
+                divQuestion[j].className = "questionDiv"
+                divQuestion[j].id = "questionDivId-" + json.ideas[idea_id].id + "-" + json.ideas[idea_id].tasks[i].id + "-" + json.ideas[idea_id].tasks[i].comments[j].question_id
+                if(prevQuestionId != divQuestion[j].id){
+                    var node = document.createTextNode(json.ideas[idea_id].tasks[i].comments[j].question)
+                    divQuestion[j].appendChild(node)
+                    var element = document.getElementById(divTask[i].id)
+                    element.appendChild(divQuestion[j])
+                    prevQuestionId = divQuestion[j].id
+                }
+            }
             divComment[j] = document.createElement("div")
-            divComment[j].className = "commentDiv"
+            divComment[j].className = "commentDiv" 
             divComment[j].id = "commentDivId-" + json.ideas[idea_id].id + "-" + json.ideas[idea_id].tasks[i].id + " " + json.ideas[idea_id].tasks[i].comments[j].comment_id
             var node = document.createTextNode(json.ideas[idea_id].tasks[i].comments[j].comment)
             divComment[j].appendChild(node)
@@ -89,8 +103,10 @@ function draw_filtered_comments(filtered_comment) {
     }
 
     var divIdea = []
+    var divQuestion = []
     var divTask = []
     var divComment = []
+    var prevQuestionId
     for (var i in filtered_comment["ideas"]) {
         divIdea[i] = document.createElement("div")
         divIdea[i].className = "ideaDiv"
@@ -108,6 +124,18 @@ function draw_filtered_comments(filtered_comment) {
             var element = document.getElementById(divIdea[i].id)
             element.appendChild(divTask[j])
             for (var k in filtered_comment.ideas[i].tasks[j].comments) {
+                if(filtered_comment.ideas[i].tasks[j].id == 12){
+                    divQuestion[k] = document.createElement("div")
+                    divQuestion[k].className = "questionDiv"
+                    divQuestion[k].id = "questionDivId-" + filtered_comment.ideas[i].id + "-" + filtered_comment.ideas[i].tasks[j].id + "-" + filtered_comment.ideas[i].tasks[j].comments[k].question_id
+                    if(prevQuestionId != divQuestion[k].id){
+                        var node = document.createTextNode(filtered_comment.ideas[i].tasks[j].comments[k].question)
+                        divQuestion[k].appendChild(node)
+                        var element = document.getElementById(divTask[k].id)
+                        element.appendChild(divQuestion[k])
+                        prevQuestionId = divQuestion[k].id
+                    }
+                }
                 divComment[k] = document.createElement("div")
                 divComment[k].className = "commentDiv"
                 divComment[k].id = "commentDivId-" + filtered_comment.ideas[i].id + "-" + filtered_comment.ideas[i].tasks[j].id + " " + filtered_comment.ideas[i].tasks[j].comments[k].comment_id
@@ -118,8 +146,4 @@ function draw_filtered_comments(filtered_comment) {
             }
         }
     }
-}
-
-function test_test(json){
-    console.log(json)
 }
