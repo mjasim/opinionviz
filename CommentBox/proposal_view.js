@@ -146,7 +146,17 @@ function draw_filtered_comments(filtered_comment) {
                 divComment[k] = document.createElement("div")
                 divComment[k].className = "commentDiv"
                 divComment[k].id = "commentDivId-" + filtered_comment.ideas[i].id + "-" + filtered_comment.ideas[i].tasks[j].id + " " + filtered_comment.ideas[i].tasks[j].comments[k].comment_id;
-                var divCommentHTML = '<p>'+ filtered_comment.ideas[i].tasks[j].comments[k].comment + '</p>';
+                var image ="/images/avatar.jpg";
+                var divCommentHTML =
+
+                    "<div class=\"comment-author\">" +
+                        "<img src=\""+image+"\" width='25px'/>" +
+                        "<a>" +" author name" + "</a>" +
+                    "</div>" +
+                    "<div class=\"comment-body\"" + "\">" +
+                    "<p>" +filtered_comment.ideas[i].tasks[j].comments[k].comment +"</p>";
+
+                    //'<p>'+ filtered_comment.ideas[i].tasks[j].comments[k].comment + '</p>';
                 divComment[k].innerHTML = divCommentHTML;
                 //var node = document.createTextNode(filtered_comment.ideas[i].tasks[j].comments[k].comment)
                 //divComment[k].appendChild(node)
