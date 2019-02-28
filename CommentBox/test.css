@@ -5,6 +5,7 @@ body {
     right: 0;
     bottom: 0;
     left: 0;
+    font-family: BentonSans, 'Open Sans', sans-serif;
 }
 
 .parentDiv{
@@ -87,10 +88,22 @@ body {
     color:blue;
     margin: 0 auto;
 }
+.ideaDiv h1{
+    font-weight: 700;
+    color: #000;
+    font-size: 24px;
+}
+
 
 .taskDiv{
     color:green;
     margin: 0 auto;
+}
+
+.taskDiv h2{
+    font-weight: 700;
+    color: #000;
+    font-size: 16px;
 }
 
 .questionDiv{
@@ -99,8 +112,12 @@ body {
 }
 
 .commentDiv{
-    color:black;
+    /*color:black;*/
+    color:#333;
     margin-left: 40px
+    font-family: Open Sans,sans-serif;
+
+
 }
 
 .btn .btn-warning .ideaButton{
