@@ -27,7 +27,7 @@ d3.json("communitycrit.json", function (err, json) {
   var proposal_wise_subjectivity_agg = get_proposal_wise_subjectivity(json)
   var proposal_wise_profanity_agg = get_proposal_wise_profanity(json)
   // console.log(proposal_wise_sentiment_agg)
-   console.log(proposal_wise_emotion_agg)
+  // console.log(proposal_wise_emotion_agg)
   // console.log(proposal_wise_subjectivity_agg)
   // console.log(proposal_wise_profanity_agg)
 

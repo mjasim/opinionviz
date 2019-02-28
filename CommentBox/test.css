@@ -19,7 +19,9 @@ body {
 
 .aggregate{
     background-color: aquamarine;
-    width: 90%;
+    width: 80%;
+    height: 30vh;
+    overflow: scroll;
 }
 
 .c_row{
@@ -43,9 +45,9 @@ body {
 }
 
 .c_column1{
-    width: 40%;
+    width: 35%;
     height: inherit;
-    background-color: red;
+    background-color: white;
     border: 2px;
     border-color: beige
 }
@@ -59,7 +61,7 @@ body {
 }
 
 .c_column3{
-    width: 10%;
+    width: 15%;
     height: inherit;
     background-color: coral;
     border: 2px;
@@ -74,15 +76,10 @@ body {
     border-color: beige
 }
 
-.comments{
-    width: 80vh;
-    height: 30vh;
-    overflow: scroll;
-}
 
 .box{
-    width: 80vh;
-    height: 40vh;
+    width: 80%;
+    height: 30vh;
     overflow: scroll;
 }
 
@@ -104,4 +101,9 @@ body {
 .commentDiv{
     color:black;
     margin-left: 40px
+}
+
+.btn .btn-warning .ideaButton{
+    width: inherit;
+    height: inherit;
 }
