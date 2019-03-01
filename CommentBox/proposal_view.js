@@ -156,7 +156,7 @@ function draw_filtered_comments(filtered_comment) {
                     "</div>" +
                     "<div class=\"comment-body\"" + "\">" +
                     "<p>" +filtered_comment.ideas[i].tasks[j].comments[k].comment +"</p>"+
-                    'inlined angry comment <span style="color: Mediumslateblue;">'+
+                    'inlined angry comment <span class="emoticon_button" id="span_id" >'+
                     '<i class="fas fa-angry"></i>'+
                     '</span>'
                     +' comment goes on';
@@ -166,10 +166,22 @@ function draw_filtered_comments(filtered_comment) {
                 //var node = document.createTextNode(filtered_comment.ideas[i].tasks[j].comments[k].comment)
                 //divComment[k].appendChild(node)
                 var element = document.getElementById(divTask[j].id)
-                element.appendChild(divComment[k])
+                element.appendChild(divComment[k]);
             }
         }
     }
+
+    $(document).ready(function() {
+        $('.emoticon_button').click(function() {
+            var id = $(this).attr('id');
+            console.log('emotion clicked',id)
+        });
+        // $('.emoticon_button').mouseover(function() {
+        //     var id = $(this).attr('id');
+        //     console.log('emotion mouseover',id)
+        // });
+    });
+
     makeRevision(filterobj);
 }
 

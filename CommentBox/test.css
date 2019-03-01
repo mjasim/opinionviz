@@ -191,3 +191,13 @@ body {
     width: inherit;
     height: inherit;
 }
+
+
+.fa-angry{
+    color: red;
+    opacity: 0.5;
+}
+.fa-angry:hover{
+    opacity: .9;
+    cursor: pointer;
+}
