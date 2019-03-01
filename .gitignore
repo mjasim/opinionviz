@@ -109,4 +109,4 @@ communitycrit/.DS_Store
 .idea/opinionviz.iml
 .idea/vcs.xml
 .idea/workspace.xml
-/server/node_modules/
+CommentBox/server/node_modules/
