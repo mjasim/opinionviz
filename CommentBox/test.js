@@ -50,20 +50,20 @@ d3.json("communitycrit.json", function (err, json) {
   //console.log(json)
 
   // fetch filtered comments
-  filterobj.emotion = "Excited"
-  filterobj.sentiment_final = "neutral"
-  filterobj.subjectivity = "Fact"
-  filterobj.idea_id = null
-  filterobj.task_id = null
+  // filterobj.emotion = "Excited"
+  // filterobj.sentiment_final = "neutral"
+  // filterobj.subjectivity = "Fact"
+  // filterobj.idea_id = null
+  // filterobj.task_id = null
 
   // console.log(json)
 
-   var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
+  // var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
   // console.log(json)
   // console.log(filtered_comment)
   // draw filtered comments
 
-    draw_filtered_comments(filtered_comment)
+  //  draw_filtered_comments(filtered_comment)
 
   // highlight filtered comments
   // CSS

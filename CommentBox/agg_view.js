@@ -1,20 +1,106 @@
 
+var filterobj = {
+    emotion: null,
+    sentiment_final: null,
+    subjectivity: null,
+    idea_id: null,
+    task_id: null
+}
+
 d3.json("communitycrit.json", function (err, json) {
     //console.log(json)
+
+    var numberOfRows = 18;
+    var numberOfColumns = 5;
 
     var proposal_names = get_proposal_names(json)
     var proposal_wise_emotion_agg = get_proposal_wise_emotion(json)
     var proposal_wise_sentiment_agg = get_proposal_wise_sentiment(json)
     var proposal_wise_subjectivity_agg = get_proposal_wise_subjectivity(json)
     var proposal_wise_profanity_agg = get_proposal_wise_profanity(json)
+    var all_proposal_sentiment_agg = get_all_proposal_sentiment(json)
+    var all_proposal_emotion_agg = get_all_proposal_emotion(json)
+    var all_proposal_subjectivity_agg = get_all_proposal_subjectivity(json)
+    var all_proposal_profanity_agg = get_all_proposal_profanity(json)
 
+    // backup data
     this.data = json
 
+    // Top div fillup
+    var topElement = document.getElementById("topDiv")
+    for (var i = 0; i < numberOfColumns; i++) {
+        var tempTopDiv = document.createElement("div")
+        tempTopDiv.id = "top" + i
+        tempTopDiv.className = "t_column" + i
+        topElement.appendChild(tempTopDiv)
+    }
+
+    //============================ top column 0 =========================//
+
+    var top0 = document.getElementById("top0")
+    tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
+    tempSvg.id = "svgtop0"
+    tempSvg.setAttribute("class", "t_svg")
+    tempSvg.setAttribute("width", top0.clientWidth)
+    tempSvg.setAttribute("height", top0.clientHeight)
+    top0.appendChild(tempSvg)
+
+    //============================ top column 0 end =====================//
+    //============================ top column 1 =========================//
+
+    var top1 = document.getElementById("top1")
+    tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
+    tempSvg.id = "svgtop1"
+    tempSvg.setAttribute("class", "t_svg")
+    tempSvg.setAttribute("width", top1.clientWidth)
+    tempSvg.setAttribute("height", top1.clientHeight)
+    top1.appendChild(tempSvg)
+
+    send_data = all_proposal_emotion_agg
+    emotion_rows(send_data, tempSvg.id, top1.id, proposal_names[i].idea_id)
+
+    //============================ top column 1 end =========================//
+    //============================ top column 2 =========================//
+
+    var top2 = document.getElementById("top2")
+    tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
+    tempSvg.id = "svgtop2"
+    tempSvg.setAttribute("class", "t_svg")
+    tempSvg.setAttribute("width", top2.clientWidth)
+    tempSvg.setAttribute("height", top2.clientHeight)
+    top2.appendChild(tempSvg)
+
+    send_data = all_proposal_sentiment_agg
+    sentiment_rows(send_data, tempSvg.id, top2.id, proposal_names[i].idea_id)
+
+    //============================ top column 2 end =========================//
+
+    //============================ top column 3 =========================//
+
+    var top3 = document.getElementById("top3")
+    tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
+    tempSvg.id = "svgtop3"
+    tempSvg.setAttribute("class", "t_svg")
+    tempSvg.setAttribute("width", top3.clientWidth)
+    tempSvg.setAttribute("height", top3.clientHeight)
+    top3.appendChild(tempSvg)
+
+    send_data = all_proposal_subjectivity_agg
+    subjectivity_rows(send_data, tempSvg.id, top3.id, proposal_names[i].idea_id)
+
+    //============================ top column 3 end =========================//
+
+    //============================ top column 4 =========================//
+
+    var top4 = document.getElementById("top4")
+    send_data = all_proposal_profanity_agg[0].profanity_distribution;
+    profanity_rows(send_data, top4.id)
+
+    //============================ top column 4 end =========================//
+
+    // Aggregate div fillup
     var titles = []
-    var svgs = []
-    var element = document.getElementById("aggregateDiv")
-    var numberOfRows = 18;
-    var numberOfColumns = 5;
+    var aggElement = document.getElementById("aggregateDiv")
     for (var i = 0; i < numberOfRows; i++) {
         var tempRowDiv = document.createElement("div")
         tempRowDiv.id = "row" + i
@@ -28,7 +114,7 @@ d3.json("communitycrit.json", function (err, json) {
             tempRowDiv.appendChild(tempColumnDiv)
         }
 
-        element.appendChild(tempRowDiv)
+        aggElement.appendChild(tempRowDiv)
 
         //============================ column 0=========================//
         var column0 = document.getElementById("row" + i + "column0")
@@ -40,6 +126,25 @@ d3.json("communitycrit.json", function (err, json) {
         var title_name = document.createTextNode(proposal_names[i].idea_name)
         titles[i].appendChild(title_name)
         column0.appendChild(titles[i])
+
+        // document.getElementById(titles[i].id).addEventListener("click", function() {
+        //     myFunction(proposal_names);
+        //   });
+          
+        //   function myFunction(idea_id, name) {
+        //     console.log(name)
+        // }
+
+        // $("#" + titles[i].id).on('click', function (e) {
+        //     filterobj.idea_id = proposal_names[i].idea_id
+        //     filterobj.emotion = null
+        //     filterobj.sentiment_final = null
+        //     filterobj.subjectivity = null
+        //     filterobj.task_id = null
+        //     console.log(filterobj)
+        //     var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
+        //     draw_filtered_comments(filtered_comment)
+        // })
 
         //============================end of column 0==================//
 
@@ -55,7 +160,7 @@ d3.json("communitycrit.json", function (err, json) {
 
         send_data = []
         send_data.push(proposal_wise_emotion_agg[i])
-        emotion_rows(send_data, tempSvg.id, column1.id)
+        emotion_rows(send_data, tempSvg.id, column1.id, proposal_names[i].idea_id)
 
         //============================end of column 1==================//
 
@@ -71,7 +176,7 @@ d3.json("communitycrit.json", function (err, json) {
 
         send_data = []
         send_data.push(proposal_wise_sentiment_agg[i])
-        sentiment_rows(send_data, tempSvg.id, column2.id)
+        sentiment_rows(send_data, tempSvg.id, column2.id, proposal_names[i].idea_id)
 
         //============================end of column 2 ==================//
 
@@ -87,25 +192,25 @@ d3.json("communitycrit.json", function (err, json) {
 
         send_data = []
         send_data.push(proposal_wise_subjectivity_agg[i])
-        subjectivity_rows(send_data, tempSvg.id, column3.id)
+        subjectivity_rows(send_data, tempSvg.id, column3.id, proposal_names[i].idea_id)
 
         //============================ end of column 3 ==================//
 
-         //============================ column 4 =========================//
-         var column4 = document.getElementById("row" + i + "column4")
-         send_data = proposal_wise_profanity_agg[i].profanity_distribution; 
-         profanity_rows(send_data, column4.id)
+        //============================ column 4 =========================//
+        var column4 = document.getElementById("row" + i + "column4")
+        send_data = proposal_wise_profanity_agg[i].profanity_distribution;
+        profanity_rows(send_data, column4.id)
 
-         //============================ end of column 4 ==================//
+        //============================ end of column 4 ==================//
     }
 
-    //function for d3
+    //functions for d3
 
-    function emotion_rows(salesData, svg_id, div_id) {
+    function emotion_rows(salesData, svg_id, div_id, idea_id) {
 
         var group = ["angry", "worried", "sad", "neutral", "happy", "excited"];
         var parseDate = d3.timeFormat("%b-%Y");
-        var mainDiv = "#"+div_id;
+        var mainDiv = "#" + div_id;
         var mainDivName = div_id;
 
         salesData.forEach(function (d) {
@@ -116,7 +221,7 @@ d3.json("communitycrit.json", function (err, json) {
             .offset(d3.stackOffsetDiverging)
             (salesData);
 
-        var svg = d3.select("#"+svg_id),
+        var svg = d3.select("#" + svg_id),
             margin = {
                 top: 0,
                 right: 0,
@@ -280,6 +385,18 @@ d3.json("communitycrit.json", function (err, json) {
                 });
         });
 
+        //clicking on the rectangles for emotions
+        rect.on("click", clicked_emotion);
+
+        function clicked_emotion(d) {
+            filterobj.idea_id = idea_id
+            filterobj.emotion = d.key
+            var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
+            //console.log(json)
+            console.log("received", filtered_comment)
+            draw_filtered_comments(filtered_comment)
+        }
+
         var rectTooltipg = svg.append("g")
             .attr("font-family", "sans-serif")
             .attr("font-size", 10)
@@ -343,12 +460,12 @@ d3.json("communitycrit.json", function (err, json) {
         };
     }
 
-    function sentiment_rows(salesData, svg_id, div_id) {
+    function sentiment_rows(salesData, svg_id, div_id, idea_id) {
 
         var group = ["negative", "neutral", "positive"];
         var parseDate = d3.timeFormat("%b-%Y");
 
-        var mainDiv = "#"+div_id;
+        var mainDiv = "#" + div_id;
         var mainDivName = div_id;
 
         salesData.forEach(function (d) {
@@ -359,7 +476,7 @@ d3.json("communitycrit.json", function (err, json) {
             .offset(d3.stackOffsetDiverging)
             (salesData);
 
-        var svg = d3.select("#"+svg_id),
+        var svg = d3.select("#" + svg_id),
             margin = {
                 top: 0,
                 right: 0,
@@ -523,6 +640,14 @@ d3.json("communitycrit.json", function (err, json) {
                 });
         });
 
+        rect.on("click", clicked_sentiment);
+
+        function clicked_sentiment(d) {
+            filterobj.idea_id = idea_id
+            filterobj.sentiment_final = d.key
+            var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
+            draw_filtered_comments(filtered_comment)
+        }
         var rectTooltipg = svg.append("g")
             .attr("font-family", "sans-serif")
             .attr("font-size", 10)
@@ -586,12 +711,12 @@ d3.json("communitycrit.json", function (err, json) {
         };
     }
 
-    function subjectivity_rows(salesData, svg_id, div_id) {
+    function subjectivity_rows(salesData, svg_id, div_id, idea_id) {
 
         var group = ["fact", "opinion"];
         var parseDate = d3.timeFormat("%b-%Y");
 
-        var mainDiv = "#"+div_id;
+        var mainDiv = "#" + div_id;
         var mainDivName = div_id;
 
         salesData.forEach(function (d) {
@@ -602,7 +727,7 @@ d3.json("communitycrit.json", function (err, json) {
             .offset(d3.stackOffsetDiverging)
             (salesData);
 
-        var svg = d3.select("#"+svg_id),
+        var svg = d3.select("#" + svg_id),
             margin = {
                 top: 0,
                 right: 0,
@@ -766,6 +891,15 @@ d3.json("communitycrit.json", function (err, json) {
                 });
         });
 
+        rect.on("click", clicked_subjectivity);
+
+        function clicked_subjectivity(d) {
+            filterobj.idea_id = idea_id
+            filterobj.subjectivity = d.key
+            var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
+            draw_filtered_comments(filtered_comment)
+        }
+
         var rectTooltipg = svg.append("g")
             .attr("font-family", "sans-serif")
             .attr("font-size", 10)
@@ -830,43 +964,41 @@ d3.json("communitycrit.json", function (err, json) {
     }
 
     function profanity_rows(salesData, div_id) {
-        console.log(salesData)
+        //console.log(salesData)
         var color_input = "to left,"
-        for (var i = 0; i < salesData.length; i++){
+        for (var i = 0; i < salesData.length; i++) {
             var factor = salesData[i]
             var color = interpolateColor("rgb(255, 255, 255)", "rgb(0, 0, 255)", factor)
-            color_input +=  color + ","
+            color_input += color + ","
         }
 
         //var style_gradient  = "background: linear-gradient( " + color_input.substring(0,color_input.length-1) + ");"
-        var style_gradient  = "linear-gradient(" + color_input.substring(0,color_input.length-1) + ")"
-
-        console.log(style_gradient)
+        var style_gradient = "linear-gradient(" + color_input.substring(0, color_input.length - 1) + ")"
 
         var dom = document.getElementById(div_id)
-        console.log(dom.id)
+
         dom.style.background = style_gradient
     }
 
     function interpolateColor(color1, color2, factor) {
-        if (arguments.length < 3) { 
-            factor = 0.5; 
+        if (arguments.length < 3) {
+            factor = 0.5;
         }
         color1 = color1.match(/\d+/g).map(Number);
         color2 = color2.match(/\d+/g).map(Number);
-        
+
         var result = color1.slice();
         for (var i = 0; i < 3; i++) {
             result[i] = Math.round(result[i] + factor * (color2[i] - color1[i]));
         }
-        return rgbToHex(result[0],result[1],result[2]);
+        return rgbToHex(result[0], result[1], result[2]);
     };
 
     function componentToHex(c) {
         var hex = c.toString(16);
         return hex.length == 1 ? "0" + hex : hex;
     }
-    
+
     function rgbToHex(r, g, b) {
         return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
     }

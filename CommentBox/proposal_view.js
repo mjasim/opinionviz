@@ -63,7 +63,6 @@ function get_filtered_comment(json, filterobj) {
             }
             var comments = []
             for (var k in json.ideas[i].tasks[j].comments) {
-
                 var flag = true
                 if (flag && filterobj.emotion != null && json.ideas[i].tasks[j].comments[k].emotion != filterobj.emotion) {
                     flag = false
@@ -91,7 +90,6 @@ function get_filtered_comment(json, filterobj) {
         }
     }
     var filtered_comment = {"ideas": ideas}
-
     return filtered_comment
 }
 
