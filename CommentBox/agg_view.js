@@ -116,11 +116,12 @@ d3.json("communitycrit.json", function (err, json) {
 
         aggElement.appendChild(tempRowDiv)
 
+        console.log(proposal_names[i]);
         //============================ column 0=========================//
         var column0 = document.getElementById("row" + i + "column0")
-        var divIdeaName = 
+        var divIdeaName =
         "<div class=\"idea-Name\"" + "\">" +
-        "<button type=\"button\" class=\"btn btn-primary btn-block ideaName\">" + proposal_names[i].idea_name + "</button>";
+        '<div  class="btn btn-primary btn-block ideaName" id="'+proposal_names[i].idea_id+'">' + proposal_names[i].idea_name + "</div>";
 
         column0.innerHTML = divIdeaName
 
@@ -183,9 +184,10 @@ d3.json("communitycrit.json", function (err, json) {
     }
 
     $(document).ready(function() {
-        $('btn btn-primary btn-block ideaName').click(function() {
-            var name = $(this).attr('className');
+        $('.ideaName').click(function() {
+            var name = $(this).attr('id');
             console.log('emotion clicked',name)
+
         });
         // $('.emoticon_button').mouseover(function() {
         //     var id = $(this).attr('id');
