@@ -1,3 +1,27 @@
+// Find corresponding awesome emoticon
+function find_emoticon(emo){
+    if(emo == "Angry"){
+        tempEmo = "fa-angry"
+    }
+    else if(emo == "Fear"){
+        tempEmo = "fa-flushed"
+    }
+    else if(emo == "Sad"){
+        tempEmo = "fa-frown"
+    }
+    else if(emo == "Bored"){
+        tempEmo = "fa-meh"
+    }
+    else if(emo == "Happy"){
+        tempEmo = "fa-smile"
+    }
+    else if(emo == "Excited"){
+        tempEmo = "fa-smile-beam"
+    }
+    return tempEmo
+}
+
+
 // Draw proposal-wise comments inside commentBox
 function draw_proposal_wise_comments(json, idea_id) {
     //console.log(json)
@@ -26,11 +50,11 @@ function draw_proposal_wise_comments(json, idea_id) {
         var element = document.getElementById(divIdea.id)
         element.appendChild(divTask[i])
         for (var j in json.ideas[idea_id].tasks[i].comments) {
-            if(json.ideas[idea_id].tasks[i].id == 12){
+            if (json.ideas[idea_id].tasks[i].id == 12) {
                 divQuestion[j] = document.createElement("div")
                 divQuestion[j].className = "questionDiv"
                 divQuestion[j].id = "questionDivId-" + json.ideas[idea_id].id + "-" + json.ideas[idea_id].tasks[i].id + "-" + json.ideas[idea_id].tasks[i].comments[j].question_id
-                if(prevQuestionId != divQuestion[j].id){
+                if (prevQuestionId != divQuestion[j].id) {
                     var node = document.createTextNode(json.ideas[idea_id].tasks[i].comments[j].question)
                     divQuestion[j].appendChild(node)
                     var element = document.getElementById(divTask[i].id)
@@ -39,7 +63,7 @@ function draw_proposal_wise_comments(json, idea_id) {
                 }
             }
             divComment[j] = document.createElement("div")
-            divComment[j].className = "commentDiv" 
+            divComment[j].className = "commentDiv"
             divComment[j].id = "commentDivId-" + json.ideas[idea_id].id + "-" + json.ideas[idea_id].tasks[i].id + " " + json.ideas[idea_id].tasks[i].comments[j].comment_id
             var node = document.createTextNode(json.ideas[idea_id].tasks[i].comments[j].comment)
             divComment[j].appendChild(node)
@@ -90,7 +114,7 @@ function get_filtered_comment(json, filterobj) {
             ideas.push(tempidea)
         }
     }
-    var filtered_comment = {"ideas": ideas}
+    var filtered_comment = { "ideas": ideas }
     return filtered_comment
 }
 
@@ -105,15 +129,15 @@ function draw_filtered_comments(filtered_comment) {
     var divQuestion = []
     var divTask = []
     var divComment = []
-    var prevQuestionId
+    var prevQuestionId = ""
     for (var i in filtered_comment["ideas"]) {
         divIdea[i] = document.createElement("div")
         divIdea[i].className = "ideaDiv"
         divIdea[i].id = "ideaDivId-" + filtered_comment.ideas[i].id;
         //var node = document.createTextNode(filtered_comment.ideas[i].name);
         //divIdea[i].appendChild(node)
-        var divIdeaHTML = '<h1>'+ filtered_comment.ideas[i].name + '</h1>';
-        var divIdeaHTML= divIdeaHTML + '<p>'+ "It would be brilliant if the entire length of 14th street was closed to motor traffic and was a truly pedestrian promenade. The only exception could be the small Free Ride carts that could transport people up and down the street. This would not only provide a pleasant safe space for people and pets to walk, but would also create space for outdoor seating, more trees and greenery, more and safer play areas, as well as food places with real sidewalk seating that is not disrupted by air pollution and motor noise. " + '</p>';
+        var divIdeaHTML = '<h1>' + filtered_comment.ideas[i].name + '</h1>';
+        var divIdeaHTML = divIdeaHTML + '<p>' + "It would be brilliant if the entire length of 14th street was closed to motor traffic and was a truly pedestrian promenade. The only exception could be the small Free Ride carts that could transport people up and down the street. This would not only provide a pleasant safe space for people and pets to walk, but would also create space for outdoor seating, more trees and greenery, more and safer play areas, as well as food places with real sidewalk seating that is not disrupted by air pollution and motor noise. " + '</p>';
         divIdea[i].innerHTML = divIdeaHTML;
         var element = document.getElementById("parentBox")
         element.appendChild(divIdea[i])
@@ -124,44 +148,87 @@ function draw_filtered_comments(filtered_comment) {
             //var node = document.createTextNode(filtered_comment.ideas[i].tasks[j].name)
             //divTask[j].appendChild(node)
 
-            var divTaskHTML = '<h2>'+ filtered_comment.ideas[i].tasks[j].name + '</h2>';
+            var divTaskHTML = '<h2>' + filtered_comment.ideas[i].tasks[j].name + '</h2>';
             divTask[j].innerHTML = divTaskHTML;
             var element = document.getElementById(divIdea[i].id);
             element.appendChild(divTask[j]);
 
             for (var k in filtered_comment.ideas[i].tasks[j].comments) {
-                if(filtered_comment.ideas[i].tasks[j].id == 12){
+
+                //var awesome_emoticon = "<i class=far " + find_emoticon(filtered_comment.ideas[i].tasks[j].comments[k].emotion) + "></i>"
+                var awesome_emoticon = "<i class=" + "far fa-smile" + "></i>"
+
+                console.log(awesome_emoticon)
+                
+                if (filtered_comment.ideas[i].tasks[j].id == 12) {
                     divQuestion[k] = document.createElement("div")
                     divQuestion[k].className = "questionDiv"
-                    divQuestion[k].id = "questionDivId-" + filtered_comment.ideas[i].id + "-" + filtered_comment.ideas[i].tasks[j].id + "-" + filtered_comment.ideas[i].tasks[j].comments[k].question_id
-                    if(prevQuestionId != divQuestion[k].id){
+                    divQuestion[k].id = "questionDivId-" + filtered_comment.ideas[i].id + "-" + filtered_comment.ideas[i].tasks[j].id + "-" + filtered_comment.ideas[i].tasks[j].comments[k].quesion_id
+                    var image = "/images/avatar.jpg";
+                    if (prevQuestionId != divQuestion[k].id) {
                         var node = document.createTextNode(filtered_comment.ideas[i].tasks[j].comments[k].question)
                         divQuestion[k].appendChild(node)
-                        var element = document.getElementById(divTask[k].id)
+                        var divQuestionHTML =
+
+                            "<div class=\"comment-author\">" +
+                            "<div style='float: left; padding-right: 15px;padding-top: 5px;'>" +
+                            "<img src=\"" + image + "\" width='27px' style='border-radius: 50%;'/></div>" +
+                            "<div><div>" + " author name" + "</div>" +
+                            '<div style="color: #888;"' + '> one year ago' + '</div></div>' +
+                            "</div>" +
+                            "<div class=\"comment-body\"" + "\">" +
+                            "<p>" + filtered_comment.ideas[i].tasks[j].comments[k].question + "</p>" +
+                            'inlined angry comment <span class="emoticon_button" id="span_id" >' +
+                            '<i class="far fa-angry"></i>' +
+                            '</span>'
+                            + ' comment goes on';
+
+                        divQuestion[k].innerHTML = divQuestionHTML;
+                        var element = document.getElementById(divTask[j].id)
                         element.appendChild(divQuestion[k])
                         prevQuestionId = divQuestion[k].id
                     }
                 }
                 divComment[k] = document.createElement("div")
                 divComment[k].className = "commentDiv"
-                divComment[k].id = "commentDivId-" + filtered_comment.ideas[i].id + "-" + filtered_comment.ideas[i].tasks[j].id + " " + filtered_comment.ideas[i].tasks[j].comments[k].comment_id;
-                var image ="/images/avatar.jpg";
+                divComment[k].id = "commentDivId-" + filtered_comment.ideas[i].id + "-" + filtered_comment.ideas[i].tasks[j].id + "-" + filtered_comment.ideas[i].tasks[j].comments[k].comment_id;
+                var image = "/images/avatar.jpg";
                 var divCommentHTML =
 
                     "<div class=\"comment-author\">" +
-                        "<div style='float: left; padding-right: 15px;padding-top: 5px;'>" +
-                            "<img src=\""+image+"\" width='27px' style='border-radius: 50%;'/></div>" +
-                        "<div><div>" +" author name" + "</div>" +
-                            '<div style="color: #888;"'+ '> one year ago'+'</div></div>'+
+                    "<div style='float: left; padding-right: 15px;padding-top: 5px;'>" +
+                    "<img src=\"" + image + "\" width='27px' style='border-radius: 50%;'/></div>" +
+                    "<div><div>" + " author name" + "</div>" +
+                    '<div style="color: #888;"' + '> one year ago' + '</div></div>' +
                     "</div>" +
                     "<div class=\"comment-body\"" + "\">" +
-                    "<p>" +filtered_comment.ideas[i].tasks[j].comments[k].comment +"</p>"+
-                    'inlined angry comment <span class="emoticon_button" id="span_id" >'+
-                    '<i class="fas fa-angry"></i>'+
+                    "<p>" + filtered_comment.ideas[i].tasks[j].comments[k].comment + "</p>" +
+                    'inlined angry comment <span class="emoticon_button" id="span_id" >' +
+                    awesome_emoticon + 
                     '</span>'
-                    +' comment goes on';
+                    + ' comment goes on';
 
-                    //'<p>'+ filtered_comment.ideas[i].tasks[j].comments[k].comment + '</p>';
+                console.log("div", awesome_emoticon)
+
+                var tempdivCommentHTML =
+
+                    "<div class=\"comment-author\">" +
+                    "<div style='float: left; padding-right: 15px;padding-top: 5px;'>" +
+                    "<img src=\"" + image + "\" width='27px' style='border-radius: 50%;'/></div>" +
+                    "<div><div>" + " author name" + "</div>" +
+                    '<div style="color: #888;"' + '> one year ago' + '</div></div>' +
+                    "</div>" +
+                    "<div class=\"comment-body\"" + "\">" +
+                    "<p>" + filtered_comment.ideas[i].tasks[j].comments[k].comment + "</p>" +
+                    'inlined angry comment <span class="emoticon_button" id="span_id" >' +
+                    "<i class=" + "far fa-angry" + "></i>" +
+                    '</span>'
+                    + ' comment goes on';
+
+                //console.log("temp", tempdivCommentHTML)
+
+                    
+                //'<p>'+ filtered_comment.ideas[i].tasks[j].comments[k].comment + '</p>';
                 divComment[k].innerHTML = divCommentHTML;
                 //var node = document.createTextNode(filtered_comment.ideas[i].tasks[j].comments[k].comment)
                 //divComment[k].appendChild(node)
@@ -171,10 +238,10 @@ function draw_filtered_comments(filtered_comment) {
         }
     }
 
-    $(document).ready(function() {
-        $('.emoticon_button').click(function() {
+    $(document).ready(function () {
+        $('.emoticon_button').click(function () {
             var id = $(this).attr('id');
-            console.log('emotion clicked',id)
+            console.log('emotion clicked', id)
         });
         // $('.emoticon_button').mouseover(function() {
         //     var id = $(this).attr('id');
@@ -194,7 +261,7 @@ function makeRevision(obj) {
         data: {
             jsonQuery: obj
         },
-        success: function( output ) {
+        success: function (output) {
             console.log(saved);
 
         }
