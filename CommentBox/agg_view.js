@@ -59,7 +59,7 @@ d3.json("communitycrit.json", function (err, json) {
     console.log(filterobj)
 
     send_data = all_proposal_emotion_agg
-    emotion_rows(send_data, tempSvg.id, top1.id, proposal_names[i].idea_id)
+    emotion_rows(send_data, tempSvg.id, top1.id, null)
 
     //============================ top column 1 end =========================//
     //============================ top column 2 =========================//
@@ -73,7 +73,7 @@ d3.json("communitycrit.json", function (err, json) {
     top2.appendChild(tempSvg)
 
     send_data = all_proposal_sentiment_agg
-    sentiment_rows(send_data, tempSvg.id, top2.id, proposal_names[i].idea_id)
+    sentiment_rows(send_data, tempSvg.id, top2.id, null)
 
     //============================ top column 2 end =========================//
 
@@ -88,7 +88,7 @@ d3.json("communitycrit.json", function (err, json) {
     top3.appendChild(tempSvg)
 
     send_data = all_proposal_subjectivity_agg
-    subjectivity_rows(send_data, tempSvg.id, top3.id, proposal_names[i].idea_id)
+    subjectivity_rows(send_data, tempSvg.id, top3.id, null)
 
     //============================ top column 3 end =========================//
 
@@ -969,7 +969,7 @@ d3.json("communitycrit.json", function (err, json) {
         var color_input = "to left,"
         for (var i = 0; i < salesData.length; i++) {
             var factor = salesData[i]
-            var color = interpolateColor("rgb(255, 255, 255)", "rgb(0, 0, 255)", factor)
+            var color = interpolateColor("rgb(226, 202, 247)","rgb(135, 0, 255)",factor)
             color_input += color + ","
         }
 
