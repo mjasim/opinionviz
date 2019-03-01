@@ -46,7 +46,7 @@ d3.json("communitycrit.json", function (err, json) {
   // // draw proposal wise comments
   // var idea_id = prompt("Please enter idea_id");  
   var idea_id = 0
-  //draw_proposal_wise_comments(json, idea_id)
+  draw_proposal_wise_comments(json, idea_id)
   //console.log(json)
 
   // fetch filtered comments
@@ -58,12 +58,12 @@ d3.json("communitycrit.json", function (err, json) {
 
   // console.log(json)
 
-  // var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
+   var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
   // console.log(json)
   // console.log(filtered_comment)
   // draw filtered comments
 
-  //  draw_filtered_comments(filtered_comment)
+    draw_filtered_comments(filtered_comment)
 
   // highlight filtered comments
   // CSS

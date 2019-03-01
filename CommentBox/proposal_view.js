@@ -65,13 +65,13 @@ function get_filtered_comment(json, filterobj) {
             var comments = []
             for (var k in json.ideas[i].tasks[j].comments) {
                 var flag = true
-                if (flag && filterobj.emotion != null && json.ideas[i].tasks[j].comments[k].emotion != filterobj.emotion) {
+                if (flag && filterobj.emotion != null && json.ideas[i].tasks[j].comments[k].emotion.toLowerCase() != filterobj.emotion.toLowerCase()) {
                     flag = false
                 }
-                if (flag && filterobj.sentiment_final != null && json.ideas[i].tasks[j].comments[k].sentiment_final != filterobj.sentiment_final) {
+                if (flag && filterobj.sentiment_final != null && (json.ideas[i].tasks[j].comments[k].sentiment_final).toLowerCase() != filterobj.sentiment_final.toLowerCase()) {
                     flag = false
                 }
-                if (flag && filterobj.subjectivity != null && json.ideas[i].tasks[j].comments[k].subjectivity != filterobj.subjectivity) {
+                if (flag && filterobj.subjectivity != null && json.ideas[i].tasks[j].comments[k].subjectivity.toLowerCase() != filterobj.subjectivity.toLowerCase()) {
                     flag = false
                 }
                 if (flag) {

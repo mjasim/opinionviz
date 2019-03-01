@@ -56,6 +56,8 @@ d3.json("communitycrit.json", function (err, json) {
     tempSvg.setAttribute("height", top1.clientHeight)
     top1.appendChild(tempSvg)
 
+    console.log(filterobj)
+
     send_data = all_proposal_emotion_agg
     emotion_rows(send_data, tempSvg.id, top1.id, proposal_names[i].idea_id)
 
@@ -389,11 +391,10 @@ d3.json("communitycrit.json", function (err, json) {
         rect.on("click", clicked_emotion);
 
         function clicked_emotion(d) {
+            console.log(filterobj)
             filterobj.idea_id = idea_id
             filterobj.emotion = d.key
             var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
-            //console.log(json)
-            console.log("received", filtered_comment)
             draw_filtered_comments(filtered_comment)
         }
 
