@@ -110,3 +110,4 @@ communitycrit/.DS_Store
 .idea/vcs.xml
 .idea/workspace.xml
 CommentBox/server/node_modules/
+CommentBox/server/package-lock.json
