@@ -115,6 +115,7 @@ function draw_filtered_comments(filtered_comment) {
         //var node = document.createTextNode(filtered_comment.ideas[i].name);
         //divIdea[i].appendChild(node)
         var divIdeaHTML = '<h1>'+ filtered_comment.ideas[i].name + '</h1>';
+        var divIdeaHTML= divIdeaHTML + '<p>'+ "It would be brilliant if the entire length of 14th street was closed to motor traffic and was a truly pedestrian promenade. The only exception could be the small Free Ride carts that could transport people up and down the street. This would not only provide a pleasant safe space for people and pets to walk, but would also create space for outdoor seating, more trees and greenery, more and safer play areas, as well as food places with real sidewalk seating that is not disrupted by air pollution and motor noise. " + '</p>';
         divIdea[i].innerHTML = divIdeaHTML;
         var element = document.getElementById("parentBox")
         element.appendChild(divIdea[i])
@@ -150,8 +151,10 @@ function draw_filtered_comments(filtered_comment) {
                 var divCommentHTML =
 
                     "<div class=\"comment-author\">" +
-                        "<img src=\""+image+"\" width='25px'/>" +
-                        "<a>" +" author name" + "</a>" +
+                        "<div style='float: left; padding-right: 15px;padding-top: 5px;'>" +
+                            "<img src=\""+image+"\" width='27px' style='border-radius: 50%;'/></div>" +
+                        "<div><div>" +" author name" + "</div>" +
+                            '<div style="color: #888;"'+ '> one year ago'+'</div></div>'+
                     "</div>" +
                     "<div class=\"comment-body\"" + "\">" +
                     "<p>" +filtered_comment.ideas[i].tasks[j].comments[k].comment +"</p>";
