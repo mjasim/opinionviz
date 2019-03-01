@@ -155,7 +155,11 @@ function draw_filtered_comments(filtered_comment) {
                             '<div style="color: #888;"'+ '> one year ago'+'</div></div>'+
                     "</div>" +
                     "<div class=\"comment-body\"" + "\">" +
-                    "<p>" +filtered_comment.ideas[i].tasks[j].comments[k].comment +"</p>";
+                    "<p>" +filtered_comment.ideas[i].tasks[j].comments[k].comment +"</p>"+
+                    'inlined angry comment <span style="color: Mediumslateblue;">'+
+                    '<i class="fas fa-angry"></i>'+
+                    '</span>'
+                    +' comment goes on';
 
                     //'<p>'+ filtered_comment.ideas[i].tasks[j].comments[k].comment + '</p>';
                 divComment[k].innerHTML = divCommentHTML;
