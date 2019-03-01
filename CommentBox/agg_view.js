@@ -56,8 +56,6 @@ d3.json("communitycrit.json", function (err, json) {
     tempSvg.setAttribute("height", top1.clientHeight)
     top1.appendChild(tempSvg)
 
-    console.log(filterobj)
-
     send_data = all_proposal_emotion_agg
     emotion_rows(send_data, tempSvg.id, top1.id, null)
 
@@ -120,33 +118,11 @@ d3.json("communitycrit.json", function (err, json) {
 
         //============================ column 0=========================//
         var column0 = document.getElementById("row" + i + "column0")
-        // add button 
-        titles[i] = document.createElement("button")
-        titles[i].id = "title" + i
-        //console.log(tempColumnDiv.id)
-        titles[i].className = "btn btn-warning ideaButton"
-        var title_name = document.createTextNode(proposal_names[i].idea_name)
-        titles[i].appendChild(title_name)
-        column0.appendChild(titles[i])
+        var divIdeaName = 
+        "<div class=\"idea-Name\"" + "\">" +
+        "<button type=\"button\" class=\"btn btn-primary btn-block ideaName\">" + proposal_names[i].idea_name + "</button>";
 
-        // document.getElementById(titles[i].id).addEventListener("click", function() {
-        //     myFunction(proposal_names);
-        //   });
-          
-        //   function myFunction(idea_id, name) {
-        //     console.log(name)
-        // }
-
-        // $("#" + titles[i].id).on('click', function (e) {
-        //     filterobj.idea_id = proposal_names[i].idea_id
-        //     filterobj.emotion = null
-        //     filterobj.sentiment_final = null
-        //     filterobj.subjectivity = null
-        //     filterobj.task_id = null
-        //     console.log(filterobj)
-        //     var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
-        //     draw_filtered_comments(filtered_comment)
-        // })
+        column0.innerHTML = divIdeaName
 
         //============================end of column 0==================//
 
@@ -206,6 +182,16 @@ d3.json("communitycrit.json", function (err, json) {
         //============================ end of column 4 ==================//
     }
 
+    $(document).ready(function() {
+        $('btn btn-primary btn-block ideaName').click(function() {
+            var name = $(this).attr('className');
+            console.log('emotion clicked',name)
+        });
+        // $('.emoticon_button').mouseover(function() {
+        //     var id = $(this).attr('id');
+        //     console.log('emotion mouseover',id)
+        // });
+    });
     //functions for d3
 
     function emotion_rows(salesData, svg_id, div_id, idea_id) {
@@ -969,7 +955,7 @@ d3.json("communitycrit.json", function (err, json) {
         var color_input = "to left,"
         for (var i = 0; i < salesData.length; i++) {
             var factor = salesData[i]
-            var color = interpolateColor("rgb(226, 202, 247)","rgb(135, 0, 255)",factor)
+            var color = interpolateColor("rgb(226, 202, 247)", "rgb(135, 0, 255)", factor)
             color_input += color + ","
         }
 
