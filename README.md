@@ -1,6 +1,14 @@
 # opinionviz
 Repository for opinionviz data and code
 
+
+to install server for saving files
+=======================
+Install node.js
+Then goto the server directory in terminal and type
+npm install express --save
+
+
 * communitycrit
 	* data_final.json - json file with NLP results
 	* communitycrit.json - final format 

@@ -166,4 +166,22 @@ function draw_filtered_comments(filtered_comment) {
             }
         }
     }
+    makeRevision(filterobj);
+}
+
+function makeRevision(obj) {
+
+    $.ajax({
+        type: "POST",
+        url: "http://localhost:8082/saveRevision/",
+        dataType: 'json',
+        data: {
+            jsonQuery: obj
+        },
+        success: function( output ) {
+            console.log(saved);
+
+        }
+    });
+
 }
