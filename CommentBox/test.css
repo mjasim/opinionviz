@@ -5,6 +5,7 @@ body {
     right: 0;
     bottom: 0;
     left: 0;
+    font-family: BentonSans, 'Open Sans', sans-serif;
 }
 
 .parentDiv{
@@ -137,13 +138,26 @@ body {
 }
 
 .ideaDiv{
-    color:blue;
+    /*color:blue;*/
+    color: #545454;
     margin: 0 auto;
 }
+.ideaDiv h1{
+    font-weight: 700;
+    color: #000;
+    font-size: 24px;
+}
+
 
 .taskDiv{
     color:green;
     margin: 0 auto;
+}
+
+.taskDiv h2{
+    font-weight: 700;
+    color: #000;
+    font-size: 16px;
 }
 
 .questionDiv{
@@ -152,10 +166,27 @@ body {
 }
 
 .commentDiv{
-    color:black;
-    margin-left: 40px
-}
+    /*color:black;*/
+    color:#333;
+    margin-left: 25px;
+    font-family: Open Sans,sans-serif;
 
+    Background: #fff;
+    padding: 5px;
+    display: block; overflow: hidden;
+    border-top:2px solid white;
+    border-bottom: 1px solid #e2e2e2;
+
+}
+.comment-author {
+    /*float: left;*/
+    /*width: 60px;*/
+    /*height: 60px;*/
+    font-size: 12px;
+    font-weight: 700;
+    text-align: left;
+    margin: 0 10px 10px 0;
+}
 .btn .btn-warning .ideaButton{
     width: inherit;
     height: inherit;

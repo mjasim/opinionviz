@@ -49,6 +49,7 @@ function draw_proposal_wise_comments(json, idea_id) {
     }
 }
 
+
 // Get filtered comments
 function get_filtered_comment(json, filterobj) {
     var ideas = []
@@ -108,19 +109,26 @@ function draw_filtered_comments(filtered_comment) {
     for (var i in filtered_comment["ideas"]) {
         divIdea[i] = document.createElement("div")
         divIdea[i].className = "ideaDiv"
-        divIdea[i].id = "ideaDivId-" + filtered_comment.ideas[i].id
-        var node = document.createTextNode(filtered_comment.ideas[i].name)
-        divIdea[i].appendChild(node)
+        divIdea[i].id = "ideaDivId-" + filtered_comment.ideas[i].id;
+        //var node = document.createTextNode(filtered_comment.ideas[i].name);
+        //divIdea[i].appendChild(node)
+        var divIdeaHTML = '<h1>'+ filtered_comment.ideas[i].name + '</h1>';
+        var divIdeaHTML= divIdeaHTML + '<p>'+ "It would be brilliant if the entire length of 14th street was closed to motor traffic and was a truly pedestrian promenade. The only exception could be the small Free Ride carts that could transport people up and down the street. This would not only provide a pleasant safe space for people and pets to walk, but would also create space for outdoor seating, more trees and greenery, more and safer play areas, as well as food places with real sidewalk seating that is not disrupted by air pollution and motor noise. " + '</p>';
+        divIdea[i].innerHTML = divIdeaHTML;
         var element = document.getElementById("parentBox")
         element.appendChild(divIdea[i])
         for (var j in filtered_comment.ideas[i].tasks) {
             divTask[j] = document.createElement("div")
             divTask[j].className = "taskDiv"
             divTask[j].id = "taskDivId-" + filtered_comment.ideas[i].id + "-" + filtered_comment.ideas[i].tasks[j].id
-            var node = document.createTextNode(filtered_comment.ideas[i].tasks[j].name)
-            divTask[j].appendChild(node)
-            var element = document.getElementById(divIdea[i].id)
-            element.appendChild(divTask[j])
+            //var node = document.createTextNode(filtered_comment.ideas[i].tasks[j].name)
+            //divTask[j].appendChild(node)
+
+            var divTaskHTML = '<h2>'+ filtered_comment.ideas[i].tasks[j].name + '</h2>';
+            divTask[j].innerHTML = divTaskHTML;
+            var element = document.getElementById(divIdea[i].id);
+            element.appendChild(divTask[j]);
+
             for (var k in filtered_comment.ideas[i].tasks[j].comments) {
                 if(filtered_comment.ideas[i].tasks[j].id == 12){
                     divQuestion[k] = document.createElement("div")
@@ -136,9 +144,23 @@ function draw_filtered_comments(filtered_comment) {
                 }
                 divComment[k] = document.createElement("div")
                 divComment[k].className = "commentDiv"
-                divComment[k].id = "commentDivId-" + filtered_comment.ideas[i].id + "-" + filtered_comment.ideas[i].tasks[j].id + " " + filtered_comment.ideas[i].tasks[j].comments[k].comment_id
-                var node = document.createTextNode(filtered_comment.ideas[i].tasks[j].comments[k].comment)
-                divComment[k].appendChild(node)
+                divComment[k].id = "commentDivId-" + filtered_comment.ideas[i].id + "-" + filtered_comment.ideas[i].tasks[j].id + " " + filtered_comment.ideas[i].tasks[j].comments[k].comment_id;
+                var image ="/images/avatar.jpg";
+                var divCommentHTML =
+
+                    "<div class=\"comment-author\">" +
+                        "<div style='float: left; padding-right: 15px;padding-top: 5px;'>" +
+                            "<img src=\""+image+"\" width='27px' style='border-radius: 50%;'/></div>" +
+                        "<div><div>" +" author name" + "</div>" +
+                            '<div style="color: #888;"'+ '> one year ago'+'</div></div>'+
+                    "</div>" +
+                    "<div class=\"comment-body\"" + "\">" +
+                    "<p>" +filtered_comment.ideas[i].tasks[j].comments[k].comment +"</p>";
+
+                    //'<p>'+ filtered_comment.ideas[i].tasks[j].comments[k].comment + '</p>';
+                divComment[k].innerHTML = divCommentHTML;
+                //var node = document.createTextNode(filtered_comment.ideas[i].tasks[j].comments[k].comment)
+                //divComment[k].appendChild(node)
                 var element = document.getElementById(divTask[j].id)
                 element.appendChild(divComment[k])
             }
