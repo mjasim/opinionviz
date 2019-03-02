@@ -94,7 +94,16 @@ d3.json("communitycrit.json", function (err, json) {
 
     var top4 = document.getElementById("top4")
     send_data = all_proposal_profanity_agg[0].profanity_distribution;
-    profanity_rows(send_data, top4.id)
+
+    var min = Math.min(...send_data)
+    var max = Math.max(...send_data)
+    normalized = []
+    for (var x = 0; x < send_data.length; x++) {
+        normalized.push(normalize(send_data[x], max, min))
+    }
+    //console.log(send_data)
+    profanity_rows(normalized, top4.id)
+
 
     //============================ top column 4 end =========================//
 
@@ -116,12 +125,12 @@ d3.json("communitycrit.json", function (err, json) {
 
         aggElement.appendChild(tempRowDiv)
 
-        console.log(proposal_names[i]);
+        //console.log(proposal_names[i]);
         //============================ column 0=========================//
         var column0 = document.getElementById("row" + i + "column0")
         var divIdeaName =
-        "<div class=\"idea-Name\"" + "\">" +
-        '<div  class="btn btn-primary btn-block ideaName" id="'+proposal_names[i].idea_id+'">' + proposal_names[i].idea_name + "</div>";
+            "<div class=\"idea-Name\"" + "\">" +
+            '<div  class="btn btn-primary btn-block ideaName" id="' + proposal_names[i].idea_id + '">' + proposal_names[i].idea_name + "</div>";
 
         column0.innerHTML = divIdeaName
 
@@ -177,16 +186,35 @@ d3.json("communitycrit.json", function (err, json) {
 
         //============================ column 4 =========================//
         var column4 = document.getElementById("row" + i + "column4")
-        send_data = proposal_wise_profanity_agg[i].profanity_distribution;
-        profanity_rows(send_data, column4.id)
+        var send_data = proposal_wise_profanity_agg[i].profanity_distribution;
+        var min = Math.min(...send_data)
+        var max = Math.max(...send_data)
+        normalized = []
+        for (var x = 0; x < send_data.length; x++) {
+            //console.log(send_data, max, min)
+            normalized.push(normalize(send_data[x], max, min))
+        }
+        //console.log(send_data)
+        profanity_rows(normalized, column4.id)
 
         //============================ end of column 4 ==================//
     }
 
-    $(document).ready(function() {
-        $('.ideaName').click(function() {
-            var name = $(this).attr('id');
-            console.log('emotion clicked',name)
+    function normalize(val, max, min) {
+        return (val - min) / (max - min);
+    }
+
+    $(document).ready(function () {
+        $('.ideaName').click(function () {
+            var id = $(this).attr('id');
+            console.log('emotion clicked', id)
+            filterobj.idea_id = id
+            filterobj.emotion = null
+            filterobj.sentiment_final = null
+            filterobj.subjectivity = null
+            filterobj.task_id = null
+            var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
+            draw_filtered_comments(filtered_comment)
 
         });
         // $('.emoticon_button').mouseover(function() {
@@ -247,7 +275,7 @@ d3.json("communitycrit.json", function (err, json) {
             });
         }
 
-        var z = d3.scaleOrdinal(["red", "blue", "gray", "green", "yellow", "brown"]);
+        var z = d3.scaleOrdinal(["#4C78A8", "#F58518", "#E45756", "#72B7B2", "#54A24B", "#EECA3B"]);
 
         var maing = svg.append("g")
             .selectAll("g")
@@ -255,7 +283,8 @@ d3.json("communitycrit.json", function (err, json) {
         var g = maing.enter().append("g")
             .attr("fill", function (d) {
                 return z(d.key);
-            });
+            })
+            .attr("style", "outline: thin solid black;");
 
         var rect = g.selectAll("rect")
             .data(function (d) {
@@ -501,7 +530,7 @@ d3.json("communitycrit.json", function (err, json) {
             });
         }
 
-        var z = d3.scaleOrdinal(["orange", "white", "purple"]);
+        var z = d3.scaleOrdinal(["#D67195", "#FFBF79", "#439894"]);
 
         var maing = svg.append("g")
             .selectAll("g")
@@ -509,7 +538,9 @@ d3.json("communitycrit.json", function (err, json) {
         var g = maing.enter().append("g")
             .attr("fill", function (d) {
                 return z(d.key);
-            });
+                
+            })
+            .attr("style", "outline: thin solid black;");
 
         var rect = g.selectAll("rect")
             .data(function (d) {
@@ -752,7 +783,7 @@ d3.json("communitycrit.json", function (err, json) {
             });
         }
 
-        var z = d3.scaleOrdinal(["#424949", "white"]);
+        var z = d3.scaleOrdinal(["#bfbfbf", "#4d4d4d"]);
 
         var maing = svg.append("g")
             .selectAll("g")
@@ -760,7 +791,8 @@ d3.json("communitycrit.json", function (err, json) {
         var g = maing.enter().append("g")
             .attr("fill", function (d) {
                 return z(d.key);
-            });
+            })
+            .attr("style", "outline: thin solid black;");
 
         var rect = g.selectAll("rect")
             .data(function (d) {
@@ -957,7 +989,7 @@ d3.json("communitycrit.json", function (err, json) {
         var color_input = "to left,"
         for (var i = 0; i < salesData.length; i++) {
             var factor = salesData[i]
-            var color = interpolateColor("rgb(226, 202, 247)", "rgb(135, 0, 255)", factor)
+            var color = interpolateColor("rgb(44, 72, 91)", "rgb(242, 242, 242)", factor)
             color_input += color + ","
         }
 

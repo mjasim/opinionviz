@@ -1,27 +1,3 @@
-// Find corresponding awesome emoticon
-function find_emoticon(emo){
-    if(emo == "Angry"){
-        tempEmo = "fa-angry"
-    }
-    else if(emo == "Fear"){
-        tempEmo = "fa-flushed"
-    }
-    else if(emo == "Sad"){
-        tempEmo = "fa-frown"
-    }
-    else if(emo == "Bored"){
-        tempEmo = "fa-meh"
-    }
-    else if(emo == "Happy"){
-        tempEmo = "fa-smile"
-    }
-    else if(emo == "Excited"){
-        tempEmo = "fa-smile-beam"
-    }
-    return tempEmo
-}
-
-
 // Draw proposal-wise comments inside commentBox
 function draw_proposal_wise_comments(json, idea_id) {
     //console.log(json)
@@ -125,6 +101,18 @@ function draw_filtered_comments(filtered_comment) {
         myNode.removeChild(myNode.firstChild);
     }
 
+    var attributeObj = {
+        Angry: "fa-angry",
+        Fear: "fa-flushed",
+        Sad: "fa-frown",
+        Bored: "fa-meh",
+        Happy: "fa-smile",
+        Excited: "fa-smile-beam",
+        negative: "fa-thumbs-down",
+        neutral: "",
+        positive: "fa-thumbs-up"
+    }
+
     var divIdea = []
     var divQuestion = []
     var divTask = []
@@ -155,11 +143,9 @@ function draw_filtered_comments(filtered_comment) {
 
             for (var k in filtered_comment.ideas[i].tasks[j].comments) {
 
-                //var awesome_emoticon = "<i class=far " + find_emoticon(filtered_comment.ideas[i].tasks[j].comments[k].emotion) + "></i>"
-                var awesome_emoticon = "<i class=" + "far fa-smile" + "></i>"
+                var awesome_emoticon = attributeObj[filtered_comment.ideas[i].tasks[j].comments[k].emotion]
+                var awesome_sentiment = attributeObj[filtered_comment.ideas[i].tasks[j].comments[k].sentiment_final]
 
-                console.log(awesome_emoticon)
-                
                 if (filtered_comment.ideas[i].tasks[j].id == 12) {
                     divQuestion[k] = document.createElement("div")
                     divQuestion[k].className = "questionDiv"
@@ -177,11 +163,13 @@ function draw_filtered_comments(filtered_comment) {
                             '<div style="color: #888;"' + '> one year ago' + '</div></div>' +
                             "</div>" +
                             "<div class=\"comment-body\"" + "\">" +
-                            "<p>" + filtered_comment.ideas[i].tasks[j].comments[k].question + "</p>" +
-                            'inlined angry comment <span class="emoticon_button" id="span_id" >' +
-                            '<i class="far fa-angry"></i>' +
-                            '</span>'
-                            + ' comment goes on';
+                            "<p>" + filtered_comment.ideas[i].tasks[j].comments[k].question + "\xa0\xa0" +
+                            '<span class="emoticon_button" id="span_id_emo" >' +
+                            "<i class=" + "\"" + "fas " + awesome_emoticon + "\"" + "></i>" + "\xa0" + '</span>' +
+                            '<span class="sentiment_button" id="span_id_sent" >' +
+                            "<i class=" + "\"" + "fas " + awesome_sentiment + "\"" + "></i>" +
+                            '</span>' +
+                            "</p>";
 
                         divQuestion[k].innerHTML = divQuestionHTML;
                         var element = document.getElementById(divTask[j].id)
@@ -202,32 +190,14 @@ function draw_filtered_comments(filtered_comment) {
                     '<div style="color: #888;"' + '> one year ago' + '</div></div>' +
                     "</div>" +
                     "<div class=\"comment-body\"" + "\">" +
-                    "<p>" + filtered_comment.ideas[i].tasks[j].comments[k].comment + "</p>" +
-                    'inlined angry comment <span class="emoticon_button" id="span_id" >' +
-                    awesome_emoticon + 
-                    '</span>'
-                    + ' comment goes on';
+                    "<p>" + filtered_comment.ideas[i].tasks[j].comments[k].comment + "\xa0\xa0" +
+                    '<span class="emoticon_button" id="span_id_emo" >' +
+                    "<i class=" + "\"" + "fas " + awesome_emoticon + "\"" + "></i>" + "\xa0" + '</span>' +
+                    '<span class="sentiment_button" id="span_id_sent" >' +
+                    "<i class=" + "\"" + "fas " + awesome_sentiment + "\"" + "></i>" +
+                    '</span>' +
+                    "</p>";
 
-                console.log("div", awesome_emoticon)
-
-                var tempdivCommentHTML =
-
-                    "<div class=\"comment-author\">" +
-                    "<div style='float: left; padding-right: 15px;padding-top: 5px;'>" +
-                    "<img src=\"" + image + "\" width='27px' style='border-radius: 50%;'/></div>" +
-                    "<div><div>" + " author name" + "</div>" +
-                    '<div style="color: #888;"' + '> one year ago' + '</div></div>' +
-                    "</div>" +
-                    "<div class=\"comment-body\"" + "\">" +
-                    "<p>" + filtered_comment.ideas[i].tasks[j].comments[k].comment + "</p>" +
-                    'inlined angry comment <span class="emoticon_button" id="span_id" >' +
-                    "<i class=" + "far fa-angry" + "></i>" +
-                    '</span>'
-                    + ' comment goes on';
-
-                //console.log("temp", tempdivCommentHTML)
-
-                    
                 //'<p>'+ filtered_comment.ideas[i].tasks[j].comments[k].comment + '</p>';
                 divComment[k].innerHTML = divCommentHTML;
                 //var node = document.createTextNode(filtered_comment.ideas[i].tasks[j].comments[k].comment)
@@ -242,6 +212,17 @@ function draw_filtered_comments(filtered_comment) {
         $('.emoticon_button').click(function () {
             var id = $(this).attr('id');
             console.log('emotion clicked', id)
+        });
+        // $('.emoticon_button').mouseover(function() {
+        //     var id = $(this).attr('id');
+        //     console.log('emotion mouseover',id)
+        // });
+    });
+
+    $(document).ready(function () {
+        $('.sentiment_button').click(function () {
+            var id = $(this).attr('id');
+            console.log('sentiment clicked', id)
         });
         // $('.emoticon_button').mouseover(function() {
         //     var id = $(this).attr('id');
