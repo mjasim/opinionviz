@@ -124,8 +124,8 @@ function draw_filtered_comments(filtered_comment) {
         divIdea[i].id = "ideaDivId-" + filtered_comment.ideas[i].id;
         //var node = document.createTextNode(filtered_comment.ideas[i].name);
         //divIdea[i].appendChild(node)
-        var divIdeaHTML = '<h1>' + filtered_comment.ideas[i].name + '</h1>';
-        var divIdeaHTML = divIdeaHTML + '<p>' + "It would be brilliant if the entire length of 14th street was closed to motor traffic and was a truly pedestrian promenade. The only exception could be the small Free Ride carts that could transport people up and down the street. This would not only provide a pleasant safe space for people and pets to walk, but would also create space for outdoor seating, more trees and greenery, more and safer play areas, as well as food places with real sidewalk seating that is not disrupted by air pollution and motor noise. " + '</p>';
+        var divIdeaHTML = '<h1 style=margin-left:5px;color:#337AB7>' + filtered_comment.ideas[i].name + '</h1>';
+        var divIdeaHTML = divIdeaHTML + '<p style=margin-left:10px>' + "It would be brilliant if the entire length of 14th street was closed to motor traffic and was a truly pedestrian promenade. The only exception could be the small Free Ride carts that could transport people up and down the street. This would not only provide a pleasant safe space for people and pets to walk, but would also create space for outdoor seating, more trees and greenery, more and safer play areas, as well as food places with real sidewalk seating that is not disrupted by air pollution and motor noise. " + '</p>';
         divIdea[i].innerHTML = divIdeaHTML;
         var element = document.getElementById("parentBox")
         element.appendChild(divIdea[i])
@@ -136,7 +136,7 @@ function draw_filtered_comments(filtered_comment) {
             //var node = document.createTextNode(filtered_comment.ideas[i].tasks[j].name)
             //divTask[j].appendChild(node)
 
-            var divTaskHTML = '<h2>' + filtered_comment.ideas[i].tasks[j].name + '</h2>';
+            var divTaskHTML = '<h2 style=margin-left:5px;color:#3DAADB>' + filtered_comment.ideas[i].tasks[j].name + '</h2>';
             divTask[j].innerHTML = divTaskHTML;
             var element = document.getElementById(divIdea[i].id);
             element.appendChild(divTask[j]);

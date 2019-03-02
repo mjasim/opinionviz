@@ -107,6 +107,12 @@ d3.json("communitycrit.json", function (err, json) {
 
     //============================ top column 4 end =========================//
 
+
+    // Label div fillup
+
+    var labelElement = document.getElementById("labelDiv")
+    var 
+
     // Aggregate div fillup
     var titles = []
     var aggElement = document.getElementById("aggregateDiv")
@@ -275,7 +281,7 @@ d3.json("communitycrit.json", function (err, json) {
             });
         }
 
-        var z = d3.scaleOrdinal(["#4C78A8", "#F58518", "#E45756", "#72B7B2", "#54A24B", "#EECA3B"]);
+        var z = d3.scaleOrdinal(["#E45756", "#54A24B", "#4C78A8", "#72B7B2", "#EECA3B", "#F58518"]);
 
         var maing = svg.append("g")
             .selectAll("g")
