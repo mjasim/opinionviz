@@ -57,6 +57,7 @@ d3.json("communitycrit_new.json", function (err, json) {
     top1.appendChild(tempSvg)
 
     send_data = all_proposal_emotion_agg
+    console.log("tc1", send_data)
     emotion_rows(send_data, tempSvg.id, top1.id, null)
 
     //============================ top column 1 end =========================//
@@ -280,6 +281,7 @@ d3.json("communitycrit_new.json", function (err, json) {
 
         send_data = []
         send_data.push(proposal_wise_emotion_agg[i])
+        //console.log(send_data)
         emotion_rows(send_data, tempSvg.id, column1.id, proposal_names[i].idea_id)
 
         //============================end of column 1==================//
@@ -357,7 +359,7 @@ d3.json("communitycrit_new.json", function (err, json) {
 
     function emotion_rows(salesData, svg_id, div_id, idea_id) {
 
-        var group = ["angry", "worried", "sad", "neutral", "happy", "excited"];
+        var group = ["angry", "worried", "sad", "bored", "happy", "excited"];
         var parseDate = d3.timeFormat("%b-%Y");
         var mainDiv = "#" + div_id;
         var mainDivName = div_id;
@@ -539,7 +541,7 @@ d3.json("communitycrit_new.json", function (err, json) {
         rect.on("click", clicked_emotion);
 
         function clicked_emotion(d) {
-            console.log(filterobj)
+            //console.log(filterobj)
             filterobj.idea_id = idea_id
             filterobj.emotion = d.key
             var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
