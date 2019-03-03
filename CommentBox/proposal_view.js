@@ -1,55 +1,3 @@
-//
-
-var divCaption =
-    "<div class=\"label-body\"" + "\">" +
-    "<div class=\"label-title\"" + ">" +"</div>" +
-    "<div class=\"label-emo-body\"" + ">" +
-    "<p>" + "Angry" + "</p>" +
-    "<p>" + '<span class="label-emo-button" id="span_id_angry" >' +
-    "<i class=" + "\"fas fa-angry fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
-    "<div class=\"label-emo-body\"" + "\">" +
-    "<p>" + "Fear" + "</p>" +
-    "<p>" + '<span class="label-emo-button" id="span_id_fear" >' +
-    "<i class=" + "\"fas fa-flushed fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
-    "<div class=\"label-emo-body\"" + "\">" +
-    "<p>" + "Sad" + "</p>" +
-    "<p>" + '<span class="label-emo-button" id="span_id_sad" >' +
-    "<i class=" + "\"fas fa-frown fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
-    "<div class=\"label-emo-body\"" + "\">" +
-    "<p>" + "Bored" + "</p>" +
-    "<p>" + '<span class="label-emo-button" id="span_id_bored" >' +
-    "<i class=" + "\"fas fa-meh fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
-    "<div class=\"label-emo-body\"" + "\">" +
-    "<p>" + "Happy" + "</p>" +
-    "<p>" + '<span class="label-emo-button" id="span_id_happy" >' +
-    "<i class=" + "\"fas fa-smile fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
-    "<div class=\"label-emo-body\"" + "\">" +
-    "<p>" + "Excited" + "</p>" +
-    "<p>" + '<span class="label-emo-button" id="span_id_excited" >' +
-    "<i class=" + "\"fas fa-smile-beam fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>";
-tippy('button', {
-    interactive: true,
-    role: 'menu',
-    // `focus` is not suitable for buttons with dropdowns
-    trigger: 'click',
-    content: divCaption,
-    theme: 'tomato',
-    // Don't announce the tooltip's contents when expanded
-    aria: null,
-    // Important: the tooltip should be DIRECTLY after the reference element
-    // in the DOM source order, which is why it has its own wrapper element
-    appendTo: 'parent',
-    // Let the user know the popup has been expanded
-    onMount({ reference }) {
-        reference.setAttribute('aria-expanded', 'true')
-    },
-    onHide({ reference }) {
-        reference.setAttribute('aria-expanded', 'false')
-    },
-})
-
-
-
 
 var proposalIntro = {
     1: "Build a tower in the center of El Nudillo. Sketches of tower concepts as shown.",
@@ -272,6 +220,9 @@ function draw_filtered_comments(filtered_comment) {
                 divComment[k].className = "commentDiv"
                 divComment[k].id = "commentDivId-" + filtered_comment.ideas[i].id + "-" + filtered_comment.ideas[i].tasks[j].id + "-" + filtered_comment.ideas[i].tasks[j].comments[k].comment_id;
                 var image = "/images/avatar.jpg";
+                var sentimentButton = filtered_comment.ideas[i].tasks[j].comments[k].sentiment_final == "neutral"?
+                        "<i aria-haspopup=\"true\" aria-expanded=\"false\" class=" + "\"fas fa-thumbs-down fa-lg neutral\"" + " style=transform:rotate(90deg)" + "></i>" :
+                        "<i class=" + "\"" + "fas " + awesome_sentiment + "\"" + "></i>";
                 var divCommentHTML =
 
                     "<div class=\"comment-author\">" +
@@ -285,11 +236,12 @@ function draw_filtered_comments(filtered_comment) {
                     '<span class="emoticon_button" id="span_id_emo">' +
                     "<i class=" + "\"" + "fas " + awesome_emoticon + "\"" + "></i>" + "\xa0" + '</span>' +
                     '<span class="sentiment_button" id="span_id_sent" >' +
-                    "<i class=" + "\"" + "fas " + awesome_sentiment + "\"" + "></i>" +
+                    //"<i class=" + "\"" + "fas " + awesome_sentiment + "\"" + "></i>" +
+                    sentimentButton+
                     '</span>' +
                     "</p>";
 
-                if (filtered_comment.ideas[i].tasks[j].comments[k].sentiment_final == "neutral") {
+                /*if (filtered_comment.ideas[i].tasks[j].comments[k].sentiment_final == "neutral") {
                     divCommentHTML = "<div class=\"comment-author\">" +
                         "<div style='float: left; padding-right: 15px;padding-top: 5px;'>" +
                         "<img src=\"" + image + "\" width='27px' style='border-radius: 50%;'/></div>" +
@@ -304,38 +256,33 @@ function draw_filtered_comments(filtered_comment) {
                         "<i class=" + "\"fas fa-thumbs-down fa-lg neutral\"" + " style=transform:rotate(90deg)" + "></i>" +
                         '</span>' +
                         "</p>";
-                }
+                }*/
                 //'<p>'+ filtered_comment.ideas[i].tasks[j].comments[k].comment + '</p>';
                 divComment[k].innerHTML = divCommentHTML;
-                //var node = document.createTextNode(filtered_comment.ideas[i].tasks[j].comments[k].comment)
-                //divComment[k].appendChild(node)
+                setTippy(divComment[k].id);
+
                 var element = document.getElementById(divTask[j].id)
                 element.appendChild(divComment[k]);
             }
         }
     }
 
-    $(document).ready(function () {
-        $('.emoticon_button').click(function () {
-            var id = $(this).attr('id');
-            console.log('emotion clicked', id)
-        });
-        // $('.emoticon_button').mouseover(function() {
-        //     var id = $(this).attr('id');
-        //     console.log('emotion mouseover',id)
-        // });
-    });
 
-    $(document).ready(function () {
-        $('.emoticon_button').popover(function () {
-            var id = $(this).attr('id');
-            console.log('emotion clicked', id)
-        });
-        // $('.emoticon_button').mouseover(function() {
-        //     var id = $(this).attr('id');
-        //     console.log('emotion mouseover',id)
-        // });
-    });
+
+    // $(document).ready(function () {
+    //     $('.emoticon_button').popover(function () {
+    //         var id = $(this).attr('id');
+    //         console.log('emotion clicked', id)
+    //     });
+    //     $('.emoticon_button').popover(function () {
+    //         var id = $(this).attr('id');
+    //         console.log('emotion clicked', id)
+    //     });
+    //     // $('.emoticon_button').mouseover(function() {
+    //     //     var id = $(this).attr('id');
+    //     //     console.log('emotion mouseover',id)
+    //     // });
+    // });
 
     $(document).ready(function () {
         $('.sentiment_button').click(function () {
@@ -349,6 +296,82 @@ function draw_filtered_comments(filtered_comment) {
     });
 
     makeRevision(filterobj);
+}
+
+function setTippy(commentID) {
+    //console.log(commentID);
+    $(document).ready(function () {
+        tippy('#'+commentID+ ' .emoticon_button', {
+            interactive: true,
+            role: 'menu',
+            // `focus` is not suitable for buttons with dropdowns
+            trigger: 'click',
+            content: getEmojiString(commentID),
+            theme: 'tomato',
+            // Don't announce the tooltip's contents when expanded
+            aria: null,
+            // Important: the tooltip should be DIRECTLY after the reference element
+            // in the DOM source order, which is why it has its own wrapper element
+            appendTo: 'parent',
+            // Let the user know the popup has been expanded
+            onMount({ reference }) {
+                reference.setAttribute('aria-expanded', 'true')
+            },
+            onHide({ reference }) {
+                reference.setAttribute('aria-expanded', 'false')
+            },
+        });
+
+
+
+        $('#'+commentID+ ' .label-emo-button').click(function () {
+            var id = $(this).attr('id');
+            console.log('emoji-revision', id)
+        });
+        $('#span_id_angry'+commentID).click(function () {
+            var id = $(this).attr('id');
+            console.log('emoji-revision', id)
+        });
+        $('#span_id_angrycommentDivId-1-1-0').click(function () {
+            var id = $(this).attr('id');
+            console.log('emoji-revision', id)
+        });
+    });
+
+}
+function emojiMouseClick(id) {
+    console.log('emoji id '+ id);
+}
+function getEmojiString(commentID) {
+
+    var emojiDiv =
+        "<div class=\"label-body\"" + "\">" +
+        "<div class=\"label-title\"" + ">" +"</div>" +
+        "<div class=\"label-emo-body\"" + ">" +
+        "<p>" + "Angry" + "</p>" +
+        "<p>" + '<span class="label-emo-button" id="span_id_angry'+commentID+'" onclick="emojiMouseClick(\''+'angry'+commentID+'\')">' +
+        "<i class=" + "\"fas fa-angry fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<div class=\"label-emo-body\"" + "\">" +
+        "<p>" + "Fear" + "</p>" +
+        "<p>" + '<span class="label-emo-button" id="span_id_fear'+'" onclick="emojiMouseClick(\''+'fear'+commentID+'\')">' +
+        "<i class=" + "\"fas fa-flushed fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<div class=\"label-emo-body\"" + "\">" +
+        "<p>" + "Sad" + "</p>" +
+        "<p>" + '<span class="label-emo-button" id="span_id_sad'+'" onclick="emojiMouseClick(\''+'sad'+commentID+'\')">' +
+        "<i class=" + "\"fas fa-frown fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<div class=\"label-emo-body\"" + "\">" +
+        "<p>" + "Bored" + "</p>" +
+        "<p>" + '<span class="label-emo-button" id="span_id_bored'+'" onclick="emojiMouseClick(\''+'bored'+commentID+'\')">' +
+        "<i class=" + "\"fas fa-meh fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<div class=\"label-emo-body\"" + "\">" +
+        "<p>" + "Happy" + "</p>" +
+        "<p>" + '<span class="label-emo-button" id="span_id_happy'+'" onclick="emojiMouseClick(\''+'happy'+commentID+'\')">' +
+        "<i class=" + "\"fas fa-smile fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<div class=\"label-emo-body\"" + "\">" +
+        "<p>" + "Excited" + "</p>" +
+        "<p>" + '<span class="label-emo-button" id="span_id_excited'+'" onclick="emojiMouseClick(\''+'excited'+commentID+'\')">' +
+        "<i class=" + "\"fas fa-smile-beam fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>";
+    return emojiDiv;
 }
 
 function makeRevision(obj) {
