@@ -55,7 +55,7 @@ function get_proposal_wise_emotion(json) {
                 if (json.ideas[i].tasks[j].comments[k].emotion == "Angry") {
                     count_angry++;
                 }
-                else if (json.ideas[i].tasks[j].comments[k].emotion == "Fear") {
+                else if (json.ideas[i].tasks[j].comments[k].emotion == "Worried") {
                     count_fear++;
                 }
                 else if (json.ideas[i].tasks[j].comments[k].emotion == "Sad") {

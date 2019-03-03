@@ -7,7 +7,7 @@ var filterobj = {
     task_id: null
 }
 
-d3.json("communitycrit.json", function (err, json) {
+d3.json("communitycrit_new.json", function (err, json) {
     //console.log(json)
 
     var numberOfRows = 18;

@@ -126,7 +126,7 @@ function draw_filtered_comments(filtered_comment) {
 
     var attributeObj = {
         Angry: "fa-angry fa-lg",
-        Fear: "fa-flushed fa-lg",
+        Worried: "fa-flushed fa-lg",
         Sad: "fa-frown fa-lg",
         Bored: "fa-meh fa-lg",
         Happy: "fa-smile fa-lg",
@@ -194,6 +194,9 @@ function draw_filtered_comments(filtered_comment) {
                             "<i class=" + "\"" + "fas " + awesome_emoticon + "\"" + "></i>" + "\xa0" + '</span>' +
                             '<span class="sentiment_button" id="span_id_sent" >' +
                             "<i class=" + "\"" + "fas " + awesome_sentiment + "\"" + "></i>" + "\xa0" + '</span>' +
+                            '<span class="subjectivity_button" id="span_id_sub" >' +
+                            "<i class=" + "\"" + "fas " + awesome_subjectivity + "\"" + "></i>" +
+                            '</span>' +
                             "</p>";
                         if (filtered_comment.ideas[i].tasks[j].comments[k].sentiment_final == "neutral") {
                             divCommentHTML = "<div class=\"comment-author\">" +
@@ -208,10 +211,15 @@ function draw_filtered_comments(filtered_comment) {
                                 "<i class=" + "\"" + "fas " + awesome_emoticon + "\"" + "></i>" + "\xa0" + '</span>' +
                                 '<span class="sentiment_button" id="span_id_sent" >' +
                                 "<i class=" + "\"fas fa-thumbs-down fa-lg neutral\"" + " style=transform:rotate(90deg)" + "></i>" + "\xa0" + '</span>' +
+                                '<span class="subjectivity_button" id="span_id_sub" >' +
+                                "<i class=" + "\"" + "fas " + awesome_subjectivity + "\"" + "></i>" +
+                                '</span>' +
                                 "</p>";
                         }
 
                         divQuestion[k].innerHTML = divQuestionHTML;
+                        setTippy(divQuestion[k].id);
+
                         var element = document.getElementById(divTask[j].id)
                         element.appendChild(divQuestion[k])
                         prevQuestionId = divQuestion[k].id
@@ -238,9 +246,9 @@ function draw_filtered_comments(filtered_comment) {
                     "<i class=" + "\"" + "fas " + awesome_emoticon + "\"" + "></i>" + "\xa0" + '</span>' +
                     '<span class="sentiment_button" id="span_id_sent" >' +
                     //"<i class=" + "\"" + "fas " + awesome_sentiment + "\"" + "></i>" +
-                    sentimentButton + "\xa0" + 
-                    '</span>' + 
-                    '<span class="sebjectivity_button" id="span_id_sub" >' +
+                    sentimentButton + "\xa0" +
+                    '</span>' +
+                    '<span class="subjectivity_button" id="span_id_sub" >' +
                     "<i class=" + "\"" + "fas " + awesome_subjectivity + "\"" + "></i>" +
                     '</span>' +
                     "</p>";
@@ -326,7 +334,47 @@ function setTippy(commentID) {
             },
         });
 
+        tippy('#' + commentID + ' .sentiment_button', {
+            interactive: true,
+            role: 'menu',
+            // `focus` is not suitable for buttons with dropdowns
+            trigger: 'click',
+            content: getSentiString(commentID),
+            theme: 'tomato',
+            // Don't announce the tooltip's contents when expanded
+            aria: null,
+            // Important: the tooltip should be DIRECTLY after the reference element
+            // in the DOM source order, which is why it has its own wrapper element
+            appendTo: 'parent',
+            // Let the user know the popup has been expanded
+            onMount({ reference }) {
+                reference.setAttribute('aria-expanded', 'true')
+            },
+            onHide({ reference }) {
+                reference.setAttribute('aria-expanded', 'false')
+            },
+        });
 
+        tippy('#' + commentID + ' .subjectivity_button', {
+            interactive: true,
+            role: 'menu',
+            // `focus` is not suitable for buttons with dropdowns
+            trigger: 'click',
+            content: getSubjectivityString(commentID),
+            theme: 'tomato',
+            // Don't announce the tooltip's contents when expanded
+            aria: null,
+            // Important: the tooltip should be DIRECTLY after the reference element
+            // in the DOM source order, which is why it has its own wrapper element
+            appendTo: 'parent',
+            // Let the user know the popup has been expanded
+            onMount({ reference }) {
+                reference.setAttribute('aria-expanded', 'true')
+            },
+            onHide({ reference }) {
+                reference.setAttribute('aria-expanded', 'false')
+            },
+        });
 
         // $('#'+commentID+ ' .label-emo-button').click(function () {
         //     var id = $(this).attr('id');
@@ -376,6 +424,48 @@ function getEmojiString(commentID) {
         "<p>" + '<span class="label-emo-button" id="span_id_excited' + '" onclick="emojiMouseClick(\'' + 'excited' + commentID + '\')">' +
         "<i class=" + "\"fas fa-smile-beam fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>";
     return emojiDiv;
+}
+
+function sentiMouseClick(id) {
+    console.log('senti id ' + id);
+}
+function getSentiString(commentID) {
+
+    var sentiDiv =
+        "<div class=\"label-body\"" + "\">" +
+        "<div class=\"label-title\"" + ">" + "</div>" +
+        "<div class=\"label-sent-body\"" + ">" +
+        "<p>" + "Negative" + "</p>" +
+        "<p>" + '<span class="label-sent-button" id="span_id_negative' + commentID + '" onclick="sentiMouseClick(\'' + 'negative' + commentID + '\')">' +
+        "<i class=" + "\"fas fa-thumbs-down fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<div class=\"label-sent-body\"" + "\">" +
+        "<p>" + "Neutral" + "</p>" +
+        "<p>" + '<span class="label-sent-button" id="span_id_neutral' + '" onclick="sentiMouseClick(\'' + 'neutral' + commentID + '\')">' +
+        "<i class=" + "\"fas fa-thumbs-down fa-2x neutral\"" + " style=transform:rotate(-90deg)" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<div class=\"label-sent-body\"" + "\">" +
+        "<p>" + "Positive" + "</p>" +
+        "<p>" + '<span class="label-sent-button" id="span_id_positive' + '" onclick="sentiMouseClick(\'' + 'positive' + commentID + '\')">' +
+        "<i class=" + "\"fas fa-thumbs-up fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>";
+    return sentiDiv;
+}
+
+function subjectivityMouseClick(id) {
+    console.log('subjectivity id ' + id);
+}
+function getSubjectivityString(commentID) {
+
+    var subjectivityDiv =
+        "<div class=\"label-body\"" + "\">" +
+        "<div class=\"label-title\"" + ">" + "</div>" +
+        "<div class=\"label-sub-body\"" + ">" +
+        "<p>" + "Fact" + "</p>" +
+        "<p>" + '<span class="label-sub-button" id="span_id_fact' + commentID + '" onclick="subjectivityMouseClick(\'' + 'fact' + commentID + '\')">' +
+        "<i class=" + "\"fas fa-clipboard-check fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<div class=\"label-sub-body\"" + "\">" +
+        "<p>" + "Neutral" + "</p>" +
+        "<p>" + '<span class="label-sub-button" id="span_id_opinion' + '" onclick="subjectivityMouseClick(\'' + 'opinion' + commentID + '\')">' +
+        "<i class=" + "\"fas fa-comments fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>";
+    return subjectivityDiv;
 }
 
 function makeRevision(obj) {

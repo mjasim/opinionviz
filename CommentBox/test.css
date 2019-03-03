@@ -336,7 +336,7 @@ body {
     color: #FFBF79;
     opacity: 0.7;
 }
-.fa-thumbs-down:hover{
+.fa-thumbs-down.neutral:hover{
     opacity: .9;
     cursor: pointer;
 }
@@ -352,4 +352,22 @@ body {
 
 .tippy-tooltip.tomato-theme .tippy-backdrop {
     background-color: white;
+}
+
+.fa-clipboard-check{
+    color: gray;
+    opacity: 0.7;
+}
+.fa-clipboard-check:hover{
+    opacity: .9;
+    cursor: pointer;
+}
+
+.fa-comments{
+    color: black;
+    opacity: 0.7;
+}
+.fa-comments:hover{
+    opacity: .9;
+    cursor: pointer;
 }
