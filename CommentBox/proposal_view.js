@@ -133,7 +133,9 @@ function draw_filtered_comments(filtered_comment) {
         Excited: "fa-smile-beam fa-lg",
         negative: "fa-thumbs-down fa-lg",
         neutral: "fa-thumbs-down fa-lg",
-        positive: "fa-thumbs-up fa-lg"
+        positive: "fa-thumbs-up fa-lg",
+        Fact: "fa-clipboard-check fa-lg",
+        Opinion: "fa-comments fa-lg"
     }
 
     var divIdea = []
@@ -168,6 +170,7 @@ function draw_filtered_comments(filtered_comment) {
 
                 var awesome_emoticon = attributeObj[filtered_comment.ideas[i].tasks[j].comments[k].emotion]
                 var awesome_sentiment = attributeObj[filtered_comment.ideas[i].tasks[j].comments[k].sentiment_final]
+                var awesome_subjectivity = attributeObj[filtered_comment.ideas[i].tasks[j].comments[k].subjectivity]
 
                 if (filtered_comment.ideas[i].tasks[j].id == 12) {
                     divQuestion[k] = document.createElement("div")
@@ -190,8 +193,7 @@ function draw_filtered_comments(filtered_comment) {
                             '<span class="emoticon_button" id="span_id_emo" >' +
                             "<i class=" + "\"" + "fas " + awesome_emoticon + "\"" + "></i>" + "\xa0" + '</span>' +
                             '<span class="sentiment_button" id="span_id_sent" >' +
-                            "<i class=" + "\"" + "fas " + awesome_sentiment + "\"" + "></i>" +
-                            '</span>' +
+                            "<i class=" + "\"" + "fas " + awesome_sentiment + "\"" + "></i>" + "\xa0" + '</span>' +
                             "</p>";
                         if (filtered_comment.ideas[i].tasks[j].comments[k].sentiment_final == "neutral") {
                             divCommentHTML = "<div class=\"comment-author\">" +
@@ -205,8 +207,7 @@ function draw_filtered_comments(filtered_comment) {
                                 '<span class="emoticon_button" id="span_id_emo" >' +
                                 "<i class=" + "\"" + "fas " + awesome_emoticon + "\"" + "></i>" + "\xa0" + '</span>' +
                                 '<span class="sentiment_button" id="span_id_sent" >' +
-                                "<i class=" + "\"fas fa-thumbs-down fa-lg neutral\"" + " style=transform:rotate(90deg)" + "></i>" +
-                                '</span>' +
+                                "<i class=" + "\"fas fa-thumbs-down fa-lg neutral\"" + " style=transform:rotate(90deg)" + "></i>" + "\xa0" + '</span>' +
                                 "</p>";
                         }
 
@@ -220,9 +221,9 @@ function draw_filtered_comments(filtered_comment) {
                 divComment[k].className = "commentDiv"
                 divComment[k].id = "commentDivId-" + filtered_comment.ideas[i].id + "-" + filtered_comment.ideas[i].tasks[j].id + "-" + filtered_comment.ideas[i].tasks[j].comments[k].comment_id;
                 var image = "/images/avatar.jpg";
-                var sentimentButton = filtered_comment.ideas[i].tasks[j].comments[k].sentiment_final == "neutral"?
-                        "<i aria-haspopup=\"true\" aria-expanded=\"false\" class=" + "\"fas fa-thumbs-down fa-lg neutral\"" + " style=transform:rotate(90deg)" + "></i>" :
-                        "<i class=" + "\"" + "fas " + awesome_sentiment + "\"" + "></i>";
+                var sentimentButton = filtered_comment.ideas[i].tasks[j].comments[k].sentiment_final == "neutral" ?
+                    "<i aria-haspopup=\"true\" aria-expanded=\"false\" class=" + "\"fas fa-thumbs-down fa-lg neutral\"" + " style=transform:rotate(90deg)" + "></i>" :
+                    "<i class=" + "\"" + "fas " + awesome_sentiment + "\"" + "></i>";
                 var divCommentHTML =
 
                     "<div class=\"comment-author\">" +
@@ -237,7 +238,10 @@ function draw_filtered_comments(filtered_comment) {
                     "<i class=" + "\"" + "fas " + awesome_emoticon + "\"" + "></i>" + "\xa0" + '</span>' +
                     '<span class="sentiment_button" id="span_id_sent" >' +
                     //"<i class=" + "\"" + "fas " + awesome_sentiment + "\"" + "></i>" +
-                    sentimentButton+
+                    sentimentButton + "\xa0" + 
+                    '</span>' + 
+                    '<span class="sebjectivity_button" id="span_id_sub" >' +
+                    "<i class=" + "\"" + "fas " + awesome_subjectivity + "\"" + "></i>" +
                     '</span>' +
                     "</p>";
 
@@ -301,7 +305,7 @@ function draw_filtered_comments(filtered_comment) {
 function setTippy(commentID) {
     //console.log(commentID);
     $(document).ready(function () {
-        tippy('#'+commentID+ ' .emoticon_button', {
+        tippy('#' + commentID + ' .emoticon_button', {
             interactive: true,
             role: 'menu',
             // `focus` is not suitable for buttons with dropdowns
@@ -324,52 +328,52 @@ function setTippy(commentID) {
 
 
 
-        $('#'+commentID+ ' .label-emo-button').click(function () {
-            var id = $(this).attr('id');
-            console.log('emoji-revision', id)
-        });
-        $('#span_id_angry'+commentID).click(function () {
-            var id = $(this).attr('id');
-            console.log('emoji-revision', id)
-        });
-        $('#span_id_angrycommentDivId-1-1-0').click(function () {
-            var id = $(this).attr('id');
-            console.log('emoji-revision', id)
-        });
+        // $('#'+commentID+ ' .label-emo-button').click(function () {
+        //     var id = $(this).attr('id');
+        //     console.log('emoji-revision', id)
+        // });
+        // $('#span_id_angry'+commentID).click(function () {
+        //     var id = $(this).attr('id');
+        //     console.log('emoji-revision', id)
+        // });
+        // $('#span_id_angrycommentDivId-1-1-0').click(function () {
+        //     var id = $(this).attr('id');
+        //     console.log('emoji-revision', id)
+        // });
     });
 
 }
 function emojiMouseClick(id) {
-    console.log('emoji id '+ id);
+    console.log('emoji id ' + id);
 }
 function getEmojiString(commentID) {
 
     var emojiDiv =
         "<div class=\"label-body\"" + "\">" +
-        "<div class=\"label-title\"" + ">" +"</div>" +
+        "<div class=\"label-title\"" + ">" + "</div>" +
         "<div class=\"label-emo-body\"" + ">" +
         "<p>" + "Angry" + "</p>" +
-        "<p>" + '<span class="label-emo-button" id="span_id_angry'+commentID+'" onclick="emojiMouseClick(\''+'angry'+commentID+'\')">' +
+        "<p>" + '<span class="label-emo-button" id="span_id_angry' + commentID + '" onclick="emojiMouseClick(\'' + 'angry' + commentID + '\')">' +
         "<i class=" + "\"fas fa-angry fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Fear" + "</p>" +
-        "<p>" + '<span class="label-emo-button" id="span_id_fear'+'" onclick="emojiMouseClick(\''+'fear'+commentID+'\')">' +
+        "<p>" + '<span class="label-emo-button" id="span_id_fear' + '" onclick="emojiMouseClick(\'' + 'fear' + commentID + '\')">' +
         "<i class=" + "\"fas fa-flushed fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Sad" + "</p>" +
-        "<p>" + '<span class="label-emo-button" id="span_id_sad'+'" onclick="emojiMouseClick(\''+'sad'+commentID+'\')">' +
+        "<p>" + '<span class="label-emo-button" id="span_id_sad' + '" onclick="emojiMouseClick(\'' + 'sad' + commentID + '\')">' +
         "<i class=" + "\"fas fa-frown fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Bored" + "</p>" +
-        "<p>" + '<span class="label-emo-button" id="span_id_bored'+'" onclick="emojiMouseClick(\''+'bored'+commentID+'\')">' +
+        "<p>" + '<span class="label-emo-button" id="span_id_bored' + '" onclick="emojiMouseClick(\'' + 'bored' + commentID + '\')">' +
         "<i class=" + "\"fas fa-meh fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Happy" + "</p>" +
-        "<p>" + '<span class="label-emo-button" id="span_id_happy'+'" onclick="emojiMouseClick(\''+'happy'+commentID+'\')">' +
+        "<p>" + '<span class="label-emo-button" id="span_id_happy' + '" onclick="emojiMouseClick(\'' + 'happy' + commentID + '\')">' +
         "<i class=" + "\"fas fa-smile fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Excited" + "</p>" +
-        "<p>" + '<span class="label-emo-button" id="span_id_excited'+'" onclick="emojiMouseClick(\''+'excited'+commentID+'\')">' +
+        "<p>" + '<span class="label-emo-button" id="span_id_excited' + '" onclick="emojiMouseClick(\'' + 'excited' + commentID + '\')">' +
         "<i class=" + "\"fas fa-smile-beam fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>";
     return emojiDiv;
 }
