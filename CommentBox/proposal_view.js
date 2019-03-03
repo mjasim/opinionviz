@@ -1,4 +1,55 @@
-// 
+//
+
+var divCaption =
+    "<div class=\"label-body\"" + "\">" +
+    "<div class=\"label-title\"" + ">" +"</div>" +
+    "<div class=\"label-emo-body\"" + ">" +
+    "<p>" + "Angry" + "</p>" +
+    "<p>" + '<span class="label-emo-button" id="span_id_angry" >' +
+    "<i class=" + "\"fas fa-angry fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+    "<div class=\"label-emo-body\"" + "\">" +
+    "<p>" + "Fear" + "</p>" +
+    "<p>" + '<span class="label-emo-button" id="span_id_fear" >' +
+    "<i class=" + "\"fas fa-flushed fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+    "<div class=\"label-emo-body\"" + "\">" +
+    "<p>" + "Sad" + "</p>" +
+    "<p>" + '<span class="label-emo-button" id="span_id_sad" >' +
+    "<i class=" + "\"fas fa-frown fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+    "<div class=\"label-emo-body\"" + "\">" +
+    "<p>" + "Bored" + "</p>" +
+    "<p>" + '<span class="label-emo-button" id="span_id_bored" >' +
+    "<i class=" + "\"fas fa-meh fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+    "<div class=\"label-emo-body\"" + "\">" +
+    "<p>" + "Happy" + "</p>" +
+    "<p>" + '<span class="label-emo-button" id="span_id_happy" >' +
+    "<i class=" + "\"fas fa-smile fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+    "<div class=\"label-emo-body\"" + "\">" +
+    "<p>" + "Excited" + "</p>" +
+    "<p>" + '<span class="label-emo-button" id="span_id_excited" >' +
+    "<i class=" + "\"fas fa-smile-beam fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>";
+tippy('button', {
+    interactive: true,
+    role: 'menu',
+    // `focus` is not suitable for buttons with dropdowns
+    trigger: 'click',
+    content: divCaption,
+    theme: 'tomato',
+    // Don't announce the tooltip's contents when expanded
+    aria: null,
+    // Important: the tooltip should be DIRECTLY after the reference element
+    // in the DOM source order, which is why it has its own wrapper element
+    appendTo: 'parent',
+    // Let the user know the popup has been expanded
+    onMount({ reference }) {
+        reference.setAttribute('aria-expanded', 'true')
+    },
+    onHide({ reference }) {
+        reference.setAttribute('aria-expanded', 'false')
+    },
+})
+
+
+
 
 var proposalIntro = {
     1: "Build a tower in the center of El Nudillo. Sketches of tower concepts as shown.",

@@ -340,3 +340,16 @@ body {
     opacity: .9;
     cursor: pointer;
 }
+
+.tippy-tooltip.tomato-theme {
+    background-color: tomato;
+    color: black;
+}
+
+.tippy-tooltip.tomato-theme[data-animatefill] {
+    background-color: transparent;
+}
+
+.tippy-tooltip.tomato-theme .tippy-backdrop {
+    background-color: white;
+}
