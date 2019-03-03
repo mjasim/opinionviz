@@ -18,6 +18,14 @@ body {
     align-items: center;
 }
 
+.t_svg{
+    border:solid thin white;
+}
+
+.c_svg{
+    border:solid thin white;
+}
+
 .aggregate{
     align-items: center;
     width: 80%;
@@ -31,17 +39,50 @@ body {
     flex-wrap: wrap;
     align-items: center;
     width: 80%;
-    height: 7vh;
-    overflow: scroll;
+    height: 6vh;
+
 }
 
-.top{
+.label{
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     align-items: center;
     width: 80%;
-    height: 7vh;
+    height: 8vh;
+    color:black
+}
+
+.label-body{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.label-title{
+    width: 100%;
+    border:solid thin;
+}
+
+.label-title-body{
+    width: 100%;
+    padding: 5px 0;
+}
+
+.label-emo-body{
+    width: 16%;
+    padding: 5px 0;
+}
+
+.label-sent-body{
+    width: 33%;
+    padding: 5px 0;
+}
+
+.label-sub-body{
+    width: 50%;
+    padding: 5px 0;
 }
 
 .c_row{
@@ -83,7 +124,9 @@ body {
 .t_column4{
     width: 20%;
     height: inherit;
-    border: 10px;
+    border: solid thin;
+    height: 49px;
+    margin-top: 4px;
 }
 
 .l_column0{
@@ -149,10 +192,11 @@ body {
 .c_column4{
     width: 20%;
     height: inherit;
-    border: 10px;
+    border: solid thin black;
     border-color: black;
+    height: 43px;
+    margin-top: 2px;
 }
-
 
 .box{
     width: 80%;
@@ -281,6 +325,15 @@ body {
 
 .fa-thumbs-down{
     color: #D67195;
+    opacity: 0.7;
+}
+.fa-thumbs-down:hover{
+    opacity: .9;
+    cursor: pointer;
+}
+
+.fa-thumbs-down.neutral{
+    color: #FFBF79;
     opacity: 0.7;
 }
 .fa-thumbs-down:hover{

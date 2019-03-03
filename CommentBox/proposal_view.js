@@ -1,3 +1,27 @@
+// 
+
+var proposalIntro = {
+    1: "Build a tower in the center of El Nudillo. Sketches of tower concepts as shown.",
+    2: "I would love to see El Nudillo, the intersection of 14th Street and National Avenue, become a place for public creative expression. There are so many talented artists around this area, and if we could somehow commission one to make a sculpture or something, or maybe invite everyone to paint a mural one day, it could be an amazing way to make this space ours and bring the community together.",
+    3: "The intersection right now is basically just an empty lot. We could easily make it a roundabout with three crosswalks so that traffic from National Ave and Commercial St can still get around but so people can also use the open space in the center.",
+    4: "So many cities are beautified with fountains! Kids can play in them when it is hot outside, and any sort of water element attracts a crowd. A huge fountain at El Nudillo would make it a destination for people to visit. ",
+    6: "Love to see interactive rotating art with current cultural subjects. A place for exchanging ideas which helps the community grow together.",
+    10: "a densely landscaped small urban park. NO Large sculpture or gateway 'ART' archway JUST a BIG canopy tree and pervious ground cover with native grasses to soften",
+    14: "I want to see National Avenue between Imperial and Commercial closed to Auto traffic. I want to see MTS's property, the triangle parking lot bordered by National, 14th and Imperial, the lot with the Greyhound terminal and the parking area for busses to become a woonerf.",
+    15: "It would be brilliant if the entire length of 14th street was closed to motor traffic and was a truly pedestrian promenade. The only exception could be the small Free Ride carts that could transport people up and down the street. This would not only provide a pleasant safe space for people and pets to walk, but would also create space for outdoor seating, more trees and greenery, more and safer play areas, as well as food places with real sidewalk seating that is not disrupted by air pollution and motor noise",
+    22: "Instead of making a roundabout we can create a two story triangle platform to avoid a major infrastructure change. It is a platform that works with current traffic, but allows people to walk to get where they need, and creates a green space at the ground level. ",
+    23: "",
+    24: "A zipline from the top of a tower that allows people to see the view and connects El Nudillo to Balboa park. People can get up and look at the park. It creates a direct visual link to the Balboa park.",
+    25: "Many large cities like New York have a transit hub. We can create a station that ties to commercial and residential activities. Right now, the bus station is disconnected from the trolley. It should be a transit hub for bus, trolley, and bike traffic. ",
+    26: "El Nudillo is a front door for both Barrio Logan and East Village. It can be a gateway that reflects both neighborhoods, something that has both characteristics of the education district to the north and the Barrio to the south with a green space and murals.",
+    27: "We can create a public green path to connect the past to the future. Library and the dome represent the future, and the brewery represents the past. The brewery is one of the oldest warehouses in San Diego.They can work together to create a mass and a sense of place.",
+    31: "Address the homeless issue before spending on artistic projects or it is just a waste of money.",
+    32: "Stop using the term \"El Nudillo\". It is obnoxious and arrogant. You cannot create culture before it exists. Please adopt high-density zoning and let the people who occupy those spaces define FOR THEMSELVES what the area is called. ",
+    33: "The spires intersect to support three sky paths suspended by cables allowing complete access around the streets above transit modes passing below. The elevation of the paths remains consistent, approximately 16-18 feet above grade.",
+    34: "Named because the primary archway and supporting cables are reminiscent of this musical instrument. This suspension bridge’s sky paths slope through the air moving above the streets below. The lowest level begins approximately 14-16 feet above the street on the corner adjacent to the transit center.",
+    35: "Open Air Market - weekly activations, events, farmer's markets, etc."
+}
+
 // Draw proposal-wise comments inside commentBox
 function draw_proposal_wise_comments(json, idea_id) {
     //console.log(json)
@@ -102,15 +126,15 @@ function draw_filtered_comments(filtered_comment) {
     }
 
     var attributeObj = {
-        Angry: "fa-angry",
-        Fear: "fa-flushed",
-        Sad: "fa-frown",
-        Bored: "fa-meh",
-        Happy: "fa-smile",
-        Excited: "fa-smile-beam",
-        negative: "fa-thumbs-down",
-        neutral: "",
-        positive: "fa-thumbs-up"
+        Angry: "fa-angry fa-lg",
+        Fear: "fa-flushed fa-lg",
+        Sad: "fa-frown fa-lg",
+        Bored: "fa-meh fa-lg",
+        Happy: "fa-smile fa-lg",
+        Excited: "fa-smile-beam fa-lg",
+        negative: "fa-thumbs-down fa-lg",
+        neutral: "fa-thumbs-down fa-lg",
+        positive: "fa-thumbs-up fa-lg"
     }
 
     var divIdea = []
@@ -125,7 +149,7 @@ function draw_filtered_comments(filtered_comment) {
         //var node = document.createTextNode(filtered_comment.ideas[i].name);
         //divIdea[i].appendChild(node)
         var divIdeaHTML = '<h1 style=margin-left:5px;color:#337AB7>' + filtered_comment.ideas[i].name + '</h1>';
-        var divIdeaHTML = divIdeaHTML + '<p style=margin-left:10px>' + "It would be brilliant if the entire length of 14th street was closed to motor traffic and was a truly pedestrian promenade. The only exception could be the small Free Ride carts that could transport people up and down the street. This would not only provide a pleasant safe space for people and pets to walk, but would also create space for outdoor seating, more trees and greenery, more and safer play areas, as well as food places with real sidewalk seating that is not disrupted by air pollution and motor noise. " + '</p>';
+        var divIdeaHTML = divIdeaHTML + '<p style=margin-left:10px>' + proposalIntro[filtered_comment.ideas[i].id] + '</p>';
         divIdea[i].innerHTML = divIdeaHTML;
         var element = document.getElementById("parentBox")
         element.appendChild(divIdea[i])
@@ -170,6 +194,22 @@ function draw_filtered_comments(filtered_comment) {
                             "<i class=" + "\"" + "fas " + awesome_sentiment + "\"" + "></i>" +
                             '</span>' +
                             "</p>";
+                        if (filtered_comment.ideas[i].tasks[j].comments[k].sentiment_final == "neutral") {
+                            divCommentHTML = "<div class=\"comment-author\">" +
+                                "<div style='float: left; padding-right: 15px;padding-top: 5px;'>" +
+                                "<img src=\"" + image + "\" width='27px' style='border-radius: 50%;'/></div>" +
+                                "<div><div>" + " author name" + "</div>" +
+                                '<div style="color: #888;"' + '> one year ago' + '</div></div>' +
+                                "</div>" +
+                                "<div class=\"comment-body\"" + "\">" +
+                                "<p>" + filtered_comment.ideas[i].tasks[j].comments[k].comment + "\xa0\xa0" +
+                                '<span class="emoticon_button" id="span_id_emo" >' +
+                                "<i class=" + "\"" + "fas " + awesome_emoticon + "\"" + "></i>" + "\xa0" + '</span>' +
+                                '<span class="sentiment_button" id="span_id_sent" >' +
+                                "<i class=" + "\"fas fa-thumbs-down fa-lg neutral\"" + " style=transform:rotate(90deg)" + "></i>" +
+                                '</span>' +
+                                "</p>";
+                        }
 
                         divQuestion[k].innerHTML = divQuestionHTML;
                         var element = document.getElementById(divTask[j].id)
@@ -191,13 +231,29 @@ function draw_filtered_comments(filtered_comment) {
                     "</div>" +
                     "<div class=\"comment-body\"" + "\">" +
                     "<p>" + filtered_comment.ideas[i].tasks[j].comments[k].comment + "\xa0\xa0" +
-                    '<span class="emoticon_button" id="span_id_emo" >' +
+                    '<span class="emoticon_button" id="span_id_emo">' +
                     "<i class=" + "\"" + "fas " + awesome_emoticon + "\"" + "></i>" + "\xa0" + '</span>' +
                     '<span class="sentiment_button" id="span_id_sent" >' +
                     "<i class=" + "\"" + "fas " + awesome_sentiment + "\"" + "></i>" +
                     '</span>' +
                     "</p>";
 
+                if (filtered_comment.ideas[i].tasks[j].comments[k].sentiment_final == "neutral") {
+                    divCommentHTML = "<div class=\"comment-author\">" +
+                        "<div style='float: left; padding-right: 15px;padding-top: 5px;'>" +
+                        "<img src=\"" + image + "\" width='27px' style='border-radius: 50%;'/></div>" +
+                        "<div><div>" + " author name" + "</div>" +
+                        '<div style="color: #888;"' + '> one year ago' + '</div></div>' +
+                        "</div>" +
+                        "<div class=\"comment-body\"" + "\">" +
+                        "<p>" + filtered_comment.ideas[i].tasks[j].comments[k].comment + "\xa0\xa0" +
+                        '<span class="emoticon_button" id="span_id_emo">' +
+                        "<i class=" + "\"" + "fas " + awesome_emoticon + "\"" + "></i>" + "\xa0" + '</span>' +
+                        '<span class="sentiment_button" id="span_id_sent" >' +
+                        "<i class=" + "\"fas fa-thumbs-down fa-lg neutral\"" + " style=transform:rotate(90deg)" + "></i>" +
+                        '</span>' +
+                        "</p>";
+                }
                 //'<p>'+ filtered_comment.ideas[i].tasks[j].comments[k].comment + '</p>';
                 divComment[k].innerHTML = divCommentHTML;
                 //var node = document.createTextNode(filtered_comment.ideas[i].tasks[j].comments[k].comment)
@@ -210,6 +266,17 @@ function draw_filtered_comments(filtered_comment) {
 
     $(document).ready(function () {
         $('.emoticon_button').click(function () {
+            var id = $(this).attr('id');
+            console.log('emotion clicked', id)
+        });
+        // $('.emoticon_button').mouseover(function() {
+        //     var id = $(this).attr('id');
+        //     console.log('emotion mouseover',id)
+        // });
+    });
+
+    $(document).ready(function () {
+        $('.emoticon_button').popover(function () {
             var id = $(this).attr('id');
             console.log('emotion clicked', id)
         });

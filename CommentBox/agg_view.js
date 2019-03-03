@@ -111,7 +111,133 @@ d3.json("communitycrit.json", function (err, json) {
     // Label div fillup
 
     var labelElement = document.getElementById("labelDiv")
-    var 
+
+    // =========================== label column 0 ===============================//
+
+    var labelColumn0Div = document.createElement("div")
+    labelColumn0Div.id = "labelcolumn0"
+    labelColumn0Div.className = "l_column0"
+
+    var divCaption =
+        "<div class=\"label-body\"" + "\">" +
+        "<div class=\"label-title\"" + ">" +
+        "<p style=\"margin: 5px 0px 5px 0px\""+ ">" + "Proposal Title" + "</p>" + "</div>" +
+        "<div class=\"label-title-body\"" + ">" +
+        "<p>" + "Search" + "</p>" +
+        "<p>" + '<span class="label-search-button" id="span_id_angry" >' +
+        "<i class=" + "\"fas fa-search fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>"
+
+    labelColumn0Div.innerHTML = divCaption
+    labelElement.appendChild(labelColumn0Div)
+
+    // =========================== label column 0 end ===========================//
+
+    // =========================== label column 1 ===============================//
+
+    var labelColumn1Div = document.createElement("div")
+    labelColumn1Div.id = "labelcolumn1"
+    labelColumn1Div.className = "l_column1"
+
+    var divCaption =
+        "<div class=\"label-body\"" + "\">" +
+        "<div class=\"label-title\"" + ">" +
+        "<p style=\"margin: 5px 0px 5px 0px\""+ ">" + "Emotion" + "</p>" + "</div>" +
+        "<div class=\"label-emo-body\"" + ">" +
+        "<p>" + "Angry" + "</p>" +
+        "<p>" + '<span class="label-emo-button" id="span_id_angry" >' +
+        "<i class=" + "\"fas fa-angry fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<div class=\"label-emo-body\"" + "\">" +
+        "<p>" + "Fear" + "</p>" +
+        "<p>" + '<span class="label-emo-button" id="span_id_fear" >' +
+        "<i class=" + "\"fas fa-flushed fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<div class=\"label-emo-body\"" + "\">" +
+        "<p>" + "Sad" + "</p>" +
+        "<p>" + '<span class="label-emo-button" id="span_id_sad" >' +
+        "<i class=" + "\"fas fa-frown fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<div class=\"label-emo-body\"" + "\">" +
+        "<p>" + "Bored" + "</p>" +
+        "<p>" + '<span class="label-emo-button" id="span_id_bored" >' +
+        "<i class=" + "\"fas fa-meh fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<div class=\"label-emo-body\"" + "\">" +
+        "<p>" + "Happy" + "</p>" +
+        "<p>" + '<span class="label-emo-button" id="span_id_happy" >' +
+        "<i class=" + "\"fas fa-smile fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<div class=\"label-emo-body\"" + "\">" +
+        "<p>" + "Excited" + "</p>" +
+        "<p>" + '<span class="label-emo-button" id="span_id_excited" >' +
+        "<i class=" + "\"fas fa-smile-beam fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>";
+
+    labelColumn1Div.innerHTML = divCaption
+    labelElement.appendChild(labelColumn1Div)
+
+    // =========================== label column 1 end ===========================//
+
+
+    // =========================== label column 2 ===============================//
+
+    var labelColumn2Div = document.createElement("div")
+    labelColumn2Div.id = "labelcolumn2"
+    labelColumn2Div.className = "l_column2"
+
+    var divCaption =
+        "<div class=\"label-body\"" + "\">" +
+        "<div class=\"label-title\"" + ">" +
+        "<p style=\"margin: 5px 0px 5px 0px\""+ ">" + "Sentiment" + "</p>" + "</div>" +
+        "<div class=\"label-sent-body\"" + ">" +
+        "<p>" + "Negative" + "</p>" +
+        "<p>" + '<span class="label-sent-button" id="span_id_negative" >' +
+        "<i class=" + "\"fas fa-thumbs-down fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<div class=\"label-sent-body\"" + "\">" +
+        "<p>" + "Neutral" + "</p>" +
+        "<p>" + '<span class="label-sent-button" id="span_id_neutral" >' +
+        "<i class=" + "\"fas fa-thumbs-down fa-2x neutral\"" + " style=transform:rotate(-90deg)" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<div class=\"label-sent-body\"" + "\">" +
+        "<p>" + "Positive" + "</p>" +
+        "<p>" + '<span class="label-sent-button" id="span_id_sad" >' +
+        "<i class=" + "\"fas fa-thumbs-up fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>";
+    labelColumn2Div.innerHTML = divCaption
+    labelElement.appendChild(labelColumn2Div)
+
+    // =========================== label column 2 end ===========================//
+
+    // =========================== label column 3 ===============================//
+
+    var labelColumn3Div = document.createElement("div")
+    labelColumn3Div.id = "labelcolumn3"
+    labelColumn3Div.className = "l_column3"
+
+    var divCaption =
+        "<div class=\"label-body\"" + "\">" +
+        "<div class=\"label-title\"" + ">" +
+        "<p style=\"margin: 5px 0px 5px 0px\""+ ">" + "Subjectivity" + "</p>" + "</div>" +
+        "<div class=\"label-sub-body\"" + ">" +
+        "<p>" + "Fact" + "</p>" +
+        "<p>" + '<span class="label-sub-button" id="span_id_negative" >' +
+        "<i class=" + "\"fas fa-clipboard-check fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<div class=\"label-sub-body\"" + "\">" +
+        "<p>" + "Opinion" + "</p>" +
+        "<p>" + '<span class="label-sent-button" id="span_id_neutral" >' +
+        "<i class=" + "\"fas fa-comments fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>";
+    labelColumn3Div.innerHTML = divCaption
+    labelElement.appendChild(labelColumn3Div)
+
+    // =========================== label column 3 end ===========================//
+
+    // =========================== label column 4 ===============================//
+
+    var labelColumn4Div = document.createElement("div")
+    labelColumn4Div.id = "labelcolumn4"
+    labelColumn4Div.className = "l_column4"
+
+    var divCaption =
+        "<div class=\"label-body\"" + "\">" +
+        "<div class=\"label-title\"" + ">" +
+        "<p style=\"margin: 5px 0px 5px 0px\""+ ">"+ "Profanity" + "</p>" + "</div>";
+        labelColumn4Div.innerHTML = divCaption
+    labelElement.appendChild(labelColumn4Div)
+
+    // =========================== label column 3 end ===========================//
+
 
     // Aggregate div fillup
     var titles = []
@@ -213,7 +339,6 @@ d3.json("communitycrit.json", function (err, json) {
     $(document).ready(function () {
         $('.ideaName').click(function () {
             var id = $(this).attr('id');
-            console.log('emotion clicked', id)
             filterobj.idea_id = id
             filterobj.emotion = null
             filterobj.sentiment_final = null
@@ -544,7 +669,7 @@ d3.json("communitycrit.json", function (err, json) {
         var g = maing.enter().append("g")
             .attr("fill", function (d) {
                 return z(d.key);
-                
+
             })
             .attr("style", "outline: thin solid black;");
 
