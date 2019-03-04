@@ -4,20 +4,22 @@ var filterobj = {
     sentiment_final: null,
     subjectivity: null,
     idea_id: null,
-    task_id: null
+    task_id: null,
+    topic: null
 }
 
 d3.json("communitycrit_new.json", function (err, json) {
     //console.log(json)
 
     var numberOfRows = 18;
-    var numberOfColumns = 5;
+    var numberOfColumns = 6;
 
     var proposal_names = get_proposal_names(json)
     var proposal_wise_emotion_agg = get_proposal_wise_emotion(json)
     var proposal_wise_sentiment_agg = get_proposal_wise_sentiment(json)
     var proposal_wise_subjectivity_agg = get_proposal_wise_subjectivity(json)
     var proposal_wise_profanity_agg = get_proposal_wise_profanity(json)
+    var proposal_wise_topic_agg = get_proposal_wise_topic(json)
     var all_proposal_sentiment_agg = get_all_proposal_sentiment(json)
     var all_proposal_emotion_agg = get_all_proposal_emotion(json)
     var all_proposal_subjectivity_agg = get_all_proposal_subjectivity(json)
@@ -46,21 +48,20 @@ d3.json("communitycrit_new.json", function (err, json) {
     top0.appendChild(tempSvg)
 
     //============================ top column 0 end =====================//
+
+
     //============================ top column 1 =========================//
 
-    var top1 = document.getElementById("top1")
+    var top1 = document.getElementById("top0")
     tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
-    tempSvg.id = "svgtop1"
+    tempSvg.id = "svgtop0"
     tempSvg.setAttribute("class", "t_svg")
     tempSvg.setAttribute("width", top1.clientWidth)
     tempSvg.setAttribute("height", top1.clientHeight)
     top1.appendChild(tempSvg)
 
-    send_data = all_proposal_emotion_agg
-    console.log("tc1", send_data)
-    emotion_rows(send_data, tempSvg.id, top1.id, null)
+    //============================ top column 1 end =====================//
 
-    //============================ top column 1 end =========================//
     //============================ top column 2 =========================//
 
     var top2 = document.getElementById("top2")
@@ -71,11 +72,10 @@ d3.json("communitycrit_new.json", function (err, json) {
     tempSvg.setAttribute("height", top2.clientHeight)
     top2.appendChild(tempSvg)
 
-    send_data = all_proposal_sentiment_agg
-    sentiment_rows(send_data, tempSvg.id, top2.id, null)
+    send_data = all_proposal_emotion_agg
+    emotion_rows(send_data, tempSvg.id, top2.id, null)
 
     //============================ top column 2 end =========================//
-
     //============================ top column 3 =========================//
 
     var top3 = document.getElementById("top3")
@@ -86,14 +86,29 @@ d3.json("communitycrit_new.json", function (err, json) {
     tempSvg.setAttribute("height", top3.clientHeight)
     top3.appendChild(tempSvg)
 
-    send_data = all_proposal_subjectivity_agg
-    subjectivity_rows(send_data, tempSvg.id, top3.id, null)
+    send_data = all_proposal_sentiment_agg
+    sentiment_rows(send_data, tempSvg.id, top3.id, null)
 
     //============================ top column 3 end =========================//
 
     //============================ top column 4 =========================//
 
     var top4 = document.getElementById("top4")
+    tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
+    tempSvg.id = "svgtop4"
+    tempSvg.setAttribute("class", "t_svg")
+    tempSvg.setAttribute("width", top4.clientWidth)
+    tempSvg.setAttribute("height", top4.clientHeight)
+    top4.appendChild(tempSvg)
+
+    send_data = all_proposal_subjectivity_agg
+    subjectivity_rows(send_data, tempSvg.id, top4.id, null)
+
+    //============================ top column 4 end =========================//
+
+    //============================ top column 5 =========================//
+
+    var top5 = document.getElementById("top5")
     send_data = all_proposal_profanity_agg[0].profanity_distribution;
 
     var min = Math.min(...send_data)
@@ -103,10 +118,10 @@ d3.json("communitycrit_new.json", function (err, json) {
         normalized.push(normalize(send_data[x], max, min))
     }
     //console.log(send_data)
-    profanity_rows(normalized, top4.id)
+    profanity_rows(normalized, top5.id)
 
 
-    //============================ top column 4 end =========================//
+    //============================ top column 5 end =========================//
 
 
     // Label div fillup
@@ -122,10 +137,10 @@ d3.json("communitycrit_new.json", function (err, json) {
     var divCaption =
         "<div class=\"label-body\"" + "\">" +
         "<div class=\"label-title\"" + ">" +
-        "<p style=\"margin: 5px 0px 5px 0px\""+ ">" + "Proposal Title" + "</p>" + "</div>" +
+        "<p style=\"margin: 5px 0px 5px 0px\"" + ">" + "Proposal Title" + "</p>" + "</div>" +
         "<div class=\"label-title-body\"" + ">" +
         "<p>" + "Search" + "</p>" +
-        "<p>" + '<span class="label-search-button" id="span_id_angry" >' +
+        "<p>" + '<span class="label-search-button" id="span_id_title" >' +
         "<i class=" + "\"fas fa-search fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>"
 
     labelColumn0Div.innerHTML = divCaption
@@ -133,7 +148,8 @@ d3.json("communitycrit_new.json", function (err, json) {
 
     // =========================== label column 0 end ===========================//
 
-    // =========================== label column 1 ===============================//
+
+    //============================ label column 1 =========================//
 
     var labelColumn1Div = document.createElement("div")
     labelColumn1Div.id = "labelcolumn1"
@@ -142,7 +158,29 @@ d3.json("communitycrit_new.json", function (err, json) {
     var divCaption =
         "<div class=\"label-body\"" + "\">" +
         "<div class=\"label-title\"" + ">" +
-        "<p style=\"margin: 5px 0px 5px 0px\""+ ">" + "Emotion" + "</p>" + "</div>" +
+        "<p style=\"margin: 5px 0px 5px 0px\"" + ">" + "Topics" + "</p>" + "</div>" +
+        "<div class=\"label-title-body\"" + ">" +
+        "<p>" + "Search" + "</p>" +
+        "<p>" + '<span class="label-search-button" id="span_id_topic" >' +
+        "<i class=" + "\"fas fa-search fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>"
+
+    labelColumn1Div.innerHTML = divCaption
+    labelElement.appendChild(labelColumn1Div)
+
+    //============================ label column 1 end =====================//
+
+
+
+    // =========================== label column 2 ===============================//
+
+    var labelColumn2Div = document.createElement("div")
+    labelColumn2Div.id = "labelcolumn2"
+    labelColumn2Div.className = "l_column2"
+
+    var divCaption =
+        "<div class=\"label-body\"" + "\">" +
+        "<div class=\"label-title\"" + ">" +
+        "<p style=\"margin: 5px 0px 5px 0px\"" + ">" + "Emotion" + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + ">" +
         "<p>" + "Angry" + "</p>" +
         "<p>" + '<span class="label-emo-button" id="span_id_angry" >' +
@@ -168,22 +206,22 @@ d3.json("communitycrit_new.json", function (err, json) {
         "<p>" + '<span class="label-emo-button" id="span_id_excited" >' +
         "<i class=" + "\"fas fa-smile-beam fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>";
 
-    labelColumn1Div.innerHTML = divCaption
-    labelElement.appendChild(labelColumn1Div)
+    labelColumn2Div.innerHTML = divCaption
+    labelElement.appendChild(labelColumn2Div)
 
-    // =========================== label column 1 end ===========================//
+    // =========================== label column 2 end ===========================//
 
 
-    // =========================== label column 2 ===============================//
+    // =========================== label column 3 ===============================//
 
-    var labelColumn2Div = document.createElement("div")
-    labelColumn2Div.id = "labelcolumn2"
-    labelColumn2Div.className = "l_column2"
+    var labelColumn3Div = document.createElement("div")
+    labelColumn3Div.id = "labelcolumn3"
+    labelColumn3Div.className = "l_column3"
 
     var divCaption =
         "<div class=\"label-body\"" + "\">" +
         "<div class=\"label-title\"" + ">" +
-        "<p style=\"margin: 5px 0px 5px 0px\""+ ">" + "Sentiment" + "</p>" + "</div>" +
+        "<p style=\"margin: 5px 0px 5px 0px\"" + ">" + "Sentiment" + "</p>" + "</div>" +
         "<div class=\"label-sent-body\"" + ">" +
         "<p>" + "Negative" + "</p>" +
         "<p>" + '<span class="label-sent-button" id="span_id_negative" >' +
@@ -196,29 +234,6 @@ d3.json("communitycrit_new.json", function (err, json) {
         "<p>" + "Positive" + "</p>" +
         "<p>" + '<span class="label-sent-button" id="span_id_sad" >' +
         "<i class=" + "\"fas fa-thumbs-up fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>";
-    labelColumn2Div.innerHTML = divCaption
-    labelElement.appendChild(labelColumn2Div)
-
-    // =========================== label column 2 end ===========================//
-
-    // =========================== label column 3 ===============================//
-
-    var labelColumn3Div = document.createElement("div")
-    labelColumn3Div.id = "labelcolumn3"
-    labelColumn3Div.className = "l_column3"
-
-    var divCaption =
-        "<div class=\"label-body\"" + "\">" +
-        "<div class=\"label-title\"" + ">" +
-        "<p style=\"margin: 5px 0px 5px 0px\""+ ">" + "Subjectivity" + "</p>" + "</div>" +
-        "<div class=\"label-sub-body\"" + ">" +
-        "<p>" + "Fact" + "</p>" +
-        "<p>" + '<span class="label-sub-button" id="span_id_negative" >' +
-        "<i class=" + "\"fas fa-clipboard-check fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
-        "<div class=\"label-sub-body\"" + "\">" +
-        "<p>" + "Opinion" + "</p>" +
-        "<p>" + '<span class="label-sent-button" id="span_id_neutral" >' +
-        "<i class=" + "\"fas fa-comments fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>";
     labelColumn3Div.innerHTML = divCaption
     labelElement.appendChild(labelColumn3Div)
 
@@ -233,11 +248,34 @@ d3.json("communitycrit_new.json", function (err, json) {
     var divCaption =
         "<div class=\"label-body\"" + "\">" +
         "<div class=\"label-title\"" + ">" +
-        "<p style=\"margin: 5px 0px 5px 0px\""+ ">"+ "Profanity" + "</p>" + "</div>";
-        labelColumn4Div.innerHTML = divCaption
+        "<p style=\"margin: 5px 0px 5px 0px\"" + ">" + "Subjectivity" + "</p>" + "</div>" +
+        "<div class=\"label-sub-body\"" + ">" +
+        "<p>" + "Fact" + "</p>" +
+        "<p>" + '<span class="label-sub-button" id="span_id_negative" >' +
+        "<i class=" + "\"fas fa-clipboard-check fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<div class=\"label-sub-body\"" + "\">" +
+        "<p>" + "Opinion" + "</p>" +
+        "<p>" + '<span class="label-sent-button" id="span_id_neutral" >' +
+        "<i class=" + "\"fas fa-comments fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>";
+    labelColumn4Div.innerHTML = divCaption
     labelElement.appendChild(labelColumn4Div)
 
-    // =========================== label column 3 end ===========================//
+    // =========================== label column 4 end ===========================//
+
+    // =========================== label column 5 ===============================//
+
+    var labelColumn5Div = document.createElement("div")
+    labelColumn5Div.id = "labelcolumn5"
+    labelColumn5Div.className = "l_column5"
+
+    var divCaption =
+        "<div class=\"label-body\"" + "\">" +
+        "<div class=\"label-title\"" + ">" +
+        "<p style=\"margin: 5px 0px 5px 0px\"" + ">" + "Profanity" + "</p>" + "</div>";
+    labelColumn5Div.innerHTML = divCaption
+    labelElement.appendChild(labelColumn5Div)
+
+    // =========================== label column 5 end ===========================//
 
 
     // Aggregate div fillup
@@ -270,25 +308,24 @@ d3.json("communitycrit_new.json", function (err, json) {
         //============================end of column 0==================//
 
         //============================ column 1 =========================//
+
+        var divTopicName = "<div class=\"topic-body\"" + "\">"
         var column1 = document.getElementById("row" + i + "column1")
-        //console.log(proposal_wise_emotion_agg)
-        tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
-        tempSvg.id = "svg" + "row" + i + "column1"
-        tempSvg.setAttribute("class", "c_svg")
-        tempSvg.setAttribute("width", column1.clientWidth)
-        tempSvg.setAttribute("height", column1.clientHeight)
-        column1.appendChild(tempSvg)
+        for (var j = 0; j < proposal_wise_topic_agg[i].length; j++) {
+            proposal_wise_topic_agg[i][j].topic_keyphrase
+            divTopicName = divTopicName +
+                '<div  class="topicName" id="topic_' + proposal_names[i].idea_id + "_" + j + '\">' +
+                '<span class="badge badge-primary topic-name" style="margin: 3px;">' + proposal_wise_topic_agg[i][j].topic_keyphrase + '</span></div>'
+        }
 
-        send_data = []
-        send_data.push(proposal_wise_emotion_agg[i])
-        //console.log(send_data)
-        emotion_rows(send_data, tempSvg.id, column1.id, proposal_names[i].idea_id)
+        column1.innerHTML = divTopicName
 
-        //============================end of column 1==================//
+        //============================ column 1 end =====================//
+
 
         //============================ column 2 =========================//
         var column2 = document.getElementById("row" + i + "column2")
-        //console.log(proposal_wise_sentiment_agg)
+        //console.log(proposal_wise_emotion_agg)
         tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
         tempSvg.id = "svg" + "row" + i + "column2"
         tempSvg.setAttribute("class", "c_svg")
@@ -297,14 +334,15 @@ d3.json("communitycrit_new.json", function (err, json) {
         column2.appendChild(tempSvg)
 
         send_data = []
-        send_data.push(proposal_wise_sentiment_agg[i])
-        sentiment_rows(send_data, tempSvg.id, column2.id, proposal_names[i].idea_id)
+        send_data.push(proposal_wise_emotion_agg[i])
+        //console.log(send_data)
+        emotion_rows(send_data, tempSvg.id, column2.id, proposal_names[i].idea_id)
 
-        //============================end of column 2 ==================//
+        //============================end of column 2==================//
 
         //============================ column 3 =========================//
         var column3 = document.getElementById("row" + i + "column3")
-        //console.log(proposal_wise_subjectivity_agg)
+        //console.log(proposal_wise_sentiment_agg)
         tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
         tempSvg.id = "svg" + "row" + i + "column3"
         tempSvg.setAttribute("class", "c_svg")
@@ -313,13 +351,29 @@ d3.json("communitycrit_new.json", function (err, json) {
         column3.appendChild(tempSvg)
 
         send_data = []
-        send_data.push(proposal_wise_subjectivity_agg[i])
-        subjectivity_rows(send_data, tempSvg.id, column3.id, proposal_names[i].idea_id)
+        send_data.push(proposal_wise_sentiment_agg[i])
+        sentiment_rows(send_data, tempSvg.id, column3.id, proposal_names[i].idea_id)
 
-        //============================ end of column 3 ==================//
+        //============================end of column 3 ==================//
 
         //============================ column 4 =========================//
         var column4 = document.getElementById("row" + i + "column4")
+        //console.log(proposal_wise_subjectivity_agg)
+        tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
+        tempSvg.id = "svg" + "row" + i + "column4"
+        tempSvg.setAttribute("class", "c_svg")
+        tempSvg.setAttribute("width", column4.clientWidth)
+        tempSvg.setAttribute("height", column4.clientHeight)
+        column4.appendChild(tempSvg)
+
+        send_data = []
+        send_data.push(proposal_wise_subjectivity_agg[i])
+        subjectivity_rows(send_data, tempSvg.id, column4.id, proposal_names[i].idea_id)
+
+        //============================ end of column 4 ==================//
+
+        //============================ column 5 =========================//
+        var column5 = document.getElementById("row" + i + "column5")
         var send_data = proposal_wise_profanity_agg[i].profanity_distribution;
         var min = Math.min(...send_data)
         var max = Math.max(...send_data)
@@ -329,9 +383,9 @@ d3.json("communitycrit_new.json", function (err, json) {
             normalized.push(normalize(send_data[x], max, min))
         }
         //console.log(send_data)
-        profanity_rows(normalized, column4.id)
+        profanity_rows(normalized, column5.id)
 
-        //============================ end of column 4 ==================//
+        //============================ end of column 5 ==================//
     }
 
     function normalize(val, max, min) {
@@ -346,6 +400,8 @@ d3.json("communitycrit_new.json", function (err, json) {
             filterobj.sentiment_final = null
             filterobj.subjectivity = null
             filterobj.task_id = null
+            filterobj.topic = null
+            console.log(id)
             var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
             draw_filtered_comments(filtered_comment)
 
@@ -355,6 +411,30 @@ d3.json("communitycrit_new.json", function (err, json) {
         //     console.log('emotion mouseover',id)
         // });
     });
+
+    $(document).ready(function () {
+        $('.topicName').click(function () {
+            var id = $(this).attr('id');
+            var split_str = id.split("_")
+            filterobj.idea_id = split_str[1]
+            filterobj.emotion = null
+            filterobj.sentiment_final = null
+            filterobj.subjectivity = null
+            filterobj.task_id = null
+            filterobj.topic = split_str[2]
+            var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
+           // console.log("calling draw with", filtered_comment)
+            draw_filtered_comments(filtered_comment)
+            //console.log("draw returned")
+
+        });
+        // $('.emoticon_button').mouseover(function() {
+        //     var id = $(this).attr('id');
+        //     console.log('emotion mouseover',id)
+        // });
+    });
+
+
     //functions for d3
 
     function emotion_rows(salesData, svg_id, div_id, idea_id) {
@@ -545,7 +625,7 @@ d3.json("communitycrit_new.json", function (err, json) {
             filterobj.idea_id = idea_id
             filterobj.emotion = d.key
             var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
-            draw_filtered_comments(filtered_comment)
+            draw_filtered_comments(filtered_comment, json)
         }
 
         var rectTooltipg = svg.append("g")

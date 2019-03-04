@@ -11,6 +11,20 @@ function get_proposal_names(json){
     return proposal_names;
 }
 
+// Get proposal-wise topic_names
+function get_proposal_wise_topic(json) {
+    var proposal_topic_agg = [];
+    for (var i in json["ideas"]) {
+        var topics = json.ideas[i].topic_keyphrases
+        topics.sort((function(a, b){
+            return a.keyphrase_score-b.keyphrase_score
+        }))
+
+        proposal_topic_agg.push(topics)
+    }
+    return proposal_topic_agg;
+}
+
 // Get proposal-wise sentiments
 function get_proposal_wise_sentiment(json) {
     var proposal_sentiment_agg = [];
