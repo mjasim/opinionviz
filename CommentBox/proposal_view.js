@@ -65,7 +65,7 @@ function draw_proposal_wise_comments(json, idea_id) {
             }
             divComment[j] = document.createElement("div")
             divComment[j].className = "commentDiv"
-            divComment[j].id = "commentDivId-" + json.ideas[idea_id].id + "-" + json.ideas[idea_id].tasks[i].id + " " + json.ideas[idea_id].tasks[i].comments[j].comment_id
+            divComment[j].id = "commentDivId-" + json.ideas[idea_id].id + "-" + json.ideas[idea_id].tasks[i].id + "-" + json.ideas[idea_id].tasks[i].comments[j].comment_id
             var node = document.createTextNode(json.ideas[idea_id].tasks[i].comments[j].comment)
             divComment[j].appendChild(node)
             var element = document.getElementById(divTask[i].id)
@@ -225,8 +225,8 @@ function draw_filtered_comments(filtered_comment, json) {
                                 "<i class=" + "\"" + "fas " + awesome_subjectivity + "\"" + "></i>" + "\xa0" + '</span>' +
                                 '<span class="options_button" id="span_id_opt" >' +
                                 "<i class=" + "\"fas fa-plus-circle fa-lg\"" + "></i>" +
-                                '</span>' + 
-                            "</p>";
+                                '</span>' +
+                                "</p>";
                         }
 
                         divQuestion[k].innerHTML = divQuestionHTML;
@@ -242,7 +242,7 @@ function draw_filtered_comments(filtered_comment, json) {
                 divComment[k].id = "commentDivId-" + filtered_comment.ideas[i].id + "-" + filtered_comment.ideas[i].tasks[j].id + "-" + filtered_comment.ideas[i].tasks[j].comments[k].comment_id;
                 var image = "/images/avatar.jpg";
                 var sentimentButton = filtered_comment.ideas[i].tasks[j].comments[k].sentiment_final == "neutral" ?
-                    "<i aria-haspopup=\"true\" aria-expanded=\"false\" class=" + "\"fas fa-thumbs-down fa-lg neutral\"" + " style=transform:rotate(90deg)" + "></i>" :
+                    "<i aria-haspopup=\"true\" aria-expanded=\"false\" class=" + "\"fas fa-thumbs-down fa-lg neutral\"" + " style=transform:rotate(-90deg)" + "></i>" :
                     "<i class=" + "\"" + "fas " + awesome_sentiment + "\"" + "></i>";
 
                 var divCommentHTML =
@@ -325,13 +325,13 @@ function draw_filtered_comments(filtered_comment, json) {
         // });
     });
 
-    makeRevision(filterobj);
+    //makeRevision(filterobj); jasim
 }
 
 function setTippy(commentID, json) {
     //console.log('set tippy'+json);
     currentJSON = json;
-        $(document).ready(function () {
+    $(document).ready(function () {
         tippy('#' + commentID + ' .emoticon_button', {
             interactive: true,
             role: 'menu',
@@ -424,7 +424,32 @@ function emojiMouseClick(id) {
 
     console.log('emoji id ' + id);
     console.log("inside emoclick")
-    console.log(currentJSON);
+
+    var all_ids = id.split("-")
+
+    for (var i in currentJSON["ideas"]) {
+        for (var j in currentJSON.ideas[i].tasks){
+            for (var k in currentJSON.ideas[i].tasks[j].comments){
+                if(currentJSON.ideas[i].id == all_ids[2] && currentJSON.ideas[i].tasks[j].id == all_ids[3] && currentJSON.ideas[i].tasks[j].comments[k].comment_id == all_ids[4]){
+                    var new_emo = all_ids[0].charAt(0).toUpperCase() + all_ids[0].slice(1)
+                    console.log("New Emotion ", String(new_emo))
+                    currentJSON.ideas[i].tasks[j].comments[k].emotion = new_emo
+                }
+            }
+        }
+    }
+
+    commentDiv = "commentDiv-" + all_ids[2] + "-" + all_ids[3] + "-" + all_ids[4]
+    questionDiv = "questionDiv-" + all_ids[2] + "-" + all_ids[3] + "-" + all_ids[4]
+    
+
+    var awesome_emoticon = attributeObj[filtered_comment.ideas[i].tasks[j].comments[k].emotion]
+    var awesome_sentiment = attributeObj[filtered_comment.ideas[i].tasks[j].comments[k].sentiment_final]
+    var awesome_subjectivity = attributeObj[filtered_comment.ideas[i].tasks[j].comments[k].subjectivity]
+
+    
+
+    // console.log(currentJSON)
     //after revising do this
 
 }
@@ -435,27 +460,27 @@ function getEmojiString(commentID) {
         "<div class=\"label-title\"" + ">" + "</div>" +
         "<div class=\"label-emo-body\"" + ">" +
         "<p>" + "Angry" + "</p>" +
-        "<p>" + '<span class="label-emo-button" id="span_id_angry' + commentID + '" onclick="emojiMouseClick(\'' + 'angry' + commentID + "," + ''+ '\')">' +
+        "<p>" + '<span class="label-emo-button" id="span_id_angry' + commentID + '" onclick="emojiMouseClick(\'' + 'angry-' + commentID + '\')">' +
         "<i class=" + "\"fas fa-angry fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Fear" + "</p>" +
-        "<p>" + '<span class="label-emo-button" id="span_id_fear' + '" onclick="emojiMouseClick(\'' + 'fear' + commentID + "," + '' + '\')">' +
+        "<p>" + '<span class="label-emo-button" id="span_id_fear' + '" onclick="emojiMouseClick(\'' + 'fear-' + commentID + '\')">' +
         "<i class=" + "\"fas fa-flushed fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Sad" + "</p>" +
-        "<p>" + '<span class="label-emo-button" id="span_id_sad' + '" onclick="emojiMouseClick(\'' + 'sad' + commentID + "," + '' + '\')">' +
+        "<p>" + '<span class="label-emo-button" id="span_id_sad' + '" onclick="emojiMouseClick(\'' + 'sad-' + commentID + '\')">' +
         "<i class=" + "\"fas fa-frown fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Bored" + "</p>" +
-        "<p>" + '<span class="label-emo-button" id="span_id_bored' + '" onclick="emojiMouseClick(\'' + 'bored' + commentID + "," + '' + '\')">' +
+        "<p>" + '<span class="label-emo-button" id="span_id_bored' + '" onclick="emojiMouseClick(\'' + 'bored-' + commentID + '\')">' +
         "<i class=" + "\"fas fa-meh fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Happy" + "</p>" +
-        "<p>" + '<span class="label-emo-button" id="span_id_happy' + '" onclick="emojiMouseClick(\'' + 'happy' + commentID + "," + '' + '\')">' +
+        "<p>" + '<span class="label-emo-button" id="span_id_happy' + '" onclick="emojiMouseClick(\'' + 'happy-' + commentID + '\')">' +
         "<i class=" + "\"fas fa-smile fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Excited" + "</p>" +
-        "<p>" + '<span class="label-emo-button" id="span_id_excited' + '" onclick="emojiMouseClick(\'' + 'excited' + commentID + "," + '' + '\')">' +
+        "<p>" + '<span class="label-emo-button" id="span_id_excited' + '" onclick="emojiMouseClick(\'' + 'excited-' + commentID + '\')">' +
         "<i class=" + "\"fas fa-smile-beam fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>";
     return emojiDiv;
 }
@@ -463,6 +488,22 @@ function getEmojiString(commentID) {
 function sentiMouseClick(id) {
     console.log('senti id ' + id);
     console.log("inside senticlick", currentJSON)
+
+    var all_ids = id.split("-")
+    console.log(all_ids)
+
+    for (var i in currentJSON["ideas"]) {
+        for (var j in currentJSON.ideas[i].tasks){
+            for (var k in currentJSON.ideas[i].tasks[j].comments){
+                if(currentJSON.ideas[i].id == all_ids[2] && currentJSON.ideas[i].tasks[j].id == all_ids[3] && currentJSON.ideas[i].tasks[j].comments[k].comment_id == all_ids[4]){
+                    var new_senti = all_ids[0]
+                    console.log("New Sentiment ", String(new_senti))
+                    currentJSON.ideas[i].tasks[j].comments[k].sentiment_final = new_senti
+                }
+            }
+        }
+    }
+
 }
 function getSentiString(commentID) {
 
@@ -471,15 +512,15 @@ function getSentiString(commentID) {
         "<div class=\"label-title\"" + ">" + "</div>" +
         "<div class=\"label-sent-body\"" + ">" +
         "<p>" + "Negative" + "</p>" +
-        "<p>" + '<span class="label-sent-button" id="span_id_negative' + commentID + '" onclick="sentiMouseClick(\'' + 'negative' + commentID + '\')">' +
+        "<p>" + '<span class="label-sent-button" id="span_id_negative' + commentID + '" onclick="sentiMouseClick(\'' + 'negative-' + commentID + '\')">' +
         "<i class=" + "\"fas fa-thumbs-down fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-sent-body\"" + "\">" +
         "<p>" + "Neutral" + "</p>" +
-        "<p>" + '<span class="label-sent-button" id="span_id_neutral' + '" onclick="sentiMouseClick(\'' + 'neutral' + commentID + '\')">' +
+        "<p>" + '<span class="label-sent-button" id="span_id_neutral' + '" onclick="sentiMouseClick(\'' + 'neutral-' + commentID + '\')">' +
         "<i class=" + "\"fas fa-thumbs-down fa-2x neutral\"" + " style=transform:rotate(-90deg)" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-sent-body\"" + "\">" +
         "<p>" + "Positive" + "</p>" +
-        "<p>" + '<span class="label-sent-button" id="span_id_positive' + '" onclick="sentiMouseClick(\'' + 'positive' + commentID + '\')">' +
+        "<p>" + '<span class="label-sent-button" id="span_id_positive' + '" onclick="sentiMouseClick(\'' + 'positive-' + commentID + '\')">' +
         "<i class=" + "\"fas fa-thumbs-up fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>";
     return sentiDiv;
 }
@@ -487,6 +528,21 @@ function getSentiString(commentID) {
 function subjectivityMouseClick(id) {
     console.log('subjectivity id ' + id);
     console.log("inside subclick", currentJSON)
+
+    var all_ids = id.split("-")
+    console.log(all_ids)
+
+    for (var i in currentJSON["ideas"]) {
+        for (var j in currentJSON.ideas[i].tasks){
+            for (var k in currentJSON.ideas[i].tasks[j].comments){
+                if(currentJSON.ideas[i].id == all_ids[2] && currentJSON.ideas[i].tasks[j].id == all_ids[3] && currentJSON.ideas[i].tasks[j].comments[k].comment_id == all_ids[4]){
+                    var new_sub = all_ids[0].charAt(0).toUpperCase() + all_ids[0].slice(1)
+                    console.log("New Subjectivity ", String(new_sub))
+                    currentJSON.ideas[i].tasks[j].comments[k].subjectivity = new_sub
+                }
+            }
+        }
+    }
 }
 function getSubjectivityString(commentID) {
 
@@ -495,11 +551,11 @@ function getSubjectivityString(commentID) {
         "<div class=\"label-title\"" + ">" + "</div>" +
         "<div class=\"label-sub-body\"" + ">" +
         "<p>" + "Fact" + "</p>" +
-        "<p>" + '<span class="label-sub-button" id="span_id_fact' + commentID + '" onclick="subjectivityMouseClick(\'' + 'fact' + commentID + '\')">' +
+        "<p>" + '<span class="label-sub-button" id="span_id_fact' + commentID + '" onclick="subjectivityMouseClick(\'' + 'fact-' + commentID + '\')">' +
         "<i class=" + "\"fas fa-clipboard-check fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-sub-body\"" + "\">" +
         "<p>" + "Neutral" + "</p>" +
-        "<p>" + '<span class="label-sub-button" id="span_id_opinion' + '" onclick="subjectivityMouseClick(\'' + 'opinion' + commentID + '\')">' +
+        "<p>" + '<span class="label-sub-button" id="span_id_opinion' + '" onclick="subjectivityMouseClick(\'' + 'opinion-' + commentID + '\')">' +
         "<i class=" + "\"fas fa-comments fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>";
     return subjectivityDiv;
 }
@@ -509,12 +565,12 @@ function optionMouseClick(id) {
     console.log('option id ' + id);
     console.log("inside optclick", currentJSON)
 
-    if(id.includes("issue")){
-        save_issue(currentJSON)    
+    if (id.includes("issue")) {
+        save_issue(id)
     }
 
-    else if(id.includes("criteria")){
-        save_criteria(currentJSON)    
+    else if (id.includes("criteria")) {
+        save_criteria(id)
     }
 
     // else if(id.includes("note")){
@@ -528,15 +584,15 @@ function getOptionString(commentID) {
         "<div class=\"label-title\"" + ">" + "</div>" +
         "<div class=\"label-opt-body\"" + ">" +
         "<p>" + "Issue" + "</p>" +
-        "<p>" + '<span class="label-opt-button" id="span_id_issue' + commentID + '" onclick="optionMouseClick(\'' + 'issue' + commentID + '\')">' +
+        "<p>" + '<span class="label-opt-button" id="span_id_issue' + commentID + '" onclick="optionMouseClick(\'' + 'issue-' + commentID + '\')">' +
         "<i class=" + "\"fas fa-exclamation-circle fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-opt-body\"" + "\">" +
         "<p>" + "Criteria" + "</p>" +
-        "<p>" + '<span class="label-opt-button" id="span_id_criteria' + '" onclick="optionMouseClick(\'' + 'criteria' + commentID + '\')">' +
+        "<p>" + '<span class="label-opt-button" id="span_id_criteria' + '" onclick="optionMouseClick(\'' + 'criteria-' + commentID + '\')">' +
         "<i class=" + "\"fas fa-clipboard-list fa-2x neutral\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-opt-body\"" + "\">" +
         "<p>" + "Note" + "</p>" +
-        "<p>" + '<span class="label-opt-button" id="span_id_note' + '" onclick="optionMouseClick(\'' + 'note' + commentID + '\')">' +
+        "<p>" + '<span class="label-opt-button" id="span_id_note' + '" onclick="optionMouseClick(\'' + 'note-' + commentID + '\')">' +
         "<i class=" + "\"fas fa-save fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>";
     return optDiv;
 }
@@ -570,4 +626,58 @@ function checkKeyphrase(prop_topic, all_topics) {
         }
     }
     return false;
+}
+
+function save_issue(id) {
+    $('#issueModal').modal('show')
+    $('#issue_save_button').on('click', function () {
+        console.log(currentJSON)
+        var all_ids = id.split("-")
+        console.log(all_ids)
+        
+        for (var i in currentJSON["ideas"]) {
+            for (var j in currentJSON.ideas[i].tasks){
+                for (var k in currentJSON.ideas[i].tasks[j].comments){
+                    if(currentJSON.ideas[i].id == all_ids[2] && currentJSON.ideas[i].tasks[j].id == all_ids[3] && currentJSON.ideas[i].tasks[j].comments[k].comment_id == all_ids[4]){
+                        console.log("Issue Title", $('#issue_title').val())
+                        console.log("Issue Type", $('#issue_type').val())
+                        console.log("Issue Text", $('#issue_text').val())
+                        currentJSON.ideas[i].tasks[j].comments[k].issue_title = $('#issue_title').val()
+                        currentJSON.ideas[i].tasks[j].comments[k].issue_type = $('#issue_type').val()
+                        currentJSON.ideas[i].tasks[j].comments[k].issue_text = $('#issue_text').val()
+                    }
+                }
+            }
+        }
+
+        console.log(currentJSON)
+        $('#issueModal').modal('hide')
+    });
+}
+
+function save_criteria(id) {
+    $('#criteriaModal').modal('show')
+    $('#criteria_save_button').on('click', function () {
+        console.log(currentJSON)
+        var all_ids = id.split("-")
+        console.log(all_ids)
+        
+        for (var i in currentJSON["ideas"]) {
+            for (var j in currentJSON.ideas[i].tasks){
+                for (var k in currentJSON.ideas[i].tasks[j].comments){
+                    if(currentJSON.ideas[i].id == all_ids[2] && currentJSON.ideas[i].tasks[j].id == all_ids[3] && currentJSON.ideas[i].tasks[j].comments[k].comment_id == all_ids[4]){
+                        console.log("Criteria Title", $('#criteria_title').val())
+                        console.log("Criteria Type", $('#criteria_type').val())
+                        console.log("Criteria Text", $('#criteria_text').val())
+                        currentJSON.ideas[i].tasks[j].comments[k].criteria_title = $('#criteria_title').val()
+                        currentJSON.ideas[i].tasks[j].comments[k].criteria_type = $('#criteria_type').val()
+                        currentJSON.ideas[i].tasks[j].comments[k].criteria_text = $('#criteria_text').val()
+                    }
+                }
+            }
+        }
+
+        console.log(currentJSON)
+        $('#criteriaModal').modal('hide')
+    });
 }
