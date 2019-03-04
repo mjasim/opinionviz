@@ -1,6 +1,22 @@
 
 var currentJSON = null;
 
+var attributeObj = {
+    Angry: "fa-angry fa-lg",
+    Worried: "fa-flushed fa-lg",
+    Sad: "fa-frown fa-lg",
+    Bored: "fa-meh fa-lg",
+    Happy: "fa-smile fa-lg",
+    Excited: "fa-smile-beam fa-lg",
+    negative: "fa-thumbs-down fa-lg",
+    neutral: "fa-thumbs-down fa-lg",
+    positive: "fa-thumbs-up fa-lg",
+    Fact: "fa-clipboard-check fa-lg",
+    Opinion: "fa-comments fa-lg"
+}
+
+var image = "/images/avatar.jpg";
+
 var proposalIntro = {
     1: "Build a tower in the center of El Nudillo. Sketches of tower concepts as shown.",
     2: "I would love to see El Nudillo, the intersection of 14th Street and National Avenue, become a place for public creative expression. There are so many talented artists around this area, and if we could somehow commission one to make a sculpture or something, or maybe invite everyone to paint a mural one day, it could be an amazing way to make this space ours and bring the community together.",
@@ -84,11 +100,17 @@ function get_filtered_comment(json, filterobj) {
         }
         var tasks = []
         for (var j in json.ideas[i].tasks) {
+
             if (filterobj.task_id != null && json.ideas[i].tasks[j].id != filterobj.task_id) {
                 continue
             }
+
             var comments = []
             for (var k in json.ideas[i].tasks[j].comments) {
+                
+                if (filterobj.topic != null) {
+                    var topicFilter = json.ideas[i].topic_keyphrases[filterobj.topic].topic_keyphrase
+                }
                 var flag = true
                 if (flag && filterobj.emotion != null && json.ideas[i].tasks[j].comments[k].emotion.toLowerCase() != filterobj.emotion.toLowerCase()) {
                     flag = false
@@ -97,6 +119,9 @@ function get_filtered_comment(json, filterobj) {
                     flag = false
                 }
                 if (flag && filterobj.subjectivity != null && json.ideas[i].tasks[j].comments[k].subjectivity.toLowerCase() != filterobj.subjectivity.toLowerCase()) {
+                    flag = false
+                }
+                if(flag && filterobj.topic != null && !checkKeyphrase(topicFilter, json.ideas[i].tasks[j].comments[k].findTopicLabels)){
                     flag = false
                 }
                 if (flag) {
@@ -124,20 +149,6 @@ function draw_filtered_comments(filtered_comment, json) {
     var myNode = document.getElementById("parentBox");
     while (myNode.firstChild) {
         myNode.removeChild(myNode.firstChild);
-    }
-
-    var attributeObj = {
-        Angry: "fa-angry fa-lg",
-        Worried: "fa-flushed fa-lg",
-        Sad: "fa-frown fa-lg",
-        Bored: "fa-meh fa-lg",
-        Happy: "fa-smile fa-lg",
-        Excited: "fa-smile-beam fa-lg",
-        negative: "fa-thumbs-down fa-lg",
-        neutral: "fa-thumbs-down fa-lg",
-        positive: "fa-thumbs-up fa-lg",
-        Fact: "fa-clipboard-check fa-lg",
-        Opinion: "fa-comments fa-lg"
     }
 
     var divIdea = []
@@ -175,16 +186,10 @@ function draw_filtered_comments(filtered_comment, json) {
                 var awesome_sentiment = attributeObj[filtered_comment.ideas[i].tasks[j].comments[k].sentiment_final]
                 var awesome_subjectivity = attributeObj[filtered_comment.ideas[i].tasks[j].comments[k].subjectivity]
 
-                if (filterobj.topic != null) {
-                    var topicFilter = filtered_comment.ideas[i].topic_keyphrases[filterobj.topic].topic_keyphrase
-                    //console.log(topicFilter)
-                }
-
                 if (filtered_comment.ideas[i].tasks[j].id == 12) {
                     divQuestion[k] = document.createElement("div")
                     divQuestion[k].className = "questionDiv"
                     divQuestion[k].id = "questionDivId-" + filtered_comment.ideas[i].id + "-" + filtered_comment.ideas[i].tasks[j].id + "-" + filtered_comment.ideas[i].tasks[j].comments[k].quesion_id
-                    var image = "/images/avatar.jpg";
                     if (prevQuestionId != divQuestion[k].id) {
                         var node = document.createTextNode(filtered_comment.ideas[i].tasks[j].comments[k].question)
                         divQuestion[k].appendChild(node)
@@ -287,9 +292,6 @@ function draw_filtered_comments(filtered_comment, json) {
                 }*/
                 //'<p>'+ filtered_comment.ideas[i].tasks[j].comments[k].comment + '</p>';
                 divComment[k].innerHTML = divCommentHTML;
-                if (checkKeyphrase(topicFilter, filtered_comment.ideas[i].tasks[j].comments[k].findTopicLabels)) {
-                    divComment[k].setAttribute("style", "border: 2px solid #FCB772;");
-                }
 
                 setTippy(divComment[k].id, json);
 
@@ -428,30 +430,71 @@ function emojiMouseClick(id) {
     var all_ids = id.split("-")
 
     for (var i in currentJSON["ideas"]) {
-        for (var j in currentJSON.ideas[i].tasks){
-            for (var k in currentJSON.ideas[i].tasks[j].comments){
-                if(currentJSON.ideas[i].id == all_ids[2] && currentJSON.ideas[i].tasks[j].id == all_ids[3] && currentJSON.ideas[i].tasks[j].comments[k].comment_id == all_ids[4]){
+        for (var j in currentJSON.ideas[i].tasks) {
+            for (var k in currentJSON.ideas[i].tasks[j].comments) {
+                if (currentJSON.ideas[i].id == all_ids[2] && currentJSON.ideas[i].tasks[j].id == all_ids[3] && currentJSON.ideas[i].tasks[j].comments[k].comment_id == all_ids[4]) {
                     var new_emo = all_ids[0].charAt(0).toUpperCase() + all_ids[0].slice(1)
                     console.log("New Emotion ", String(new_emo))
                     currentJSON.ideas[i].tasks[j].comments[k].emotion = new_emo
+
+                    // commentDivId = "commentDiv-" + all_ids[2] + "-" + all_ids[3] + "-" + all_ids[4]
+                    // questionDivId = "questionDiv-" + all_ids[2] + "-" + all_ids[3] + "-" + all_ids[4]
+
+                    // commentDiv = document.getElementById(commentDivId)
+
+                    // console.log(commentDiv)
+                    // // if (filterobj.topic != null) {
+                    // //     var topicFilter = filtered_comment.ideas[i].topic_keyphrases[filterobj.topic].topic_keyphrase
+                    // //     //console.log(topicFilter)
+                    // // }
+
+                    // var awesome_emoticon = attributeObj[currentJSON.ideas[i].tasks[j].comments[k].emotion]
+                    // var awesome_sentiment = attributeObj[currentJSON.ideas[i].tasks[j].comments[k].sentiment_final]
+                    // var awesome_subjectivity = attributeObj[currentJSON.ideas[i].tasks[j].comments[k].subjectivity]
+
+                    // var sentimentButton = currentJSON.ideas[i].tasks[j].comments[k].sentiment_final == "neutral" ?
+                    //     "<i aria-haspopup=\"true\" aria-expanded=\"false\" class=" + "\"fas fa-thumbs-down fa-lg neutral\"" + " style=transform:rotate(-90deg)" + "></i>" :
+                    //     "<i class=" + "\"" + "fas " + awesome_sentiment + "\"" + "></i>";
+
+                    // var divCommentHTML =
+
+                    //     "<div class=\"comment-author\">" +
+                    //     "<div style='float: left; padding-right: 15px;padding-top: 5px;'>" +
+                    //     "<img src=\"" + image + "\" width='27px' style='border-radius: 50%;'/></div>" +
+                    //     "<div><div>" + " author name" + "</div>" +
+                    //     '<div style="color: #888;"' + '> one year ago' + '</div></div>' +
+                    //     "</div>" +
+                    //     "<div class=\"comment-body\"" + "\">" +
+                    //     "<p>" + currentJSON.ideas[i].tasks[j].comments[k].comment + "\xa0\xa0" +
+                    //     '<span class="emoticon_button" id="span_id_emo">' +
+                    //     "<i class=" + "\"" + "fas " + awesome_emoticon + "\"" + "></i>" + "\xa0" + '</span>' +
+                    //     '<span class="sentiment_button" id="span_id_sent" >' +
+                    //     //"<i class=" + "\"" + "fas " + awesome_sentiment + "\"" + "></i>" +
+                    //     sentimentButton + "\xa0" +
+                    //     '</span>' +
+                    //     '<span class="subjectivity_button" id="span_id_sub" >' +
+                    //     "<i class=" + "\"" + "fas " + awesome_subjectivity + "\"" + "></i>" +
+                    //     "\xa0" + '</span>' +
+                    //     '<span class="options_button" id="span_id_opt" >' +
+                    //     "<i class=" + "\"fas fa-plus-circle fa-lg\"" + "></i>" +
+                    //     '</span>' +
+                    //     "</p>";
+
+                    // commentDiv.innerHTML = divCommentHTML;
+                    // // if (checkKeyphrase(topicFilter, currentJSON.ideas[i].tasks[j].comments[k].findTopicLabels)) {
+                    // //     commentDiv.setAttribute("style", "border: 2px solid #FCB772;");
+                    // // }
+
+                    // setTippy(commentDiv.id, currentJSON);
                 }
             }
         }
     }
 
-    commentDiv = "commentDiv-" + all_ids[2] + "-" + all_ids[3] + "-" + all_ids[4]
-    questionDiv = "questionDiv-" + all_ids[2] + "-" + all_ids[3] + "-" + all_ids[4]
-    
-
-    var awesome_emoticon = attributeObj[filtered_comment.ideas[i].tasks[j].comments[k].emotion]
-    var awesome_sentiment = attributeObj[filtered_comment.ideas[i].tasks[j].comments[k].sentiment_final]
-    var awesome_subjectivity = attributeObj[filtered_comment.ideas[i].tasks[j].comments[k].subjectivity]
-
-    
-
     // console.log(currentJSON)
     //after revising do this
 
+    //makeRevision(currentJSON)
 }
 function getEmojiString(commentID) {
 
@@ -493,9 +536,9 @@ function sentiMouseClick(id) {
     console.log(all_ids)
 
     for (var i in currentJSON["ideas"]) {
-        for (var j in currentJSON.ideas[i].tasks){
-            for (var k in currentJSON.ideas[i].tasks[j].comments){
-                if(currentJSON.ideas[i].id == all_ids[2] && currentJSON.ideas[i].tasks[j].id == all_ids[3] && currentJSON.ideas[i].tasks[j].comments[k].comment_id == all_ids[4]){
+        for (var j in currentJSON.ideas[i].tasks) {
+            for (var k in currentJSON.ideas[i].tasks[j].comments) {
+                if (currentJSON.ideas[i].id == all_ids[2] && currentJSON.ideas[i].tasks[j].id == all_ids[3] && currentJSON.ideas[i].tasks[j].comments[k].comment_id == all_ids[4]) {
                     var new_senti = all_ids[0]
                     console.log("New Sentiment ", String(new_senti))
                     currentJSON.ideas[i].tasks[j].comments[k].sentiment_final = new_senti
@@ -533,9 +576,9 @@ function subjectivityMouseClick(id) {
     console.log(all_ids)
 
     for (var i in currentJSON["ideas"]) {
-        for (var j in currentJSON.ideas[i].tasks){
-            for (var k in currentJSON.ideas[i].tasks[j].comments){
-                if(currentJSON.ideas[i].id == all_ids[2] && currentJSON.ideas[i].tasks[j].id == all_ids[3] && currentJSON.ideas[i].tasks[j].comments[k].comment_id == all_ids[4]){
+        for (var j in currentJSON.ideas[i].tasks) {
+            for (var k in currentJSON.ideas[i].tasks[j].comments) {
+                if (currentJSON.ideas[i].id == all_ids[2] && currentJSON.ideas[i].tasks[j].id == all_ids[3] && currentJSON.ideas[i].tasks[j].comments[k].comment_id == all_ids[4]) {
                     var new_sub = all_ids[0].charAt(0).toUpperCase() + all_ids[0].slice(1)
                     console.log("New Subjectivity ", String(new_sub))
                     currentJSON.ideas[i].tasks[j].comments[k].subjectivity = new_sub
@@ -544,6 +587,7 @@ function subjectivityMouseClick(id) {
         }
     }
 }
+
 function getSubjectivityString(commentID) {
 
     var subjectivityDiv =
@@ -608,7 +652,6 @@ function makeRevision(obj) {
         },
         success: function (output) {
             console.log(saved);
-
         }
     });
 
@@ -634,11 +677,11 @@ function save_issue(id) {
         console.log(currentJSON)
         var all_ids = id.split("-")
         console.log(all_ids)
-        
+
         for (var i in currentJSON["ideas"]) {
-            for (var j in currentJSON.ideas[i].tasks){
-                for (var k in currentJSON.ideas[i].tasks[j].comments){
-                    if(currentJSON.ideas[i].id == all_ids[2] && currentJSON.ideas[i].tasks[j].id == all_ids[3] && currentJSON.ideas[i].tasks[j].comments[k].comment_id == all_ids[4]){
+            for (var j in currentJSON.ideas[i].tasks) {
+                for (var k in currentJSON.ideas[i].tasks[j].comments) {
+                    if (currentJSON.ideas[i].id == all_ids[2] && currentJSON.ideas[i].tasks[j].id == all_ids[3] && currentJSON.ideas[i].tasks[j].comments[k].comment_id == all_ids[4]) {
                         console.log("Issue Title", $('#issue_title').val())
                         console.log("Issue Type", $('#issue_type').val())
                         console.log("Issue Text", $('#issue_text').val())
@@ -661,11 +704,11 @@ function save_criteria(id) {
         console.log(currentJSON)
         var all_ids = id.split("-")
         console.log(all_ids)
-        
+
         for (var i in currentJSON["ideas"]) {
-            for (var j in currentJSON.ideas[i].tasks){
-                for (var k in currentJSON.ideas[i].tasks[j].comments){
-                    if(currentJSON.ideas[i].id == all_ids[2] && currentJSON.ideas[i].tasks[j].id == all_ids[3] && currentJSON.ideas[i].tasks[j].comments[k].comment_id == all_ids[4]){
+            for (var j in currentJSON.ideas[i].tasks) {
+                for (var k in currentJSON.ideas[i].tasks[j].comments) {
+                    if (currentJSON.ideas[i].id == all_ids[2] && currentJSON.ideas[i].tasks[j].id == all_ids[3] && currentJSON.ideas[i].tasks[j].comments[k].comment_id == all_ids[4]) {
                         console.log("Criteria Title", $('#criteria_title').val())
                         console.log("Criteria Type", $('#criteria_type').val())
                         console.log("Criteria Text", $('#criteria_text').val())

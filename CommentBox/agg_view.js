@@ -301,7 +301,8 @@ d3.json("communitycrit_new.json", function (err, json) {
         var column0 = document.getElementById("row" + i + "column0")
         var divIdeaName =
             "<div class=\"idea-Name\"" + "\">" +
-            '<div  class="btn btn-primary btn-block ideaName" id="' + proposal_names[i].idea_id + '">' + proposal_names[i].idea_name + "</div>";
+            //'<div  class="btn btn-primary btn-block ideaName" id="' + proposal_names[i].idea_id + '">' + proposal_names[i].idea_name + "</div>";
+            '<div  class="ideaName" id="' + proposal_names[i].idea_id + '">' + '<p style="margin: 0px; word-wrap:break-word;">' + proposal_names[i].idea_name + "</p></div>";
 
         column0.innerHTML = divIdeaName
 

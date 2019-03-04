@@ -434,3 +434,7 @@ body {
 .topicName:hover{
     cursor:pointer;
 }
+
+.ideaName:hover{
+    cursor:pointer;
+}
