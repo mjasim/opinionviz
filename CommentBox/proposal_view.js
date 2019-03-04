@@ -1,5 +1,6 @@
 
 var currentJSON = null;
+
 var proposalIntro = {
     1: "Build a tower in the center of El Nudillo. Sketches of tower concepts as shown.",
     2: "I would love to see El Nudillo, the intersection of 14th Street and National Avenue, become a place for public creative expression. There are so many talented artists around this area, and if we could somehow commission one to make a sculpture or something, or maybe invite everyone to paint a mural one day, it could be an amazing way to make this space ours and bring the community together.",
@@ -336,7 +337,7 @@ function setTippy(commentID, json) {
             role: 'menu',
             // `focus` is not suitable for buttons with dropdowns
             trigger: 'click',
-            content: getEmojiString(commentID, json),
+            content: getEmojiString(commentID),
             theme: 'tomato',
             // Don't announce the tooltip's contents when expanded
             aria: null,
@@ -357,7 +358,7 @@ function setTippy(commentID, json) {
             role: 'menu',
             // `focus` is not suitable for buttons with dropdowns
             trigger: 'click',
-            content: getSentiString(commentID, json),
+            content: getSentiString(commentID),
             theme: 'tomato',
             // Don't announce the tooltip's contents when expanded
             aria: null,
@@ -378,7 +379,7 @@ function setTippy(commentID, json) {
             role: 'menu',
             // `focus` is not suitable for buttons with dropdowns
             trigger: 'click',
-            content: getSubjectivityString(commentID, json),
+            content: getSubjectivityString(commentID),
             theme: 'tomato',
             // Don't announce the tooltip's contents when expanded
             aria: null,
@@ -399,7 +400,7 @@ function setTippy(commentID, json) {
             role: 'menu',
             // `focus` is not suitable for buttons with dropdowns
             trigger: 'click',
-            content: getOptionString(commentID, json),
+            content: getOptionString(commentID),
             theme: 'tomato',
             // Don't announce the tooltip's contents when expanded
             aria: null,
@@ -459,83 +460,83 @@ function getEmojiString(commentID) {
     return emojiDiv;
 }
 
-function sentiMouseClick(id, json) {
+function sentiMouseClick(id) {
     console.log('senti id ' + id);
-    console.log("inside senticlick", json)
+    console.log("inside senticlick", currentJSON)
 }
-function getSentiString(commentID, json) {
+function getSentiString(commentID) {
 
     var sentiDiv =
         "<div class=\"label-body\"" + "\">" +
         "<div class=\"label-title\"" + ">" + "</div>" +
         "<div class=\"label-sent-body\"" + ">" +
         "<p>" + "Negative" + "</p>" +
-        "<p>" + '<span class="label-sent-button" id="span_id_negative' + commentID + '" onclick="sentiMouseClick(\'' + 'negative' + commentID + "," + json + '\')">' +
+        "<p>" + '<span class="label-sent-button" id="span_id_negative' + commentID + '" onclick="sentiMouseClick(\'' + 'negative' + commentID + '\')">' +
         "<i class=" + "\"fas fa-thumbs-down fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-sent-body\"" + "\">" +
         "<p>" + "Neutral" + "</p>" +
-        "<p>" + '<span class="label-sent-button" id="span_id_neutral' + '" onclick="sentiMouseClick(\'' + 'neutral' + commentID + "," + json + '\')">' +
+        "<p>" + '<span class="label-sent-button" id="span_id_neutral' + '" onclick="sentiMouseClick(\'' + 'neutral' + commentID + '\')">' +
         "<i class=" + "\"fas fa-thumbs-down fa-2x neutral\"" + " style=transform:rotate(-90deg)" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-sent-body\"" + "\">" +
         "<p>" + "Positive" + "</p>" +
-        "<p>" + '<span class="label-sent-button" id="span_id_positive' + '" onclick="sentiMouseClick(\'' + 'positive' + commentID + "," + json + '\')">' +
+        "<p>" + '<span class="label-sent-button" id="span_id_positive' + '" onclick="sentiMouseClick(\'' + 'positive' + commentID + '\')">' +
         "<i class=" + "\"fas fa-thumbs-up fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>";
     return sentiDiv;
 }
 
-function subjectivityMouseClick(id, json) {
+function subjectivityMouseClick(id) {
     console.log('subjectivity id ' + id);
-    console.log("inside subclick", json)
+    console.log("inside subclick", currentJSON)
 }
-function getSubjectivityString(commentID, json) {
+function getSubjectivityString(commentID) {
 
     var subjectivityDiv =
         "<div class=\"label-body\"" + "\">" +
         "<div class=\"label-title\"" + ">" + "</div>" +
         "<div class=\"label-sub-body\"" + ">" +
         "<p>" + "Fact" + "</p>" +
-        "<p>" + '<span class="label-sub-button" id="span_id_fact' + commentID + '" onclick="subjectivityMouseClick(\'' + 'fact' + commentID + "," + json + '\')">' +
+        "<p>" + '<span class="label-sub-button" id="span_id_fact' + commentID + '" onclick="subjectivityMouseClick(\'' + 'fact' + commentID + '\')">' +
         "<i class=" + "\"fas fa-clipboard-check fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-sub-body\"" + "\">" +
         "<p>" + "Neutral" + "</p>" +
-        "<p>" + '<span class="label-sub-button" id="span_id_opinion' + '" onclick="subjectivityMouseClick(\'' + 'opinion' + commentID + "," + json + '\')">' +
+        "<p>" + '<span class="label-sub-button" id="span_id_opinion' + '" onclick="subjectivityMouseClick(\'' + 'opinion' + commentID + '\')">' +
         "<i class=" + "\"fas fa-comments fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>";
     return subjectivityDiv;
 }
 
 
-function optionMouseClick(id, json) {
+function optionMouseClick(id) {
     console.log('option id ' + id);
-    console.log("inside optclick", json)
+    console.log("inside optclick", currentJSON)
 
     if(id.includes("issue")){
-        save_issue(json)    
+        save_issue(currentJSON)    
     }
 
     else if(id.includes("criteria")){
-        save_criteria(json)    
+        save_criteria(currentJSON)    
     }
 
     // else if(id.includes("note")){
     //     save_note(json)    
     // }
 }
-function getOptionString(commentID, json) {
+function getOptionString(commentID) {
 
     var optDiv =
         "<div class=\"label-body\"" + "\">" +
         "<div class=\"label-title\"" + ">" + "</div>" +
         "<div class=\"label-opt-body\"" + ">" +
         "<p>" + "Issue" + "</p>" +
-        "<p>" + '<span class="label-opt-button" id="span_id_issue' + commentID + '" onclick="optionMouseClick(\'' + 'issue' + commentID + "," + json + '\')">' +
+        "<p>" + '<span class="label-opt-button" id="span_id_issue' + commentID + '" onclick="optionMouseClick(\'' + 'issue' + commentID + '\')">' +
         "<i class=" + "\"fas fa-exclamation-circle fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-opt-body\"" + "\">" +
         "<p>" + "Criteria" + "</p>" +
-        "<p>" + '<span class="label-opt-button" id="span_id_criteria' + '" onclick="optionMouseClick(\'' + 'criteria' + commentID + "," + json + '\')">' +
+        "<p>" + '<span class="label-opt-button" id="span_id_criteria' + '" onclick="optionMouseClick(\'' + 'criteria' + commentID + '\')">' +
         "<i class=" + "\"fas fa-clipboard-list fa-2x neutral\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-opt-body\"" + "\">" +
         "<p>" + "Note" + "</p>" +
-        "<p>" + '<span class="label-opt-button" id="span_id_note' + '" onclick="optionMouseClick(\'' + 'note' + commentID + "," + json + '\')">' +
+        "<p>" + '<span class="label-opt-button" id="span_id_note' + '" onclick="optionMouseClick(\'' + 'note' + commentID + '\')">' +
         "<i class=" + "\"fas fa-save fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>";
     return optDiv;
 }
