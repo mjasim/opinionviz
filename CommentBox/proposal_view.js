@@ -1,4 +1,5 @@
 
+var currentJSON = null;
 var proposalIntro = {
     1: "Build a tower in the center of El Nudillo. Sketches of tower concepts as shown.",
     2: "I would love to see El Nudillo, the intersection of 14th Street and National Avenue, become a place for public creative expression. There are so many talented artists around this area, and if we could somehow commission one to make a sculpture or something, or maybe invite everyone to paint a mural one day, it could be an amazing way to make this space ours and bring the community together.",
@@ -118,7 +119,7 @@ function get_filtered_comment(json, filterobj) {
 }
 
 function draw_filtered_comments(filtered_comment, json) {
-
+    //console.log('draw filter comment', json);
     var myNode = document.getElementById("parentBox");
     while (myNode.firstChild) {
         myNode.removeChild(myNode.firstChild);
@@ -228,7 +229,7 @@ function draw_filtered_comments(filtered_comment, json) {
                         }
 
                         divQuestion[k].innerHTML = divQuestionHTML;
-                        setTippy(divQuestion[k].id);
+                        setTippy(divQuestion[k].id, json);
 
                         var element = document.getElementById(divTask[j].id)
                         element.appendChild(divQuestion[k])
@@ -327,8 +328,9 @@ function draw_filtered_comments(filtered_comment, json) {
 }
 
 function setTippy(commentID, json) {
-    //console.log(commentID);
-    $(document).ready(function () {
+    //console.log('set tippy'+json);
+    currentJSON = json;
+        $(document).ready(function () {
         tippy('#' + commentID + ' .emoticon_button', {
             interactive: true,
             role: 'menu',
@@ -413,53 +415,46 @@ function setTippy(commentID, json) {
             },
         });
 
-        // $('#'+commentID+ ' .label-emo-button').click(function () {
-        //     var id = $(this).attr('id');
-        //     console.log('emoji-revision', id)
-        // });
-        // $('#span_id_angry'+commentID).click(function () {
-        //     var id = $(this).attr('id');
-        //     console.log('emoji-revision', id)
-        // });
-        // $('#span_id_angrycommentDivId-1-1-0').click(function () {
-        //     var id = $(this).attr('id');
-        //     console.log('emoji-revision', id)
-        // });
+
     });
 
 }
-function emojiMouseClick(id, json) {
+function emojiMouseClick(id) {
+
     console.log('emoji id ' + id);
-    console.log("inside emoclick", json)
+    console.log("inside emoclick")
+    console.log(currentJSON);
+    //after revising do this
+
 }
-function getEmojiString(commentID, json) {
+function getEmojiString(commentID) {
 
     var emojiDiv =
         "<div class=\"label-body\"" + "\">" +
         "<div class=\"label-title\"" + ">" + "</div>" +
         "<div class=\"label-emo-body\"" + ">" +
         "<p>" + "Angry" + "</p>" +
-        "<p>" + '<span class="label-emo-button" id="span_id_angry' + commentID + '" onclick="emojiMouseClick(\'' + 'angry' + commentID + "," + json + '\')">' +
+        "<p>" + '<span class="label-emo-button" id="span_id_angry' + commentID + '" onclick="emojiMouseClick(\'' + 'angry' + commentID + "," + ''+ '\')">' +
         "<i class=" + "\"fas fa-angry fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Fear" + "</p>" +
-        "<p>" + '<span class="label-emo-button" id="span_id_fear' + '" onclick="emojiMouseClick(\'' + 'fear' + commentID + "," + json + '\')">' +
+        "<p>" + '<span class="label-emo-button" id="span_id_fear' + '" onclick="emojiMouseClick(\'' + 'fear' + commentID + "," + '' + '\')">' +
         "<i class=" + "\"fas fa-flushed fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Sad" + "</p>" +
-        "<p>" + '<span class="label-emo-button" id="span_id_sad' + '" onclick="emojiMouseClick(\'' + 'sad' + commentID + "," + json + '\')">' +
+        "<p>" + '<span class="label-emo-button" id="span_id_sad' + '" onclick="emojiMouseClick(\'' + 'sad' + commentID + "," + '' + '\')">' +
         "<i class=" + "\"fas fa-frown fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Bored" + "</p>" +
-        "<p>" + '<span class="label-emo-button" id="span_id_bored' + '" onclick="emojiMouseClick(\'' + 'bored' + commentID + "," + json + '\')">' +
+        "<p>" + '<span class="label-emo-button" id="span_id_bored' + '" onclick="emojiMouseClick(\'' + 'bored' + commentID + "," + '' + '\')">' +
         "<i class=" + "\"fas fa-meh fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Happy" + "</p>" +
-        "<p>" + '<span class="label-emo-button" id="span_id_happy' + '" onclick="emojiMouseClick(\'' + 'happy' + commentID + "," + json + '\')">' +
+        "<p>" + '<span class="label-emo-button" id="span_id_happy' + '" onclick="emojiMouseClick(\'' + 'happy' + commentID + "," + '' + '\')">' +
         "<i class=" + "\"fas fa-smile fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Excited" + "</p>" +
-        "<p>" + '<span class="label-emo-button" id="span_id_excited' + '" onclick="emojiMouseClick(\'' + 'excited' + commentID + "," + json + '\')">' +
+        "<p>" + '<span class="label-emo-button" id="span_id_excited' + '" onclick="emojiMouseClick(\'' + 'excited' + commentID + "," + '' + '\')">' +
         "<i class=" + "\"fas fa-smile-beam fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>";
     return emojiDiv;
 }

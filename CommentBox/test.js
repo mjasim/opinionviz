@@ -65,7 +65,7 @@ d3.json("communitycrit_new.json", function (err, json) {
   // console.log(filtered_comment)
   // draw filtered comments
 
-    draw_filtered_comments(filtered_comment)
+    draw_filtered_comments(filtered_comment, json)
 
   // highlight filtered comments
   // CSS

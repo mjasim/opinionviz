@@ -403,7 +403,7 @@ d3.json("communitycrit_new.json", function (err, json) {
             filterobj.topic = null
             console.log(id)
             var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
-            draw_filtered_comments(filtered_comment)
+            draw_filtered_comments(filtered_comment, json)
 
         });
         // $('.emoticon_button').mouseover(function() {
@@ -424,7 +424,7 @@ d3.json("communitycrit_new.json", function (err, json) {
             filterobj.topic = split_str[2]
             var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
            // console.log("calling draw with", filtered_comment)
-            draw_filtered_comments(filtered_comment)
+            draw_filtered_comments(filtered_comment, json)
             //console.log("draw returned")
 
         });
@@ -879,7 +879,7 @@ d3.json("communitycrit_new.json", function (err, json) {
             filterobj.idea_id = idea_id
             filterobj.sentiment_final = d.key
             var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
-            draw_filtered_comments(filtered_comment)
+            draw_filtered_comments(filtered_comment, json)
         }
         var rectTooltipg = svg.append("g")
             .attr("font-family", "sans-serif")
@@ -1131,7 +1131,7 @@ d3.json("communitycrit_new.json", function (err, json) {
             filterobj.idea_id = idea_id
             filterobj.subjectivity = d.key
             var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
-            draw_filtered_comments(filtered_comment)
+            draw_filtered_comments(filtered_comment, json)
         }
 
         var rectTooltipg = svg.append("g")
