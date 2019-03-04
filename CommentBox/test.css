@@ -388,6 +388,42 @@ body {
     cursor: pointer;
 }
 
+.fa-plus-circle{
+    color: #0099FF;
+    opacity: 0.7;
+}
+.fa-plus-circle:hover{
+    opacity: .9;
+    cursor: pointer;
+}
+
+.fa-clipboard-list{
+    color: #0099FF;
+    opacity: 0.7;
+}
+.fa-clipboard-list:hover{
+    opacity: .9;
+    cursor: pointer;
+}
+
+.fa-save{
+    color: #0099FF;
+    opacity: 0.7;
+}
+.fa-save:hover{
+    opacity: .9;
+    cursor: pointer;
+}
+
+.fa-exclamation-circle{
+    color: #0099FF;
+    opacity: 0.7;
+}
+.fa-exclamation-circle:hover{
+    opacity: .9;
+    cursor: pointer;
+}
+
 .topic-body{
     display: flex;
     flex-direction: row;

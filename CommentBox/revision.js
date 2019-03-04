@@ -1,6 +1,5 @@
 function save_issue(revision_item_id, json) {
-  if (revision_item_id == 1)
-    $('#issueModal').modal('show')
+  $('#issueModal').modal('show')
   $('#issue_save_button').on('click', function () {
     console.log(json)
     issue_title = $('#issue_title').val();
@@ -10,8 +9,7 @@ function save_issue(revision_item_id, json) {
 }
 
 function save_criteria(revision_item_id, json) {
-  if (revision_item_id == 1)
-    $('#criteriaModal').modal('show')
+  $('#criteriaModal').modal('show')
   $('#criteria_save_button').on('click', function () {
     console.log(json)
     criteria_title = $('#criteria_title').val();

@@ -201,7 +201,9 @@ function draw_filtered_comments(filtered_comment, json) {
                             '<span class="sentiment_button" id="span_id_sent" >' +
                             "<i class=" + "\"" + "fas " + awesome_sentiment + "\"" + "></i>" + "\xa0" + '</span>' +
                             '<span class="subjectivity_button" id="span_id_sub" >' +
-                            "<i class=" + "\"" + "fas " + awesome_subjectivity + "\"" + "></i>" +
+                            "<i class=" + "\"" + "fas " + awesome_subjectivity + "\"" + "></i>" + "\xa0" + '</span>' +
+                            '<span class="options_button" id="span_id_opt" >' +
+                            "<i class=" + "\"fas fa-plus-circle fa-lg\"" + "></i>" +
                             '</span>' +
                             "</p>";
                         if (filtered_comment.ideas[i].tasks[j].comments[k].sentiment_final == "neutral") {
@@ -218,9 +220,11 @@ function draw_filtered_comments(filtered_comment, json) {
                                 '<span class="sentiment_button" id="span_id_sent" >' +
                                 "<i class=" + "\"fas fa-thumbs-down fa-lg neutral\"" + " style=transform:rotate(90deg)" + "></i>" + "\xa0" + '</span>' +
                                 '<span class="subjectivity_button" id="span_id_sub" >' +
-                                "<i class=" + "\"" + "fas " + awesome_subjectivity + "\"" + "></i>" +
-                                '</span>' +
-                                "</p>";
+                                "<i class=" + "\"" + "fas " + awesome_subjectivity + "\"" + "></i>" + "\xa0" + '</span>' +
+                                '<span class="options_button" id="span_id_opt" >' +
+                                "<i class=" + "\"fas fa-plus-circle fa-lg\"" + "></i>" +
+                                '</span>' + 
+                            "</p>";
                         }
 
                         divQuestion[k].innerHTML = divQuestionHTML;
@@ -257,6 +261,9 @@ function draw_filtered_comments(filtered_comment, json) {
                     '</span>' +
                     '<span class="subjectivity_button" id="span_id_sub" >' +
                     "<i class=" + "\"" + "fas " + awesome_subjectivity + "\"" + "></i>" +
+                    "\xa0" + '</span>' +
+                    '<span class="options_button" id="span_id_opt" >' +
+                    "<i class=" + "\"fas fa-plus-circle fa-lg\"" + "></i>" +
                     '</span>' +
                     "</p>";
 
@@ -278,10 +285,10 @@ function draw_filtered_comments(filtered_comment, json) {
                 }*/
                 //'<p>'+ filtered_comment.ideas[i].tasks[j].comments[k].comment + '</p>';
                 divComment[k].innerHTML = divCommentHTML;
-                if(checkKeyphrase(topicFilter, filtered_comment.ideas[i].tasks[j].comments[k].findTopicLabels)){
-                    divComment[k].setAttribute("style", "border: 2px solid #FCB772;");        
+                if (checkKeyphrase(topicFilter, filtered_comment.ideas[i].tasks[j].comments[k].findTopicLabels)) {
+                    divComment[k].setAttribute("style", "border: 2px solid #FCB772;");
                 }
-            
+
                 setTippy(divComment[k].id, json);
 
                 var element = document.getElementById(divTask[j].id)
@@ -385,6 +392,27 @@ function setTippy(commentID, json) {
             },
         });
 
+        tippy('#' + commentID + ' .options_button', {
+            interactive: true,
+            role: 'menu',
+            // `focus` is not suitable for buttons with dropdowns
+            trigger: 'click',
+            content: getOptionString(commentID, json),
+            theme: 'tomato',
+            // Don't announce the tooltip's contents when expanded
+            aria: null,
+            // Important: the tooltip should be DIRECTLY after the reference element
+            // in the DOM source order, which is why it has its own wrapper element
+            appendTo: 'parent',
+            // Let the user know the popup has been expanded
+            onMount({ reference }) {
+                reference.setAttribute('aria-expanded', 'true')
+            },
+            onHide({ reference }) {
+                reference.setAttribute('aria-expanded', 'false')
+            },
+        });
+
         // $('#'+commentID+ ' .label-emo-button').click(function () {
         //     var id = $(this).attr('id');
         //     console.log('emoji-revision', id)
@@ -415,23 +443,23 @@ function getEmojiString(commentID, json) {
         "<i class=" + "\"fas fa-angry fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Fear" + "</p>" +
-        "<p>" + '<span class="label-emo-button" id="span_id_fear' + '" onclick="emojiMouseClick(\'' + 'fear' + commentID +  "," + json + '\')">' +
+        "<p>" + '<span class="label-emo-button" id="span_id_fear' + '" onclick="emojiMouseClick(\'' + 'fear' + commentID + "," + json + '\')">' +
         "<i class=" + "\"fas fa-flushed fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Sad" + "</p>" +
-        "<p>" + '<span class="label-emo-button" id="span_id_sad' + '" onclick="emojiMouseClick(\'' + 'sad' + commentID +  "," + json + '\')">' +
+        "<p>" + '<span class="label-emo-button" id="span_id_sad' + '" onclick="emojiMouseClick(\'' + 'sad' + commentID + "," + json + '\')">' +
         "<i class=" + "\"fas fa-frown fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Bored" + "</p>" +
-        "<p>" + '<span class="label-emo-button" id="span_id_bored' + '" onclick="emojiMouseClick(\'' + 'bored' + commentID +  "," + json + '\')">' +
+        "<p>" + '<span class="label-emo-button" id="span_id_bored' + '" onclick="emojiMouseClick(\'' + 'bored' + commentID + "," + json + '\')">' +
         "<i class=" + "\"fas fa-meh fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Happy" + "</p>" +
-        "<p>" + '<span class="label-emo-button" id="span_id_happy' + '" onclick="emojiMouseClick(\'' + 'happy' + commentID +  "," + json + '\')">' +
+        "<p>" + '<span class="label-emo-button" id="span_id_happy' + '" onclick="emojiMouseClick(\'' + 'happy' + commentID + "," + json + '\')">' +
         "<i class=" + "\"fas fa-smile fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Excited" + "</p>" +
-        "<p>" + '<span class="label-emo-button" id="span_id_excited' + '" onclick="emojiMouseClick(\'' + 'excited' + commentID +  "," + json + '\')">' +
+        "<p>" + '<span class="label-emo-button" id="span_id_excited' + '" onclick="emojiMouseClick(\'' + 'excited' + commentID + "," + json + '\')">' +
         "<i class=" + "\"fas fa-smile-beam fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>";
     return emojiDiv;
 }
@@ -447,15 +475,15 @@ function getSentiString(commentID, json) {
         "<div class=\"label-title\"" + ">" + "</div>" +
         "<div class=\"label-sent-body\"" + ">" +
         "<p>" + "Negative" + "</p>" +
-        "<p>" + '<span class="label-sent-button" id="span_id_negative' + commentID + '" onclick="sentiMouseClick(\'' + 'negative' + commentID +  "," + json + '\')">' +
+        "<p>" + '<span class="label-sent-button" id="span_id_negative' + commentID + '" onclick="sentiMouseClick(\'' + 'negative' + commentID + "," + json + '\')">' +
         "<i class=" + "\"fas fa-thumbs-down fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-sent-body\"" + "\">" +
         "<p>" + "Neutral" + "</p>" +
-        "<p>" + '<span class="label-sent-button" id="span_id_neutral' + '" onclick="sentiMouseClick(\'' + 'neutral' + commentID +  "," + json + '\')">' +
+        "<p>" + '<span class="label-sent-button" id="span_id_neutral' + '" onclick="sentiMouseClick(\'' + 'neutral' + commentID + "," + json + '\')">' +
         "<i class=" + "\"fas fa-thumbs-down fa-2x neutral\"" + " style=transform:rotate(-90deg)" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-sent-body\"" + "\">" +
         "<p>" + "Positive" + "</p>" +
-        "<p>" + '<span class="label-sent-button" id="span_id_positive' + '" onclick="sentiMouseClick(\'' + 'positive' + commentID +  "," + json + '\')">' +
+        "<p>" + '<span class="label-sent-button" id="span_id_positive' + '" onclick="sentiMouseClick(\'' + 'positive' + commentID + "," + json + '\')">' +
         "<i class=" + "\"fas fa-thumbs-up fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>";
     return sentiDiv;
 }
@@ -471,13 +499,50 @@ function getSubjectivityString(commentID, json) {
         "<div class=\"label-title\"" + ">" + "</div>" +
         "<div class=\"label-sub-body\"" + ">" +
         "<p>" + "Fact" + "</p>" +
-        "<p>" + '<span class="label-sub-button" id="span_id_fact' + commentID + '" onclick="subjectivityMouseClick(\'' + 'fact' + commentID +  "," + json + '\')">' +
+        "<p>" + '<span class="label-sub-button" id="span_id_fact' + commentID + '" onclick="subjectivityMouseClick(\'' + 'fact' + commentID + "," + json + '\')">' +
         "<i class=" + "\"fas fa-clipboard-check fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-sub-body\"" + "\">" +
         "<p>" + "Neutral" + "</p>" +
-        "<p>" + '<span class="label-sub-button" id="span_id_opinion' + '" onclick="subjectivityMouseClick(\'' + 'opinion' + commentID +  "," + json + '\')">' +
+        "<p>" + '<span class="label-sub-button" id="span_id_opinion' + '" onclick="subjectivityMouseClick(\'' + 'opinion' + commentID + "," + json + '\')">' +
         "<i class=" + "\"fas fa-comments fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>";
     return subjectivityDiv;
+}
+
+
+function optionMouseClick(id, json) {
+    console.log('option id ' + id);
+    console.log("inside optclick", json)
+
+    if(id.includes("issue")){
+        save_issue(json)    
+    }
+
+    else if(id.includes("criteria")){
+        save_criteria(json)    
+    }
+
+    // else if(id.includes("note")){
+    //     save_note(json)    
+    // }
+}
+function getOptionString(commentID, json) {
+
+    var optDiv =
+        "<div class=\"label-body\"" + "\">" +
+        "<div class=\"label-title\"" + ">" + "</div>" +
+        "<div class=\"label-opt-body\"" + ">" +
+        "<p>" + "Issue" + "</p>" +
+        "<p>" + '<span class="label-opt-button" id="span_id_issue' + commentID + '" onclick="optionMouseClick(\'' + 'issue' + commentID + "," + json + '\')">' +
+        "<i class=" + "\"fas fa-exclamation-circle fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<div class=\"label-opt-body\"" + "\">" +
+        "<p>" + "Criteria" + "</p>" +
+        "<p>" + '<span class="label-opt-button" id="span_id_criteria' + '" onclick="optionMouseClick(\'' + 'criteria' + commentID + "," + json + '\')">' +
+        "<i class=" + "\"fas fa-clipboard-list fa-2x neutral\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<div class=\"label-opt-body\"" + "\">" +
+        "<p>" + "Note" + "</p>" +
+        "<p>" + '<span class="label-opt-button" id="span_id_note' + '" onclick="optionMouseClick(\'' + 'note' + commentID + "," + json + '\')">' +
+        "<i class=" + "\"fas fa-save fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>";
+    return optDiv;
 }
 
 function makeRevision(obj) {
