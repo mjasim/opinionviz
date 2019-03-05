@@ -26,7 +26,7 @@ var cellHistory = {
 d3.json("communitycrit_new.json", function (err, json) {
     //console.log(json)
 
-    var numberOfRows = 18;
+    var numberOfRows = 19;
     var numberOfColumns = 6;
 
     var proposal_names = get_proposal_names(json)
@@ -54,26 +54,26 @@ d3.json("communitycrit_new.json", function (err, json) {
 
     //============================ top column 0 =========================//
 
-    var top0 = document.getElementById("top0")
-    tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
-    tempSvg.id = "svgtop0"
-    tempSvg.setAttribute("class", "t_svg")
-    tempSvg.setAttribute("width", top0.clientWidth)
-    tempSvg.setAttribute("height", top0.clientHeight)
-    top0.appendChild(tempSvg)
+    //var top0 = document.getElementById("top0")
+    //tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
+    //tempSvg.id = "svgtop0"
+    //tempSvg.setAttribute("class", "t_svg")
+    //tempSvg.setAttribute("width", top0.clientWidth)
+    //tempSvg.setAttribute("height", top0.clientHeight)
+    //top0.appendChild(tempSvg)
 
     //============================ top column 0 end =====================//
 
 
     //============================ top column 1 =========================//
 
-    var top1 = document.getElementById("top0")
-    tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
-    tempSvg.id = "svgtop0"
-    tempSvg.setAttribute("class", "t_svg")
-    tempSvg.setAttribute("width", top1.clientWidth)
-    tempSvg.setAttribute("height", top1.clientHeight)
-    top1.appendChild(tempSvg)
+    //var top1 = document.getElementById("top0")
+    //tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
+    //tempSvg.id = "svgtop0"
+    //tempSvg.setAttribute("class", "t_svg")
+    //tempSvg.setAttribute("width", top1.clientWidth)
+    //tempSvg.setAttribute("height", top1.clientHeight)
+    //top1.appendChild(tempSvg)
 
     //============================ top column 1 end =====================//
 
@@ -352,7 +352,7 @@ d3.json("communitycrit_new.json", function (err, json) {
         var divIdeaName =
             "<div class=\"idea-Name\"" + "\">" +
             //'<div  class="btn btn-primary btn-block ideaName" id="' + proposal_names[i].idea_id + '">' + proposal_names[i].idea_name + "</div>";
-            '<div  class="ideaName" id="' + proposal_names[i].idea_id + '">' + '<p style="margin: 0px; word-wrap:break-word;">' + proposal_names[i].idea_name + "</p></div>";
+            '<div  class="ideaName" id="' + proposal_names[i].idea_id + '">' + '<p style="margin:0px; word-wrap:break-word; text-align: center">' + proposal_names[i].idea_name + "</p></div>";
 
         column0.innerHTML = divIdeaName
 
@@ -659,7 +659,7 @@ d3.json("communitycrit_new.json", function (err, json) {
 
         var y = d3.scaleBand()
             .rangeRound([height - margin.bottom, margin.top])
-            .padding(0.1);
+            .padding(0.0);
 
         y.domain(salesData.map(function (d) {
             return d.date;
@@ -938,7 +938,7 @@ d3.json("communitycrit_new.json", function (err, json) {
 
         var y = d3.scaleBand()
             .rangeRound([height - margin.bottom, margin.top])
-            .padding(0.1);
+            .padding(0.0);
 
         y.domain(salesData.map(function (d) {
             return d.date;
@@ -1210,7 +1210,7 @@ d3.json("communitycrit_new.json", function (err, json) {
 
         var y = d3.scaleBand()
             .rangeRound([height - margin.bottom, margin.top])
-            .padding(0.1);
+            .padding(0.0);
 
         y.domain(salesData.map(function (d) {
             return d.date;
@@ -1482,7 +1482,7 @@ d3.json("communitycrit_new.json", function (err, json) {
 
         var y = d3.scaleBand()
             .rangeRound([height - margin.bottom, margin.top])
-            .padding(0.1);
+            .padding(0.0);
 
         y.domain(salesData.map(function (d) {
             return d.date;
