@@ -251,8 +251,8 @@ body {
 .commentDiv{
     /*color:black;*/
     color:#333;
-    margin-left: 30px;
-    margin-right: 20px;
+    margin-left: 40px;
+    margin-right: 30px;
     font-family: Open Sans,sans-serif;
 
     Background: #fff;
@@ -436,5 +436,17 @@ body {
 }
 
 .ideaName:hover{
+    cursor:pointer;
+}
+
+.text-box{
+    width: 100%
+}
+
+.label-search-button-topic:hover{
+    cursor:pointer;
+}
+
+.label-search-button-proposal:hover{
     cursor:pointer;
 }
