@@ -401,7 +401,7 @@ function setTippy(commentID, json) {
             interactive: true,
             role: 'menu',
             // `focus` is not suitable for buttons with dropdowns
-            trigger: 'click',
+            trigger: 'mouseenter',
             content: getOptionString(commentID),
             theme: 'tomato',
             // Don't announce the tooltip's contents when expanded
@@ -444,59 +444,6 @@ function emojiMouseClick(id) {
                         "<i class=" + "\"" + "fas " + awesome_emoticon + "\"" + "></i>" + "\xa0";
 
                     $('#span_id_emo_' + all_ids[1] + '-' + all_ids[2] + '-' + all_ids[3] + '-' + all_ids[4]).html(newEmotionButtonStr);
-
-                    //$('#span_id_'+currentJSON.ideas[i].tasks[j].comments[k].emotion + commentID).html();
-
-
-                    // commentDivId = "commentDiv-" + all_ids[2] + "-" + all_ids[3] + "-" + all_ids[4]
-                    // questionDivId = "questionDiv-" + all_ids[2] + "-" + all_ids[3] + "-" + all_ids[4]
-
-                    // commentDiv = document.getElementById(commentDivId)
-
-                    // console.log(commentDiv)
-                    // // if (filterobj.topic != null) {
-                    // //     var topicFilter = filtered_comment.ideas[i].topic_keyphrases[filterobj.topic].topic_keyphrase
-                    // //     //console.log(topicFilter)
-                    // // }
-
-                    // var awesome_emoticon = attributeObj[currentJSON.ideas[i].tasks[j].comments[k].emotion]
-                    // var awesome_sentiment = attributeObj[currentJSON.ideas[i].tasks[j].comments[k].sentiment_final]
-                    // var awesome_subjectivity = attributeObj[currentJSON.ideas[i].tasks[j].comments[k].subjectivity]
-
-                    // var sentimentButton = currentJSON.ideas[i].tasks[j].comments[k].sentiment_final == "neutral" ?
-                    //     "<i aria-haspopup=\"true\" aria-expanded=\"false\" class=" + "\"fas fa-thumbs-down fa-lg neutral\"" + " style=transform:rotate(-90deg)" + "></i>" :
-                    //     "<i class=" + "\"" + "fas " + awesome_sentiment + "\"" + "></i>";
-
-                    // var divCommentHTML =
-
-                    //     "<div class=\"comment-author\">" +
-                    //     "<div style='float: left; padding-right: 15px;padding-top: 5px;'>" +
-                    //     "<img src=\"" + image + "\" width='27px' style='border-radius: 50%;'/></div>" +
-                    //     "<div><div>" + " author name" + "</div>" +
-                    //     '<div style="color: #888;"' + '> one year ago' + '</div></div>' +
-                    //     "</div>" +
-                    //     "<div class=\"comment-body\"" + "\">" +
-                    //     "<p>" + currentJSON.ideas[i].tasks[j].comments[k].comment + "\xa0\xa0" +
-                    //     '<span class="emoticon_button" id="span_id_emo">' +
-                    //     "<i class=" + "\"" + "fas " + awesome_emoticon + "\"" + "></i>" + "\xa0" + '</span>' +
-                    //     '<span class="sentiment_button" id="span_id_sent" >' +
-                    //     //"<i class=" + "\"" + "fas " + awesome_sentiment + "\"" + "></i>" +
-                    //     sentimentButton + "\xa0" +
-                    //     '</span>' +
-                    //     '<span class="subjectivity_button" id="span_id_sub" >' +
-                    //     "<i class=" + "\"" + "fas " + awesome_subjectivity + "\"" + "></i>" +
-                    //     "\xa0" + '</span>' +
-                    //     '<span class="options_button" id="span_id_opt" >' +
-                    //     "<i class=" + "\"fas fa-plus-circle fa-lg\"" + "></i>" +
-                    //     '</span>' +
-                    //     "</p>";
-
-                    // commentDiv.innerHTML = divCommentHTML;
-                    // // if (checkKeyphrase(topicFilter, currentJSON.ideas[i].tasks[j].comments[k].findTopicLabels)) {
-                    // //     commentDiv.setAttribute("style", "border: 2px solid #FCB772;");
-                    // // }
-
-                    // setTippy(commentDiv.id, currentJSON);
                 }
             }
         }
@@ -505,37 +452,37 @@ function emojiMouseClick(id) {
     // console.log(currentJSON)
     //after revising do this
 
-    makeRevision(currentJSON);
+    //makeRevision(currentJSON);
 }
 function getEmojiString(commentID) {
 
     var emojiDiv =
-        "<div class=\"label-body\"" + "\">" +
-        "<div class=\"label-title\"" + ">" + "</div>" +
+        "<div class=\"tippy-label-body\"" + "\">" +
+        "<div class=\"label-title\"" + " style=border:none;font-size:1.5em"  +  ">" + "<p> " + "Click on an icon to set as the new emotion" + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + ">" +
         "<p>" + "Angry" + "</p>" +
         "<p>" + '<span class="label-emo-button" id="span_id_angry' + commentID + '" onclick="emojiMouseClick(\'' + 'angry-' + commentID + '\')">' +
-        "<i class=" + "\"fas fa-angry fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<i class=" + "\"fas fa-angry fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Fear" + "</p>" +
         "<p>" + '<span class="label-emo-button" id="span_id_worried' + '" onclick="emojiMouseClick(\'' + 'worried-' + commentID + '\')">' +
-        "<i class=" + "\"fas fa-flushed fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<i class=" + "\"fas fa-flushed fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Sad" + "</p>" +
         "<p>" + '<span class="label-emo-button" id="span_id_sad' + '" onclick="emojiMouseClick(\'' + 'sad-' + commentID + '\')">' +
-        "<i class=" + "\"fas fa-frown fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<i class=" + "\"fas fa-frown fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Bored" + "</p>" +
         "<p>" + '<span class="label-emo-button" id="span_id_bored' + '" onclick="emojiMouseClick(\'' + 'bored-' + commentID + '\')">' +
-        "<i class=" + "\"fas fa-meh fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<i class=" + "\"fas fa-meh fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Happy" + "</p>" +
         "<p>" + '<span class="label-emo-button" id="span_id_happy' + '" onclick="emojiMouseClick(\'' + 'happy-' + commentID + '\')">' +
-        "<i class=" + "\"fas fa-smile fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<i class=" + "\"fas fa-smile fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Excited" + "</p>" +
         "<p>" + '<span class="label-emo-button" id="span_id_excited' + '" onclick="emojiMouseClick(\'' + 'excited-' + commentID + '\')">' +
-        "<i class=" + "\"fas fa-smile-beam fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>";
+        "<i class=" + "\"fas fa-smile-beam fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>";
     return emojiDiv;
 }
 
@@ -576,20 +523,20 @@ function sentiMouseClick(id) {
 function getSentiString(commentID) {
 
     var sentiDiv =
-        "<div class=\"label-body\"" + "\">" +
-        "<div class=\"label-title\"" + ">" + "</div>" +
+        "<div class=\"tippy-label-body\"" + "\">" +
+        "<div class=\"label-title\"" + " style=border:none;font-size:1.5em"  +  ">" + "<p> " + "Click on an icon to set as the new sentiment" + "</p>" + "</div>" +
         "<div class=\"label-sent-body\"" + ">" +
         "<p>" + "Negative" + "</p>" +
         "<p>" + '<span class="label-sent-button" id="span_id_negative' + commentID + '" onclick="sentiMouseClick(\'' + 'negative-' + commentID + '\')">' +
-        "<i class=" + "\"fas fa-thumbs-down fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<i class=" + "\"fas fa-thumbs-down fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-sent-body\"" + "\">" +
         "<p>" + "Neutral" + "</p>" +
         "<p>" + '<span class="label-sent-button" id="span_id_neutral' + '" onclick="sentiMouseClick(\'' + 'neutral-' + commentID + '\')">' +
-        "<i class=" + "\"fas fa-thumbs-down fa-2x neutral\"" + " style=transform:rotate(-90deg)" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<i class=" + "\"fas fa-thumbs-down fa-3x neutral\"" + " style=transform:rotate(-90deg)" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-sent-body\"" + "\">" +
         "<p>" + "Positive" + "</p>" +
         "<p>" + '<span class="label-sent-button" id="span_id_positive' + '" onclick="sentiMouseClick(\'' + 'positive-' + commentID + '\')">' +
-        "<i class=" + "\"fas fa-thumbs-up fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>";
+        "<i class=" + "\"fas fa-thumbs-up fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>";
     return sentiDiv;
 }
 
@@ -623,16 +570,16 @@ function subjectivityMouseClick(id) {
 function getSubjectivityString(commentID) {
 
     var subjectivityDiv =
-        "<div class=\"label-body\"" + "\">" +
-        "<div class=\"label-title\"" + ">" + "</div>" +
+        "<div class=\"tippy-label-body\"" + "\">" +
+        "<div class=\"label-title\"" + " style=border:none;font-size:1.5em"  +  ">" + "<p> " + "Click on an icon to set as the new subjective" + "</p>" + "</div>" +
         "<div class=\"label-sub-body\"" + ">" +
         "<p>" + "Fact" + "</p>" +
         "<p>" + '<span class="label-sub-button" id="span_id_fact' + commentID + '" onclick="subjectivityMouseClick(\'' + 'fact-' + commentID + '\')">' +
-        "<i class=" + "\"fas fa-clipboard-check fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<i class=" + "\"fas fa-clipboard-check fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-sub-body\"" + "\">" +
         "<p>" + "Neutral" + "</p>" +
         "<p>" + '<span class="label-sub-button" id="span_id_opinion' + '" onclick="subjectivityMouseClick(\'' + 'opinion-' + commentID + '\')">' +
-        "<i class=" + "\"fas fa-comments fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>";
+        "<i class=" + "\"fas fa-comments fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>";
     return subjectivityDiv;
 }
 
@@ -656,20 +603,20 @@ function optionMouseClick(id) {
 function getOptionString(commentID) {
 
     var optDiv =
-        "<div class=\"label-body\"" + "\">" +
-        "<div class=\"label-title\"" + ">" + "</div>" +
+        "<div class=\"tippy-label-body\"" + "\">" +
+        "<div class=\"label-title\"" + " style=border:none;font-size:1.5em"  +  ">" + "<p> " + "Click on an icon to save as an issue, criteria or note" + "</p>" + "</div>" +
         "<div class=\"label-opt-body\"" + ">" +
         "<p>" + "Issue" + "</p>" +
         "<p>" + '<span class="label-opt-button" id="span_id_issue' + commentID + '" onclick="optionMouseClick(\'' + 'issue-' + commentID + '\')">' +
-        "<i class=" + "\"fas fa-exclamation-circle fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<i class=" + "\"fas fa-exclamation-circle fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-opt-body\"" + "\">" +
         "<p>" + "Criteria" + "</p>" +
         "<p>" + '<span class="label-opt-button" id="span_id_criteria' + '" onclick="optionMouseClick(\'' + 'criteria-' + commentID + '\')">' +
-        "<i class=" + "\"fas fa-clipboard-list fa-2x neutral\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<i class=" + "\"fas fa-clipboard-list fa-3x neutral\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-opt-body\"" + "\">" +
         "<p>" + "Note" + "</p>" +
         "<p>" + '<span class="label-opt-button" id="span_id_note' + '" onclick="optionMouseClick(\'' + 'note-' + commentID + '\')">' +
-        "<i class=" + "\"fas fa-save fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>";
+        "<i class=" + "\"fas fa-save fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>";
     return optDiv;
 }
 

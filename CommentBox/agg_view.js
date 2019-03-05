@@ -12,7 +12,9 @@ var cellHistory = {
     prev_emo_cell: null,
     prev_senti_cell: null,
     prev_sub_cell: null,
-    prev_idea_id: null,
+    prev_idea_id_emo: null,
+    prev_idea_id_senti: null,
+    prev_idea_id_sub: null,
     prev_emo: null,
     prev_senti: null,
     prev_sub: null,
@@ -437,8 +439,6 @@ d3.json("communitycrit_new.json", function (err, json) {
             // console.log("calling draw with", filtered_comment)
             draw_filtered_comments(filtered_comment, json)
             //console.log("draw returned")
-            document.getElementById(id).scrollTop(0);
-
         });
         // $('.emoticon_button').mouseover(function() {
         //     var id = $(this).attr('id');
@@ -480,7 +480,6 @@ d3.json("communitycrit_new.json", function (err, json) {
             else {
                 text_box.value = "No match found"
             }
-            document.getElementById("parentDiv").scrollTop(0);
         });
         // $('.emoticon_button').mouseover(function() {
         //     var id = $(this).attr('id');
@@ -526,7 +525,6 @@ d3.json("communitycrit_new.json", function (err, json) {
             else {
                 text_box.value = "No match found"
             }
-            document.getElementById("parentDiv").scrollTop(0);
         });
         // $('.emoticon_button').mouseover(function() {
         //     var id = $(this).attr('id');
@@ -742,7 +740,7 @@ d3.json("communitycrit_new.json", function (err, json) {
                 cellHistory.prev_emo_cell.style("outline", "none")
             }
 
-            if (cellHistory.emo_switch && cellHistory.prev_emo == d.key && cellHistory.prev_idea_id == idea_id) {
+            if (cellHistory.emo_switch && cellHistory.prev_emo == d.key && cellHistory.prev_idea_id_emo == idea_id) {
                 filterobj.emotion = null
                 filterobj.idea_id = null
                 cellHistory.emo_switch = false
@@ -755,7 +753,7 @@ d3.json("communitycrit_new.json", function (err, json) {
             var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
             draw_filtered_comments(filtered_comment, json)
             cellHistory.prev_emo_cell = this_cell
-            cellHistory.prev_idea_id = idea_id
+            cellHistory.prev_idea_id_emo = idea_id
             cellHistory.prev_emo = d.key
         }
 
@@ -1015,7 +1013,7 @@ d3.json("communitycrit_new.json", function (err, json) {
                 cellHistory.prev_senti_cell.style("outline", "none")
             }
 
-            if (cellHistory.senti_switch && cellHistory.prev_senti == d.key && cellHistory.prev_idea_id == idea_id) {
+            if (cellHistory.senti_switch && cellHistory.prev_senti == d.key && cellHistory.prev_idea_id_senti == idea_id) {
                 filterobj.sentiment_final = null
                 filterobj.idea_id = null
                 cellHistory.senti_switch = false
@@ -1028,7 +1026,7 @@ d3.json("communitycrit_new.json", function (err, json) {
             var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
             draw_filtered_comments(filtered_comment, json)
             cellHistory.prev_senti_cell = this_cell
-            cellHistory.prev_idea_id = idea_id
+            cellHistory.prev_idea_id_senti = idea_id
             cellHistory.prev_senti = d.key
         }
         var rectTooltipg = svg.append("g")
@@ -1286,7 +1284,7 @@ d3.json("communitycrit_new.json", function (err, json) {
                 cellHistory.prev_sub_cell.style("outline", "none")
             }
 
-            if (cellHistory.sub_switch && cellHistory.prev_sub == d.key && cellHistory.prev_idea_id == idea_id) {
+            if (cellHistory.sub_switch && cellHistory.prev_sub == d.key && cellHistory.prev_idea_id_sub == idea_id) {
                 filterobj.subjectivity = null
                 filterobj.idea_id = null
                 cellHistory.sub_switch = false
@@ -1299,7 +1297,7 @@ d3.json("communitycrit_new.json", function (err, json) {
             var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
             draw_filtered_comments(filtered_comment, json)
             cellHistory.prev_sub_cell = this_cell
-            cellHistory.prev_idea_id = idea_id
+            cellHistory.prev_idea_id_sub = idea_id
             cellHistory.prev_sub = d.key
         }
 

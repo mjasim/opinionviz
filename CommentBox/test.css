@@ -60,6 +60,14 @@ body {
     align-items: center;
 }
 
+.tippy-label-body{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    outline: thin solid #337AB7;
+}
+
 .label-title{
     width: 100%;
     border:solid thin;
@@ -82,6 +90,11 @@ body {
 
 .label-sub-body{
     width: 50%;
+    padding: 5px 0;
+}
+
+.label-opt-body{
+    width: 33%;
     padding: 5px 0;
 }
 
@@ -280,9 +293,11 @@ body {
     color: #E45756;
     opacity: 0.7;
 }
+
 .fa-angry:hover{
     opacity: .9;
     cursor: pointer;
+    outline:solid thin #E45756;
 }
 
 .fa-flushed{
@@ -292,6 +307,7 @@ body {
 .fa-flushed:hover{
     opacity: .9;
     cursor: pointer;
+    outline:solid thin #54A24B;
 }
 
 .fa-frown{
@@ -301,6 +317,7 @@ body {
 .fa-frown:hover{
     opacity: .9;
     cursor: pointer;
+    outline:solid thin #4C78A8;
 }
 
 .fa-meh{
@@ -310,6 +327,7 @@ body {
 .fa-meh:hover{
     opacity: .9;
     cursor: pointer;
+    outline:solid thin #72B7B2;
 }
 
 .fa-smile{
@@ -319,6 +337,7 @@ body {
 .fa-smile:hover{
     opacity: .9;
     cursor: pointer;
+    outline:solid thin #EECA3B;
 }
 
 .fa-smile-beam{
@@ -328,6 +347,7 @@ body {
 .fa-smile-beam:hover{
     opacity: .9;
     cursor: pointer;
+    outline:solid thin #F58518;
 }
 
 .fa-thumbs-up{
@@ -337,6 +357,7 @@ body {
 .fa-thumbs-up:hover{
     opacity: .9;
     cursor: pointer;
+    outline:solid thin #439894;
 }
 
 .fa-thumbs-down{
@@ -346,6 +367,7 @@ body {
 .fa-thumbs-down:hover{
     opacity: .9;
     cursor: pointer;
+    outline:solid thin #D67195;
 }
 
 .fa-thumbs-down.neutral{
@@ -355,6 +377,7 @@ body {
 .fa-thumbs-down.neutral:hover{
     opacity: .9;
     cursor: pointer;
+    outline:solid thin #FFBF79;
 }
 
 .tippy-tooltip.tomato-theme {
@@ -377,6 +400,7 @@ body {
 .fa-clipboard-check:hover{
     opacity: .9;
     cursor: pointer;
+    outline:solid thin gray;
 }
 
 .fa-comments{
@@ -386,6 +410,7 @@ body {
 .fa-comments:hover{
     opacity: .9;
     cursor: pointer;
+    outline:solid thin black;
 }
 
 .fa-plus-circle{
@@ -395,6 +420,7 @@ body {
 .fa-plus-circle:hover{
     opacity: .9;
     cursor: pointer;
+    outline:solid thin #0099FF;
 }
 
 .fa-clipboard-list{
@@ -404,6 +430,7 @@ body {
 .fa-clipboard-list:hover{
     opacity: .9;
     cursor: pointer;
+    outline:solid thin #0099FF;
 }
 
 .fa-save{
@@ -413,6 +440,7 @@ body {
 .fa-save:hover{
     opacity: .9;
     cursor: pointer;
+    outline:solid thin #0099FF;
 }
 
 .fa-exclamation-circle{
@@ -422,6 +450,7 @@ body {
 .fa-exclamation-circle:hover{
     opacity: .9;
     cursor: pointer;
+    outline:solid thin #0099FF;
 }
 
 .topic-body{
