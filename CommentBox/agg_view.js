@@ -159,7 +159,7 @@ d3.json("communitycrit_new.json", function (err, json) {
         "<div class=\"label-title\"" + ">" +
         "<p style=\"margin: 5px 0px 5px 0px\"" + ">" + "Topics" + "</p>" + "</div>" +
         "<div class=\"label-title-body\"" + ">" +
-        "<input type=\"text\" class=\"text-box-topic\"" + "placeholder=\"Search for topics\"" + ">" +
+        "<input type=\"text\" class=\"text-box-topic\"" + "id=\"text-topic\"" + "placeholder=\"Search for topics\"" + ">" +
         "<p style=\"margin: 5px 0px 5px 0px\"" + ">" + '<span class="label-search-button-topic" id="span_id_topic" >' + "<i class=" + "\"fas fa-search fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>";
 
     labelColumn1Div.innerHTML = divCaption
@@ -424,6 +424,7 @@ d3.json("communitycrit_new.json", function (err, json) {
             // console.log("calling draw with", filtered_comment)
             draw_filtered_comments(filtered_comment, json)
             //console.log("draw returned")
+            document.getElementById(id).scrollTop(0);
 
         });
         // $('.emoticon_button').mouseover(function() {
@@ -433,6 +434,13 @@ d3.json("communitycrit_new.json", function (err, json) {
     });
 
     $(document).ready(function () {
+
+        $("#text-proposal").keyup(function(event) {
+            if (event.keyCode === 13) {
+                $("#span_id_proposal").click();
+            }
+        });
+
         $('.label-search-button-proposal').click(function () {
             var id = $(this).attr('id');
             var text_box = document.getElementById("text-proposal")
@@ -459,6 +467,7 @@ d3.json("communitycrit_new.json", function (err, json) {
             else {
                 text_box.value = "No match found"
             }
+            document.getElementById("parentDiv").scrollTop(0);
         });
         // $('.emoticon_button').mouseover(function() {
         //     var id = $(this).attr('id');
@@ -468,23 +477,34 @@ d3.json("communitycrit_new.json", function (err, json) {
 
     //jasim
     $(document).ready(function () {
+
+        $("#text-topic").keyup(function(event) {
+            if (event.keyCode === 13) {
+                $("#span_id_topic").click();
+            }
+        });
+
         $('.label-search-button-topic').click(function () {
             var id = $(this).attr('id');
-            var text_box = document.getElementById("text-proposal")
+            var text_box = document.getElementById("text-topic")
             var text = text_box.value
             var flag = true
+            var all_topic_names = get_proposal_wise_topic(json)
             var proposal_names = get_proposal_names(json)
 
-            for (var i = 0; i < proposal_names.length; i++) {
-                if (text.toLowerCase().replace(/\s+/g, '') == proposal_names[i].idea_name.toLowerCase().replace(/\s+/g, '')) {
-                    filterobj.idea_id = proposal_names[i].idea_id
-                    filterobj.emotion = null
-                    filterobj.sentiment_final = null
-                    filterobj.subjectivity = null
-                    filterobj.task_id = null
-                    filterobj.topic = null
-                    flag = false
+            for (var i = 0; i < all_topic_names.length; i++){
+                for(var j in all_topic_names[i]){
+                    if (text.toLowerCase().replace(/\s+/g, '') == all_topic_names[i][j].topic_keyphrase.toLowerCase().replace(/\s+/g, '')) {
+                        filterobj.idea_id = proposal_names[i].idea_id
+                        filterobj.emotion = null
+                        filterobj.sentiment_final = null
+                        filterobj.subjectivity = null
+                        filterobj.task_id = null
+                        filterobj.topic = j
+                        flag = false
+                    }
                 }
+                
             }
 
             if (flag == false) {
@@ -494,17 +514,19 @@ d3.json("communitycrit_new.json", function (err, json) {
             else {
                 text_box.value = "No match found"
             }
+            document.getElementById("parentDiv").scrollTop(0);
         });
         // $('.emoticon_button').mouseover(function() {
         //     var id = $(this).attr('id');
         //     console.log('emotion mouseover',id)
         // });
+
     });
 
     $(document).ready(function () {
-        $('.text-box-proposal').click(function () {
+        $('.text-box-topic').click(function () {
             var id = $(this).attr('id');
-            document.getElementById("text-proposal").value = ""
+            document.getElementById("text-topic").value = ""
         });
         // $('.emoticon_button').mouseover(function() {
         //     var id = $(this).attr('id');
@@ -703,6 +725,7 @@ d3.json("communitycrit_new.json", function (err, json) {
             filterobj.emotion = d.key
             var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
             draw_filtered_comments(filtered_comment, json)
+            document.getElementById("parentDiv").scrollTop(0);
         }
 
         var rectTooltipg = svg.append("g")
