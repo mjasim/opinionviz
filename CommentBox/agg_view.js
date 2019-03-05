@@ -124,17 +124,55 @@ d3.json("communitycrit_new.json", function (err, json) {
     //============================ top column 5 =========================//
 
     var top5 = document.getElementById("top5")
+    tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
+    tempSvg.id = "svgtop5"
+    tempSvg.setAttribute("class", "t_svg")
+    tempSvg.setAttribute("width", top5.clientWidth)
+    tempSvg.setAttribute("height", top5.clientHeight)
+    top5.appendChild(tempSvg)
     send_data = all_proposal_profanity_agg[0].profanity_distribution;
 
-    var min = Math.min(...send_data)
-    var max = Math.max(...send_data)
-    normalized = []
-    for (var x = 0; x < send_data.length; x++) {
-        normalized.push(normalize(send_data[x], max, min))
-    }
-    //console.log(send_data)
-    profanity_rows(normalized, top5.id)
+    // var min = Math.min(...send_data)
+    // var max = Math.max(...send_data)
+    // normalized = []
+    // for (var x = 0; x < send_data.length; x++) {
+    //     normalized.push(normalize(send_data[x], max, min))
+    // }
+    // //console.log(send_data)
+    // profanity_rows(normalized, top5.id)
 
+    count_very_low = 0, count_low = 0, count_mid = 0, count_high = 0, count_very_high = 0; 
+    for(var x = 0; x < send_data.length; x++){
+        if(send_data[x] > 0.0 && send_data[x] <= 0.1){
+            count_very_low++;
+        }
+        else if(parseFloat(send_data[x]) > 0.1 && parseFloat(send_data[x]) <= 0.2){
+            count_low++;
+        }
+        else if(parseFloat(send_data[x]) > 0.2 && parseFloat(send_data[x]) <= 0.3){
+            count_mid++;
+        }
+        else if(parseFloat(send_data[x]) > 0.3 && parseFloat(send_data[x]) <= 0.4){
+            count_high++;
+        }
+        else if(parseFloat(send_data[x]) > 0.4 && parseFloat(send_data[x]) <= 0.5){
+            count_very_high++;
+        }
+    }
+
+    var prof_data = []
+    //console.log(prof_data)
+
+    prof_data.push({
+        key: proposal_names[i].idea_id,
+        very_low: count_very_low,
+        low: count_low,
+        medium: count_mid,
+        high: count_high,
+        very_high: count_very_high,
+    })
+
+    profanity_rows(prof_data, tempSvg.id, top5.id, null)
 
     //============================ top column 5 end =========================//
 
@@ -386,17 +424,60 @@ d3.json("communitycrit_new.json", function (err, json) {
         //============================ end of column 4 ==================//
 
         //============================ column 5 =========================//
+
+        var column5 = document.getElementById("row" + i + "column5")
+        //console.log(proposal_wise_subjectivity_agg)
+        tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
+        tempSvg.id = "svg" + "row" + i + "column5"
+        tempSvg.setAttribute("class", "c_svg")
+        tempSvg.setAttribute("width", column5.clientWidth)
+        tempSvg.setAttribute("height", column5.clientHeight)
+        column5.appendChild(tempSvg)
+
         var column5 = document.getElementById("row" + i + "column5")
         var send_data = proposal_wise_profanity_agg[i].profanity_distribution;
-        var min = Math.min(...send_data)
-        var max = Math.max(...send_data)
-        normalized = []
-        for (var x = 0; x < send_data.length; x++) {
-            //console.log(send_data, max, min)
-            normalized.push(normalize(send_data[x], max, min))
+        count_very_low = 0, count_low = 0, count_mid = 0, count_high = 0, count_very_high = 0; 
+        for(var x = 0; x < send_data.length; x++){
+            if(send_data[x] > 0.0 && send_data[x] <= 0.1){
+                count_very_low++;
+            }
+            else if(parseFloat(send_data[x]) > 0.1 && parseFloat(send_data[x]) <= 0.2){
+                count_low++;
+            }
+            else if(parseFloat(send_data[x]) > 0.2 && parseFloat(send_data[x]) <= 0.3){
+                count_mid++;
+            }
+            else if(parseFloat(send_data[x]) > 0.3 && parseFloat(send_data[x]) <= 0.4){
+                count_high++;
+            }
+            else if(parseFloat(send_data[x]) > 0.4 && parseFloat(send_data[x]) <= 0.5){
+                count_very_high++;
+            }
         }
-        //console.log(send_data)
-        profanity_rows(normalized, column5.id)
+
+        var prof_data = []
+        //console.log(prof_data)
+
+        prof_data.push({
+            key: proposal_names[i].idea_id,
+            very_low: count_very_low,
+            low: count_low,
+            medium: count_mid,
+            high: count_high,
+            very_high: count_very_high,
+        })
+
+        // var min = Math.min(...send_data)
+        // var max = Math.max(...send_data)
+        // normalized = []
+        // for (var x = 0; x < send_data.length; x++) {
+        //     //console.log(send_data, max, min)
+        //     normalized.push(normalize(send_data[x], max, min))
+        // }
+        // //console.log(send_data)
+        // profanity_rows(normalized, column5.id)
+
+        profanity_rows(prof_data, tempSvg.id, column5.id, proposal_names[i].idea_id)
 
         //============================ end of column 5 ==================//
     }
@@ -436,9 +517,8 @@ d3.json("communitycrit_new.json", function (err, json) {
             filterobj.task_id = null
             filterobj.topic = split_str[2]
             var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
-            // console.log("calling draw with", filtered_comment)
+            console.log("calling draw with", filterobj)
             draw_filtered_comments(filtered_comment, json)
-            //console.log("draw returned")
         });
         // $('.emoticon_button').mouseover(function() {
         //     var id = $(this).attr('id');
@@ -736,10 +816,12 @@ d3.json("communitycrit_new.json", function (err, json) {
             filterobj.idea_id = idea_id
             filterobj.emotion = d.key
 
+            // remove outline from previous cell 
             if (cellHistory.prev_emo_cell) {
                 cellHistory.prev_emo_cell.style("outline", "none")
             }
 
+            // deselect cell
             if (cellHistory.emo_switch && cellHistory.prev_emo == d.key && cellHistory.prev_idea_id_emo == idea_id) {
                 filterobj.emotion = null
                 filterobj.idea_id = null
@@ -749,6 +831,8 @@ d3.json("communitycrit_new.json", function (err, json) {
                 this_cell.style("outline", "thick solid black")
                 cellHistory.emo_switch = true
             }
+
+            console.log(filterobj)
 
             var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
             draw_filtered_comments(filtered_comment, json)
@@ -1364,22 +1448,275 @@ d3.json("communitycrit_new.json", function (err, json) {
         };
     }
 
-    function profanity_rows(salesData, div_id) {
-        //console.log(salesData)
-        var color_input = "to left,"
-        for (var i = 0; i < salesData.length; i++) {
-            var factor = salesData[i]
-            var color = interpolateColor("rgb(44, 72, 91)", "rgb(242, 242, 242)", factor)
-            color_input += color + ","
+    function profanity_rows(salesData, svg_id, div_id, idea_id) {
+
+        console.log(salesData)
+        var group = ["very_low", "low", "medium", "high", "very_high"];
+        var parseDate = d3.timeFormat("%b-%Y");
+        var mainDiv = "#" + div_id;
+        var mainDivName = div_id;
+
+        salesData.forEach(function (d) {
+            d = type(d);
+        });
+        var layers = d3.stack()
+            .keys(group)
+            .offset(d3.stackOffsetDiverging)
+            (salesData);
+
+        var svg = d3.select("#" + svg_id),
+            margin = {
+                top: 0,
+                right: 0,
+                bottom: 0,
+                left: 0
+            },
+
+            width = +svg.attr("width"),
+            height = +svg.attr("height");
+
+        var x = d3.scaleLinear()
+            .rangeRound([margin.left, width - margin.right]);
+
+        x.domain([d3.min(layers, stackMin), d3.max(layers, stackMax)]);
+
+        var y = d3.scaleBand()
+            .rangeRound([height - margin.bottom, margin.top])
+            .padding(0.1);
+
+        y.domain(salesData.map(function (d) {
+            return d.date;
+        }))
+
+        function stackMin(layers) {
+            return d3.min(layers, function (d) {
+                return d[0];
+            });
         }
 
-        //var style_gradient  = "background: linear-gradient( " + color_input.substring(0,color_input.length-1) + ");"
-        var style_gradient = "linear-gradient(" + color_input.substring(0, color_input.length - 1) + ")"
+        function stackMax(layers) {
+            return d3.max(layers, function (d) {
+                return d[1];
+            });
+        }
 
-        var dom = document.getElementById(div_id)
+        var z = d3.scaleOrdinal(["#B3CCE6", "#8CB1D9", "#6697CC", "#407DBF", "#264B73"]);
 
-        dom.style.background = style_gradient
+        var maing = svg.append("g")
+            .selectAll("g")
+            .data(layers);
+        var g = maing.enter().append("g")
+            .attr("fill", function (d) {
+                return z(d.key);
+            })
+            .attr("style", "outline: thin solid black;");
+
+        var rect = g.selectAll("rect")
+            .data(function (d) {
+                d.forEach(function (d1) {
+                    d1.key = d.key;
+                    return d1;
+                });
+                return d;
+            })
+            .enter().append("rect")
+            .attr("data", function (d) {
+                var data = {};
+                data["key"] = d.key;
+                data["value"] = d.data[d.key];
+                var total = 0;
+                group.map(function (d1) {
+                    total = total + d.data[d1]
+                });
+                data["total"] = total;
+                return JSON.stringify(data);
+            })
+            .attr("width", function (d) {
+                return x(d[1]) - x(d[0]);
+            })
+            .attr("x", function (d) {
+                return x(d[0]);
+            })
+            .attr("y", function (d) {
+                return y(d.data.date);
+            })
+            .style("fill", function (d) {
+
+            })
+            .attr("height", y.bandwidth);
+
+        rect.on("mouseover", function () {
+            var currentEl = d3.select(this);
+            var fadeInSpeed = 120;
+            d3.select("#recttooltip_" + mainDivName)
+                .transition()
+                .duration(fadeInSpeed)
+                .style("opacity", function () {
+                    return 1;
+                });
+            d3.select("#recttooltip_" + mainDivName).attr("transform", function (d) {
+                var mouseCoords = d3.mouse(this.parentNode);
+                var xCo = 0;
+                if (mouseCoords[0] + 10 >= width * 0.80) {
+                    xCo = mouseCoords[0] - parseFloat(d3.selectAll("#recttooltipRect_" + mainDivName)
+                        .attr("width"));
+                } else {
+                    xCo = mouseCoords[0] + 10;
+                }
+                var x = xCo;
+                var yCo = 0;
+                if (mouseCoords[0] + 10 >= width * 0.80) {
+                    yCo = mouseCoords[1] + 10;
+                } else {
+                    yCo = mouseCoords[1];
+                }
+                var x = xCo;
+                var y = yCo;
+                return "translate(" + x + "," + y + ")";
+            });
+            //CBT:calculate tooltips text
+            var tooltipData = JSON.parse(currentEl.attr("data"));
+            var tooltipsText = "";
+            d3.selectAll("#recttooltipText_" + mainDivName).text("");
+            var yPos = 0;
+            d3.selectAll("#recttooltipText_" + mainDivName).append("tspan").attr("x", 0).attr("y", yPos * 10).attr("dy", "1.9em").text(tooltipData.key + ":  " + tooltipData.value);
+            yPos = yPos + 1;
+            d3.selectAll("#recttooltipText_" + mainDivName).append("tspan").attr("x", 0).attr("y", yPos * 10).attr("dy", "1.9em").text("Total" + ":  " + tooltipData.total);
+            //CBT:calculate width of the text based on characters
+            var dims = helpers.getDimensions("recttooltipText_" + mainDivName);
+            d3.selectAll("#recttooltipText_" + mainDivName + " tspan")
+                .attr("x", dims.w + 4);
+
+            d3.selectAll("#recttooltipRect_" + mainDivName)
+                .attr("width", dims.w + 10)
+                .attr("height", dims.h + 20);
+        });
+
+        rect.on("mousemove", function () {
+            var currentEl = d3.select(this);
+            currentEl.attr("r", 7);
+            d3.selectAll("#recttooltip_" + mainDivName)
+                .attr("transform", function (d) {
+                    var mouseCoords = d3.mouse(this.parentNode);
+                    var xCo = 0;
+                    if (mouseCoords[0] + 10 >= width * 0.80) {
+                        xCo = mouseCoords[0] - parseFloat(d3.selectAll("#recttooltipRect_" + mainDivName)
+                            .attr("width"));
+                    } else {
+                        xCo = mouseCoords[0] + 10;
+                    }
+                    var x = xCo;
+                    var yCo = 0;
+                    if (mouseCoords[0] + 10 >= width * 0.80) {
+                        yCo = mouseCoords[1] + 10;
+                    } else {
+                        yCo = mouseCoords[1];
+                    }
+                    var x = xCo;
+                    var y = yCo;
+                    return "translate(" + x + "," + y + ")";
+                });
+        });
+        rect.on("mouseout", function () {
+            var currentEl = d3.select(this);
+            d3.select("#recttooltip_" + mainDivName)
+                .style("opacity", function () {
+                    return 0;
+                })
+                .attr("transform", function (d, i) {
+                    // klutzy, but it accounts for tooltip padding which could push it onscreen
+                    var x = -500;
+                    var y = -500;
+                    return "translate(" + x + "," + y + ")";
+                });
+        });
+
+        //clicking on the rectangles for emotions
+        rect.on("click", clicked_profanity);
+
+        function clicked_profanity(d) {
+        }
+
+        var rectTooltipg = svg.append("g")
+            .attr("font-family", "sans-serif")
+            .attr("font-size", 10)
+            .attr("text-anchor", "end")
+            .attr("id", "recttooltip_" + mainDivName)
+            .attr("style", "opacity:0")
+            .attr("transform", "translate(-500,-500)");
+
+        rectTooltipg.append("rect")
+            .attr("id", "recttooltipRect_" + mainDivName)
+            .attr("x", 0)
+            .attr("width", 120)
+            .attr("height", 80)
+            .attr("opacity", 0.71)
+            .style("fill", "#000000");
+
+        rectTooltipg
+            .append("text")
+            .attr("id", "recttooltipText_" + mainDivName)
+            .attr("x", 30)
+            .attr("y", 15)
+            .attr("fill", function () {
+                return "#fff"
+            })
+            .style("font-size", function (d) {
+                return 10;
+            })
+            .style("font-family", function (d) {
+                return "arial";
+            })
+            .text(function (d, i) {
+                return "";
+            });
+
+
+        function type(d) {
+            //d.date = parseDate(new Date(d.date));
+            group.forEach(function (c) {
+                d[c] = +d[c];
+            });
+            return d;
+        }
+
+        var helpers = {
+            getDimensions: function (id) {
+                var el = document.getElementById(id);
+                var w = 0,
+                    h = 0;
+                if (el) {
+                    var dimensions = el.getBBox();
+                    w = dimensions.width;
+                    h = dimensions.height;
+                } else {
+                    console.log("error: getDimensions() " + id + " not found.");
+                }
+                return {
+                    w: w,
+                    h: h
+                };
+            }
+        };
     }
+
+
+    // function profanity_rows(salesData, div_id) {
+    //     //console.log(salesData)
+    //     var color_input = "to left,"
+    //     for (var i = 0; i < salesData.length; i++) {
+    //         var factor = salesData[i]
+    //         var color = interpolateColor("rgb(44, 72, 91)", "rgb(242, 242, 242)", factor)
+    //         color_input += color + ","
+    //     }
+
+    //     //var style_gradient  = "background: linear-gradient( " + color_input.substring(0,color_input.length-1) + ");"
+    //     var style_gradient = "linear-gradient(" + color_input.substring(0, color_input.length - 1) + ")"
+
+    //     var dom = document.getElementById(div_id)
+
+    //     dom.style.background = style_gradient
+    // }
 
     function interpolateColor(color1, color2, factor) {
         if (arguments.length < 3) {

@@ -110,121 +110,98 @@ body {
 .t_column0{
     width: 15%;
     height: inherit;
-    border: 10px;
 }
 
 .t_column1{
     width: 20%;
     height: inherit;
-    border: 10px;
 }
 
 .t_column2{
     width: 30%;
     height: inherit;
-    border: 10px;
 }
 
 .t_column3{
     width: 15%;
     height: inherit;
-    border: 10px;
-
 }
 
 .t_column4{
     width: 10%;
     height: inherit;
-    border: 10px;
 }
 
 .t_column5{
     width: 10%;
     height: inherit;
-    border: solid thin;
-    height: 49px;
-    margin-top: 4px;
 }
 
 .l_column0{
     width: 15%;
     height: inherit;
-    border: 10px;
 }
 
 
 .l_column1{
     width: 20%;
     height: inherit;
-    border: 10px;
 }
 
 .l_column2{
     width: 30%;
     height: inherit;
-    border: 10px;
 }
 
 .l_column3{
     width: 15%;
     height: inherit;
-    border: 10px;
 }
 
 .l_column4{
     width: 10%;
     height: inherit;
-    border: 10px;
 }
 
 .l_column5{
     width: 10%;
     height: inherit;
-    border: 10px;
 }
 
 .c_column0{
     width: 15%;
     height: inherit;
-    border: 10px;
     border-color: black;
 }
 
 .c_column1{
     width: 20%;
     height: inherit;
-    border: 10px;
     border-color: black;
 }
 
 .c_column2{
     width: 30%;
     height: inherit;
-    border: 10px;
     border-color: black;
 }
 
 .c_column3{
     width: 15%;
     height: inherit;
-    border: 10px;
     border-color: black;
 }
 
 .c_column4{
     width: 10%;
     height: inherit;
-    border: 10px;
     border-color: black;
 }
 
 .c_column5{
     width: 10%;
     height: inherit;
-    border: solid thin black;
     border-color: black;
-    height: 43px;
-    margin-top: 2px;
 }
 
 .box{
@@ -483,3 +460,9 @@ body {
 .label-search-button-proposal:hover{
     cursor:pointer;
 }
+
+.instructionDiv {
+    position: relative;
+    display: inline-block;
+    width:60%
+  }

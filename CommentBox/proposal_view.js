@@ -417,10 +417,7 @@ function setTippy(commentID, json) {
                 reference.setAttribute('aria-expanded', 'false')
             },
         });
-
-
     });
-
 }
 function emojiMouseClick(id) {
     console.log('emoji id ' + id);
@@ -642,7 +639,6 @@ function checkKeyphrase(prop_topic, all_topics) {
         another_split = split_topics[i].split("_")
         for (var j = 0; j < another_split.length; j++) {
             if (prop_topic.replace(/\s/g, '') == another_split[j].replace(/\s/g, '')) {
-                console.log("prop", prop_topic.replace(/\s/g, ''), "another", another_split[j].replace(/\s/g, ''))
                 return true;
             }
         }

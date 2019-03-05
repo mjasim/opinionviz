@@ -147,6 +147,7 @@ function get_proposal_wise_profanity(json) {
                 profanity_dist.push(json.ideas[i].tasks[j].comments[k].profanity)
             }
         }
+
         proposal_profanity_agg.push({
             key: idea_id,
             profanity_count: profanity_dist.length,
