@@ -439,7 +439,11 @@ body {
     cursor:pointer;
 }
 
-.text-box{
+.text-box-topic{
+    width: 100%
+}
+
+.text-box-proposal{
     width: 100%
 }
 

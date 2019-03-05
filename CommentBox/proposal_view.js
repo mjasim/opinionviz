@@ -107,7 +107,7 @@ function get_filtered_comment(json, filterobj) {
 
             var comments = []
             for (var k in json.ideas[i].tasks[j].comments) {
-                
+
                 if (filterobj.topic != null) {
                     var topicFilter = json.ideas[i].topic_keyphrases[filterobj.topic].topic_keyphrase
                 }
@@ -121,7 +121,7 @@ function get_filtered_comment(json, filterobj) {
                 if (flag && filterobj.subjectivity != null && json.ideas[i].tasks[j].comments[k].subjectivity.toLowerCase() != filterobj.subjectivity.toLowerCase()) {
                     flag = false
                 }
-                if(flag && filterobj.topic != null && !checkKeyphrase(topicFilter, json.ideas[i].tasks[j].comments[k].findTopicLabels)){
+                if (flag && filterobj.topic != null && !checkKeyphrase(topicFilter, json.ideas[i].tasks[j].comments[k].findTopicLabels)) {
                     flag = false
                 }
                 if (flag) {
@@ -260,13 +260,13 @@ function draw_filtered_comments(filtered_comment, json) {
                     "</div>" +
                     "<div class=\"comment-body\"" + "\">" +
                     "<p>" + filtered_comment.ideas[i].tasks[j].comments[k].comment + "\xa0\xa0" +
-                    '<span class="emoticon_button" id="span_id_emo_'+divComment[k].id+'">' +
+                    '<span class="emoticon_button" id="span_id_emo_' + divComment[k].id + '">' +
                     "<i class=" + "\"" + "fas " + awesome_emoticon + "\"" + "></i>" + "\xa0" + '</span>' +
-                    '<span class="sentiment_button" id="span_id_sent_'+divComment[k].id+'" >' +
+                    '<span class="sentiment_button" id="span_id_sent_' + divComment[k].id + '" >' +
                     //"<i class=" + "\"" + "fas " + awesome_sentiment + "\"" + "></i>" +
                     sentimentButton + "\xa0" +
                     '</span>' +
-                    '<span class="subjectivity_button" id="span_id_sub_'+divComment[k].id+'" >' +
+                    '<span class="subjectivity_button" id="span_id_sub_' + divComment[k].id + '" >' +
                     "<i class=" + "\"" + "fas " + awesome_subjectivity + "\"" + "></i>" +
                     "\xa0" + '</span>' +
                     '<span class="options_button" id="span_id_opt" >' +
@@ -434,18 +434,18 @@ function emojiMouseClick(id) {
                 if (currentJSON.ideas[i].id == all_ids[2] && currentJSON.ideas[i].tasks[j].id == all_ids[3]
                     && currentJSON.ideas[i].tasks[j].comments[k].comment_id == all_ids[4]) {
                     var new_emo = all_ids[0].charAt(0).toUpperCase() + all_ids[0].slice(1);
-                    console.log("New Emotion ", String(new_emo), );
+                    console.log("New Emotion ", String(new_emo));
                     currentJSON.ideas[i].tasks[j].comments[k].emotion = new_emo;
 
                     console.log(new_emo.toLowerCase());
                     var awesome_emoticon = attributeObj[new_emo];
                     console.log(awesome_emoticon);
                     var newEmotionButtonStr =
-                    "<i class=" + "\"" + "fas " + awesome_emoticon + "\"" + "></i>" + "\xa0";
+                        "<i class=" + "\"" + "fas " + awesome_emoticon + "\"" + "></i>" + "\xa0";
 
-                    $( '#span_id_emo_'+all_ids[1]+'-'+all_ids[2]+'-'+all_ids[3]+'-'+all_ids[4]).html(newEmotionButtonStr);
+                    $('#span_id_emo_' + all_ids[1] + '-' + all_ids[2] + '-' + all_ids[3] + '-' + all_ids[4]).html(newEmotionButtonStr);
 
-                     //$('#span_id_'+currentJSON.ideas[i].tasks[j].comments[k].emotion + commentID).html();
+                    //$('#span_id_'+currentJSON.ideas[i].tasks[j].comments[k].emotion + commentID).html();
 
 
                     // commentDivId = "commentDiv-" + all_ids[2] + "-" + all_ids[3] + "-" + all_ids[4]
@@ -553,6 +553,20 @@ function sentiMouseClick(id) {
                     var new_senti = all_ids[0]
                     console.log("New Sentiment ", String(new_senti))
                     currentJSON.ideas[i].tasks[j].comments[k].sentiment_final = new_senti
+
+                    console.log(new_senti.toLowerCase());
+                    var awesome_sentiment = attributeObj[new_senti];
+                    console.log(awesome_sentiment);
+                    if (new_senti == "neutral") {
+                        var newSentimentButtonStr =
+                            "<i class=" + "\"fas fa-thumbs-down fa-lg neutral\"" + " style=transform:rotate(-90deg)" + "></i>" + "\xa0";
+                        $('#span_id_sent_' + all_ids[1] + '-' + all_ids[2] + '-' + all_ids[3] + '-' + all_ids[4]).html(newSentimentButtonStr);
+                    }
+                    else {
+                        var newSentimentButtonStr =
+                            "<i class=" + "\"" + "fas " + awesome_sentiment + "\"" + "></i>" + "\xa0";
+                        $('#span_id_sent_' + all_ids[1] + '-' + all_ids[2] + '-' + all_ids[3] + '-' + all_ids[4]).html(newSentimentButtonStr);
+                    }
                 }
             }
         }
@@ -593,6 +607,13 @@ function subjectivityMouseClick(id) {
                     var new_sub = all_ids[0].charAt(0).toUpperCase() + all_ids[0].slice(1)
                     console.log("New Subjectivity ", String(new_sub))
                     currentJSON.ideas[i].tasks[j].comments[k].subjectivity = new_sub
+
+                    console.log(new_sub.toLowerCase());
+                    var awesome_subjectivity = attributeObj[new_sub];
+                    console.log(awesome_subjectivity);
+                    var newSubjectivityButtonStr =
+                        "<i class=" + "\"" + "fas " + awesome_subjectivity + "\"" + "></i>" + "\xa0";
+                    $('#span_id_sub_' + all_ids[1] + '-' + all_ids[2] + '-' + all_ids[3] + '-' + all_ids[4]).html(newSubjectivityButtonStr);
                 }
             }
         }

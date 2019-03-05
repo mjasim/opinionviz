@@ -8,6 +8,19 @@ var filterobj = {
     topic: null
 }
 
+var cellHistory = {
+    prev_emo_cell: null,
+    prev_senti_cell: null,
+    prev_sub_cell: null,
+    prev_idea_id: null,
+    prev_emo: null,
+    prev_senti: null,
+    prev_sub: null,
+    emo_switch: false,
+    senti_switch: false,
+    sub_switch: false
+}
+
 d3.json("communitycrit_new.json", function (err, json) {
     //console.log(json)
 
@@ -435,7 +448,7 @@ d3.json("communitycrit_new.json", function (err, json) {
 
     $(document).ready(function () {
 
-        $("#text-proposal").keyup(function(event) {
+        $("#text-proposal").keyup(function (event) {
             if (event.keyCode === 13) {
                 $("#span_id_proposal").click();
             }
@@ -475,10 +488,9 @@ d3.json("communitycrit_new.json", function (err, json) {
         // });
     });
 
-    //jasim
     $(document).ready(function () {
 
-        $("#text-topic").keyup(function(event) {
+        $("#text-topic").keyup(function (event) {
             if (event.keyCode === 13) {
                 $("#span_id_topic").click();
             }
@@ -492,8 +504,8 @@ d3.json("communitycrit_new.json", function (err, json) {
             var all_topic_names = get_proposal_wise_topic(json)
             var proposal_names = get_proposal_names(json)
 
-            for (var i = 0; i < all_topic_names.length; i++){
-                for(var j in all_topic_names[i]){
+            for (var i = 0; i < all_topic_names.length; i++) {
+                for (var j in all_topic_names[i]) {
                     if (text.toLowerCase().replace(/\s+/g, '') == all_topic_names[i][j].topic_keyphrase.toLowerCase().replace(/\s+/g, '')) {
                         filterobj.idea_id = proposal_names[i].idea_id
                         filterobj.emotion = null
@@ -504,7 +516,7 @@ d3.json("communitycrit_new.json", function (err, json) {
                         flag = false
                     }
                 }
-                
+
             }
 
             if (flag == false) {
@@ -627,6 +639,9 @@ d3.json("communitycrit_new.json", function (err, json) {
             .attr("y", function (d) {
                 return y(d.data.date);
             })
+            .style("fill", function (d) {
+
+            })
             .attr("height", y.bandwidth);
 
         rect.on("mouseover", function () {
@@ -674,7 +689,6 @@ d3.json("communitycrit_new.json", function (err, json) {
             d3.selectAll("#recttooltipRect_" + mainDivName)
                 .attr("width", dims.w + 10)
                 .attr("height", dims.h + 20);
-
         });
 
         rect.on("mousemove", function () {
@@ -720,12 +734,29 @@ d3.json("communitycrit_new.json", function (err, json) {
         rect.on("click", clicked_emotion);
 
         function clicked_emotion(d) {
-            //console.log(filterobj)
+            var this_cell = d3.select(this)
             filterobj.idea_id = idea_id
             filterobj.emotion = d.key
+
+            if (cellHistory.prev_emo_cell) {
+                cellHistory.prev_emo_cell.style("outline", "none")
+            }
+
+            if (cellHistory.emo_switch && cellHistory.prev_emo == d.key && cellHistory.prev_idea_id == idea_id) {
+                filterobj.emotion = null
+                filterobj.idea_id = null
+                cellHistory.emo_switch = false
+            }
+            else {
+                this_cell.style("outline", "thick solid black")
+                cellHistory.emo_switch = true
+            }
+
             var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
             draw_filtered_comments(filtered_comment, json)
-            document.getElementById("parentDiv").scrollTop(0);
+            cellHistory.prev_emo_cell = this_cell
+            cellHistory.prev_idea_id = idea_id
+            cellHistory.prev_emo = d.key
         }
 
         var rectTooltipg = svg.append("g")
@@ -976,10 +1007,29 @@ d3.json("communitycrit_new.json", function (err, json) {
         rect.on("click", clicked_sentiment);
 
         function clicked_sentiment(d) {
+            var this_cell = d3.select(this)
             filterobj.idea_id = idea_id
             filterobj.sentiment_final = d.key
+
+            if (cellHistory.prev_senti_cell) {
+                cellHistory.prev_senti_cell.style("outline", "none")
+            }
+
+            if (cellHistory.senti_switch && cellHistory.prev_senti == d.key && cellHistory.prev_idea_id == idea_id) {
+                filterobj.sentiment_final = null
+                filterobj.idea_id = null
+                cellHistory.senti_switch = false
+            }
+            else {
+                this_cell.style("outline", "thick solid black")
+                cellHistory.senti_switch = true
+            }
+
             var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
             draw_filtered_comments(filtered_comment, json)
+            cellHistory.prev_senti_cell = this_cell
+            cellHistory.prev_idea_id = idea_id
+            cellHistory.prev_senti = d.key
         }
         var rectTooltipg = svg.append("g")
             .attr("font-family", "sans-serif")
@@ -1228,10 +1278,29 @@ d3.json("communitycrit_new.json", function (err, json) {
         rect.on("click", clicked_subjectivity);
 
         function clicked_subjectivity(d) {
+            var this_cell = d3.select(this)
             filterobj.idea_id = idea_id
             filterobj.subjectivity = d.key
+
+            if (cellHistory.prev_sub_cell) {
+                cellHistory.prev_sub_cell.style("outline", "none")
+            }
+
+            if (cellHistory.sub_switch && cellHistory.prev_sub == d.key && cellHistory.prev_idea_id == idea_id) {
+                filterobj.subjectivity = null
+                filterobj.idea_id = null
+                cellHistory.sub_switch = false
+            }
+            else {
+                this_cell.style("outline", "thick solid black")
+                cellHistory.sub_switch = true
+            }
+
             var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
             draw_filtered_comments(filtered_comment, json)
+            cellHistory.prev_sub_cell = this_cell
+            cellHistory.prev_idea_id = idea_id
+            cellHistory.prev_sub = d.key
         }
 
         var rectTooltipg = svg.append("g")
