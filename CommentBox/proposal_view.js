@@ -260,13 +260,13 @@ function draw_filtered_comments(filtered_comment, json) {
                     "</div>" +
                     "<div class=\"comment-body\"" + "\">" +
                     "<p>" + filtered_comment.ideas[i].tasks[j].comments[k].comment + "\xa0\xa0" +
-                    '<span class="emoticon_button" id="span_id_emo">' +
+                    '<span class="emoticon_button" id="span_id_emo_'+divComment[k].id+'">' +
                     "<i class=" + "\"" + "fas " + awesome_emoticon + "\"" + "></i>" + "\xa0" + '</span>' +
-                    '<span class="sentiment_button" id="span_id_sent" >' +
+                    '<span class="sentiment_button" id="span_id_sent_'+divComment[k].id+'" >' +
                     //"<i class=" + "\"" + "fas " + awesome_sentiment + "\"" + "></i>" +
                     sentimentButton + "\xa0" +
                     '</span>' +
-                    '<span class="subjectivity_button" id="span_id_sub" >' +
+                    '<span class="subjectivity_button" id="span_id_sub_'+divComment[k].id+'" >' +
                     "<i class=" + "\"" + "fas " + awesome_subjectivity + "\"" + "></i>" +
                     "\xa0" + '</span>' +
                     '<span class="options_button" id="span_id_opt" >' +
@@ -338,7 +338,7 @@ function setTippy(commentID, json) {
             interactive: true,
             role: 'menu',
             // `focus` is not suitable for buttons with dropdowns
-            trigger: 'click',
+            trigger: 'mouseenter',
             content: getEmojiString(commentID),
             theme: 'tomato',
             // Don't announce the tooltip's contents when expanded
@@ -359,7 +359,7 @@ function setTippy(commentID, json) {
             interactive: true,
             role: 'menu',
             // `focus` is not suitable for buttons with dropdowns
-            trigger: 'click',
+            trigger: 'mouseenter',
             content: getSentiString(commentID),
             theme: 'tomato',
             // Don't announce the tooltip's contents when expanded
@@ -380,7 +380,7 @@ function setTippy(commentID, json) {
             interactive: true,
             role: 'menu',
             // `focus` is not suitable for buttons with dropdowns
-            trigger: 'click',
+            trigger: 'mouseenter',
             content: getSubjectivityString(commentID),
             theme: 'tomato',
             // Don't announce the tooltip's contents when expanded
@@ -423,19 +423,30 @@ function setTippy(commentID, json) {
 
 }
 function emojiMouseClick(id) {
-
     console.log('emoji id ' + id);
-    console.log("inside emoclick")
+    console.log("inside emoclick");
 
-    var all_ids = id.split("-")
+    var all_ids = id.split("-");
 
     for (var i in currentJSON["ideas"]) {
         for (var j in currentJSON.ideas[i].tasks) {
             for (var k in currentJSON.ideas[i].tasks[j].comments) {
-                if (currentJSON.ideas[i].id == all_ids[2] && currentJSON.ideas[i].tasks[j].id == all_ids[3] && currentJSON.ideas[i].tasks[j].comments[k].comment_id == all_ids[4]) {
-                    var new_emo = all_ids[0].charAt(0).toUpperCase() + all_ids[0].slice(1)
-                    console.log("New Emotion ", String(new_emo))
-                    currentJSON.ideas[i].tasks[j].comments[k].emotion = new_emo
+                if (currentJSON.ideas[i].id == all_ids[2] && currentJSON.ideas[i].tasks[j].id == all_ids[3]
+                    && currentJSON.ideas[i].tasks[j].comments[k].comment_id == all_ids[4]) {
+                    var new_emo = all_ids[0].charAt(0).toUpperCase() + all_ids[0].slice(1);
+                    console.log("New Emotion ", String(new_emo), );
+                    currentJSON.ideas[i].tasks[j].comments[k].emotion = new_emo;
+
+                    console.log(new_emo.toLowerCase());
+                    var awesome_emoticon = attributeObj[new_emo];
+                    console.log(awesome_emoticon);
+                    var newEmotionButtonStr =
+                    "<i class=" + "\"" + "fas " + awesome_emoticon + "\"" + "></i>" + "\xa0";
+
+                    $( '#span_id_emo_'+all_ids[1]+'-'+all_ids[2]+'-'+all_ids[3]+'-'+all_ids[4]).html(newEmotionButtonStr);
+
+                     //$('#span_id_'+currentJSON.ideas[i].tasks[j].comments[k].emotion + commentID).html();
+
 
                     // commentDivId = "commentDiv-" + all_ids[2] + "-" + all_ids[3] + "-" + all_ids[4]
                     // questionDivId = "questionDiv-" + all_ids[2] + "-" + all_ids[3] + "-" + all_ids[4]
@@ -494,7 +505,7 @@ function emojiMouseClick(id) {
     // console.log(currentJSON)
     //after revising do this
 
-    //makeRevision(currentJSON)
+    makeRevision(currentJSON);
 }
 function getEmojiString(commentID) {
 
@@ -507,7 +518,7 @@ function getEmojiString(commentID) {
         "<i class=" + "\"fas fa-angry fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Fear" + "</p>" +
-        "<p>" + '<span class="label-emo-button" id="span_id_fear' + '" onclick="emojiMouseClick(\'' + 'fear-' + commentID + '\')">' +
+        "<p>" + '<span class="label-emo-button" id="span_id_worried' + '" onclick="emojiMouseClick(\'' + 'worried-' + commentID + '\')">' +
         "<i class=" + "\"fas fa-flushed fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Sad" + "</p>" +
