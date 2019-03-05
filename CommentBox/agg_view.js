@@ -432,8 +432,6 @@ d3.json("communitycrit_new.json", function (err, json) {
         // });
     });
 
-    label-search-button-topic
-
     $(document).ready(function () {
         $('.label-search-button-proposal').click(function () {
             var id = $(this).attr('id');
