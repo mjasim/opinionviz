@@ -499,6 +499,8 @@ d3.json("communitycrit_new.json", function (err, json) {
             var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
             draw_filtered_comments(filtered_comment, json)
 
+            $("#parentBox").animate({ scrollTop: 0 }, 1000);
+
         });
         // $('.emoticon_button').mouseover(function() {
         //     var id = $(this).attr('id');
@@ -520,6 +522,8 @@ d3.json("communitycrit_new.json", function (err, json) {
             var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
             console.log("calling draw with", filterobj)
             draw_filtered_comments(filtered_comment, json)
+
+            $("#parentBox").animate({ scrollTop: 0 }, 1000);
         });
         // $('.emoticon_button').mouseover(function() {
         //     var id = $(this).attr('id');
@@ -558,6 +562,8 @@ d3.json("communitycrit_new.json", function (err, json) {
             if (flag == false) {
                 var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
                 draw_filtered_comments(filtered_comment, json)
+
+                $("#parentBox").animate({ scrollTop: 0 }, 1000);
             }
             else {
                 text_box.value = "No match found"
@@ -604,6 +610,9 @@ d3.json("communitycrit_new.json", function (err, json) {
             if (flag == false) {
                 var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
                 draw_filtered_comments(filtered_comment, json)
+
+                $("#parentBox").animate({ scrollTop: 0 }, 1000);
+
             }
             else {
                 text_box.value = "No match found"
