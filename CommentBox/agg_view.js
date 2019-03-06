@@ -28,9 +28,29 @@ var cellHistory = {
     sub_switch: false
 }
 
-// function to read the data and starting point
-d3.json("communitycrit_new.json", function (err, json) {
-    //console.log(json)
+var json = null;
+
+d3.json("communitycrit_new.json", function (err, myjson) {
+    json = myjson
+    draw_view()
+})
+
+function draw_view() {
+
+    var myNode = document.getElementById("topDiv");
+    while (myNode.firstChild) {
+        myNode.removeChild(myNode.firstChild);
+    }
+
+    var myNode = document.getElementById("labelDiv");
+    while (myNode.firstChild) {
+        myNode.removeChild(myNode.firstChild);
+    }
+
+    var myNode = document.getElementById("aggregateDiv");
+    while (myNode.firstChild) {
+        myNode.removeChild(myNode.firstChild);
+    }
 
     var numberOfRows = 19;
     var numberOfColumns = 6;
@@ -485,14 +505,17 @@ d3.json("communitycrit_new.json", function (err, json) {
         })
 
         profanity_rows(prof_data, tempSvg.id, column5.id, proposal_names[i].idea_id)
-
         //============================ end of column 5 ==================//
     }
 
     // On click functions for proposals
     $(document).ready(function () {
         $('.ideaName').click(function () {
+
+            console.log("idea", cellHistory)
+
             var id = $(this).attr('id');
+            var row_num = ""
             filterobj.idea_id = id
             filterobj.emotion = null
             filterobj.sentiment_final = null
@@ -502,6 +525,9 @@ d3.json("communitycrit_new.json", function (err, json) {
             console.log(id)
             var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
             draw_filtered_comments(filtered_comment, json)
+
+            console.log("redrawing")
+            draw_view();
 
             $("#parentBox").animate({ scrollTop: 0 }, 1000);
 
@@ -528,6 +554,11 @@ d3.json("communitycrit_new.json", function (err, json) {
             draw_filtered_comments(filtered_comment, json)
 
             $("#parentBox").animate({ scrollTop: 0 }, 1000);
+
+            console.log("redrawing")
+            draw_view();
+
+            console.log(filtered_comment)
         });
         // $('.emoticon_button').mouseover(function() {
         //     var id = $(this).attr('id');
@@ -568,6 +599,9 @@ d3.json("communitycrit_new.json", function (err, json) {
                 draw_filtered_comments(filtered_comment, json)
 
                 $("#parentBox").animate({ scrollTop: 0 }, 1000);
+
+                console.log("redrawing")
+                draw_view();    
             }
             else {
                 text_box.value = "No match found"
@@ -617,6 +651,8 @@ d3.json("communitycrit_new.json", function (err, json) {
 
                 $("#parentBox").animate({ scrollTop: 0 }, 1000);
 
+                console.log("redrawing")
+                draw_view();  
             }
             else {
                 text_box.value = "No match found"
@@ -629,11 +665,22 @@ d3.json("communitycrit_new.json", function (err, json) {
 
     });
 
-    // function for removing text from searchboxes
+    // functions for removing text from searchboxes
     $(document).ready(function () {
         $('.text-box-topic').click(function () {
             var id = $(this).attr('id');
             document.getElementById("text-topic").value = ""
+        });
+        // $('.emoticon_button').mouseover(function() {
+        //     var id = $(this).attr('id');
+        //     console.log('emotion mouseover',id)
+        // });
+    });
+
+    $(document).ready(function () {
+        $('.text-box-proposal').click(function () {
+            var id = $(this).attr('id');
+            document.getElementById("text-proposal").value = ""
         });
         // $('.emoticon_button').mouseover(function() {
         //     var id = $(this).attr('id');
@@ -829,6 +876,7 @@ d3.json("communitycrit_new.json", function (err, json) {
         rect.on("click", clicked_emotion);
 
         function clicked_emotion(d) {
+
             var this_cell = d3.select(this)
             filterobj.idea_id = idea_id
             filterobj.emotion = d.key
@@ -1740,7 +1788,8 @@ d3.json("communitycrit_new.json", function (err, json) {
             }
         };
     }
-});
+}
+
 
 
 
