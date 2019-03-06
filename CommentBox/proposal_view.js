@@ -1,5 +1,6 @@
-
 var currentJSON = null;
+
+var notes = []
 
 var attributeObj = {
     Angry: "fa-angry fa-lg",
@@ -212,7 +213,7 @@ function draw_filtered_comments(filtered_comment, json) {
                             "<div style='float: left; padding-right: 15px;padding-top: 5px;'>" +
                             "<img src=\"" + image + "\" width='27px' style='border-radius: 50%;'/></div>" +
                             "<div><div>" + " author name" + "</div>" +
-                            '<div style="color: #888;"' + '>' +  "posted on " + filtered_comment.ideas[i].tasks[j].comments[k].post_time + '</div></div>' +
+                            '<div style="color: #888;"' + '>' + "posted on " + filtered_comment.ideas[i].tasks[j].comments[k].post_time + '</div></div>' +
                             "</div>" +
                             "<div class=\"comment-body\"" + "\">" +
                             "<p>" + filtered_comment.ideas[i].tasks[j].comments[k].question + "\xa0\xa0" +
@@ -262,9 +263,6 @@ function draw_filtered_comments(filtered_comment, json) {
                 var sentimentButton = filtered_comment.ideas[i].tasks[j].comments[k].sentiment_final == "neutral" ?
                     "<i aria-haspopup=\"true\" aria-expanded=\"false\" class=" + "\"fas fa-thumbs-down fa-lg neutral\"" + " style=transform:rotate(-90deg)" + "></i>" :
                     "<i class=" + "\"" + "fas " + awesome_sentiment + "\"" + "></i>";
-
-                console.log(filtered_comment.ideas[i].tasks[j].comments[k].post_time)
-
 
                 var divCommentHTML =
 
@@ -596,7 +594,7 @@ function optionMouseClick(id) {
     }
 
     else if (id.includes("note")) {
-        save_note(id)
+        save_notes(id)
     }
 }
 function getOptionString(commentID) {
@@ -654,9 +652,9 @@ function checkKeyphrase(prop_topic, all_topics) {
 function save_issue(id) {
     $('#issueModal').modal('show')
     $('#issue_save_button').on('click', function () {
-        console.log(currentJSON)
+        //console.log(currentJSON)
         var all_ids = id.split("-")
-        console.log(all_ids)
+        //console.log(all_ids)
 
         for (var i in currentJSON["ideas"]) {
             for (var j in currentJSON.ideas[i].tasks) {
@@ -673,7 +671,7 @@ function save_issue(id) {
             }
         }
 
-        console.log(currentJSON)
+        //console.log(currentJSON)
         $('#issueModal').modal('hide')
     });
 }
@@ -682,9 +680,9 @@ function save_issue(id) {
 function save_criteria(id) {
     $('#criteriaModal').modal('show')
     $('#criteria_save_button').on('click', function () {
-        console.log(currentJSON)
+        //console.log(currentJSON)
         var all_ids = id.split("-")
-        console.log(all_ids)
+        //console.log(all_ids)
 
         for (var i in currentJSON["ideas"]) {
             for (var j in currentJSON.ideas[i].tasks) {
@@ -706,6 +704,39 @@ function save_criteria(id) {
     });
 }
 
-function save_note(id) {
-
+function save_notes(id) {
+    var all_ids = id.split("-")
+    var new_note = ""
+    count = 0
+    for (var i in currentJSON["ideas"]) {
+        for (var j in currentJSON.ideas[i].tasks) {
+            for (var k in currentJSON.ideas[i].tasks[j].comments) {
+                if (currentJSON.ideas[i].id == all_ids[2]) {
+                    if (currentJSON.ideas[i].tasks[j].id == all_ids[3]) {
+                        if (currentJSON.ideas[i].tasks[j].comments[k].comment_id == all_ids[4]) {
+                            if (currentJSON.ideas[i].tasks[j].comments[k].quesion_id == null) {
+                                new_note = "Proposal Title: " + currentJSON.ideas[i].name + "\n" +
+                                    "Task: " + currentJSON.ideas[i].tasks[j].name + "\n" +
+                                    "Comment: " + currentJSON.ideas[i].tasks[j].comments[k].comment + "\n" +
+                                    "Emotion " + currentJSON.ideas[i].tasks[j].comments[k].emotion + "\n" +
+                                    "Sentiment " + currentJSON.ideas[i].tasks[j].comments[k].sentiment_final + "\n" +
+                                    "Subjectivity " + currentJSON.ideas[i].tasks[j].comments[k].subjectivity + "\n"
+                            }
+                            else {
+                                new_note = "Proposal Title: " + currentJSON.ideas[i].name + "\n" +
+                                    "Task: " + currentJSON.ideas[i].tasks[j].name + "\n" +
+                                    "Question: " + currentJSON.ideas[i].tasks[j].comments[k].question + "\n" +
+                                    "Comment: " + currentJSON.ideas[i].tasks[j].comments[k].comment + "\n" +
+                                    "Emotion " + currentJSON.ideas[i].tasks[j].comments[k].emotion + "\n" +
+                                    "Sentiment " + currentJSON.ideas[i].tasks[j].comments[k].sentiment_final + "\n" +
+                                    "Subjectivity " + currentJSON.ideas[i].tasks[j].comments[k].subjectivity + "\n"
+                            }
+                        }
+                        notes.push(new_note);
+                    }
+                }
+            }
+        }
+    }
 }
+

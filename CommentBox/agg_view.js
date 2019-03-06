@@ -1466,7 +1466,7 @@ d3.json("communitycrit_new.json", function (err, json) {
     // draw profanity
     function profanity_rows(salesData, svg_id, div_id, idea_id) {
 
-        console.log(salesData)
+        //console.log(salesData)
         var group = ["very_low", "low", "medium", "high", "very_high"];
         var parseDate = d3.timeFormat("%b-%Y");
         var mainDiv = "#" + div_id;
