@@ -506,6 +506,14 @@ function draw_view() {
 
         profanity_rows(prof_data, tempSvg.id, column5.id, proposal_names[i].idea_id)
         //============================ end of column 5 ==================//
+
+        // Instructions
+        divInstr = document.getElementById("instr")
+        var divInstrHTML = 
+        "<div>" +
+        "<p> <span class=\"instr_button\" id=\"instr_button_id\" tabIndex=\"0\"><i class=\"fas fa-info-circle fa-2x\"></i></span></p></div>";
+        divInstr.innerHTML = divInstrHTML;
+        setTippy(divInstr.id, json)
     }
 
     // On click functions for proposals
@@ -1789,7 +1797,6 @@ function draw_view() {
         };
     }
 }
-
 
 
 

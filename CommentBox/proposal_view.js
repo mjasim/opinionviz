@@ -417,6 +417,27 @@ function setTippy(commentID, json) {
                 reference.setAttribute('aria-expanded', 'false')
             },
         });
+
+        tippy('#' + commentID, {
+            interactive: true,
+            role: 'menu',
+            // `focus` is not suitable for buttons with dropdowns
+            trigger: 'click',
+            content: getInstrString(),
+            theme: 'tomato',
+            // Don't announce the tooltip's contents when expanded
+            aria: null,
+            // Important: the tooltip should be DIRECTLY after the reference element
+            // in the DOM source order, which is why it has its own wrapper element
+            appendTo: 'parent',
+            // Let the user know the popup has been expanded
+            onMount({ reference }) {
+                reference.setAttribute('aria-expanded', 'true')
+            },
+            onHide({ reference }) {
+                reference.setAttribute('aria-expanded', 'false')
+            },
+        });
     });
 }
 
@@ -615,6 +636,19 @@ function getOptionString(commentID) {
         "<p>" + '<span class="label-opt-button" id="span_id_note' + '" onclick="optionMouseClick(\'' + 'note-' + commentID + '\')">' +
         "<i class=" + "\"fas fa-save fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>";
     return optDiv;
+}
+
+function getInstrString() {
+
+    var instrDiv =
+        "<div class=\"tippy-label-body\"" + "\">" +
+        "<div class=\"label-title\"" + " style=border:none;font-size:1.5em" + ">" + "<p> " + "The instructions go here" + "</p>" + "</div>" +
+        "<div class=\"label-instr-body\"" + " style=border:none;font-size:1.5em" + ">" +
+        "<p>" + "Instruction 1" + "</p>" +
+        "<p>" + "Instruction 2" + "</p>" +
+        "<p>" + "Instruction 1" + "</p>" +
+        "</div>";
+    return instrDiv;
 }
 
 // save revisions

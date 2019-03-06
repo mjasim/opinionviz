@@ -466,9 +466,11 @@ body {
 }
 
 .instructionDiv {
+    display: flex;
     position: relative;
     display: inline-block;
-    width:60%
+    width: 60%;
+    align-items: center;
   }
   
   .aggregate::-webkit-scrollbar{
@@ -487,4 +489,14 @@ body {
 
   .fa-user{
     color:#337AB7
+}
+
+.fa-info-circle{
+    color: #0099FF;
+    opacity: 0.7;
+}
+.fa-info-circle:hover{
+    opacity: .9;
+    cursor: pointer;
+    outline:solid thin #0099FF;
 }
