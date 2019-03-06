@@ -163,8 +163,21 @@ function draw_filtered_comments(filtered_comment, json) {
         divIdea[i].id = "ideaDivId-" + filtered_comment.ideas[i].id;
         //var node = document.createTextNode(filtered_comment.ideas[i].name);
         //divIdea[i].appendChild(node)
-        var divIdeaHTML = '<h1 style=margin-left:5px;color:#337AB7>' + filtered_comment.ideas[i].name + '</h1>';
-        var divIdeaHTML = divIdeaHTML + '<p style=margin-left:10px>' + proposalIntro[filtered_comment.ideas[i].id] + '</p>';
+        var divIdeaHTML = '<h1 style=margin-left:5px;color:#337AB7>' + filtered_comment.ideas[i].name + '</h1>' +
+            "<div class=\"comment-body\"" + "\">" +
+            "<p>" + "\xa0\xa0\xa0" +
+            '<span class="commenters_button" id="span_id_opt" >' +
+            "<i class=" + "\"fas fa-user fa-lg\"" + "></i>" +
+            '</span>' + "\xa0" +
+            '<span class="commenters_number" id="span_id_opt" >' + filtered_comment.ideas[i].num_of_commenters +
+            '</span>' + "\xa0" +
+            '<span class="comments_button" id="span_id_opt" >' +
+            "<i class=" + "\"fas fa-comment-alt fa-lg\"" + "></i>" +
+            '</span>' + "\xa0" +
+            '<span class="comments_number" id="span_id_opt" >' + filtered_comment.ideas[i].num_of_comments +
+            '</span>' + "\xa0" +
+            "</p>" +
+            '<p style=margin-left:10px>' + proposalIntro[filtered_comment.ideas[i].id] + '</p>';
         divIdea[i].innerHTML = divIdeaHTML;
         var element = document.getElementById("parentBox")
         element.appendChild(divIdea[i])
@@ -199,7 +212,7 @@ function draw_filtered_comments(filtered_comment, json) {
                             "<div style='float: left; padding-right: 15px;padding-top: 5px;'>" +
                             "<img src=\"" + image + "\" width='27px' style='border-radius: 50%;'/></div>" +
                             "<div><div>" + " author name" + "</div>" +
-                            '<div style="color: #888;"' + '> one year ago' + '</div></div>' +
+                            '<div style="color: #888;"' + '>' +  "posted on " + filtered_comment.ideas[i].tasks[j].comments[k].post_time + '</div></div>' +
                             "</div>" +
                             "<div class=\"comment-body\"" + "\">" +
                             "<p>" + filtered_comment.ideas[i].tasks[j].comments[k].question + "\xa0\xa0" +
@@ -218,7 +231,7 @@ function draw_filtered_comments(filtered_comment, json) {
                                 "<div style='float: left; padding-right: 15px;padding-top: 5px;'>" +
                                 "<img src=\"" + image + "\" width='27px' style='border-radius: 50%;'/></div>" +
                                 "<div><div>" + " author name" + "</div>" +
-                                '<div style="color: #888;"' + '> one year ago' + '</div></div>' +
+                                '<div style="color: #888;"' + '>' + "posted on " + filtered_comment.ideas[i].tasks[j].comments[k].post_time + '</div></div>' +
                                 "</div>" +
                                 "<div class=\"comment-body\"" + "\">" +
                                 "<p>" + filtered_comment.ideas[i].tasks[j].comments[k].comment + "\xa0\xa0" +
@@ -250,13 +263,16 @@ function draw_filtered_comments(filtered_comment, json) {
                     "<i aria-haspopup=\"true\" aria-expanded=\"false\" class=" + "\"fas fa-thumbs-down fa-lg neutral\"" + " style=transform:rotate(-90deg)" + "></i>" :
                     "<i class=" + "\"" + "fas " + awesome_sentiment + "\"" + "></i>";
 
+                console.log(filtered_comment.ideas[i].tasks[j].comments[k].post_time)
+
+
                 var divCommentHTML =
 
                     "<div class=\"comment-author\">" +
                     "<div style='float: left; padding-right: 15px;padding-top: 5px;'>" +
                     "<img src=\"" + image + "\" width='27px' style='border-radius: 50%;'/></div>" +
                     "<div><div>" + " author name" + "</div>" +
-                    '<div style="color: #888;"' + '> one year ago' + '</div></div>' +
+                    '<div style="color: #888;"' + '>' + "posted on " + filtered_comment.ideas[i].tasks[j].comments[k].post_time + '</div></div>' +
                     "</div>" +
                     "<div class=\"comment-body\"" + "\">" +
                     "<p>" + filtered_comment.ideas[i].tasks[j].comments[k].comment + "\xa0\xa0" +
@@ -274,23 +290,6 @@ function draw_filtered_comments(filtered_comment, json) {
                     '</span>' +
                     "</p>";
 
-                /*if (filtered_comment.ideas[i].tasks[j].comments[k].sentiment_final == "neutral") {
-                    divCommentHTML = "<div class=\"comment-author\">" +
-                        "<div style='float: left; padding-right: 15px;padding-top: 5px;'>" +
-                        "<img src=\"" + image + "\" width='27px' style='border-radius: 50%;'/></div>" +
-                        "<div><div>" + " author name" + "</div>" +
-                        '<div style="color: #888;"' + '> one year ago' + '</div></div>' +
-                        "</div>" +
-                        "<div class=\"comment-body\"" + "\">" +
-                        "<p>" + filtered_comment.ideas[i].tasks[j].comments[k].comment + "\xa0\xa0" +
-                        '<span class="emoticon_button" id="span_id_emo">' +
-                        "<i class=" + "\"" + "fas " + awesome_emoticon + "\"" + "></i>" + "\xa0" + '</span>' +
-                        '<span class="sentiment_button" id="span_id_sent" >' +
-                        "<i class=" + "\"fas fa-thumbs-down fa-lg neutral\"" + " style=transform:rotate(90deg)" + "></i>" +
-                        '</span>' +
-                        "</p>";
-                }*/
-                //'<p>'+ filtered_comment.ideas[i].tasks[j].comments[k].comment + '</p>';
                 divComment[k].innerHTML = divCommentHTML;
 
                 setTippy(divComment[k].id, json);
@@ -300,21 +299,6 @@ function draw_filtered_comments(filtered_comment, json) {
             }
         }
     }
-
-    // $(document).ready(function () {
-    //     $('.emoticon_button').popover(function () {
-    //         var id = $(this).attr('id');
-    //         console.log('emotion clicked', id)
-    //     });
-    //     $('.emoticon_button').popover(function () {
-    //         var id = $(this).attr('id');
-    //         console.log('emotion clicked', id)
-    //     });
-    //     // $('.emoticon_button').mouseover(function() {
-    //     //     var id = $(this).attr('id');
-    //     //     console.log('emotion mouseover',id)
-    //     // });
-    // });
 
     $(document).ready(function () {
         $('.sentiment_button').click(function () {
@@ -327,9 +311,27 @@ function draw_filtered_comments(filtered_comment, json) {
         // });
     });
 
-    //makeRevision(filterobj); jasim
+    //makeRevision(filterobj); mjasim - call for save
 }
 
+// get time passed
+// function time_ago(date_past, date_now) {
+//     var delta = Math.abs(date_now - date_past) / 1000;
+//     var years = Math.floor(delta / 31556952);
+//     delta -= years * 31556952;
+//     var months = Math.floor(delta / 2629746);
+//     delta -= months * 2629746;
+//     var days = Math.floor(delta / 86400);
+//     delta -= days * 86400;
+//     var hours = Math.floor(delta / 3600) % 24;
+//     delta -= hours * 3600;
+//     var minutes = Math.floor(delta / 60) % 60;
+//     delta -= minutes * 60;
+//     var seconds = delta % 60;  // in theory the modulus is not required
+//     return  years + " years" + months + " months" + days + " days" + hours + " hours" + minutes + " minutes" + seconds + " seconds ago"
+// }
+
+// tippy functions for categories
 function setTippy(commentID, json) {
     //console.log('set tippy'+json);
     currentJSON = json;
@@ -419,6 +421,7 @@ function setTippy(commentID, json) {
         });
     });
 }
+
 function emojiMouseClick(id) {
     console.log('emoji id ' + id);
     console.log("inside emoclick");
@@ -455,7 +458,7 @@ function getEmojiString(commentID) {
 
     var emojiDiv =
         "<div class=\"tippy-label-body\"" + "\">" +
-        "<div class=\"label-title\"" + " style=border:none;font-size:1.5em"  +  ">" + "<p> " + "Click on an icon to set as the new emotion" + "</p>" + "</div>" +
+        "<div class=\"label-title\"" + " style=border:none;font-size:1.5em" + ">" + "<p> " + "Click on an icon to set as the new emotion" + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + ">" +
         "<p>" + "Angry" + "</p>" +
         "<p>" + '<span class="label-emo-button" id="span_id_angry' + commentID + '" onclick="emojiMouseClick(\'' + 'angry-' + commentID + '\')">' +
@@ -521,7 +524,7 @@ function getSentiString(commentID) {
 
     var sentiDiv =
         "<div class=\"tippy-label-body\"" + "\">" +
-        "<div class=\"label-title\"" + " style=border:none;font-size:1.5em"  +  ">" + "<p> " + "Click on an icon to set as the new sentiment" + "</p>" + "</div>" +
+        "<div class=\"label-title\"" + " style=border:none;font-size:1.5em" + ">" + "<p> " + "Click on an icon to set as the new sentiment" + "</p>" + "</div>" +
         "<div class=\"label-sent-body\"" + ">" +
         "<p>" + "Negative" + "</p>" +
         "<p>" + '<span class="label-sent-button" id="span_id_negative' + commentID + '" onclick="sentiMouseClick(\'' + 'negative-' + commentID + '\')">' +
@@ -568,7 +571,7 @@ function getSubjectivityString(commentID) {
 
     var subjectivityDiv =
         "<div class=\"tippy-label-body\"" + "\">" +
-        "<div class=\"label-title\"" + " style=border:none;font-size:1.5em"  +  ">" + "<p> " + "Click on an icon to set as the new subjective" + "</p>" + "</div>" +
+        "<div class=\"label-title\"" + " style=border:none;font-size:1.5em" + ">" + "<p> " + "Click on an icon to set as the new subjective" + "</p>" + "</div>" +
         "<div class=\"label-sub-body\"" + ">" +
         "<p>" + "Fact" + "</p>" +
         "<p>" + '<span class="label-sub-button" id="span_id_fact' + commentID + '" onclick="subjectivityMouseClick(\'' + 'fact-' + commentID + '\')">' +
@@ -579,7 +582,6 @@ function getSubjectivityString(commentID) {
         "<i class=" + "\"fas fa-comments fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>";
     return subjectivityDiv;
 }
-
 
 function optionMouseClick(id) {
     console.log('option id ' + id);
@@ -593,15 +595,15 @@ function optionMouseClick(id) {
         save_criteria(id)
     }
 
-    // else if(id.includes("note")){
-    //     save_note(json)    
-    // }
+    else if (id.includes("note")) {
+        save_note(id)
+    }
 }
 function getOptionString(commentID) {
 
     var optDiv =
         "<div class=\"tippy-label-body\"" + "\">" +
-        "<div class=\"label-title\"" + " style=border:none;font-size:1.5em"  +  ">" + "<p> " + "Click on an icon to save as an issue, criteria or note" + "</p>" + "</div>" +
+        "<div class=\"label-title\"" + " style=border:none;font-size:1.5em" + ">" + "<p> " + "Click on an icon to save as an issue, criteria or note" + "</p>" + "</div>" +
         "<div class=\"label-opt-body\"" + ">" +
         "<p>" + "Issue" + "</p>" +
         "<p>" + '<span class="label-opt-button" id="span_id_issue' + commentID + '" onclick="optionMouseClick(\'' + 'issue-' + commentID + '\')">' +
@@ -617,6 +619,7 @@ function getOptionString(commentID) {
     return optDiv;
 }
 
+// save revisions
 function makeRevision(obj) {
 
     $.ajax({
@@ -633,6 +636,7 @@ function makeRevision(obj) {
 
 }
 
+// check keyphrases for topics
 function checkKeyphrase(prop_topic, all_topics) {
     var split_topics = all_topics.split(",")
     for (var i = 0; i < split_topics.length; i++) {
@@ -646,6 +650,7 @@ function checkKeyphrase(prop_topic, all_topics) {
     return false;
 }
 
+// save as issues
 function save_issue(id) {
     $('#issueModal').modal('show')
     $('#issue_save_button').on('click', function () {
@@ -673,6 +678,7 @@ function save_issue(id) {
     });
 }
 
+// save as criteria
 function save_criteria(id) {
     $('#criteriaModal').modal('show')
     $('#criteria_save_button').on('click', function () {
@@ -698,4 +704,8 @@ function save_criteria(id) {
         console.log(currentJSON)
         $('#criteriaModal').modal('hide')
     });
+}
+
+function save_note(id) {
+
 }

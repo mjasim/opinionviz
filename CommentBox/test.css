@@ -438,6 +438,7 @@ body {
     flex-direction: row;
     flex-wrap: wrap;
     align-items: stretch;
+    flex-shrink: 2;
 }
 
 .topicName:hover{
@@ -474,3 +475,16 @@ body {
       display:none;
       width:0 !important
   }
+
+  .title-header{
+      display:flex;
+      flex-direction: row;
+  }
+
+  .fa-comment-alt{
+      color:#337AB7
+  }
+
+  .fa-user{
+    color:#337AB7
+}

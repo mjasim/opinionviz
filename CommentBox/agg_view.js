@@ -1,4 +1,4 @@
-
+// global variable to maintain what will be filtered
 var filterobj = {
     emotion: null,
     sentiment_final: null,
@@ -8,6 +8,7 @@ var filterobj = {
     topic: null
 }
 
+// global variable to maintain filter selection //mjasim - This needs to be fixed. There are flaws
 var cellHistory = {
     prev_emo_cell: null,
     prev_senti_cell: null,
@@ -23,6 +24,7 @@ var cellHistory = {
     sub_switch: false
 }
 
+// function to read the data and starting point
 d3.json("communitycrit_new.json", function (err, json) {
     //console.log(json)
 
@@ -79,6 +81,7 @@ d3.json("communitycrit_new.json", function (err, json) {
 
     //============================ top column 2 =========================//
 
+    // top emotions
     var top2 = document.getElementById("top2")
     tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
     tempSvg.id = "svgtop2"
@@ -93,6 +96,7 @@ d3.json("communitycrit_new.json", function (err, json) {
     //============================ top column 2 end =========================//
     //============================ top column 3 =========================//
 
+    // top sentiments
     var top3 = document.getElementById("top3")
     tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
     tempSvg.id = "svgtop3"
@@ -108,6 +112,7 @@ d3.json("communitycrit_new.json", function (err, json) {
 
     //============================ top column 4 =========================//
 
+    // top subjectivity
     var top4 = document.getElementById("top4")
     tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
     tempSvg.id = "svgtop4"
@@ -123,6 +128,7 @@ d3.json("communitycrit_new.json", function (err, json) {
 
     //============================ top column 5 =========================//
 
+    // top profanity
     var top5 = document.getElementById("top5")
     tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
     tempSvg.id = "svgtop5"
@@ -132,30 +138,21 @@ d3.json("communitycrit_new.json", function (err, json) {
     top5.appendChild(tempSvg)
     send_data = all_proposal_profanity_agg[0].profanity_distribution;
 
-    // var min = Math.min(...send_data)
-    // var max = Math.max(...send_data)
-    // normalized = []
-    // for (var x = 0; x < send_data.length; x++) {
-    //     normalized.push(normalize(send_data[x], max, min))
-    // }
-    // //console.log(send_data)
-    // profanity_rows(normalized, top5.id)
-
-    count_very_low = 0, count_low = 0, count_mid = 0, count_high = 0, count_very_high = 0; 
-    for(var x = 0; x < send_data.length; x++){
-        if(send_data[x] > 0.0 && send_data[x] <= 0.1){
+    count_very_low = 0, count_low = 0, count_mid = 0, count_high = 0, count_very_high = 0;
+    for (var x = 0; x < send_data.length; x++) {
+        if (send_data[x] > 0.0 && send_data[x] <= 0.1) {
             count_very_low++;
         }
-        else if(parseFloat(send_data[x]) > 0.1 && parseFloat(send_data[x]) <= 0.2){
+        else if (parseFloat(send_data[x]) > 0.1 && parseFloat(send_data[x]) <= 0.2) {
             count_low++;
         }
-        else if(parseFloat(send_data[x]) > 0.2 && parseFloat(send_data[x]) <= 0.3){
+        else if (parseFloat(send_data[x]) > 0.2 && parseFloat(send_data[x]) <= 0.3) {
             count_mid++;
         }
-        else if(parseFloat(send_data[x]) > 0.3 && parseFloat(send_data[x]) <= 0.4){
+        else if (parseFloat(send_data[x]) > 0.3 && parseFloat(send_data[x]) <= 0.4) {
             count_high++;
         }
-        else if(parseFloat(send_data[x]) > 0.4 && parseFloat(send_data[x]) <= 0.5){
+        else if (parseFloat(send_data[x]) > 0.4 && parseFloat(send_data[x]) <= 0.5) {
             count_very_high++;
         }
     }
@@ -183,6 +180,7 @@ d3.json("communitycrit_new.json", function (err, json) {
 
     // =========================== label column 0 ===============================//
 
+    // labels and search bars for proposals
     var labelColumn0Div = document.createElement("div")
     labelColumn0Div.id = "labelcolumn0"
     labelColumn0Div.className = "l_column0"
@@ -203,6 +201,7 @@ d3.json("communitycrit_new.json", function (err, json) {
 
     //============================ label column 1 =========================//
 
+    // label and search bars for topics
     var labelColumn1Div = document.createElement("div")
     labelColumn1Div.id = "labelcolumn1"
     labelColumn1Div.className = "l_column1"
@@ -224,6 +223,7 @@ d3.json("communitycrit_new.json", function (err, json) {
 
     // =========================== label column 2 ===============================//
 
+    // labels and icons for emotions
     var labelColumn2Div = document.createElement("div")
     labelColumn2Div.id = "labelcolumn2"
     labelColumn2Div.className = "l_column2"
@@ -265,6 +265,7 @@ d3.json("communitycrit_new.json", function (err, json) {
 
     // =========================== label column 3 ===============================//
 
+    // labels and icons for sentiments
     var labelColumn3Div = document.createElement("div")
     labelColumn3Div.id = "labelcolumn3"
     labelColumn3Div.className = "l_column3"
@@ -292,6 +293,7 @@ d3.json("communitycrit_new.json", function (err, json) {
 
     // =========================== label column 4 ===============================//
 
+    // labels and icons for subjectivity
     var labelColumn4Div = document.createElement("div")
     labelColumn4Div.id = "labelcolumn4"
     labelColumn4Div.className = "l_column4"
@@ -315,6 +317,7 @@ d3.json("communitycrit_new.json", function (err, json) {
 
     // =========================== label column 5 ===============================//
 
+    // labels for profanity
     var labelColumn5Div = document.createElement("div")
     labelColumn5Div.id = "labelcolumn5"
     labelColumn5Div.className = "l_column5"
@@ -348,6 +351,8 @@ d3.json("communitycrit_new.json", function (err, json) {
 
         //console.log(proposal_names[i]);
         //============================ column 0=========================//
+
+        // column with all proposal names
         var column0 = document.getElementById("row" + i + "column0")
         var divIdeaName =
             "<div class=\"idea-Name\"" + "\">" +
@@ -360,13 +365,14 @@ d3.json("communitycrit_new.json", function (err, json) {
 
         //============================ column 1 =========================//
 
+        // column with proposal wise topics
         var divTopicName = "<div class=\"topic-body\"" + "\">"
         var column1 = document.getElementById("row" + i + "column1")
         for (var j = 0; j < proposal_wise_topic_agg[i].length; j++) {
             proposal_wise_topic_agg[i][j].topic_keyphrase
             divTopicName = divTopicName +
                 '<div  class="topicName" id="topic_' + proposal_names[i].idea_id + "_" + j + '\">' +
-                '<span class="badge badge-primary topic-name" style="margin: 3px;">' + proposal_wise_topic_agg[i][j].topic_keyphrase + '</span></div>'
+                '<span class="badge badge-warning topic-name" style="margin: 3px;">' + proposal_wise_topic_agg[i][j].topic_keyphrase + '</span></div>'
         }
 
         column1.innerHTML = divTopicName
@@ -375,6 +381,8 @@ d3.json("communitycrit_new.json", function (err, json) {
 
 
         //============================ column 2 =========================//
+
+        // column with proposal wise emotions
         var column2 = document.getElementById("row" + i + "column2")
         //console.log(proposal_wise_emotion_agg)
         tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
@@ -392,6 +400,8 @@ d3.json("communitycrit_new.json", function (err, json) {
         //============================end of column 2==================//
 
         //============================ column 3 =========================//
+        // column with proposal wise sentiments
+
         var column3 = document.getElementById("row" + i + "column3")
         //console.log(proposal_wise_sentiment_agg)
         tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
@@ -408,6 +418,8 @@ d3.json("communitycrit_new.json", function (err, json) {
         //============================end of column 3 ==================//
 
         //============================ column 4 =========================//
+        // column with proposal wise subjectivity
+
         var column4 = document.getElementById("row" + i + "column4")
         //console.log(proposal_wise_subjectivity_agg)
         tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
@@ -425,8 +437,9 @@ d3.json("communitycrit_new.json", function (err, json) {
 
         //============================ column 5 =========================//
 
+        // column with proposal wise profanity
+
         var column5 = document.getElementById("row" + i + "column5")
-        //console.log(proposal_wise_subjectivity_agg)
         tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
         tempSvg.id = "svg" + "row" + i + "column5"
         tempSvg.setAttribute("class", "c_svg")
@@ -436,21 +449,21 @@ d3.json("communitycrit_new.json", function (err, json) {
 
         var column5 = document.getElementById("row" + i + "column5")
         var send_data = proposal_wise_profanity_agg[i].profanity_distribution;
-        count_very_low = 0, count_low = 0, count_mid = 0, count_high = 0, count_very_high = 0; 
-        for(var x = 0; x < send_data.length; x++){
-            if(send_data[x] > 0.0 && send_data[x] <= 0.1){
+        count_very_low = 0, count_low = 0, count_mid = 0, count_high = 0, count_very_high = 0;
+        for (var x = 0; x < send_data.length; x++) {
+            if (send_data[x] > 0.0 && send_data[x] <= 0.1) {
                 count_very_low++;
             }
-            else if(parseFloat(send_data[x]) > 0.1 && parseFloat(send_data[x]) <= 0.2){
+            else if (parseFloat(send_data[x]) > 0.1 && parseFloat(send_data[x]) <= 0.2) {
                 count_low++;
             }
-            else if(parseFloat(send_data[x]) > 0.2 && parseFloat(send_data[x]) <= 0.3){
+            else if (parseFloat(send_data[x]) > 0.2 && parseFloat(send_data[x]) <= 0.3) {
                 count_mid++;
             }
-            else if(parseFloat(send_data[x]) > 0.3 && parseFloat(send_data[x]) <= 0.4){
+            else if (parseFloat(send_data[x]) > 0.3 && parseFloat(send_data[x]) <= 0.4) {
                 count_high++;
             }
-            else if(parseFloat(send_data[x]) > 0.4 && parseFloat(send_data[x]) <= 0.5){
+            else if (parseFloat(send_data[x]) > 0.4 && parseFloat(send_data[x]) <= 0.5) {
                 count_very_high++;
             }
         }
@@ -467,25 +480,12 @@ d3.json("communitycrit_new.json", function (err, json) {
             very_high: count_very_high,
         })
 
-        // var min = Math.min(...send_data)
-        // var max = Math.max(...send_data)
-        // normalized = []
-        // for (var x = 0; x < send_data.length; x++) {
-        //     //console.log(send_data, max, min)
-        //     normalized.push(normalize(send_data[x], max, min))
-        // }
-        // //console.log(send_data)
-        // profanity_rows(normalized, column5.id)
-
         profanity_rows(prof_data, tempSvg.id, column5.id, proposal_names[i].idea_id)
 
         //============================ end of column 5 ==================//
     }
 
-    function normalize(val, max, min) {
-        return (val - min) / (max - min);
-    }
-
+    // On click functions for proposals
     $(document).ready(function () {
         $('.ideaName').click(function () {
             var id = $(this).attr('id');
@@ -506,6 +506,7 @@ d3.json("communitycrit_new.json", function (err, json) {
         // });
     });
 
+    // On click for topics //
     $(document).ready(function () {
         $('.topicName').click(function () {
             var id = $(this).attr('id');
@@ -526,6 +527,7 @@ d3.json("communitycrit_new.json", function (err, json) {
         // });
     });
 
+    // On click function for proposal search box
     $(document).ready(function () {
 
         $("#text-proposal").keyup(function (event) {
@@ -567,6 +569,7 @@ d3.json("communitycrit_new.json", function (err, json) {
         // });
     });
 
+    // // On click function for topic search box
     $(document).ready(function () {
 
         $("#text-topic").keyup(function (event) {
@@ -613,6 +616,7 @@ d3.json("communitycrit_new.json", function (err, json) {
 
     });
 
+    // function for removing text from searchboxes
     $(document).ready(function () {
         $('.text-box-topic').click(function () {
             var id = $(this).attr('id');
@@ -626,6 +630,7 @@ d3.json("communitycrit_new.json", function (err, json) {
 
     //functions for d3
 
+    // draw emotions
     function emotion_rows(salesData, svg_id, div_id, idea_id) {
 
         var group = ["angry", "worried", "sad", "bored", "happy", "excited"];
@@ -808,7 +813,7 @@ d3.json("communitycrit_new.json", function (err, json) {
                 });
         });
 
-        //clicking on the rectangles for emotions
+        //clicking on the rectangles for emotions // mjasim - this is broken and needs to be fixed
         rect.on("click", clicked_emotion);
 
         function clicked_emotion(d) {
@@ -906,6 +911,7 @@ d3.json("communitycrit_new.json", function (err, json) {
         };
     }
 
+    // draw sentiments
     function sentiment_rows(salesData, svg_id, div_id, idea_id) {
 
         var group = ["negative", "neutral", "positive"];
@@ -1090,6 +1096,7 @@ d3.json("communitycrit_new.json", function (err, json) {
 
         rect.on("click", clicked_sentiment);
 
+        // sentiment rectangle clicked // mjasim - this is broken and needs to be fixed
         function clicked_sentiment(d) {
             var this_cell = d3.select(this)
             filterobj.idea_id = idea_id
@@ -1180,6 +1187,7 @@ d3.json("communitycrit_new.json", function (err, json) {
         };
     }
 
+    // draw subjectivity
     function subjectivity_rows(salesData, svg_id, div_id, idea_id) {
 
         var group = ["fact", "opinion"];
@@ -1363,6 +1371,7 @@ d3.json("communitycrit_new.json", function (err, json) {
 
         rect.on("click", clicked_subjectivity);
 
+        // subjectivity rectangle clicked // mjasim - this is broken and needs to be fixed
         function clicked_subjectivity(d) {
             var this_cell = d3.select(this)
             filterobj.idea_id = idea_id
@@ -1454,6 +1463,7 @@ d3.json("communitycrit_new.json", function (err, json) {
         };
     }
 
+    // draw profanity
     function profanity_rows(salesData, svg_id, div_id, idea_id) {
 
         console.log(salesData)
@@ -1637,7 +1647,7 @@ d3.json("communitycrit_new.json", function (err, json) {
                 });
         });
 
-        //clicking on the rectangles for emotions
+        //clicking on the rectangles for profanity // mjasim - discuss if it needs to be implemented
         rect.on("click", clicked_profanity);
 
         function clicked_profanity(d) {
@@ -1704,47 +1714,6 @@ d3.json("communitycrit_new.json", function (err, json) {
                 };
             }
         };
-    }
-
-
-    // function profanity_rows(salesData, div_id) {
-    //     //console.log(salesData)
-    //     var color_input = "to left,"
-    //     for (var i = 0; i < salesData.length; i++) {
-    //         var factor = salesData[i]
-    //         var color = interpolateColor("rgb(44, 72, 91)", "rgb(242, 242, 242)", factor)
-    //         color_input += color + ","
-    //     }
-
-    //     //var style_gradient  = "background: linear-gradient( " + color_input.substring(0,color_input.length-1) + ");"
-    //     var style_gradient = "linear-gradient(" + color_input.substring(0, color_input.length - 1) + ")"
-
-    //     var dom = document.getElementById(div_id)
-
-    //     dom.style.background = style_gradient
-    // }
-
-    function interpolateColor(color1, color2, factor) {
-        if (arguments.length < 3) {
-            factor = 0.5;
-        }
-        color1 = color1.match(/\d+/g).map(Number);
-        color2 = color2.match(/\d+/g).map(Number);
-
-        var result = color1.slice();
-        for (var i = 0; i < 3; i++) {
-            result[i] = Math.round(result[i] + factor * (color2[i] - color1[i]));
-        }
-        return rgbToHex(result[0], result[1], result[2]);
-    };
-
-    function componentToHex(c) {
-        var hex = c.toString(16);
-        return hex.length == 1 ? "0" + hex : hex;
-    }
-
-    function rgbToHex(r, g, b) {
-        return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
     }
 });
 
