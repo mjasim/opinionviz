@@ -839,6 +839,8 @@ d3.json("communitycrit_new.json", function (err, json) {
             cellHistory.prev_emo_cell = this_cell
             cellHistory.prev_idea_id_emo = idea_id
             cellHistory.prev_emo = d.key
+
+            $("#parentBox").animate({ scrollTop: 0 }, 1000);
         }
 
         var rectTooltipg = svg.append("g")
@@ -1112,6 +1114,8 @@ d3.json("communitycrit_new.json", function (err, json) {
             cellHistory.prev_senti_cell = this_cell
             cellHistory.prev_idea_id_senti = idea_id
             cellHistory.prev_senti = d.key
+
+            $("#parentBox").animate({ scrollTop: 0 }, 1000);
         }
         var rectTooltipg = svg.append("g")
             .attr("font-family", "sans-serif")
@@ -1383,6 +1387,8 @@ d3.json("communitycrit_new.json", function (err, json) {
             cellHistory.prev_sub_cell = this_cell
             cellHistory.prev_idea_id_sub = idea_id
             cellHistory.prev_sub = d.key
+
+            $("#parentBox").animate({ scrollTop: 0 }, 1000);
         }
 
         var rectTooltipg = svg.append("g")

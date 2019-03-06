@@ -31,6 +31,8 @@ body {
     width: 90%;
     height: 28vh;
     overflow: scroll;
+    -ms-overflow-style: none;
+    overflow: -moz-scrollbars-none;
 }
 
 .top{
@@ -466,4 +468,9 @@ body {
     position: relative;
     display: inline-block;
     width:60%
+  }
+  
+  .aggregate::-webkit-scrollbar{
+      display:none;
+      width:0 !important
   }

@@ -1,41 +1,175 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <style>
+  * {
+    margin: 0;
+  }
 
-h1 {
-  font: 30px verdana;
-  color: blue;
-  text-align: center;
-  text-shadow: 5px 4px red;
-}
+  #container1 {
+    height: 100%;
+    width: 100%;
+    border: 1px solid green;
+    overflow: hidden;
+    position: relative;
+  }
 
-.chart div {
-  font: 15px sans-serif;
-  background: blue; /* For browsers that do not support gradients */
-  background: linear-gradient(-90deg, blue, red); /* Standard syntax */
-  text-align: right;
-  padding: 20px;
-  margin: 2px;
-  color: white;
-}
+  #container2 {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    /* exact value is given through JavaScript */
+    border: 1px solid blue;
+    overflow: auto;
+  }
 
+  html,
+  body {
+    height: 99%;
+    border: 1px solid red;
+    overflow: hidden;
+  }
 </style>
-<h1>Gradient Bar Chart 1</h1>
-<div class="chart"></div>
-<script src="//d3js.org/d3.v4.min.js"></script>
+
+<body>
+
+  <div id="container1">
+    <div id="container2">hello
+      <br />I
+      <br />am
+      <br />here
+      <br />hello
+      <br />I
+      <br />am
+      <br />here
+      <br />hello
+      <br />I
+      <br />am
+      <br />here
+      <br />hello
+      <br />I
+      <br />am
+      <br />here
+      <br />hello
+      <br />I
+      <br />am
+      <br />here
+      <br />hello
+      <br />I
+      <br />am
+      <br />here
+      <br />hello
+      <br />I
+      <br />am
+      <br />here
+      <br />hello
+      <br />I
+      <br />am
+      <br />here
+      <br />hello
+      <br />I
+      <br />am
+      <br />here
+      <br />hello
+      <br />I
+      <br />am
+      <br />here
+      <br />hello
+      <br />I
+      <br />am
+      <br />here
+      <br />hello
+      <br />I
+      <br />am
+      <br />here
+      <br />hello
+      <br />I
+      <br />am
+      <br />here
+      <br />hello
+      <br />I
+      <br />am
+      <br />here
+      <br />hello
+      <br />I
+      <br />am
+      <br />here
+      <br />hello
+      <br />I
+      <br />am
+      <br />here
+      <br />hello
+      <br />I
+      <br />am
+      <br />here
+      <br />hello
+      <br />I
+      <br />am
+      <br />here
+      <br />hello
+      <br />I
+      <br />am
+      <br />here
+      <br />hello
+      <br />I
+      <br />am
+      <br />here
+      <br />hello
+      <br />I
+      <br />am
+      <br />here
+      <br />hello
+      <br />I
+      <br />am
+      <br />here
+      <br />hello
+      <br />I
+      <br />am
+      <br />here
+      <br />hello
+      <br />I
+      <br />am
+      <br />here
+      <br />hello
+      <br />I
+      <br />am
+      <br />here
+      <br />hello
+      <br />I
+      <br />am
+      <br />here
+      <br />hello
+      <br />I
+      <br />am
+      <br />here
+      <br />hello
+      <br />I
+      <br />am
+      <br />here
+      <br />hello
+      <br />I
+      <br />am
+      <br />here
+      <br />hello
+      <br />I
+      <br />am
+      <br />here
+      <br />hello
+      <br />I
+      <br />am
+      <br />here
+      <br />good
+      <br />bye.</div>
+    <div>
+
+</body>
+
+
 <script>
 
-var data = [4, 8, 15, 16, 23, 42];
+var parent = document.getElementById('container1');
+var child = document.getElementById('container2');
+child.style.right = child.clientWidth - child.offsetWidth + "px";
 
-var x = d3.scaleLinear()
-    .domain([0, d3.max(data)])
-    .range([0, 420]);
-    
-d3.select(".chart")
-  .selectAll("div")
-    .data(data)
-  .enter().append("div")
-    .style("width", function(d) {return x(d) + "px"; })
-    .text(function(d) { return d; });
-    
 </script>
