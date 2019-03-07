@@ -771,7 +771,7 @@ function draw_view() {
                 left: 0
             },
 
-            width = +svg.attr("width"),
+            width = +svg.attr("width")-2,
             height = +svg.attr("height");
 
         var x = d3.scaleLinear()
