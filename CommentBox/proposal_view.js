@@ -418,7 +418,7 @@ function setTippy(commentID, json) {
             },
         });
 
-        tippy('#' + commentID, {
+        tippy('#instr_button_id', {
             interactive: true,
             role: 'menu',
             // `focus` is not suitable for buttons with dropdowns

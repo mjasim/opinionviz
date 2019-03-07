@@ -11,7 +11,6 @@ body {
 .parentDiv{
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
     height: 100%;
     width: 100%;
     justify-content: start;
@@ -19,12 +18,16 @@ body {
 
 }
 
-.t_svg{
-    border:solid thin black;
+.c_svg{
+    border:solid #F2F2F2;
+    border-width: 1px;
+    padding: 2px 1px 2px 1px
 }
 
-.c_svg{
-    border:solid thin black;
+.t_svg{
+    border:solid #F2F2F2;
+    border-width: 1px;
+    padding: 2px 1px 2px 1px;
 }
 
 .aggregate{
@@ -34,16 +37,15 @@ body {
     overflow: scroll;
     -ms-overflow-style: none;
     overflow: -moz-scrollbars-none;
+    transition: all .5s linear;
 }
 
 .top{
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
     align-items: center;
     width: 90%;
-    height: 6vh;
-
+    height: 36px;
 }
 
 .label{
@@ -52,7 +54,7 @@ body {
     flex-wrap: wrap;
     align-items: center;
     width: 90%;
-    height: 8vh;
+    height: 80px;
     color:black;
     padding: 0px;
 }
@@ -107,17 +109,16 @@ body {
     flex-direction: row;
     flex-wrap: wrap;
     width: 100%;
-    height: 60px;
-    border-top: solid thin black;
+    height: 36px;
 }
 
 .t_column0{
-    width: 15%;
+    width: 10%;
     height: inherit;
 }
 
 .t_column1{
-    width: 20%;
+    width: 25%;
     height: inherit;
 }
 
@@ -142,13 +143,13 @@ body {
 }
 
 .l_column0{
-    width: 15%;
+    width: 10%;
     height: inherit;
 }
 
 
 .l_column1{
-    width: 20%;
+    width: 25%;
     height: inherit;
 }
 
@@ -173,13 +174,16 @@ body {
 }
 
 .c_column0{
-    width: 15%;
+    width: 10%;
     height: inherit;
     border-color: black;
+    font-size: 0.8em;
+    font-weight: bold;
+    padding:2px;
 }
 
 .c_column1{
-    width: 20%;
+    width: 25%;
     height: inherit;
     border-color: black;
 }
@@ -441,7 +445,6 @@ body {
     flex-direction: row;
     flex-wrap: wrap;
     align-items: stretch;
-    flex-shrink: 2;
 }
 
 .topicName:hover{
@@ -507,11 +510,11 @@ body {
     outline:solid thin #0099FF;
 }
 
-.fa-home{
+.fa-sync-alt{
     color: #0099FF;
     opacity: 0.7;
 }
-.fa-home:hover{
+.fa-sync-alt:hover{
     opacity: .9;
     cursor: pointer;
     outline:solid thin #0099FF;
@@ -525,4 +528,36 @@ body {
 .homeDiv{
     text-align: center;
     width:50%;
+}
+
+.label_icons{
+    opacity:0.9;
+}
+
+.label_icons:hover{
+    outline: none;
+    cursor: default;
+}
+
+.badge{
+    border-style:solid;
+    border-width:1px;
+    border-color:#337AB7;
+    background-color: white;
+    color:black;
+}
+
+.badge:hover{
+    border-style:solid;
+    border-width:1px;
+    border-color:#337AB7;
+    background-color:#ECF2F9;
+    color:black;
+}
+
+.c_column0:hover{
+    border-style:solid;
+    border-width:1px;
+    border-color:#337AB7;
+    border-radius: 5px;
 }

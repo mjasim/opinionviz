@@ -80,13 +80,14 @@ function draw_view() {
 
     //============================ top column 0 =========================//
 
-    //var top0 = document.getElementById("top0")
-    //tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
-    //tempSvg.id = "svgtop0"
-    //tempSvg.setAttribute("class", "t_svg")
-    //tempSvg.setAttribute("width", top0.clientWidth)
-    //tempSvg.setAttribute("height", top0.clientHeight)
-    //top0.appendChild(tempSvg)
+    var top0 = document.getElementById("top0")
+
+    var divCaption =
+        "<div class=\"search\"" + "\">" +
+        "<input type=\"text\" class=\"c_search_box\"" + "id=search_box\"" + " placeholder=\"Search...\"" + ">" +
+        '<button type=\"submit\" id="search_button">' + "<i class=" + "\"fas fa-search fa-lg\"" + "></i>" + "</div>";
+
+    top0.innerHTML = divCaption
 
     //============================ top column 0 end =====================//
 
@@ -212,10 +213,10 @@ function draw_view() {
     var divCaption =
         "<div class=\"label-body\"" + "\">" +
         "<div class=\"label-title\"" + ">" +
-        "<p style=\"margin: 5px 0px 5px 0px\"" + ">" + "Proposal Title" + "</p>" + "</div>" +
+        "<p style=\"margin: 5px 0px 5px 0px\"" + ">" + "Proposals" + "</p>" + "</div>" +
         "<div class=\"label-title-body\"" + ">" +
-        "<input type=\"text\" class=\"text-box-proposal\"" + "id=\"text-proposal\"" + "placeholder=\"Search for proposals\"" + ">" +
-        "<p style=\"margin: 5px 0px 5px 0px\"" + ">" + '<span class="label-search-button-proposal" id="span_id_proposal" >' + "<i class=" + "\"fas fa-search fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>";
+        "<p style=\"margin: 5px 0px 5px 0px\"" + ">" + "\xa0" + "</p>" + "</div>" +
+        "<p style=\"margin: 5px 0px 5px 0px\"" + ">" + "\xa0" + "</p>" + "</div>";
 
     labelColumn0Div.innerHTML = divCaption
     labelElement.appendChild(labelColumn0Div)
@@ -235,8 +236,8 @@ function draw_view() {
         "<div class=\"label-title\"" + ">" +
         "<p style=\"margin: 5px 0px 5px 0px\"" + ">" + "Topics" + "</p>" + "</div>" +
         "<div class=\"label-title-body\"" + ">" +
-        "<input type=\"text\" class=\"text-box-topic\"" + "id=\"text-topic\"" + "placeholder=\"Search for topics\"" + ">" +
-        "<p style=\"margin: 5px 0px 5px 0px\"" + ">" + '<span class="label-search-button-topic" id="span_id_topic" >' + "<i class=" + "\"fas fa-search fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>";
+        "<p style=\"margin: 5px 0px 5px 0px\"" + ">" + "\xa0" + "</p>" + "</div>" +
+        "<p style=\"margin: 5px 0px 5px 0px\"" + ">" + "\xa0" + "</p>" + "</div>";
 
     labelColumn1Div.innerHTML = divCaption
     labelElement.appendChild(labelColumn1Div)
@@ -259,27 +260,27 @@ function draw_view() {
         "<div class=\"label-emo-body\"" + ">" +
         "<p>" + "Angry" + "</p>" +
         "<p>" + '<span class="label-emo-button" id="span_id_angry" >' +
-        "<i class=" + "\"fas fa-angry fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<i class=" + "\"fas fa-angry fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Fear" + "</p>" +
         "<p>" + '<span class="label-emo-button" id="span_id_fear" >' +
-        "<i class=" + "\"fas fa-flushed fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<i class=" + "\"fas fa-flushed fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Sad" + "</p>" +
         "<p>" + '<span class="label-emo-button" id="span_id_sad" >' +
-        "<i class=" + "\"fas fa-frown fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<i class=" + "\"fas fa-frown fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Bored" + "</p>" +
         "<p>" + '<span class="label-emo-button" id="span_id_bored" >' +
-        "<i class=" + "\"fas fa-meh fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<i class=" + "\"fas fa-meh fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Happy" + "</p>" +
         "<p>" + '<span class="label-emo-button" id="span_id_happy" >' +
-        "<i class=" + "\"fas fa-smile fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<i class=" + "\"fas fa-smile fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Excited" + "</p>" +
         "<p>" + '<span class="label-emo-button" id="span_id_excited" >' +
-        "<i class=" + "\"fas fa-smile-beam fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>";
+        "<i class=" + "\"fas fa-smile-beam fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>";
 
     labelColumn2Div.innerHTML = divCaption
     labelElement.appendChild(labelColumn2Div)
@@ -301,15 +302,15 @@ function draw_view() {
         "<div class=\"label-sent-body\"" + ">" +
         "<p>" + "Negative" + "</p>" +
         "<p>" + '<span class="label-sent-button" id="span_id_negative" >' +
-        "<i class=" + "\"fas fa-thumbs-down fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<i class=" + "\"fas fa-thumbs-down fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-sent-body\"" + "\">" +
         "<p>" + "Neutral" + "</p>" +
         "<p>" + '<span class="label-sent-button" id="span_id_neutral" >' +
-        "<i class=" + "\"fas fa-thumbs-down fa-2x neutral\"" + " style=transform:rotate(-90deg)" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<i class=" + "\"fas fa-thumbs-down fa-2x neutral label_icons\"" + " style=transform:rotate(-90deg)" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-sent-body\"" + "\">" +
         "<p>" + "Positive" + "</p>" +
         "<p>" + '<span class="label-sent-button" id="span_id_sad" >' +
-        "<i class=" + "\"fas fa-thumbs-up fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>";
+        "<i class=" + "\"fas fa-thumbs-up fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>";
     labelColumn3Div.innerHTML = divCaption
     labelElement.appendChild(labelColumn3Div)
 
@@ -329,11 +330,11 @@ function draw_view() {
         "<div class=\"label-sub-body\"" + ">" +
         "<p>" + "Fact" + "</p>" +
         "<p>" + '<span class="label-sub-button" id="span_id_negative" >' +
-        "<i class=" + "\"fas fa-clipboard-check fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<i class=" + "\"fas fa-clipboard-check fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-sub-body\"" + "\">" +
         "<p>" + "Opinion" + "</p>" +
         "<p>" + '<span class="label-sent-button" id="span_id_neutral" >' +
-        "<i class=" + "\"fas fa-comments fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>";
+        "<i class=" + "\"fas fa-comments fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>";
     labelColumn4Div.innerHTML = divCaption
     labelElement.appendChild(labelColumn4Div)
 
@@ -381,7 +382,7 @@ function draw_view() {
         var divIdeaName =
             "<div class=\"idea-Name\"" + "\">" +
             //'<div  class="btn btn-primary btn-block ideaName" id="' + proposal_names[i].idea_id + '">' + proposal_names[i].idea_name + "</div>";
-            '<div  class="ideaName" id="' + proposal_names[i].idea_id + '">' + '<p style="margin:0px; word-wrap:break-word; text-align: center">' + proposal_names[i].idea_name + "</p></div>";
+            '<div  class="ideaName" id="' + proposal_names[i].idea_id + '">' + '<p style="margin:0px; word-wrap:break-word; text-align: left">' + proposal_names[i].idea_name + "</p></div>";
 
         column0.innerHTML = divIdeaName
 
@@ -393,10 +394,10 @@ function draw_view() {
         var divTopicName = "<div class=\"topic-body\"" + "\">"
         var column1 = document.getElementById("row" + i + "column1")
         for (var j = 0; j < proposal_wise_topic_agg[i].length; j++) {
-            proposal_wise_topic_agg[i][j].topic_keyphrase
+            console.log(proposal_wise_topic_agg[i][j])
             divTopicName = divTopicName +
                 '<div  class="topicName" id="topic_' + proposal_names[i].idea_id + "_" + j + '\">' +
-                '<span class="badge badge-warning topic-name" style="margin: 2px;font-size:0.7em;">' + proposal_wise_topic_agg[i][j].topic_keyphrase + '</span></div>'
+                '<span class="badge badge-warning topic-name" id="topic_' + proposal_names[i].idea_id + "_" + j + "_id\"" + 'style="margin: 0px 1px 0px 1px;font-size:0.7em;">' + proposal_wise_topic_agg[i][j].topic_keyphrase + '</span></div>'
         }
 
         column1.innerHTML = divTopicName
@@ -509,18 +510,18 @@ function draw_view() {
 
         // Instructions
         var divInstr = document.getElementById("instr")
-        var divInstrHTML = 
-        "<div>" +
-        "<span class=\"c_instr_button\" id=\"instr_button_id\"><i class=\"fas fa-info-circle fa-2x\"></i></span></div>";
+        var divInstrHTML =
+            "<div>" +
+            "<span class=\"c_instr_button\" id=\"instr_button_id\"><i class=\"fas fa-info-circle fa-2x\"></i></span></div>";
         divInstr.innerHTML = divInstrHTML;
         setTippy(divInstr.id, json)
 
-        // Home
-        var divHome = document.getElementById("home")
-        var divhomeHTML = 
-        "<div>" +
-        "<span class=\"c_home_button\" id=\"home_button_id\"><i class=\"fas fa-home fa-2x\"></i></span></div>";
-        divHome.innerHTML = divhomeHTML;
+        // refresh
+        var divRefresh = document.getElementById("refresh")
+        var divrefreshHTML =
+            "<div>" +
+            "<span class=\"c_refresh_button\" id=\"refresh_button_id\"><i class=\"fas fa-sync-alt fa-2x\"></i></span></div>";
+        divRefresh.innerHTML = divrefreshHTML;
     }
 
     // On click functions for proposals
@@ -543,7 +544,10 @@ function draw_view() {
             $("#parentBox").animate({ scrollTop: 0 }, 1000);
             console.log("redrawing")
             draw_view();
-
+            console.log("#"+ id)
+            //$("#aggregateDiv").animate({ scrollTop: $('#id').offset().top }, 1000);
+            document.getElementById(id).scrollIntoView({block: 'center', behavior:"instant"});
+            document.getElementById(id).setAttribute("style", "background-color:#3DAADD")
         });
         // $('.emoticon_button').mouseover(function() {
         //     var id = $(this).attr('id');
@@ -571,7 +575,9 @@ function draw_view() {
             console.log("redrawing")
             draw_view();
 
-            console.log(filtered_comment)
+            id = id + "_id"
+            document.getElementById(id).scrollIntoView({block: 'center', behavior:"instant"});
+            document.getElementById(id).setAttribute("style", "background-color:#3DAADD")
         });
         // $('.emoticon_button').mouseover(function() {
         //     var id = $(this).attr('id');
@@ -614,7 +620,7 @@ function draw_view() {
                 $("#parentBox").animate({ scrollTop: 0 }, 1000);
 
                 console.log("redrawing")
-                draw_view();    
+                draw_view();
             }
             else {
                 text_box.value = "No match found"
@@ -665,7 +671,7 @@ function draw_view() {
                 $("#parentBox").animate({ scrollTop: 0 }, 1000);
 
                 console.log("redrawing")
-                draw_view();  
+                draw_view();
             }
             else {
                 text_box.value = "No match found"
@@ -701,9 +707,9 @@ function draw_view() {
         // });
     });
 
-        // On click for home //
+    // On click for refresh //
     $(document).ready(function () {
-        $('#home_button_id').click(function () {
+        $('#refresh_button_id').click(function () {
             var row_num = ""
             filterobj.idea_id = null
             filterobj.emotion = null
@@ -713,6 +719,7 @@ function draw_view() {
             filterobj.topic = null
             var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
             draw_filtered_comments(filtered_comment, json)
+            $("#aggregateDiv").animate({ scrollTop: 0 }, 1000);
             $("#parentBox").animate({ scrollTop: 0 }, 1000);
             console.log("redrawing")
             draw_view();
@@ -786,8 +793,9 @@ function draw_view() {
             .attr("fill", function (d) {
                 return z(d.key);
             })
-            .attr("style", "outline: thin solid black;");
-
+            .attr("style", "outline: solid;")
+            .attr("style", "outline-color: #F2F2F2")
+            .style("cursor", "pointer");
         var rect = g.selectAll("rect")
             .data(function (d) {
                 d.forEach(function (d1) {
@@ -927,13 +935,13 @@ function draw_view() {
                 filterobj.emotion = null
                 filterobj.topic = null
                 cellHistory.emo_switch = false
-                animatedDivs(false)
+                //animatedDivs(false)
 
             }
             else {
-                this_cell.style("fill", "red")
+                this_cell.style("outline", "thin solid red")
                 cellHistory.emo_switch = true
-                animatedDivs(true)
+                //animatedDivs(true)
             }
 
             console.log(filterobj)
@@ -955,7 +963,9 @@ function draw_view() {
             .attr("text-anchor", "end")
             .attr("id", "recttooltip_" + mainDivName)
             .attr("style", "opacity:0")
-            .attr("transform", "translate(-500,-500)");
+            .attr("transform", "translate(-500,-500)")
+            .attr("style", "position:absolute")
+            .attr("style", "z-index:30");
 
         rectTooltipg.append("rect")
             .attr("id", "recttooltipRect_" + mainDivName)
@@ -1012,15 +1022,15 @@ function draw_view() {
         };
     }
 
-    function animatedDivs(isSelected){
-        if (isSelected){
-            document.getElementById("aggregateDiv").setAttribute ("style","height:60px")
+    function animatedDivs(isSelected) {
+        if (isSelected) {
+            document.getElementById("aggregateDiv").setAttribute("style", "height:60px")
 
-            document.getElementById("parentBox").setAttribute ("style","height:70vh")
-        }else{
-            document.getElementById("aggregateDiv").setAttribute ("style","height:28vh")
+            document.getElementById("parentBox").setAttribute("style", "height:70vh")
+        } else {
+            document.getElementById("aggregateDiv").setAttribute("style", "height:28vh")
 
-            document.getElementById("parentBox").setAttribute ("style","height:50vh")
+            document.getElementById("parentBox").setAttribute("style", "height:50vh")
         }
     }
 
@@ -1087,7 +1097,9 @@ function draw_view() {
                 return z(d.key);
 
             })
-            .attr("style", "outline: thin solid black;");
+            .attr("style", "outline: solid;")
+            .attr("style", "outline-color: #F2F2F2")
+            .style("cursor", "pointer");
 
         var rect = g.selectAll("rect")
             .data(function (d) {
@@ -1165,7 +1177,6 @@ function draw_view() {
             d3.selectAll("#recttooltipRect_" + mainDivName)
                 .attr("width", dims.w + 10)
                 .attr("height", dims.h + 20);
-
         });
 
         rect.on("mousemove", function () {
@@ -1249,7 +1260,10 @@ function draw_view() {
             .attr("text-anchor", "end")
             .attr("id", "recttooltip_" + mainDivName)
             .attr("style", "opacity:0")
-            .attr("transform", "translate(-500,-500)");
+            .attr("transform", "translate(-500,-500)")
+            .attr("style", "position:absolute")
+            .attr("style", "z-index:30");
+
 
         rectTooltipg.append("rect")
             .attr("id", "recttooltipRect_" + mainDivName)
@@ -1368,7 +1382,9 @@ function draw_view() {
             .attr("fill", function (d) {
                 return z(d.key);
             })
-            .attr("style", "outline: thin solid black;");
+            .attr("style", "outline: solid;")
+            .attr("style", "outline-color: #F2F2F2")
+            .style("cursor", "pointer");
 
         var rect = g.selectAll("rect")
             .data(function (d) {
@@ -1529,7 +1545,9 @@ function draw_view() {
             .attr("text-anchor", "end")
             .attr("id", "recttooltip_" + mainDivName)
             .attr("style", "opacity:0")
-            .attr("transform", "translate(-500,-500)");
+            .attr("transform", "translate(-500,-500)")
+            .attr("style", "position:absolute")
+            .attr("style", "z-index:30");;
 
         rectTooltipg.append("rect")
             .attr("id", "recttooltipRect_" + mainDivName)
@@ -1648,7 +1666,8 @@ function draw_view() {
             .attr("fill", function (d) {
                 return z(d.key);
             })
-            .attr("style", "outline: thin solid black;");
+            .attr("style", "outline: solid;")
+            .attr("style", "outline-color: #F2F2F2");
 
         var rect = g.selectAll("rect")
             .data(function (d) {
@@ -1782,7 +1801,9 @@ function draw_view() {
             .attr("text-anchor", "end")
             .attr("id", "recttooltip_" + mainDivName)
             .attr("style", "opacity:0")
-            .attr("transform", "translate(-500,-500)");
+            .attr("transform", "translate(-500,-500)")
+            .attr("style", "position:absolute")
+            .attr("style", "z-index:30");
 
         rectTooltipg.append("rect")
             .attr("id", "recttooltipRect_" + mainDivName)
