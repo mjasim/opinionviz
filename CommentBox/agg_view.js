@@ -805,11 +805,11 @@ function draw_view() {
             .selectAll("g")
             .data(layers);
         var g = maing.enter().append("g")
-            .attr("fill", function (d) {
-                return z(d.key);
-            })
-            .attr("style", "outline: solid;")
-            .attr("style", "outline-color: #F2F2F2")
+            // .attr("fill", function (d) {
+            //     return z(d.key);
+            // })
+            // .attr("style", "outline: solid;")
+            // .attr("style", "outline-color: #F2F2F2")
             .style("cursor", "pointer");
         var rect = g.selectAll("rect")
             .data(function (d) {
@@ -832,7 +832,7 @@ function draw_view() {
                 return JSON.stringify(data);
             })
             .attr("width", function (d) {
-                return x(d[1]) - x(d[0]);
+                return x(d[1]) - x(d[0])-2;
             })
             .attr("x", function (d) {
                 return x(d[0]);
@@ -840,10 +840,17 @@ function draw_view() {
             .attr("y", function (d) {
                 return y(d.data.date);
             })
-            .style("fill", function (d) {
-
+            .attr("fill", function (d) {
+                return z(d.key);
             })
-            .attr("height", y.bandwidth);
+            .attr("stroke", function (d) {
+                return z(d.key);
+            })
+            .attr("stroke-width", function (d) {
+                return "2px";
+            })
+            .attr("height", 25);
+            //.attr("height", y.bandwidth);
 
         rect.on("mouseover", function () {
             var currentEl = d3.select(this);
@@ -954,7 +961,7 @@ function draw_view() {
 
             }
             else {
-                this_cell.style("outline", "thin solid red")
+                this_cell.attr("stroke", "black")
                 cellHistory.emo_switch = true
                 //animatedDivs(true)
             }
