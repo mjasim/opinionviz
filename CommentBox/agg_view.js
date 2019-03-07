@@ -396,7 +396,7 @@ function draw_view() {
             proposal_wise_topic_agg[i][j].topic_keyphrase
             divTopicName = divTopicName +
                 '<div  class="topicName" id="topic_' + proposal_names[i].idea_id + "_" + j + '\">' +
-                '<span class="badge badge-warning topic-name" style="margin: 3px;">' + proposal_wise_topic_agg[i][j].topic_keyphrase + '</span></div>'
+                '<span class="badge badge-warning topic-name" style="margin: 2px;font-size:0.7em;">' + proposal_wise_topic_agg[i][j].topic_keyphrase + '</span></div>'
         }
 
         column1.innerHTML = divTopicName
@@ -508,12 +508,19 @@ function draw_view() {
         //============================ end of column 5 ==================//
 
         // Instructions
-        divInstr = document.getElementById("instr")
+        var divInstr = document.getElementById("instr")
         var divInstrHTML = 
         "<div>" +
-        "<p> <span class=\"instr_button\" id=\"instr_button_id\" tabIndex=\"0\"><i class=\"fas fa-info-circle fa-2x\"></i></span></p></div>";
+        "<span class=\"c_instr_button\" id=\"instr_button_id\"><i class=\"fas fa-info-circle fa-2x\"></i></span></div>";
         divInstr.innerHTML = divInstrHTML;
         setTippy(divInstr.id, json)
+
+        // Home
+        var divHome = document.getElementById("home")
+        var divhomeHTML = 
+        "<div>" +
+        "<span class=\"c_home_button\" id=\"home_button_id\"><i class=\"fas fa-home fa-2x\"></i></span></div>";
+        divHome.innerHTML = divhomeHTML;
     }
 
     // On click functions for proposals
@@ -533,11 +540,9 @@ function draw_view() {
             console.log(id)
             var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
             draw_filtered_comments(filtered_comment, json)
-
+            $("#parentBox").animate({ scrollTop: 0 }, 1000);
             console.log("redrawing")
             draw_view();
-
-            $("#parentBox").animate({ scrollTop: 0 }, 1000);
 
         });
         // $('.emoticon_button').mouseover(function() {
@@ -689,6 +694,28 @@ function draw_view() {
         $('.text-box-proposal').click(function () {
             var id = $(this).attr('id');
             document.getElementById("text-proposal").value = ""
+        });
+        // $('.emoticon_button').mouseover(function() {
+        //     var id = $(this).attr('id');
+        //     console.log('emotion mouseover',id)
+        // });
+    });
+
+        // On click for home //
+    $(document).ready(function () {
+        $('#home_button_id').click(function () {
+            var row_num = ""
+            filterobj.idea_id = null
+            filterobj.emotion = null
+            filterobj.sentiment_final = null
+            filterobj.subjectivity = null
+            filterobj.task_id = null
+            filterobj.topic = null
+            var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
+            draw_filtered_comments(filtered_comment, json)
+            $("#parentBox").animate({ scrollTop: 0 }, 1000);
+            console.log("redrawing")
+            draw_view();
         });
         // $('.emoticon_button').mouseover(function() {
         //     var id = $(this).attr('id');
@@ -900,10 +927,13 @@ function draw_view() {
                 filterobj.emotion = null
                 filterobj.topic = null
                 cellHistory.emo_switch = false
+                animatedDivs(false)
+
             }
             else {
                 this_cell.style("fill", "red")
                 cellHistory.emo_switch = true
+                animatedDivs(true)
             }
 
             console.log(filterobj)
@@ -980,6 +1010,18 @@ function draw_view() {
                 };
             }
         };
+    }
+
+    function animatedDivs(isSelected){
+        if (isSelected){
+            document.getElementById("aggregateDiv").setAttribute ("style","height:60px")
+
+            document.getElementById("parentBox").setAttribute ("style","height:70vh")
+        }else{
+            document.getElementById("aggregateDiv").setAttribute ("style","height:28vh")
+
+            document.getElementById("parentBox").setAttribute ("style","height:50vh")
+        }
     }
 
     // draw sentiments

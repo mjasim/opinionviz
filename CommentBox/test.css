@@ -14,8 +14,9 @@ body {
     flex-wrap: wrap;
     height: 100%;
     width: 100%;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
+
 }
 
 .t_svg{
@@ -73,7 +74,7 @@ body {
 
 .label-title{
     width: 100%;
-    border:solid thin;
+    border-bottom:solid thin black;
 }
 
 .label-title-body{
@@ -107,7 +108,7 @@ body {
     flex-wrap: wrap;
     width: 100%;
     height: 60px;
-    border: 10px;
+    border-top: solid thin black;
 }
 
 .t_column0{
@@ -212,6 +213,8 @@ body {
     height: 50vh;
     background-color: #ecf2f9;
     overflow: scroll;
+    transition: all .5s linear;
+
 }
 
 .ideaDiv{
@@ -465,19 +468,22 @@ body {
     cursor:pointer;
 }
 
-.instructionDiv {
+.headerDiv {
     display: flex;
+    flex-direction: row;
     position: relative;
-    display: inline-block;
-    width: 60%;
+    width: 20%;
     align-items: center;
+    margin: 8px;
   }
   
   .aggregate::-webkit-scrollbar{
       display:none;
       width:0 !important
   }
-
+  .aggregate{
+    transition: all .5s linear;
+  }
   .title-header{
       display:flex;
       flex-direction: row;
@@ -499,4 +505,24 @@ body {
     opacity: .9;
     cursor: pointer;
     outline:solid thin #0099FF;
+}
+
+.fa-home{
+    color: #0099FF;
+    opacity: 0.7;
+}
+.fa-home:hover{
+    opacity: .9;
+    cursor: pointer;
+    outline:solid thin #0099FF;
+}
+
+.instrDiv{
+    text-align: center;
+    width:50%
+}
+
+.homeDiv{
+    text-align: center;
+    width:50%;
 }
