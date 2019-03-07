@@ -30,6 +30,8 @@ var cellHistory = {
 
 var json = null;
 
+var selected_topic = null;
+
 d3.json("communitycrit_new.json", function (err, myjson) {
     json = myjson
     draw_view()
@@ -394,7 +396,7 @@ function draw_view() {
         var divTopicName = "<div class=\"topic-body\"" + "\">"
         var column1 = document.getElementById("row" + i + "column1")
         for (var j = 0; j < proposal_wise_topic_agg[i].length; j++) {
-            console.log(proposal_wise_topic_agg[i][j])
+            //console.log(proposal_wise_topic_agg[i][j])
             divTopicName = divTopicName +
                 '<div  class="topicName" id="topic_' + proposal_names[i].idea_id + "_" + j + '\">' +
                 '<span class="badge badge-warning topic-name" id="topic_' + proposal_names[i].idea_id + "_" + j + "_id\"" + 'style="margin: 0px 1px 0px 1px;font-size:0.7em;">' + proposal_wise_topic_agg[i][j].topic_keyphrase + '</span></div>'
@@ -522,13 +524,15 @@ function draw_view() {
             "<div>" +
             "<span class=\"c_refresh_button\" id=\"refresh_button_id\"><i class=\"fas fa-sync-alt fa-2x\"></i></span></div>";
         divRefresh.innerHTML = divrefreshHTML;
+
+
     }
 
     // On click functions for proposals
     $(document).ready(function () {
         $('.ideaName').click(function () {
 
-            console.log("idea", cellHistory)
+            //console.log("idea", cellHistory)
 
             var id = $(this).attr('id');
             var row_num = ""
@@ -538,16 +542,23 @@ function draw_view() {
             filterobj.subjectivity = null
             filterobj.task_id = null
             filterobj.topic = null
-            console.log(id)
+            //console.log(id)
             var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
             draw_filtered_comments(filtered_comment, json)
             $("#parentBox").animate({ scrollTop: 0 }, 1000);
-            console.log("redrawing")
+            //console.log("redrawing")
             draw_view();
-            console.log("#"+ id)
+            //console.log("#"+ id)
+
+            temp = get_proposal_names(json)
+            for (var i = 0; i < temp.length; i++) {
+                if (temp[i].idea_id == id) {
+                    divID = "row" + i + "column0"
+                }
+            }
             //$("#aggregateDiv").animate({ scrollTop: $('#id').offset().top }, 1000);
-            document.getElementById(id).scrollIntoView({block: 'center', behavior:"instant"});
-            document.getElementById(id).setAttribute("style", "background-color:#3DAADD")
+            document.getElementById(id).scrollIntoView({ block: 'center' });
+            document.getElementById(divID).setAttribute("style", "background-color:#3DAADD")
         });
         // $('.emoticon_button').mouseover(function() {
         //     var id = $(this).attr('id');
@@ -567,16 +578,17 @@ function draw_view() {
             filterobj.task_id = null
             filterobj.topic = split_str[2]
             var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
-            console.log("calling draw with", filterobj)
+            //console.log("calling draw with", filterobj)
             draw_filtered_comments(filtered_comment, json)
 
             $("#parentBox").animate({ scrollTop: 0 }, 1000);
 
-            console.log("redrawing")
+            //console.log("redrawing")
             draw_view();
 
             id = id + "_id"
-            document.getElementById(id).scrollIntoView({block: 'center', behavior:"instant"});
+
+            document.getElementById(id).scrollIntoView({ block: 'center' });
             document.getElementById(id).setAttribute("style", "background-color:#3DAADD")
         });
         // $('.emoticon_button').mouseover(function() {
@@ -619,7 +631,7 @@ function draw_view() {
 
                 $("#parentBox").animate({ scrollTop: 0 }, 1000);
 
-                console.log("redrawing")
+                //console.log("redrawing")
                 draw_view();
             }
             else {
@@ -670,7 +682,7 @@ function draw_view() {
 
                 $("#parentBox").animate({ scrollTop: 0 }, 1000);
 
-                console.log("redrawing")
+                //console.log("redrawing")
                 draw_view();
             }
             else {
@@ -717,12 +729,14 @@ function draw_view() {
             filterobj.subjectivity = null
             filterobj.task_id = null
             filterobj.topic = null
+
+            $("#parentBox").animate({ scrollTop: 0 }, 1000);
+
+            draw_view();
+            //console.log("redrawing")
             var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
             draw_filtered_comments(filtered_comment, json)
-            $("#aggregateDiv").animate({ scrollTop: 0 }, 1000);
-            $("#parentBox").animate({ scrollTop: 0 }, 1000);
-            console.log("redrawing")
-            draw_view();
+
         });
         // $('.emoticon_button').mouseover(function() {
         //     var id = $(this).attr('id');
@@ -944,7 +958,7 @@ function draw_view() {
                 //animatedDivs(true)
             }
 
-            console.log(filterobj)
+            //console.log(filterobj)
 
             var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
             draw_filtered_comments(filtered_comment, json)
@@ -1241,7 +1255,7 @@ function draw_view() {
                 cellHistory.senti_switch = true
             }
 
-            console.log(filterobj)
+            //console.log(filterobj)
 
 
             var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
@@ -1526,7 +1540,7 @@ function draw_view() {
                 cellHistory.sub_switch = true
             }
 
-            console.log(filterobj)
+            //console.log(filterobj)
 
             var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
             draw_filtered_comments(filtered_comment, json)
