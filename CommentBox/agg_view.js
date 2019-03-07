@@ -86,10 +86,11 @@ function draw_view() {
 
     var divCaption =
         "<div class=\"search\"" + "\">" +
-        "<input type=\"text\" class=\"c_search_box\"" + "id=search_box\"" + " placeholder=\"Search...\"" + ">" +
-        '<button type=\"submit\" id="search_button">' + "<i class=" + "\"fas fa-search fa-lg\"" + "></i>" + "</div>";
+        "<input type=\"text\" class=\"c_search_box\"" + "id=search_box\"" + " placeholder=\"Search...\"" + ">" + "</div>"
 
     top0.innerHTML = divCaption
+
+    //'<button type=\"submit\" id="search_button">' + "<i class=" + "\"fas fa-search fa-lg\"" + "></i>" + "</div>";
 
     //============================ top column 0 end =====================//
 

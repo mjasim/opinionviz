@@ -451,10 +451,6 @@ body {
     cursor:pointer;
 }
 
-.ideaName:hover{
-    cursor:pointer;
-}
-
 .text-box-topic{
     width: 100%
 }
@@ -559,5 +555,7 @@ body {
     border-style:solid;
     border-width:1px;
     border-color:#337AB7;
+    background-color:#ECF2F9;
     border-radius: 10px;
+    cursor:pointer;
 }
