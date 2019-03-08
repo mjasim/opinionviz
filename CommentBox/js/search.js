@@ -21,7 +21,7 @@
 					
 					//search for any matches
 					var count = 0;
-					$("p").each(function(i, v) {
+					$(".commentDiv p").each(function(i, v) {
 					
 						//replace any matches
 						var block = $(v);
