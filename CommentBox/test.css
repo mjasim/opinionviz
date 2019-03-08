@@ -567,7 +567,7 @@ body {
     cursor: pointer;
 }
 
-.navbar-toggle, .navbar-form .navbar-left{
+.navbar-toggle, .navbar-form .navbar-left, .input-group{
     padding-top:5px !important; 
     padding-bottom:5px !important;
 }

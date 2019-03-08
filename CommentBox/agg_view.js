@@ -86,7 +86,7 @@ function draw_view() {
 
     var divCaption =
         "<div class=\"search\"" + "\">" +
-        "<input type=\"text\" class=\"c_search_box\"" + "id=search_box\"" + " placeholder=\"Search...\"" + "style=\"width:280px\"" + ">" + 
+        "<input type=\"text\" class=\"c_search_box\"" + "id=search_box\"" + " placeholder=\"Search...\"" + "style=\"width:280px\"" + ">" +
         "<i class=\"fa fa-search fa-lg\"></i>" + "</div>";
 
     top0.innerHTML = divCaption
@@ -384,20 +384,20 @@ function draw_view() {
         // column with all proposal names
         var column0 = document.getElementById("row" + i + "column0")
 
-        if(proposal_names[i].idea_name.length < 30){
+        if (proposal_names[i].idea_name.length < 30) {
             //console.log(proposal_names[i].idea_name.length)
             var divIdeaName =
-            "<div class=\"idea-Name\"" + "\">" +
-            //'<div  class="btn btn-primary btn-block ideaName" id="' + proposal_names[i].idea_id + '">' + proposal_names[i].idea_name + "</div>";
-            '<div  class="ideaName" id="' + proposal_names[i].idea_id + '">' + '<p style="margin:5px 0px 5px 2px; word-wrap:break-word; text-align: left">' + proposal_names[i].idea_name + "</p></div>";
+                "<div class=\"idea-Name\"" + "\">" +
+                //'<div  class="btn btn-primary btn-block ideaName" id="' + proposal_names[i].idea_id + '">' + proposal_names[i].idea_name + "</div>";
+                '<div  class="ideaName" id="' + proposal_names[i].idea_id + '">' + '<p style="margin:5px 0px 5px 2px; word-wrap:break-word; text-align: left">' + proposal_names[i].idea_name + "</p></div>";
         }
-        else{
+        else {
             var divIdeaName =
-            "<div class=\"idea-Name\"" + "\">" +
-            //'<div  class="btn btn-primary btn-block ideaName" id="' + proposal_names[i].idea_id + '">' + proposal_names[i].idea_name + "</div>";
-            '<div  class="ideaName" id="' + proposal_names[i].idea_id + '">' + '<p style="margin:0px 0px 0px 2px; word-wrap:break-word; text-align: left">' + proposal_names[i].idea_name + "</p></div>";
+                "<div class=\"idea-Name\"" + "\">" +
+                //'<div  class="btn btn-primary btn-block ideaName" id="' + proposal_names[i].idea_id + '">' + proposal_names[i].idea_name + "</div>";
+                '<div  class="ideaName" id="' + proposal_names[i].idea_id + '">' + '<p style="margin:0px 0px 0px 2px; word-wrap:break-word; text-align: left">' + proposal_names[i].idea_name + "</p></div>";
         }
-        
+
         column0.innerHTML = divIdeaName
 
         //============================end of column 0==================//
@@ -780,11 +780,11 @@ function draw_view() {
                 left: 0
             },
 
-            width = +svg.attr("width")-2,
+            width = +svg.attr("width") - 2,
             height = +svg.attr("height");
-            if(width < 0){
-                width = 0;
-            }
+        if (width < 0) {
+            width = 0;
+        }
 
         var x = d3.scaleLinear()
             .rangeRound([margin.left, width - margin.right]);
@@ -844,10 +844,10 @@ function draw_view() {
                 return JSON.stringify(data);
             })
             .attr("width", function (d) {
-                if(x(d[1]) - x(d[0]) - 2 < 0){
+                if (x(d[1]) - x(d[0]) - 2 < 0) {
                     return 0;
                 }
-                else{
+                else {
                     return x(d[1]) - x(d[0]) - 2;
                 }
             })
@@ -866,18 +866,20 @@ function draw_view() {
             .attr("stroke-width", function (d) {
                 return "2px";
             })
-            .attr("height", 25);
+            .attr("height", 25)
             //.attr("height", y.bandwidth);
+            .attr("opacity", 0.8);
 
         rect.on("mouseover", function () {
             var currentEl = d3.select(this);
+            currentEl.attr("opacity", 1);
             var fadeInSpeed = 120;
             d3.select("#recttooltip_" + mainDivName)
                 .transition()
                 .duration(fadeInSpeed)
                 .style("opacity", function () {
                     return 1;
-                });
+                })
             d3.select("#recttooltip_" + mainDivName).attr("transform", function (d) {
                 var mouseCoords = d3.mouse(this.parentNode);
                 var xCo = 0;
@@ -943,259 +945,313 @@ function draw_view() {
         });
         rect.on("mouseout", function () {
             var currentEl = d3.select(this);
-            d3.select("#recttooltip_" + mainDivName)
-                .style("opacity", function () {
-                    return 0;
-                })
-                .attr("transform", function (d, i) {
-                    // klutzy, but it accounts for tooltip padding which could push it onscreen
-                    var x = -500;
-                    var y = -500;
-                    return "translate(" + x + "," + y + ")";
-                });
+            currentEl.attr("opacity", function () {
+                if (cellHistory.emo_switch) {
+                    return 1
+                }
+                else {
+                    return 0.8
+                }
+            })
+        d3.select("#recttooltip_" + mainDivName)
+            .style("opacity", function () {
+                return 0;
+            })
+            .attr("transform", function (d, i) {
+                // klutzy, but it accounts for tooltip padding which could push it onscreen
+                var x = -500;
+                var y = -500;
+                return "translate(" + x + "," + y + ")";
+            });
+    });
+
+    rect.on("click", clicked_emotion);
+
+    function clicked_emotion(d) {
+
+        var this_cell = d3.select(this)
+        filterobj.idea_id = idea_id
+        filterobj.emotion = d.key
+
+        // remove outline from previous cell 
+        if (cellHistory.prev_emo_cell) {
+            cellHistory.prev_emo_cell.attr("stroke", cellHistory.prev_emo_color)
+            cellHistory.prev_emo_cell.attr("opacity", 0.8)
+        }
+
+        // deselect cell (check if previously selected row and column selected. Remove the column filter)
+        if (cellHistory.emo_switch && cellHistory.prev_emo == d.key && cellHistory.prev_idea_id_emo == idea_id) {
+            filterobj.idea_id = cellHistory.prev_idea_id
+            filterobj.emotion = null
+            filterobj.topic = null
+            cellHistory.emo_switch = false
+            //animatedDivs(false)
+        }
+        else {
+            this_cell.attr("stroke", "black")
+            this_cell.attr("opacity", 1)
+            cellHistory.emo_switch = true
+            //animatedDivs(true)
+        }
+
+        //console.log(filterobj)
+
+        var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
+        draw_filtered_comments(filtered_comment, json)
+        cellHistory.prev_emo_cell = this_cell
+        cellHistory.prev_idea_id_emo = idea_id
+        cellHistory.prev_idea_id = idea_id
+        cellHistory.prev_emo = d.key
+        cellHistory.prev_emo_color = z(d.key)
+
+        $("#parentBox").animate({ scrollTop: 0 }, 1000);
+    }
+
+    var rectTooltipg = svg.append("g")
+        .attr("font-family", "sans-serif")
+        .attr("font-size", 10)
+        .attr("text-anchor", "end")
+        .attr("id", "recttooltip_" + mainDivName)
+        .attr("style", "opacity:0")
+        .attr("transform", "translate(-500,-500)")
+        .attr("style", "position:absolute")
+        .attr("style", "z-index:30");
+
+    rectTooltipg.append("rect")
+        .attr("id", "recttooltipRect_" + mainDivName)
+        .attr("x", 0)
+        .attr("width", 120)
+        .attr("height", 80)
+        .attr("opacity", 0.71)
+        .style("fill", "#000000");
+
+    rectTooltipg
+        .append("text")
+        .attr("id", "recttooltipText_" + mainDivName)
+        .attr("x", 30)
+        .attr("y", 15)
+        .attr("fill", function () {
+            return "#fff"
+        })
+        .style("font-size", function (d) {
+            return 10;
+        })
+        .style("font-family", function (d) {
+            return "arial";
+        })
+        .text(function (d, i) {
+            return "";
         });
 
-        rect.on("click", clicked_emotion);
 
-        function clicked_emotion(d) {
+    function type(d) {
+        //d.date = parseDate(new Date(d.date));
+        group.forEach(function (c) {
+            d[c] = +d[c];
+        });
+        return d;
+    }
 
-            var this_cell = d3.select(this)
-            filterobj.idea_id = idea_id
-            filterobj.emotion = d.key
-
-            // remove outline from previous cell 
-            if (cellHistory.prev_emo_cell) {
-                cellHistory.prev_emo_cell.attr("stroke", cellHistory.prev_emo_color)
+    var helpers = {
+        getDimensions: function (id) {
+            var el = document.getElementById(id);
+            var w = 0,
+                h = 0;
+            if (el) {
+                var dimensions = el.getBBox();
+                w = dimensions.width;
+                h = dimensions.height;
+            } else {
+                console.log("error: getDimensions() " + id + " not found.");
             }
+            return {
+                w: w,
+                h: h
+            };
+        }
+    };
+}
 
-            // deselect cell (check if previously selected row and column selected. Remove the column filter)
-            if (cellHistory.emo_switch && cellHistory.prev_emo == d.key && cellHistory.prev_idea_id_emo == idea_id) {
-                filterobj.idea_id = cellHistory.prev_idea_id
-                filterobj.emotion = null
-                filterobj.topic = null
-                cellHistory.emo_switch = false
-                //animatedDivs(false)
+function animatedDivs(isSelected) {
+    if (isSelected) {
+        document.getElementById("aggregateDiv").setAttribute("style", "height:60px")
+
+        document.getElementById("parentBox").setAttribute("style", "height:70vh")
+    } else {
+        document.getElementById("aggregateDiv").setAttribute("style", "height:28vh")
+
+        document.getElementById("parentBox").setAttribute("style", "height:50vh")
+    }
+}
+
+// draw sentiments
+function sentiment_rows(salesData, svg_id, div_id, idea_id) {
+
+    var group = ["negative", "neutral", "positive"];
+    var parseDate = d3.timeFormat("%b-%Y");
+
+    var mainDiv = "#" + div_id;
+    var mainDivName = div_id;
+
+    salesData.forEach(function (d) {
+        d = type(d);
+    });
+    var layers = d3.stack()
+        .keys(group)
+        .offset(d3.stackOffsetDiverging)
+        (salesData);
+
+    var svg = d3.select("#" + svg_id),
+        margin = {
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0
+        },
+
+        width = +svg.attr("width") - 2,
+        height = +svg.attr("height");
+    if (width < 0) {
+        width = 0;
+    }
+
+    var x = d3.scaleLinear()
+        .rangeRound([margin.left, width - margin.right]);
+
+    x.domain([d3.min(layers, stackMin), d3.max(layers, stackMax)]);
+
+    var y = d3.scaleBand()
+        .rangeRound([height - margin.bottom, margin.top])
+        .padding(0.0);
+
+    y.domain(salesData.map(function (d) {
+        return d.date;
+    }))
+
+    function stackMin(layers) {
+        return d3.min(layers, function (d) {
+            return d[0];
+        });
+    }
+
+    function stackMax(layers) {
+        return d3.max(layers, function (d) {
+            return d[1];
+        });
+    }
+
+    var z = d3.scaleOrdinal(["#D67195", "#FFBF79", "#439894"]);
+
+    var maing = svg.append("g")
+        .selectAll("g")
+        .data(layers);
+    var g = maing.enter().append("g")
+        // .attr("fill", function (d) {
+        //     return z(d.key);
+        // })
+        // .attr("style", "outline: solid;")
+        // .attr("style", "outline-color: #F2F2F2")
+        .style("cursor", "pointer");
+    var rect = g.selectAll("rect")
+        .data(function (d) {
+            d.forEach(function (d1) {
+                d1.key = d.key;
+                return d1;
+            });
+            return d;
+        })
+        .enter().append("rect")
+        .attr("data", function (d) {
+            var data = {};
+            data["key"] = d.key;
+            data["value"] = d.data[d.key];
+            var total = 0;
+            group.map(function (d1) {
+                total = total + d.data[d1]
+            });
+            data["total"] = total;
+            return JSON.stringify(data);
+        })
+        .attr("width", function (d) {
+            if (x(d[1]) - x(d[0]) - 2 < 0) {
+                return 0;
             }
             else {
-                this_cell.attr("stroke", "black")
-                cellHistory.emo_switch = true
-                //animatedDivs(true)
+                return x(d[1]) - x(d[0]) - 2;
             }
+        })
+        .attr("x", function (d) {
+            return x(d[0]);
+        })
+        .attr("y", function (d) {
+            return y(d.data.date);
+        })
+        .attr("fill", function (d) {
+            return z(d.key);
+        })
+        .attr("stroke", function (d) {
+            return z(d.key);
+        })
+        .attr("stroke-width", function (d) {
+            return "2px";
+        })
+        .attr("height", 25)
+        .attr("opacity", 0.8);
+    //.attr("height", y.bandwidth);
 
-            //console.log(filterobj)
-
-            var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
-            draw_filtered_comments(filtered_comment, json)
-            cellHistory.prev_emo_cell = this_cell
-            cellHistory.prev_idea_id_emo = idea_id
-            cellHistory.prev_idea_id = idea_id
-            cellHistory.prev_emo = d.key
-            cellHistory.prev_emo_color = z(d.key)
-
-            $("#parentBox").animate({ scrollTop: 0 }, 1000);
-        }
-
-        var rectTooltipg = svg.append("g")
-            .attr("font-family", "sans-serif")
-            .attr("font-size", 10)
-            .attr("text-anchor", "end")
-            .attr("id", "recttooltip_" + mainDivName)
-            .attr("style", "opacity:0")
-            .attr("transform", "translate(-500,-500)")
-            .attr("style", "position:absolute")
-            .attr("style", "z-index:30");
-
-        rectTooltipg.append("rect")
-            .attr("id", "recttooltipRect_" + mainDivName)
-            .attr("x", 0)
-            .attr("width", 120)
-            .attr("height", 80)
-            .attr("opacity", 0.71)
-            .style("fill", "#000000");
-
-        rectTooltipg
-            .append("text")
-            .attr("id", "recttooltipText_" + mainDivName)
-            .attr("x", 30)
-            .attr("y", 15)
-            .attr("fill", function () {
-                return "#fff"
-            })
-            .style("font-size", function (d) {
-                return 10;
-            })
-            .style("font-family", function (d) {
-                return "arial";
-            })
-            .text(function (d, i) {
-                return "";
+    rect.on("mouseover", function () {
+        var currentEl = d3.select(this);
+        currentEl.attr("opacity", 1)
+        var fadeInSpeed = 120;
+        d3.select("#recttooltip_" + mainDivName)
+            .transition()
+            .duration(fadeInSpeed)
+            .style("opacity", function () {
+                return 1;
             });
-
-
-        function type(d) {
-            //d.date = parseDate(new Date(d.date));
-            group.forEach(function (c) {
-                d[c] = +d[c];
-            });
-            return d;
-        }
-
-        var helpers = {
-            getDimensions: function (id) {
-                var el = document.getElementById(id);
-                var w = 0,
-                    h = 0;
-                if (el) {
-                    var dimensions = el.getBBox();
-                    w = dimensions.width;
-                    h = dimensions.height;
-                } else {
-                    console.log("error: getDimensions() " + id + " not found.");
-                }
-                return {
-                    w: w,
-                    h: h
-                };
+        d3.select("#recttooltip_" + mainDivName).attr("transform", function (d) {
+            var mouseCoords = d3.mouse(this.parentNode);
+            var xCo = 0;
+            if (mouseCoords[0] + 10 >= width * 0.80) {
+                xCo = mouseCoords[0] - parseFloat(d3.selectAll("#recttooltipRect_" + mainDivName)
+                    .attr("width"));
+            } else {
+                xCo = mouseCoords[0] + 10;
             }
-        };
-    }
-
-    function animatedDivs(isSelected) {
-        if (isSelected) {
-            document.getElementById("aggregateDiv").setAttribute("style", "height:60px")
-
-            document.getElementById("parentBox").setAttribute("style", "height:70vh")
-        } else {
-            document.getElementById("aggregateDiv").setAttribute("style", "height:28vh")
-
-            document.getElementById("parentBox").setAttribute("style", "height:50vh")
-        }
-    }
-
-    // draw sentiments
-    function sentiment_rows(salesData, svg_id, div_id, idea_id) {
-
-        var group = ["negative", "neutral", "positive"];
-        var parseDate = d3.timeFormat("%b-%Y");
-
-        var mainDiv = "#" + div_id;
-        var mainDivName = div_id;
-
-        salesData.forEach(function (d) {
-            d = type(d);
+            var x = xCo;
+            var yCo = 0;
+            if (mouseCoords[0] + 10 >= width * 0.80) {
+                yCo = mouseCoords[1] + 10;
+            } else {
+                yCo = mouseCoords[1];
+            }
+            var x = xCo;
+            var y = yCo;
+            return "translate(" + x + "," + y + ")";
         });
-        var layers = d3.stack()
-            .keys(group)
-            .offset(d3.stackOffsetDiverging)
-            (salesData);
+        //CBT:calculate tooltips text
+        var tooltipData = JSON.parse(currentEl.attr("data"));
+        var tooltipsText = "";
+        d3.selectAll("#recttooltipText_" + mainDivName).text("");
+        var yPos = 0;
+        d3.selectAll("#recttooltipText_" + mainDivName).append("tspan").attr("x", 0).attr("y", yPos * 10).attr("dy", "1.9em").text(tooltipData.key + ":  " + tooltipData.value);
+        yPos = yPos + 1;
+        d3.selectAll("#recttooltipText_" + mainDivName).append("tspan").attr("x", 0).attr("y", yPos * 10).attr("dy", "1.9em").text("Total" + ":  " + tooltipData.total);
+        //CBT:calculate width of the text based on characters
+        var dims = helpers.getDimensions("recttooltipText_" + mainDivName);
+        d3.selectAll("#recttooltipText_" + mainDivName + " tspan")
+            .attr("x", dims.w + 4);
 
-            var svg = d3.select("#" + svg_id),
-            margin = {
-                top: 0,
-                right: 0,
-                bottom: 0,
-                left: 0
-            },
+        d3.selectAll("#recttooltipRect_" + mainDivName)
+            .attr("width", dims.w + 10)
+            .attr("height", dims.h + 20);
+    });
 
-            width = +svg.attr("width") - 2,
-            height = +svg.attr("height");
-            if(width < 0){
-                width = 0;
-            }
-
-        var x = d3.scaleLinear()
-            .rangeRound([margin.left, width - margin.right]);
-
-        x.domain([d3.min(layers, stackMin), d3.max(layers, stackMax)]);
-
-        var y = d3.scaleBand()
-            .rangeRound([height - margin.bottom, margin.top])
-            .padding(0.0);
-
-        y.domain(salesData.map(function (d) {
-            return d.date;
-        }))
-
-        function stackMin(layers) {
-            return d3.min(layers, function (d) {
-                return d[0];
-            });
-        }
-
-        function stackMax(layers) {
-            return d3.max(layers, function (d) {
-                return d[1];
-            });
-        }
-
-        var z = d3.scaleOrdinal(["#D67195", "#FFBF79", "#439894"]);
-
-        var maing = svg.append("g")
-            .selectAll("g")
-            .data(layers);
-        var g = maing.enter().append("g")
-            // .attr("fill", function (d) {
-            //     return z(d.key);
-            // })
-            // .attr("style", "outline: solid;")
-            // .attr("style", "outline-color: #F2F2F2")
-            .style("cursor", "pointer");
-        var rect = g.selectAll("rect")
-            .data(function (d) {
-                d.forEach(function (d1) {
-                    d1.key = d.key;
-                    return d1;
-                });
-                return d;
-            })
-            .enter().append("rect")
-            .attr("data", function (d) {
-                var data = {};
-                data["key"] = d.key;
-                data["value"] = d.data[d.key];
-                var total = 0;
-                group.map(function (d1) {
-                    total = total + d.data[d1]
-                });
-                data["total"] = total;
-                return JSON.stringify(data);
-            })
-            .attr("width", function (d) {
-                if(x(d[1]) - x(d[0]) - 2 < 0){
-                    return 0;
-                }
-                else{
-                    return x(d[1]) - x(d[0]) - 2;
-                }
-            })
-            .attr("x", function (d) {
-                return x(d[0]);
-            })
-            .attr("y", function (d) {
-                return y(d.data.date);
-            })
-            .attr("fill", function (d) {
-                return z(d.key);
-            })
-            .attr("stroke", function (d) {
-                return z(d.key);
-            })
-            .attr("stroke-width", function (d) {
-                return "2px";
-            })
-            .attr("height", 25);
-            //.attr("height", y.bandwidth);
-
-        rect.on("mouseover", function () {
-            var currentEl = d3.select(this);
-            var fadeInSpeed = 120;
-            d3.select("#recttooltip_" + mainDivName)
-                .transition()
-                .duration(fadeInSpeed)
-                .style("opacity", function () {
-                    return 1;
-                });
-            d3.select("#recttooltip_" + mainDivName).attr("transform", function (d) {
+    rect.on("mousemove", function () {
+        var currentEl = d3.select(this);
+        currentEl.attr("r", 7);
+        d3.selectAll("#recttooltip_" + mainDivName)
+            .attr("transform", function (d) {
                 var mouseCoords = d3.mouse(this.parentNode);
                 var xCo = 0;
                 if (mouseCoords[0] + 10 >= width * 0.80) {
@@ -1215,584 +1271,302 @@ function draw_view() {
                 var y = yCo;
                 return "translate(" + x + "," + y + ")";
             });
-            //CBT:calculate tooltips text
-            var tooltipData = JSON.parse(currentEl.attr("data"));
-            var tooltipsText = "";
-            d3.selectAll("#recttooltipText_" + mainDivName).text("");
-            var yPos = 0;
-            d3.selectAll("#recttooltipText_" + mainDivName).append("tspan").attr("x", 0).attr("y", yPos * 10).attr("dy", "1.9em").text(tooltipData.key + ":  " + tooltipData.value);
-            yPos = yPos + 1;
-            d3.selectAll("#recttooltipText_" + mainDivName).append("tspan").attr("x", 0).attr("y", yPos * 10).attr("dy", "1.9em").text("Total" + ":  " + tooltipData.total);
-            //CBT:calculate width of the text based on characters
-            var dims = helpers.getDimensions("recttooltipText_" + mainDivName);
-            d3.selectAll("#recttooltipText_" + mainDivName + " tspan")
-                .attr("x", dims.w + 4);
-
-            d3.selectAll("#recttooltipRect_" + mainDivName)
-                .attr("width", dims.w + 10)
-                .attr("height", dims.h + 20);
-        });
-
-        rect.on("mousemove", function () {
-            var currentEl = d3.select(this);
-            currentEl.attr("r", 7);
-            d3.selectAll("#recttooltip_" + mainDivName)
-                .attr("transform", function (d) {
-                    var mouseCoords = d3.mouse(this.parentNode);
-                    var xCo = 0;
-                    if (mouseCoords[0] + 10 >= width * 0.80) {
-                        xCo = mouseCoords[0] - parseFloat(d3.selectAll("#recttooltipRect_" + mainDivName)
-                            .attr("width"));
-                    } else {
-                        xCo = mouseCoords[0] + 10;
-                    }
-                    var x = xCo;
-                    var yCo = 0;
-                    if (mouseCoords[0] + 10 >= width * 0.80) {
-                        yCo = mouseCoords[1] + 10;
-                    } else {
-                        yCo = mouseCoords[1];
-                    }
-                    var x = xCo;
-                    var y = yCo;
-                    return "translate(" + x + "," + y + ")";
-                });
-        });
-        rect.on("mouseout", function () {
-            var currentEl = d3.select(this);
-            d3.select("#recttooltip_" + mainDivName)
-                .style("opacity", function () {
-                    return 0;
-                })
-                .attr("transform", function (d, i) {
-                    // klutzy, but it accounts for tooltip padding which could push it onscreen
-                    var x = -500;
-                    var y = -500;
-                    return "translate(" + x + "," + y + ")";
-                });
-        });
-
-        rect.on("click", clicked_sentiment);
-
-        function clicked_sentiment(d) {
-            var this_cell = d3.select(this)
-            filterobj.idea_id = idea_id
-            filterobj.sentiment_final = d.key
-
-            if (cellHistory.prev_senti_cell) {
-                cellHistory.prev_senti_cell.attr("stroke", cellHistory.prev_senti_color)
-            }
-
-            // deselect cell (check if previously selected row and column selected. Remove the column filter and revert back to last row)
-            if (cellHistory.senti_switch && cellHistory.prev_senti == d.key && cellHistory.prev_idea_id_senti == idea_id) {
-                filterobj.sentiment_final = null
-                filterobj.idea_id = cellHistory.prev_idea_id
-                filterobj.topic = null
-                cellHistory.senti_switch = false
+    });
+    rect.on("mouseout", function () {
+        var currentEl = d3.select(this);
+        currentEl.attr("opacity", function () {
+            if (cellHistory.emo_switch) {
+                return 1
             }
             else {
-                this_cell.attr("stroke", "black")
-                cellHistory.senti_switch = true
+                return 0.8
             }
-
-            //console.log(filterobj)
-
-
-            var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
-            draw_filtered_comments(filtered_comment, json)
-            cellHistory.prev_senti_cell = this_cell
-            cellHistory.prev_idea_id_senti = idea_id
-            cellHistory.prev_idea_id = idea_id
-            cellHistory.prev_senti = d.key
-            cellHistory.prev_senti_color = z(d.key)
-
-            $("#parentBox").animate({ scrollTop: 0 }, 1000);
-        }
-        var rectTooltipg = svg.append("g")
-            .attr("font-family", "sans-serif")
-            .attr("font-size", 10)
-            .attr("text-anchor", "end")
-            .attr("id", "recttooltip_" + mainDivName)
-            .attr("style", "opacity:0")
-            .attr("transform", "translate(-500,-500)")
-            .attr("style", "position:absolute")
-            .attr("style", "z-index:30");
-
-
-        rectTooltipg.append("rect")
-            .attr("id", "recttooltipRect_" + mainDivName)
-            .attr("x", 0)
-            .attr("width", 120)
-            .attr("height", 80)
-            .attr("opacity", 0.71)
-            .style("fill", "#000000");
-
-        rectTooltipg
-            .append("text")
-            .attr("id", "recttooltipText_" + mainDivName)
-            .attr("x", 30)
-            .attr("y", 15)
-            .attr("fill", function () {
-                return "#fff"
+        })
+        d3.select("#recttooltip_" + mainDivName)
+            .style("opacity", function () {
+                return 0;
             })
-            .style("font-size", function (d) {
-                return 10;
-            })
-            .style("font-family", function (d) {
-                return "arial";
-            })
-            .text(function (d, i) {
-                return "";
-            });
-
-
-        function type(d) {
-            //d.date = parseDate(new Date(d.date));
-            group.forEach(function (c) {
-                d[c] = +d[c];
-            });
-            return d;
-        }
-
-        var helpers = {
-            getDimensions: function (id) {
-                var el = document.getElementById(id);
-                var w = 0,
-                    h = 0;
-                if (el) {
-                    var dimensions = el.getBBox();
-                    w = dimensions.width;
-                    h = dimensions.height;
-                } else {
-                    console.log("error: getDimensions() " + id + " not found.");
-                }
-                return {
-                    w: w,
-                    h: h
-                };
-            }
-        };
-    }
-
-    // draw subjectivity
-    function subjectivity_rows(salesData, svg_id, div_id, idea_id) {
-
-        var group = ["fact", "opinion"];
-        var parseDate = d3.timeFormat("%b-%Y");
-
-        var mainDiv = "#" + div_id;
-        var mainDivName = div_id;
-
-        salesData.forEach(function (d) {
-            d = type(d);
-        });
-        var layers = d3.stack()
-            .keys(group)
-            .offset(d3.stackOffsetDiverging)
-            (salesData);
-
-            var svg = d3.select("#" + svg_id),
-            margin = {
-                top: 0,
-                right: 0,
-                bottom: 0,
-                left: 0
-            },
-
-            width = +svg.attr("width") - 2,
-            height = +svg.attr("height");
-            if(width < 0){
-                width = 0;
-            }
-
-        var x = d3.scaleLinear()
-            .rangeRound([margin.left, width - margin.right]);
-
-        x.domain([d3.min(layers, stackMin), d3.max(layers, stackMax)]);
-
-        var y = d3.scaleBand()
-            .rangeRound([height - margin.bottom, margin.top])
-            .padding(0.0);
-
-        y.domain(salesData.map(function (d) {
-            return d.date;
-        }))
-
-        function stackMin(layers) {
-            return d3.min(layers, function (d) {
-                return d[0];
-            });
-        }
-
-        function stackMax(layers) {
-            return d3.max(layers, function (d) {
-                return d[1];
-            });
-        }
-
-        var z = d3.scaleOrdinal(["#bfbfbf", "#4d4d4d"]);
-
-        var maing = svg.append("g")
-            .selectAll("g")
-            .data(layers);
-        var g = maing.enter().append("g")
-            // .attr("fill", function (d) {
-            //     return z(d.key);
-            // })
-            // .attr("style", "outline: solid;")
-            // .attr("style", "outline-color: #F2F2F2")
-            .style("cursor", "pointer");
-        var rect = g.selectAll("rect")
-            .data(function (d) {
-                d.forEach(function (d1) {
-                    d1.key = d.key;
-                    return d1;
-                });
-                return d;
-            })
-            .enter().append("rect")
-            .attr("data", function (d) {
-                var data = {};
-                data["key"] = d.key;
-                data["value"] = d.data[d.key];
-                var total = 0;
-                group.map(function (d1) {
-                    total = total + d.data[d1]
-                });
-                data["total"] = total;
-                return JSON.stringify(data);
-            })
-            .attr("width", function (d) {
-                if(x(d[1]) - x(d[0]) - 2 < 0){
-                    return 0;
-                }
-                else{
-                    return x(d[1]) - x(d[0]) - 2;
-                }
-            })
-            .attr("x", function (d) {
-                return x(d[0]);
-            })
-            .attr("y", function (d) {
-                return y(d.data.date);
-            })
-            .attr("fill", function (d) {
-                return z(d.key);
-            })
-            .attr("stroke", function (d) {
-                return z(d.key);
-            })
-            .attr("stroke-width", function (d) {
-                return "2px";
-            })
-            .attr("height", 25);
-            //.attr("height", y.bandwidth);
-
-        rect.on("mouseover", function () {
-            var currentEl = d3.select(this);
-            var fadeInSpeed = 120;
-            d3.select("#recttooltip_" + mainDivName)
-                .transition()
-                .duration(fadeInSpeed)
-                .style("opacity", function () {
-                    return 1;
-                });
-            d3.select("#recttooltip_" + mainDivName).attr("transform", function (d) {
-                var mouseCoords = d3.mouse(this.parentNode);
-                var xCo = 0;
-                if (mouseCoords[0] + 10 >= width * 0.80) {
-                    xCo = mouseCoords[0] - parseFloat(d3.selectAll("#recttooltipRect_" + mainDivName)
-                        .attr("width"));
-                } else {
-                    xCo = mouseCoords[0] + 10;
-                }
-                var x = xCo;
-                var yCo = 0;
-                if (mouseCoords[0] + 10 >= width * 0.80) {
-                    yCo = mouseCoords[1] + 10;
-                } else {
-                    yCo = mouseCoords[1];
-                }
-                var x = xCo;
-                var y = yCo;
+            .attr("transform", function (d, i) {
+                // klutzy, but it accounts for tooltip padding which could push it onscreen
+                var x = -500;
+                var y = -500;
                 return "translate(" + x + "," + y + ")";
             });
-            //CBT:calculate tooltips text
-            var tooltipData = JSON.parse(currentEl.attr("data"));
-            var tooltipsText = "";
-            d3.selectAll("#recttooltipText_" + mainDivName).text("");
-            var yPos = 0;
-            d3.selectAll("#recttooltipText_" + mainDivName).append("tspan").attr("x", 0).attr("y", yPos * 10).attr("dy", "1.9em").text(tooltipData.key + ":  " + tooltipData.value);
-            yPos = yPos + 1;
-            d3.selectAll("#recttooltipText_" + mainDivName).append("tspan").attr("x", 0).attr("y", yPos * 10).attr("dy", "1.9em").text("Total" + ":  " + tooltipData.total);
-            //CBT:calculate width of the text based on characters
-            var dims = helpers.getDimensions("recttooltipText_" + mainDivName);
-            d3.selectAll("#recttooltipText_" + mainDivName + " tspan")
-                .attr("x", dims.w + 4);
+    });
 
-            d3.selectAll("#recttooltipRect_" + mainDivName)
-                .attr("width", dims.w + 10)
-                .attr("height", dims.h + 20);
+    rect.on("click", clicked_sentiment);
 
+    function clicked_sentiment(d) {
+        var this_cell = d3.select(this)
+        filterobj.idea_id = idea_id
+        filterobj.sentiment_final = d.key
+
+        if (cellHistory.prev_senti_cell) {
+            cellHistory.prev_senti_cell.attr("stroke", cellHistory.prev_senti_color)
+            cellHistory.prev_senti_cell.attr("opacity", 0.8)
+        }
+
+        // deselect cell (check if previously selected row and column selected. Remove the column filter and revert back to last row)
+        if (cellHistory.senti_switch && cellHistory.prev_senti == d.key && cellHistory.prev_idea_id_senti == idea_id) {
+            filterobj.sentiment_final = null
+            filterobj.idea_id = cellHistory.prev_idea_id
+            filterobj.topic = null
+            cellHistory.senti_switch = false
+        }
+        else {
+            this_cell.attr("stroke", "black")
+            this_cell.attr("opacity", 1)
+            cellHistory.senti_switch = true
+        }
+
+        //console.log(filterobj)
+
+
+        var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
+        draw_filtered_comments(filtered_comment, json)
+        cellHistory.prev_senti_cell = this_cell
+        cellHistory.prev_idea_id_senti = idea_id
+        cellHistory.prev_idea_id = idea_id
+        cellHistory.prev_senti = d.key
+        cellHistory.prev_senti_color = z(d.key)
+
+        $("#parentBox").animate({ scrollTop: 0 }, 1000);
+    }
+    var rectTooltipg = svg.append("g")
+        .attr("font-family", "sans-serif")
+        .attr("font-size", 10)
+        .attr("text-anchor", "end")
+        .attr("id", "recttooltip_" + mainDivName)
+        .attr("style", "opacity:0")
+        .attr("transform", "translate(-500,-500)")
+        .attr("style", "position:absolute")
+        .attr("style", "z-index:30");
+
+
+    rectTooltipg.append("rect")
+        .attr("id", "recttooltipRect_" + mainDivName)
+        .attr("x", 0)
+        .attr("width", 120)
+        .attr("height", 80)
+        .attr("opacity", 0.71)
+        .style("fill", "#000000");
+
+    rectTooltipg
+        .append("text")
+        .attr("id", "recttooltipText_" + mainDivName)
+        .attr("x", 30)
+        .attr("y", 15)
+        .attr("fill", function () {
+            return "#fff"
+        })
+        .style("font-size", function (d) {
+            return 10;
+        })
+        .style("font-family", function (d) {
+            return "arial";
+        })
+        .text(function (d, i) {
+            return "";
         });
 
-        rect.on("mousemove", function () {
-            var currentEl = d3.select(this);
-            currentEl.attr("r", 7);
-            d3.selectAll("#recttooltip_" + mainDivName)
-                .attr("transform", function (d) {
-                    var mouseCoords = d3.mouse(this.parentNode);
-                    var xCo = 0;
-                    if (mouseCoords[0] + 10 >= width * 0.80) {
-                        xCo = mouseCoords[0] - parseFloat(d3.selectAll("#recttooltipRect_" + mainDivName)
-                            .attr("width"));
-                    } else {
-                        xCo = mouseCoords[0] + 10;
-                    }
-                    var x = xCo;
-                    var yCo = 0;
-                    if (mouseCoords[0] + 10 >= width * 0.80) {
-                        yCo = mouseCoords[1] + 10;
-                    } else {
-                        yCo = mouseCoords[1];
-                    }
-                    var x = xCo;
-                    var y = yCo;
-                    return "translate(" + x + "," + y + ")";
-                });
+
+    function type(d) {
+        //d.date = parseDate(new Date(d.date));
+        group.forEach(function (c) {
+            d[c] = +d[c];
         });
-        rect.on("mouseout", function () {
-            var currentEl = d3.select(this);
-            d3.select("#recttooltip_" + mainDivName)
-                .style("opacity", function () {
-                    return 0;
-                })
-                .attr("transform", function (d, i) {
-                    // klutzy, but it accounts for tooltip padding which could push it onscreen
-                    var x = -500;
-                    var y = -500;
-                    return "translate(" + x + "," + y + ")";
-                });
-        });
+        return d;
+    }
 
-        rect.on("click", clicked_subjectivity);
-
-        function clicked_subjectivity(d) {
-            var this_cell = d3.select(this)
-            filterobj.idea_id = idea_id
-            filterobj.subjectivity = d.key
-
-            if (cellHistory.prev_sub_cell) {
-                cellHistory.prev_sub_cell.attr("stroke", cellHistory.prev_sub_color)
+    var helpers = {
+        getDimensions: function (id) {
+            var el = document.getElementById(id);
+            var w = 0,
+                h = 0;
+            if (el) {
+                var dimensions = el.getBBox();
+                w = dimensions.width;
+                h = dimensions.height;
+            } else {
+                console.log("error: getDimensions() " + id + " not found.");
             }
+            return {
+                w: w,
+                h: h
+            };
+        }
+    };
+}
 
-            // deselect cell (check if previously selected row and column selected. Remove the column filter and revert back to last row)
-            if (cellHistory.sub_switch && cellHistory.prev_sub == d.key && cellHistory.prev_idea_id_sub == idea_id) {
-                filterobj.subjectivity = null
-                filterobj.idea_id = cellHistory.prev_idea_id
-                cellHistory.sub_switch = false
+// draw subjectivity
+function subjectivity_rows(salesData, svg_id, div_id, idea_id) {
+
+    var group = ["fact", "opinion"];
+    var parseDate = d3.timeFormat("%b-%Y");
+
+    var mainDiv = "#" + div_id;
+    var mainDivName = div_id;
+
+    salesData.forEach(function (d) {
+        d = type(d);
+    });
+    var layers = d3.stack()
+        .keys(group)
+        .offset(d3.stackOffsetDiverging)
+        (salesData);
+
+    var svg = d3.select("#" + svg_id),
+        margin = {
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0
+        },
+
+        width = +svg.attr("width") - 2,
+        height = +svg.attr("height");
+    if (width < 0) {
+        width = 0;
+    }
+
+    var x = d3.scaleLinear()
+        .rangeRound([margin.left, width - margin.right]);
+
+    x.domain([d3.min(layers, stackMin), d3.max(layers, stackMax)]);
+
+    var y = d3.scaleBand()
+        .rangeRound([height - margin.bottom, margin.top])
+        .padding(0.0);
+
+    y.domain(salesData.map(function (d) {
+        return d.date;
+    }))
+
+    function stackMin(layers) {
+        return d3.min(layers, function (d) {
+            return d[0];
+        });
+    }
+
+    function stackMax(layers) {
+        return d3.max(layers, function (d) {
+            return d[1];
+        });
+    }
+
+    var z = d3.scaleOrdinal(["#bfbfbf", "#4d4d4d"]);
+
+    var maing = svg.append("g")
+        .selectAll("g")
+        .data(layers);
+    var g = maing.enter().append("g")
+        // .attr("fill", function (d) {
+        //     return z(d.key);
+        // })
+        // .attr("style", "outline: solid;")
+        // .attr("style", "outline-color: #F2F2F2")
+        .style("cursor", "pointer");
+    var rect = g.selectAll("rect")
+        .data(function (d) {
+            d.forEach(function (d1) {
+                d1.key = d.key;
+                return d1;
+            });
+            return d;
+        })
+        .enter().append("rect")
+        .attr("data", function (d) {
+            var data = {};
+            data["key"] = d.key;
+            data["value"] = d.data[d.key];
+            var total = 0;
+            group.map(function (d1) {
+                total = total + d.data[d1]
+            });
+            data["total"] = total;
+            return JSON.stringify(data);
+        })
+        .attr("width", function (d) {
+            if (x(d[1]) - x(d[0]) - 2 < 0) {
+                return 0;
             }
             else {
-                this_cell.attr("stroke", "black")
-                cellHistory.sub_switch = true
+                return x(d[1]) - x(d[0]) - 2;
             }
+        })
+        .attr("x", function (d) {
+            return x(d[0]);
+        })
+        .attr("y", function (d) {
+            return y(d.data.date);
+        })
+        .attr("fill", function (d) {
+            return z(d.key);
+        })
+        .attr("stroke", function (d) {
+            return z(d.key);
+        })
+        .attr("stroke-width", function (d) {
+            return "2px";
+        })
+        .attr("height", 25)
+        .attr("opacity", 0.8);
+    //.attr("height", y.bandwidth);
 
-            //console.log(filterobj)
-
-            var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
-            draw_filtered_comments(filtered_comment, json)
-            cellHistory.prev_sub_cell = this_cell
-            cellHistory.prev_idea_id_sub = idea_id
-            cellHistory.prev_idea_id = idea_id
-            cellHistory.prev_sub = d.key
-            cellHistory.prev_sub_color = z(d.key)
-
-            $("#parentBox").animate({ scrollTop: 0 }, 1000);
-        }
-
-        var rectTooltipg = svg.append("g")
-            .attr("font-family", "sans-serif")
-            .attr("font-size", 10)
-            .attr("text-anchor", "end")
-            .attr("id", "recttooltip_" + mainDivName)
-            .attr("style", "opacity:0")
-            .attr("transform", "translate(-500,-500)")
-            .attr("style", "position:absolute")
-            .attr("style", "z-index:30");;
-
-        rectTooltipg.append("rect")
-            .attr("id", "recttooltipRect_" + mainDivName)
-            .attr("x", 0)
-            .attr("width", 120)
-            .attr("height", 80)
-            .attr("opacity", 0.71)
-            .style("fill", "#000000");
-
-        rectTooltipg
-            .append("text")
-            .attr("id", "recttooltipText_" + mainDivName)
-            .attr("x", 30)
-            .attr("y", 15)
-            .attr("fill", function () {
-                return "#fff"
-            })
-            .style("font-size", function (d) {
-                return 10;
-            })
-            .style("font-family", function (d) {
-                return "arial";
-            })
-            .text(function (d, i) {
-                return "";
+    rect.on("mouseover", function () {
+        var currentEl = d3.select(this);
+        currentEl.attr("opacity", 1)
+        var fadeInSpeed = 120;
+        d3.select("#recttooltip_" + mainDivName)
+            .transition()
+            .duration(fadeInSpeed)
+            .style("opacity", function () {
+                return 1;
             });
-
-
-        function type(d) {
-            //d.date = parseDate(new Date(d.date));
-            group.forEach(function (c) {
-                d[c] = +d[c];
-            });
-            return d;
-        }
-
-        var helpers = {
-            getDimensions: function (id) {
-                var el = document.getElementById(id);
-                var w = 0,
-                    h = 0;
-                if (el) {
-                    var dimensions = el.getBBox();
-                    w = dimensions.width;
-                    h = dimensions.height;
-                } else {
-                    console.log("error: getDimensions() " + id + " not found.");
-                }
-                return {
-                    w: w,
-                    h: h
-                };
+        d3.select("#recttooltip_" + mainDivName).attr("transform", function (d) {
+            var mouseCoords = d3.mouse(this.parentNode);
+            var xCo = 0;
+            if (mouseCoords[0] + 10 >= width * 0.80) {
+                xCo = mouseCoords[0] - parseFloat(d3.selectAll("#recttooltipRect_" + mainDivName)
+                    .attr("width"));
+            } else {
+                xCo = mouseCoords[0] + 10;
             }
-        };
-    }
-
-    // draw profanity
-    function profanity_rows(salesData, svg_id, div_id, idea_id) {
-
-        //console.log(salesData)
-        var group = ["very_low", "low", "medium", "high", "very_high"];
-        var parseDate = d3.timeFormat("%b-%Y");
-        var mainDiv = "#" + div_id;
-        var mainDivName = div_id;
-
-        salesData.forEach(function (d) {
-            d = type(d);
+            var x = xCo;
+            var yCo = 0;
+            if (mouseCoords[0] + 10 >= width * 0.80) {
+                yCo = mouseCoords[1] + 10;
+            } else {
+                yCo = mouseCoords[1];
+            }
+            var x = xCo;
+            var y = yCo;
+            return "translate(" + x + "," + y + ")";
         });
-        var layers = d3.stack()
-            .keys(group)
-            .offset(d3.stackOffsetDiverging)
-            (salesData);
+        //CBT:calculate tooltips text
+        var tooltipData = JSON.parse(currentEl.attr("data"));
+        var tooltipsText = "";
+        d3.selectAll("#recttooltipText_" + mainDivName).text("");
+        var yPos = 0;
+        d3.selectAll("#recttooltipText_" + mainDivName).append("tspan").attr("x", 0).attr("y", yPos * 10).attr("dy", "1.9em").text(tooltipData.key + ":  " + tooltipData.value);
+        yPos = yPos + 1;
+        d3.selectAll("#recttooltipText_" + mainDivName).append("tspan").attr("x", 0).attr("y", yPos * 10).attr("dy", "1.9em").text("Total" + ":  " + tooltipData.total);
+        //CBT:calculate width of the text based on characters
+        var dims = helpers.getDimensions("recttooltipText_" + mainDivName);
+        d3.selectAll("#recttooltipText_" + mainDivName + " tspan")
+            .attr("x", dims.w + 4);
 
-        var svg = d3.select("#" + svg_id),
-            margin = {
-                top: 0,
-                right: 0,
-                bottom: 0,
-                left: 0
-            },
+        d3.selectAll("#recttooltipRect_" + mainDivName)
+            .attr("width", dims.w + 10)
+            .attr("height", dims.h + 20);
 
-            width = +svg.attr("width") - 2,
-            height = +svg.attr("height");
-            if(width < 0){
-                width = 0;
-            }
+    });
 
-        var x = d3.scaleLinear()
-            .rangeRound([margin.left, width - margin.right]);
-
-        x.domain([d3.min(layers, stackMin), d3.max(layers, stackMax)]);
-
-        var y = d3.scaleBand()
-            .rangeRound([height - margin.bottom, margin.top])
-            .padding(0.0);
-
-        y.domain(salesData.map(function (d) {
-            return d.date;
-        }))
-
-        function stackMin(layers) {
-            return d3.min(layers, function (d) {
-                return d[0];
-            });
-        }
-
-        function stackMax(layers) {
-            return d3.max(layers, function (d) {
-                return d[1];
-            });
-        }
-
-        var z = d3.scaleOrdinal(["#B3CCE6", "#8CB1D9", "#6697CC", "#407DBF", "#264B73"]);
-
-        var maing = svg.append("g")
-            .selectAll("g")
-            .data(layers);
-        var g = maing.enter().append("g")
-            .attr("fill", function (d) {
-                return z(d.key);
-            })
-            // .attr("style", "outline: solid;")
-            // .attr("style", "outline-color: #F2F2F2");
-
-        var rect = g.selectAll("rect")
-            .data(function (d) {
-                d.forEach(function (d1) {
-                    d1.key = d.key;
-                    return d1;
-                });
-                return d;
-            })
-            .enter().append("rect")
-            .attr("data", function (d) {
-                var data = {};
-                data["key"] = d.key;
-                data["value"] = d.data[d.key];
-                var total = 0;
-                group.map(function (d1) {
-                    total = total + d.data[d1]
-                });
-                data["total"] = total;
-                return JSON.stringify(data);
-            })
-            .attr("width", function (d) {
-                if(x(d[1]) - x(d[0]) - 2 < 0){
-                    return 0;
-                }
-                else{
-                    return x(d[1]) - x(d[0]) - 2;
-                }
-            })
-            .attr("x", function (d) {
-                return x(d[0]);
-            })
-            .attr("y", function (d) {
-                return y(d.data.date);
-            })
-            .style("fill", function (d) {
-
-            })
-            .attr("height", 25);
-            //.attr("height", y.bandwidth);
-
-        rect.on("mouseover", function () {
-            var currentEl = d3.select(this);
-            var fadeInSpeed = 120;
-            d3.select("#recttooltip_" + mainDivName)
-                .transition()
-                .duration(fadeInSpeed)
-                .style("opacity", function () {
-                    return 1;
-                });
-            d3.select("#recttooltip_" + mainDivName).attr("transform", function (d) {
+    rect.on("mousemove", function () {
+        var currentEl = d3.select(this);
+        currentEl.attr("r", 7);
+        d3.selectAll("#recttooltip_" + mainDivName)
+            .attr("transform", function (d) {
                 var mouseCoords = d3.mouse(this.parentNode);
                 var xCo = 0;
                 if (mouseCoords[0] + 10 >= width * 0.80) {
@@ -1812,133 +1586,395 @@ function draw_view() {
                 var y = yCo;
                 return "translate(" + x + "," + y + ")";
             });
-            //CBT:calculate tooltips text
-            var tooltipData = JSON.parse(currentEl.attr("data"));
-            var tooltipsText = "";
-            d3.selectAll("#recttooltipText_" + mainDivName).text("");
-            var yPos = 0;
-            d3.selectAll("#recttooltipText_" + mainDivName).append("tspan").attr("x", 0).attr("y", yPos * 10).attr("dy", "1.9em").text(tooltipData.key + ":  " + tooltipData.value);
-            yPos = yPos + 1;
-            d3.selectAll("#recttooltipText_" + mainDivName).append("tspan").attr("x", 0).attr("y", yPos * 10).attr("dy", "1.9em").text("Total" + ":  " + tooltipData.total);
-            //CBT:calculate width of the text based on characters
-            var dims = helpers.getDimensions("recttooltipText_" + mainDivName);
-            d3.selectAll("#recttooltipText_" + mainDivName + " tspan")
-                .attr("x", dims.w + 4);
+    });
+    rect.on("mouseout", function () {
+        var currentEl = d3.select(this);
+        currentEl.attr("opacity", function () {
+            if (cellHistory.emo_switch) {
+                return 1
+            }
+            else {
+                return 0.8
+            }
+        })
+        d3.select("#recttooltip_" + mainDivName)
+            .style("opacity", function () {
+                return 0;
+            })
+            .attr("transform", function (d, i) {
+                // klutzy, but it accounts for tooltip padding which could push it onscreen
+                var x = -500;
+                var y = -500;
+                return "translate(" + x + "," + y + ")";
+            });
+    });
 
-            d3.selectAll("#recttooltipRect_" + mainDivName)
-                .attr("width", dims.w + 10)
-                .attr("height", dims.h + 20);
-        });
+    rect.on("click", clicked_subjectivity);
 
-        rect.on("mousemove", function () {
-            var currentEl = d3.select(this);
-            currentEl.attr("r", 7);
-            d3.selectAll("#recttooltip_" + mainDivName)
-                .attr("transform", function (d) {
-                    var mouseCoords = d3.mouse(this.parentNode);
-                    var xCo = 0;
-                    if (mouseCoords[0] + 10 >= width * 0.80) {
-                        xCo = mouseCoords[0] - parseFloat(d3.selectAll("#recttooltipRect_" + mainDivName)
-                            .attr("width"));
-                    } else {
-                        xCo = mouseCoords[0] + 10;
-                    }
-                    var x = xCo;
-                    var yCo = 0;
-                    if (mouseCoords[0] + 10 >= width * 0.80) {
-                        yCo = mouseCoords[1] + 10;
-                    } else {
-                        yCo = mouseCoords[1];
-                    }
-                    var x = xCo;
-                    var y = yCo;
-                    return "translate(" + x + "," + y + ")";
-                });
-        });
-        rect.on("mouseout", function () {
-            var currentEl = d3.select(this);
-            d3.select("#recttooltip_" + mainDivName)
-                .style("opacity", function () {
-                    return 0;
-                })
-                .attr("transform", function (d, i) {
-                    // klutzy, but it accounts for tooltip padding which could push it onscreen
-                    var x = -500;
-                    var y = -500;
-                    return "translate(" + x + "," + y + ")";
-                });
-        });
+    function clicked_subjectivity(d) {
+        var this_cell = d3.select(this)
+        filterobj.idea_id = idea_id
+        filterobj.subjectivity = d.key
 
-        //clicking on the rectangles for profanity // mjasim - discuss if it needs to be implemented
-        rect.on("click", clicked_profanity);
-
-        function clicked_profanity(d) {
+        if (cellHistory.prev_sub_cell) {
+            cellHistory.prev_sub_cell.attr("stroke", cellHistory.prev_sub_color)
+            cellHistory.prev_sub_cell.attr("opacity", 0.8)
         }
 
-        var rectTooltipg = svg.append("g")
-            .attr("font-family", "sans-serif")
-            .attr("font-size", 10)
-            .attr("text-anchor", "end")
-            .attr("id", "recttooltip_" + mainDivName)
-            .attr("style", "opacity:0")
-            .attr("transform", "translate(-500,-500)")
-            .attr("style", "position:absolute")
-            .attr("style", "z-index:30");
+        // deselect cell (check if previously selected row and column selected. Remove the column filter and revert back to last row)
+        if (cellHistory.sub_switch && cellHistory.prev_sub == d.key && cellHistory.prev_idea_id_sub == idea_id) {
+            filterobj.subjectivity = null
+            filterobj.idea_id = cellHistory.prev_idea_id
+            cellHistory.sub_switch = false
+        }
+        else {
+            this_cell.attr("stroke", "black")
+            this_cell.attr("opacity", 1)
+            cellHistory.sub_switch = true
+        }
 
-        rectTooltipg.append("rect")
-            .attr("id", "recttooltipRect_" + mainDivName)
-            .attr("x", 0)
-            .attr("width", 120)
-            .attr("height", 80)
-            .attr("opacity", 0.71)
-            .style("fill", "#000000");
+        //console.log(filterobj)
 
-        rectTooltipg
-            .append("text")
-            .attr("id", "recttooltipText_" + mainDivName)
-            .attr("x", 30)
-            .attr("y", 15)
-            .attr("fill", function () {
-                return "#fff"
-            })
-            .style("font-size", function (d) {
-                return 10;
-            })
-            .style("font-family", function (d) {
-                return "arial";
-            })
-            .text(function (d, i) {
-                return "";
-            });
+        var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
+        draw_filtered_comments(filtered_comment, json)
+        cellHistory.prev_sub_cell = this_cell
+        cellHistory.prev_idea_id_sub = idea_id
+        cellHistory.prev_idea_id = idea_id
+        cellHistory.prev_sub = d.key
+        cellHistory.prev_sub_color = z(d.key)
+
+        $("#parentBox").animate({ scrollTop: 0 }, 1000);
+    }
+
+    var rectTooltipg = svg.append("g")
+        .attr("font-family", "sans-serif")
+        .attr("font-size", 10)
+        .attr("text-anchor", "end")
+        .attr("id", "recttooltip_" + mainDivName)
+        .attr("style", "opacity:0")
+        .attr("transform", "translate(-500,-500)")
+        .attr("style", "position:absolute")
+        .attr("style", "z-index:30");;
+
+    rectTooltipg.append("rect")
+        .attr("id", "recttooltipRect_" + mainDivName)
+        .attr("x", 0)
+        .attr("width", 120)
+        .attr("height", 80)
+        .attr("opacity", 0.71)
+        .style("fill", "#000000");
+
+    rectTooltipg
+        .append("text")
+        .attr("id", "recttooltipText_" + mainDivName)
+        .attr("x", 30)
+        .attr("y", 15)
+        .attr("fill", function () {
+            return "#fff"
+        })
+        .style("font-size", function (d) {
+            return 10;
+        })
+        .style("font-family", function (d) {
+            return "arial";
+        })
+        .text(function (d, i) {
+            return "";
+        });
 
 
-        function type(d) {
-            //d.date = parseDate(new Date(d.date));
-            group.forEach(function (c) {
-                d[c] = +d[c];
+    function type(d) {
+        //d.date = parseDate(new Date(d.date));
+        group.forEach(function (c) {
+            d[c] = +d[c];
+        });
+        return d;
+    }
+
+    var helpers = {
+        getDimensions: function (id) {
+            var el = document.getElementById(id);
+            var w = 0,
+                h = 0;
+            if (el) {
+                var dimensions = el.getBBox();
+                w = dimensions.width;
+                h = dimensions.height;
+            } else {
+                console.log("error: getDimensions() " + id + " not found.");
+            }
+            return {
+                w: w,
+                h: h
+            };
+        }
+    };
+}
+
+// draw profanity
+function profanity_rows(salesData, svg_id, div_id, idea_id) {
+
+    //console.log(salesData)
+    var group = ["very_low", "low", "medium", "high", "very_high"];
+    var parseDate = d3.timeFormat("%b-%Y");
+    var mainDiv = "#" + div_id;
+    var mainDivName = div_id;
+
+    salesData.forEach(function (d) {
+        d = type(d);
+    });
+    var layers = d3.stack()
+        .keys(group)
+        .offset(d3.stackOffsetDiverging)
+        (salesData);
+
+    var svg = d3.select("#" + svg_id),
+        margin = {
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0
+        },
+
+        width = +svg.attr("width") - 2,
+        height = +svg.attr("height");
+    if (width < 0) {
+        width = 0;
+    }
+
+    var x = d3.scaleLinear()
+        .rangeRound([margin.left, width - margin.right]);
+
+    x.domain([d3.min(layers, stackMin), d3.max(layers, stackMax)]);
+
+    var y = d3.scaleBand()
+        .rangeRound([height - margin.bottom, margin.top])
+        .padding(0.0);
+
+    y.domain(salesData.map(function (d) {
+        return d.date;
+    }))
+
+    function stackMin(layers) {
+        return d3.min(layers, function (d) {
+            return d[0];
+        });
+    }
+
+    function stackMax(layers) {
+        return d3.max(layers, function (d) {
+            return d[1];
+        });
+    }
+
+    var z = d3.scaleOrdinal(["#B3CCE6", "#8CB1D9", "#6697CC", "#407DBF", "#264B73"]);
+
+    var maing = svg.append("g")
+        .selectAll("g")
+        .data(layers);
+    var g = maing.enter().append("g")
+        .attr("fill", function (d) {
+            return z(d.key);
+        })
+    // .attr("style", "outline: solid;")
+    // .attr("style", "outline-color: #F2F2F2");
+
+    var rect = g.selectAll("rect")
+        .data(function (d) {
+            d.forEach(function (d1) {
+                d1.key = d.key;
+                return d1;
             });
             return d;
-        }
-
-        var helpers = {
-            getDimensions: function (id) {
-                var el = document.getElementById(id);
-                var w = 0,
-                    h = 0;
-                if (el) {
-                    var dimensions = el.getBBox();
-                    w = dimensions.width;
-                    h = dimensions.height;
-                } else {
-                    console.log("error: getDimensions() " + id + " not found.");
-                }
-                return {
-                    w: w,
-                    h: h
-                };
+        })
+        .enter().append("rect")
+        .attr("data", function (d) {
+            var data = {};
+            data["key"] = d.key;
+            data["value"] = d.data[d.key];
+            var total = 0;
+            group.map(function (d1) {
+                total = total + d.data[d1]
+            });
+            data["total"] = total;
+            return JSON.stringify(data);
+        })
+        .attr("width", function (d) {
+            if (x(d[1]) - x(d[0]) - 2 < 0) {
+                return 0;
             }
-        };
+            else {
+                return x(d[1]) - x(d[0]) - 2;
+            }
+        })
+        .attr("x", function (d) {
+            return x(d[0]);
+        })
+        .attr("y", function (d) {
+            return y(d.data.date);
+        })
+        .style("fill", function (d) {
+
+        })
+        .attr("height", 25);
+    //.attr("height", y.bandwidth);
+
+    rect.on("mouseover", function () {
+        var currentEl = d3.select(this);
+        var fadeInSpeed = 120;
+        d3.select("#recttooltip_" + mainDivName)
+            .transition()
+            .duration(fadeInSpeed)
+            .style("opacity", function () {
+                return 1;
+            });
+        d3.select("#recttooltip_" + mainDivName).attr("transform", function (d) {
+            var mouseCoords = d3.mouse(this.parentNode);
+            var xCo = 0;
+            if (mouseCoords[0] + 10 >= width * 0.80) {
+                xCo = mouseCoords[0] - parseFloat(d3.selectAll("#recttooltipRect_" + mainDivName)
+                    .attr("width"));
+            } else {
+                xCo = mouseCoords[0] + 10;
+            }
+            var x = xCo;
+            var yCo = 0;
+            if (mouseCoords[0] + 10 >= width * 0.80) {
+                yCo = mouseCoords[1] + 10;
+            } else {
+                yCo = mouseCoords[1];
+            }
+            var x = xCo;
+            var y = yCo;
+            return "translate(" + x + "," + y + ")";
+        });
+        //CBT:calculate tooltips text
+        var tooltipData = JSON.parse(currentEl.attr("data"));
+        var tooltipsText = "";
+        d3.selectAll("#recttooltipText_" + mainDivName).text("");
+        var yPos = 0;
+        d3.selectAll("#recttooltipText_" + mainDivName).append("tspan").attr("x", 0).attr("y", yPos * 10).attr("dy", "1.9em").text(tooltipData.key + ":  " + tooltipData.value);
+        yPos = yPos + 1;
+        d3.selectAll("#recttooltipText_" + mainDivName).append("tspan").attr("x", 0).attr("y", yPos * 10).attr("dy", "1.9em").text("Total" + ":  " + tooltipData.total);
+        //CBT:calculate width of the text based on characters
+        var dims = helpers.getDimensions("recttooltipText_" + mainDivName);
+        d3.selectAll("#recttooltipText_" + mainDivName + " tspan")
+            .attr("x", dims.w + 4);
+
+        d3.selectAll("#recttooltipRect_" + mainDivName)
+            .attr("width", dims.w + 10)
+            .attr("height", dims.h + 20);
+    });
+
+    rect.on("mousemove", function () {
+        var currentEl = d3.select(this);
+        currentEl.attr("r", 7);
+        d3.selectAll("#recttooltip_" + mainDivName)
+            .attr("transform", function (d) {
+                var mouseCoords = d3.mouse(this.parentNode);
+                var xCo = 0;
+                if (mouseCoords[0] + 10 >= width * 0.80) {
+                    xCo = mouseCoords[0] - parseFloat(d3.selectAll("#recttooltipRect_" + mainDivName)
+                        .attr("width"));
+                } else {
+                    xCo = mouseCoords[0] + 10;
+                }
+                var x = xCo;
+                var yCo = 0;
+                if (mouseCoords[0] + 10 >= width * 0.80) {
+                    yCo = mouseCoords[1] + 10;
+                } else {
+                    yCo = mouseCoords[1];
+                }
+                var x = xCo;
+                var y = yCo;
+                return "translate(" + x + "," + y + ")";
+            });
+    });
+    rect.on("mouseout", function () {
+        var currentEl = d3.select(this);
+        d3.select("#recttooltip_" + mainDivName)
+            .style("opacity", function () {
+                return 0;
+            })
+            .attr("transform", function (d, i) {
+                // klutzy, but it accounts for tooltip padding which could push it onscreen
+                var x = -500;
+                var y = -500;
+                return "translate(" + x + "," + y + ")";
+            });
+    });
+
+    //clicking on the rectangles for profanity // mjasim - discuss if it needs to be implemented
+    rect.on("click", clicked_profanity);
+
+    function clicked_profanity(d) {
     }
+
+    var rectTooltipg = svg.append("g")
+        .attr("font-family", "sans-serif")
+        .attr("font-size", 10)
+        .attr("text-anchor", "end")
+        .attr("id", "recttooltip_" + mainDivName)
+        .attr("style", "opacity:0")
+        .attr("transform", "translate(-500,-500)")
+        .attr("style", "position:absolute")
+        .attr("style", "z-index:30");
+
+    rectTooltipg.append("rect")
+        .attr("id", "recttooltipRect_" + mainDivName)
+        .attr("x", 0)
+        .attr("width", 120)
+        .attr("height", 80)
+        .attr("opacity", 0.71)
+        .style("fill", "#000000");
+
+    rectTooltipg
+        .append("text")
+        .attr("id", "recttooltipText_" + mainDivName)
+        .attr("x", 30)
+        .attr("y", 15)
+        .attr("fill", function () {
+            return "#fff"
+        })
+        .style("font-size", function (d) {
+            return 10;
+        })
+        .style("font-family", function (d) {
+            return "arial";
+        })
+        .text(function (d, i) {
+            return "";
+        });
+
+
+    function type(d) {
+        //d.date = parseDate(new Date(d.date));
+        group.forEach(function (c) {
+            d[c] = +d[c];
+        });
+        return d;
+    }
+
+    var helpers = {
+        getDimensions: function (id) {
+            var el = document.getElementById(id);
+            var w = 0,
+                h = 0;
+            if (el) {
+                var dimensions = el.getBBox();
+                w = dimensions.width;
+                h = dimensions.height;
+            } else {
+                console.log("error: getDimensions() " + id + " not found.");
+            }
+            return {
+                w: w,
+                h: h
+            };
+        }
+    };
+}
 }
 
 
