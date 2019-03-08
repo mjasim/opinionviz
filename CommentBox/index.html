@@ -4,7 +4,7 @@
 <head>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 	<script src="https://d3js.org/d3.v4.min.js" charset="utf-8"></script>
 	<script src="https://d3js.org/d3-color.v1.min.js"></script>
 	<script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
@@ -19,14 +19,47 @@
 </head>
 
 <body>
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+					data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">
+					<img alt="Brand"
+						src="https://i.imgur.com/fJ69Rb7.png", width=30px, height=30px, style="transform:rotate(130deg);")>
+				</a>
+			</div>
+
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav">
+					<li><a href="#">User Guide</a></li>
+					<li><a href="#">Refresh</a></li>
+				</ul>
+				<form class="navbar-form navbar-left">
+					<div class="form-group">
+						<input type="text" class="form-control" placeholder="Search">
+					</div>
+					<button type="submit" class="btn btn-default">Submit</button>
+				</form>
+			</div><!-- /.navbar-collapse -->
+		</div><!-- /.container-fluid -->
+	</nav>
+
+	<div class="headerDiv" id="header">
+		<div class="instrDiv" id="instr" style="width:50%;float:left"></div>
+		<div class="refreshDiv" id="refresh" style="width:50%;float:right"></div>
+	</div>
 	<div id="parDiv" class="parentDiv">
 		<!--<div>-->
 		<!--<button aria-haspopup="true" aria-expanded="false">Text</button>-->
 		<!--</div>-->
-		<div class="headerDiv" id="header">
-			<div class="instrDiv" id="instr"></div>
-			<div class="refreshDiv" id="refresh"></div>
-		</div>
 		<div id="topDiv" class="top"></div>
 		<div id="labelDiv" class="label"></div>
 		<div id="aggregateDiv" class="aggregate">
@@ -111,8 +144,7 @@
 
 </html>
 
-<script src="agg_view.js"></script>
 <script src="overview.js"></script>
 <script src="proposal_view.js"></script>
-<script src="revision.js"></script>
+<script src="agg_view.js"></script>
 <script src="test.js"></script>

@@ -86,7 +86,8 @@ function draw_view() {
 
     var divCaption =
         "<div class=\"search\"" + "\">" +
-        "<input type=\"text\" class=\"c_search_box\"" + "id=search_box\"" + " placeholder=\"Search...\"" + ">" + "</div>"
+        "<input type=\"text\" class=\"c_search_box\"" + "id=search_box\"" + " placeholder=\"Search...\"" + "style=\"width:280px\"" + ">" + 
+        "<i class=\"fa fa-search fa-lg\"></i>" + "</div>";
 
     top0.innerHTML = divCaption
 
@@ -382,11 +383,21 @@ function draw_view() {
 
         // column with all proposal names
         var column0 = document.getElementById("row" + i + "column0")
-        var divIdeaName =
+
+        if(proposal_names[i].idea_name.length < 30){
+            //console.log(proposal_names[i].idea_name.length)
+            var divIdeaName =
             "<div class=\"idea-Name\"" + "\">" +
             //'<div  class="btn btn-primary btn-block ideaName" id="' + proposal_names[i].idea_id + '">' + proposal_names[i].idea_name + "</div>";
-            '<div  class="ideaName" id="' + proposal_names[i].idea_id + '">' + '<p style="margin:0px; word-wrap:break-word; text-align: left">' + proposal_names[i].idea_name + "</p></div>";
-
+            '<div  class="ideaName" id="' + proposal_names[i].idea_id + '">' + '<p style="margin:5px 0px 5px 2px; word-wrap:break-word; text-align: left">' + proposal_names[i].idea_name + "</p></div>";
+        }
+        else{
+            var divIdeaName =
+            "<div class=\"idea-Name\"" + "\">" +
+            //'<div  class="btn btn-primary btn-block ideaName" id="' + proposal_names[i].idea_id + '">' + proposal_names[i].idea_name + "</div>";
+            '<div  class="ideaName" id="' + proposal_names[i].idea_id + '">' + '<p style="margin:0px 0px 0px 2px; word-wrap:break-word; text-align: left">' + proposal_names[i].idea_name + "</p></div>";
+        }
+        
         column0.innerHTML = divIdeaName
 
         //============================end of column 0==================//
@@ -400,7 +411,7 @@ function draw_view() {
             //console.log(proposal_wise_topic_agg[i][j])
             divTopicName = divTopicName +
                 '<div  class="topicName" id="topic_' + proposal_names[i].idea_id + "_" + j + '\">' +
-                '<span class="badge badge-warning topic-name" id="topic_' + proposal_names[i].idea_id + "_" + j + "_id\"" + 'style="margin: 0px 1px 0px 1px;font-size:0.7em;">' + proposal_wise_topic_agg[i][j].topic_keyphrase + '</span></div>'
+                '<span class="badge badge-warning topic-name" id="topic_' + proposal_names[i].idea_id + "_" + j + "_id\"" + 'style="margin: 1px 1px 1px 1px;font-size:0.7em;">' + proposal_wise_topic_agg[i][j].topic_keyphrase + '</span></div>'
         }
 
         column1.innerHTML = divTopicName
@@ -514,16 +525,14 @@ function draw_view() {
         // Instructions
         var divInstr = document.getElementById("instr")
         var divInstrHTML =
-            "<div>" +
-            "<span class=\"c_instr_button\" id=\"instr_button_id\"><i class=\"fas fa-info-circle fa-2x\"></i></span></div>";
+            "<span class=\"c_instr_button\" id=\"instr_button_id\"><i class=\"fas fa-info-circle fa-lg\"></i></span>";
         divInstr.innerHTML = divInstrHTML;
         setTippy(divInstr.id, json)
 
         // refresh
         var divRefresh = document.getElementById("refresh")
         var divrefreshHTML =
-            "<div>" +
-            "<span class=\"c_refresh_button\" id=\"refresh_button_id\"><i class=\"fas fa-sync-alt fa-2x\"></i></span></div>";
+            "<span class=\"c_refresh_button\" id=\"refresh_button_id\"><i class=\"fas fa-sync-alt fa-lg\"></i></span>";
         divRefresh.innerHTML = divrefreshHTML;
 
 
@@ -551,15 +560,15 @@ function draw_view() {
             draw_view();
             //console.log("#"+ id)
 
-            temp = get_proposal_names(json)
-            for (var i = 0; i < temp.length; i++) {
-                if (temp[i].idea_id == id) {
-                    divID = "row" + i + "column0"
-                }
-            }
+            // temp = get_proposal_names(json)
+            // for (var i = 0; i < temp.length; i++) {
+            //     if (temp[i].idea_id == id) {
+            //         divID = "row" + i + "column0"
+            //     }
+            // }
             //$("#aggregateDiv").animate({ scrollTop: $('#id').offset().top }, 1000);
             document.getElementById(id).scrollIntoView({ block: 'center' });
-            document.getElementById(divID).setAttribute("style", "background-color:#3DAADD")
+            document.getElementById(id).setAttribute("style", "background-color:#3DAADD")
         });
         // $('.emoticon_button').mouseover(function() {
         //     var id = $(this).attr('id');
@@ -771,8 +780,11 @@ function draw_view() {
                 left: 0
             },
 
-            width = +svg.attr("width"),
+            width = +svg.attr("width") - 2,
             height = +svg.attr("height");
+            if(width < 0){
+                width = 0;
+            }
 
         var x = d3.scaleLinear()
             .rangeRound([margin.left, width - margin.right]);
@@ -832,7 +844,12 @@ function draw_view() {
                 return JSON.stringify(data);
             })
             .attr("width", function (d) {
-                return x(d[1]) - x(d[0])-2;
+                if(x(d[1]) - x(d[0]) - 2 < 0){
+                    return 0;
+                }
+                else{
+                    return x(d[1]) - x(d[0]) - 2;
+                }
             })
             .attr("x", function (d) {
                 return x(d[0]);
@@ -948,7 +965,7 @@ function draw_view() {
 
             // remove outline from previous cell 
             if (cellHistory.prev_emo_cell) {
-                cellHistory.prev_emo_cell.style("fill", cellHistory.prev_emo_color)
+                cellHistory.prev_emo_cell.attr("stroke", cellHistory.prev_emo_color)
             }
 
             // deselect cell (check if previously selected row and column selected. Remove the column filter)
@@ -958,7 +975,6 @@ function draw_view() {
                 filterobj.topic = null
                 cellHistory.emo_switch = false
                 //animatedDivs(false)
-
             }
             else {
                 this_cell.attr("stroke", "black")
@@ -1073,7 +1089,7 @@ function draw_view() {
             .offset(d3.stackOffsetDiverging)
             (salesData);
 
-        var svg = d3.select("#" + svg_id),
+            var svg = d3.select("#" + svg_id),
             margin = {
                 top: 0,
                 right: 0,
@@ -1081,8 +1097,11 @@ function draw_view() {
                 left: 0
             },
 
-            width = +svg.attr("width"),
+            width = +svg.attr("width") - 2,
             height = +svg.attr("height");
+            if(width < 0){
+                width = 0;
+            }
 
         var x = d3.scaleLinear()
             .rangeRound([margin.left, width - margin.right]);
@@ -1115,14 +1134,12 @@ function draw_view() {
             .selectAll("g")
             .data(layers);
         var g = maing.enter().append("g")
-            .attr("fill", function (d) {
-                return z(d.key);
-
-            })
-            .attr("style", "outline: solid;")
-            .attr("style", "outline-color: #F2F2F2")
+            // .attr("fill", function (d) {
+            //     return z(d.key);
+            // })
+            // .attr("style", "outline: solid;")
+            // .attr("style", "outline-color: #F2F2F2")
             .style("cursor", "pointer");
-
         var rect = g.selectAll("rect")
             .data(function (d) {
                 d.forEach(function (d1) {
@@ -1144,7 +1161,12 @@ function draw_view() {
                 return JSON.stringify(data);
             })
             .attr("width", function (d) {
-                return x(d[1]) - x(d[0]);
+                if(x(d[1]) - x(d[0]) - 2 < 0){
+                    return 0;
+                }
+                else{
+                    return x(d[1]) - x(d[0]) - 2;
+                }
             })
             .attr("x", function (d) {
                 return x(d[0]);
@@ -1152,7 +1174,17 @@ function draw_view() {
             .attr("y", function (d) {
                 return y(d.data.date);
             })
-            .attr("height", y.bandwidth);
+            .attr("fill", function (d) {
+                return z(d.key);
+            })
+            .attr("stroke", function (d) {
+                return z(d.key);
+            })
+            .attr("stroke-width", function (d) {
+                return "2px";
+            })
+            .attr("height", 25);
+            //.attr("height", y.bandwidth);
 
         rect.on("mouseover", function () {
             var currentEl = d3.select(this);
@@ -1248,7 +1280,7 @@ function draw_view() {
             filterobj.sentiment_final = d.key
 
             if (cellHistory.prev_senti_cell) {
-                cellHistory.prev_senti_cell.style("fill", cellHistory.prev_senti_color)
+                cellHistory.prev_senti_cell.attr("stroke", cellHistory.prev_senti_color)
             }
 
             // deselect cell (check if previously selected row and column selected. Remove the column filter and revert back to last row)
@@ -1259,7 +1291,7 @@ function draw_view() {
                 cellHistory.senti_switch = false
             }
             else {
-                this_cell.style("fill", "red")
+                this_cell.attr("stroke", "black")
                 cellHistory.senti_switch = true
             }
 
@@ -1359,7 +1391,7 @@ function draw_view() {
             .offset(d3.stackOffsetDiverging)
             (salesData);
 
-        var svg = d3.select("#" + svg_id),
+            var svg = d3.select("#" + svg_id),
             margin = {
                 top: 0,
                 right: 0,
@@ -1367,8 +1399,11 @@ function draw_view() {
                 left: 0
             },
 
-            width = +svg.attr("width"),
+            width = +svg.attr("width") - 2,
             height = +svg.attr("height");
+            if(width < 0){
+                width = 0;
+            }
 
         var x = d3.scaleLinear()
             .rangeRound([margin.left, width - margin.right]);
@@ -1401,13 +1436,12 @@ function draw_view() {
             .selectAll("g")
             .data(layers);
         var g = maing.enter().append("g")
-            .attr("fill", function (d) {
-                return z(d.key);
-            })
-            .attr("style", "outline: solid;")
-            .attr("style", "outline-color: #F2F2F2")
+            // .attr("fill", function (d) {
+            //     return z(d.key);
+            // })
+            // .attr("style", "outline: solid;")
+            // .attr("style", "outline-color: #F2F2F2")
             .style("cursor", "pointer");
-
         var rect = g.selectAll("rect")
             .data(function (d) {
                 d.forEach(function (d1) {
@@ -1429,7 +1463,12 @@ function draw_view() {
                 return JSON.stringify(data);
             })
             .attr("width", function (d) {
-                return x(d[1]) - x(d[0]);
+                if(x(d[1]) - x(d[0]) - 2 < 0){
+                    return 0;
+                }
+                else{
+                    return x(d[1]) - x(d[0]) - 2;
+                }
             })
             .attr("x", function (d) {
                 return x(d[0]);
@@ -1437,7 +1476,17 @@ function draw_view() {
             .attr("y", function (d) {
                 return y(d.data.date);
             })
-            .attr("height", y.bandwidth);
+            .attr("fill", function (d) {
+                return z(d.key);
+            })
+            .attr("stroke", function (d) {
+                return z(d.key);
+            })
+            .attr("stroke-width", function (d) {
+                return "2px";
+            })
+            .attr("height", 25);
+            //.attr("height", y.bandwidth);
 
         rect.on("mouseover", function () {
             var currentEl = d3.select(this);
@@ -1534,7 +1583,7 @@ function draw_view() {
             filterobj.subjectivity = d.key
 
             if (cellHistory.prev_sub_cell) {
-                cellHistory.prev_sub_cell.style("fill", cellHistory.prev_sub_color)
+                cellHistory.prev_sub_cell.attr("stroke", cellHistory.prev_sub_color)
             }
 
             // deselect cell (check if previously selected row and column selected. Remove the column filter and revert back to last row)
@@ -1544,7 +1593,7 @@ function draw_view() {
                 cellHistory.sub_switch = false
             }
             else {
-                this_cell.style("fill", "red")
+                this_cell.attr("stroke", "black")
                 cellHistory.sub_switch = true
             }
 
@@ -1651,8 +1700,11 @@ function draw_view() {
                 left: 0
             },
 
-            width = +svg.attr("width"),
+            width = +svg.attr("width") - 2,
             height = +svg.attr("height");
+            if(width < 0){
+                width = 0;
+            }
 
         var x = d3.scaleLinear()
             .rangeRound([margin.left, width - margin.right]);
@@ -1688,8 +1740,8 @@ function draw_view() {
             .attr("fill", function (d) {
                 return z(d.key);
             })
-            .attr("style", "outline: solid;")
-            .attr("style", "outline-color: #F2F2F2");
+            // .attr("style", "outline: solid;")
+            // .attr("style", "outline-color: #F2F2F2");
 
         var rect = g.selectAll("rect")
             .data(function (d) {
@@ -1712,7 +1764,12 @@ function draw_view() {
                 return JSON.stringify(data);
             })
             .attr("width", function (d) {
-                return x(d[1]) - x(d[0]);
+                if(x(d[1]) - x(d[0]) - 2 < 0){
+                    return 0;
+                }
+                else{
+                    return x(d[1]) - x(d[0]) - 2;
+                }
             })
             .attr("x", function (d) {
                 return x(d[0]);
@@ -1723,7 +1780,8 @@ function draw_view() {
             .style("fill", function (d) {
 
             })
-            .attr("height", y.bandwidth);
+            .attr("height", 25);
+            //.attr("height", y.bandwidth);
 
         rect.on("mouseover", function () {
             var currentEl = d3.select(this);

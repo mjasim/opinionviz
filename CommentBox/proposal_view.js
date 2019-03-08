@@ -216,7 +216,7 @@ function draw_filtered_comments(filtered_comment, json) {
                             '<div style="color: #888;"' + '>' + "posted on " + filtered_comment.ideas[i].tasks[j].comments[k].post_time + '</div></div>' +
                             "</div>" +
                             "<div class=\"comment-body\"" + "\">" +
-                            "<p>" + filtered_comment.ideas[i].tasks[j].comments[k].question + "\xa0\xa0" +
+                            "<p>" +
                             '<span class="emoticon_button" id="span_id_emo" >' +
                             "<i class=" + "\"" + "fas " + awesome_emoticon + "\"" + "></i>" + "\xa0" + '</span>' +
                             '<span class="sentiment_button" id="span_id_sent" >' +
@@ -226,16 +226,17 @@ function draw_filtered_comments(filtered_comment, json) {
                             '<span class="options_button" id="span_id_opt" >' +
                             "<i class=" + "\"fas fa-plus-circle fa-lg\"" + "></i>" +
                             '</span>' +
+                            "\xa0\xa0" + filtered_comment.ideas[i].tasks[j].comments[k].question + "\xa0" +
                             "</p>";
                         if (filtered_comment.ideas[i].tasks[j].comments[k].sentiment_final == "neutral") {
-                            divCommentHTML = "<div class=\"comment-author\">" +
+                            divQuestionHTML = "<div class=\"comment-author\">" +
                                 "<div style='float: left; padding-right: 15px;padding-top: 5px;'>" +
                                 "<img src=\"" + image + "\" width='27px' style='border-radius: 50%;'/></div>" +
                                 "<div><div>" + " author name" + "</div>" +
                                 '<div style="color: #888;"' + '>' + "posted on " + filtered_comment.ideas[i].tasks[j].comments[k].post_time + '</div></div>' +
                                 "</div>" +
                                 "<div class=\"comment-body\"" + "\">" +
-                                "<p>" + filtered_comment.ideas[i].tasks[j].comments[k].comment + "\xa0\xa0" +
+                                "<p>" +
                                 '<span class="emoticon_button" id="span_id_emo" >' +
                                 "<i class=" + "\"" + "fas " + awesome_emoticon + "\"" + "></i>" + "\xa0" + '</span>' +
                                 '<span class="sentiment_button" id="span_id_sent" >' +
@@ -245,6 +246,7 @@ function draw_filtered_comments(filtered_comment, json) {
                                 '<span class="options_button" id="span_id_opt" >' +
                                 "<i class=" + "\"fas fa-plus-circle fa-lg\"" + "></i>" +
                                 '</span>' +
+                                "\xa0\xa0" + filtered_comment.ideas[i].tasks[j].comments[k].question + "\xa0" +
                                 "</p>";
                         }
 
@@ -273,7 +275,7 @@ function draw_filtered_comments(filtered_comment, json) {
                     '<div style="color: #888;"' + '>' + "posted on " + filtered_comment.ideas[i].tasks[j].comments[k].post_time + '</div></div>' +
                     "</div>" +
                     "<div class=\"comment-body\"" + "\">" +
-                    "<p>" + filtered_comment.ideas[i].tasks[j].comments[k].comment + "\xa0\xa0" +
+                    "<p>" +
                     '<span class="emoticon_button" id="span_id_emo_' + divComment[k].id + '">' +
                     "<i class=" + "\"" + "fas " + awesome_emoticon + "\"" + "></i>" + "\xa0" + '</span>' +
                     '<span class="sentiment_button" id="span_id_sent_' + divComment[k].id + '" >' +
@@ -286,6 +288,7 @@ function draw_filtered_comments(filtered_comment, json) {
                     '<span class="options_button" id="span_id_opt" >' +
                     "<i class=" + "\"fas fa-plus-circle fa-lg\"" + "></i>" +
                     '</span>' +
+                    "\xa0\xa0" + filtered_comment.ideas[i].tasks[j].comments[k].comment + "\xa0" +
                     "</p>";
 
                 divComment[k].innerHTML = divCommentHTML;
@@ -475,6 +478,8 @@ function emojiMouseClick(id) {
 }
 function getEmojiString(commentID) {
 
+    //console.log(commentID)
+
     var emojiDiv =
         "<div class=\"tippy-label-body\"" + "\">" +
         "<div class=\"label-title\"" + " style=border:none;font-size:1.5em" + ">" + "<p> " + "Click on an icon to set as the new emotion" + "</p>" + "</div>" +
@@ -510,7 +515,7 @@ function sentiMouseClick(id) {
     console.log("inside senticlick", currentJSON)
 
     var all_ids = id.split("-")
-    console.log(all_ids)
+    //console.log(all_ids)
 
     for (var i in currentJSON["ideas"]) {
         for (var j in currentJSON.ideas[i].tasks) {
@@ -564,7 +569,7 @@ function subjectivityMouseClick(id) {
     console.log("inside subclick", currentJSON)
 
     var all_ids = id.split("-")
-    console.log(all_ids)
+    //console.log(all_ids)
 
     for (var i in currentJSON["ideas"]) {
         for (var j in currentJSON.ideas[i].tasks) {
