@@ -43,7 +43,7 @@ function animatedDivs() {
     }
     else if (!filterobj.idea_id && !filterobj.emotion && !filterobj.sentiment_final && !filterobj.subjectivity) {
         document.getElementById("aggregateDiv").setAttribute("style", "height:80vh")
-        document.getElementById("parentBox").setAttribute("style", "height:0px")
+        document.getElementById("parentBox").setAttribute("style", "height:50px")
     }
     else if (filterobj.idea_id) {
         document.getElementById(filterobj.idea_id).parentElement.parentElement.scrollIntoView({ block: 'start' });
@@ -241,8 +241,7 @@ function draw_view() {
         "<div class=\"label-title\"" + ">" +
         "<p style=\"margin: 5px 0px 5px 0px\"" + ">" + "Proposals" + "</p>" + "</div>" +
         "<div class=\"label-title-body\"" + ">" +
-        "<p style=\"margin: 5px 0px 5px 0px\"" + ">" + "\xa0" + "</p>" + "</div>" +
-        "<p style=\"margin: 5px 0px 5px 0px\"" + ">" + "\xa0" + "</p>" + "</div>";
+        "<p style=\"margin: 5px 0px 5px 0px;font-size:3em;color:#337AB7\"" + ">" + "19\xa0" + "</p>" + "</div>"
 
     labelColumn0Div.innerHTML = divCaption
     labelElement.appendChild(labelColumn0Div)
@@ -262,8 +261,7 @@ function draw_view() {
         "<div class=\"label-title\"" + ">" +
         "<p style=\"margin: 5px 0px 5px 0px\"" + ">" + "Topics" + "</p>" + "</div>" +
         "<div class=\"label-title-body\"" + ">" +
-        "<p style=\"margin: 5px 0px 5px 0px\"" + ">" + "\xa0" + "</p>" + "</div>" +
-        "<p style=\"margin: 5px 0px 5px 0px\"" + ">" + "\xa0" + "</p>" + "</div>";
+        "<p style=\"margin: 5px 0px 5px 0px;font-size:3em;color:#337AB7\"" + ">" + "78\xa0" + "</p>" + "</div>";
 
     labelColumn1Div.innerHTML = divCaption
     labelElement.appendChild(labelColumn1Div)
@@ -592,7 +590,7 @@ function draw_view() {
             //document.getElementById(id).scrollIntoView({ block: 'center' });
             document.getElementById(id).setAttribute("style", "background-color:#3DAADD")
             console.log(id)
-            if(animate_trigger){
+            if (animate_trigger) {
                 animatedDivs();
             }
         });
@@ -624,7 +622,9 @@ function draw_view() {
 
             id = id + "_id"
 
-            //animatedDivs();
+            if (animate_trigger) { 
+                animatedDivs();
+            }
             document.getElementById(id).setAttribute("style", "background-color:#3DAADD")
         });
         // $('.emoticon_button').mouseover(function() {
@@ -768,7 +768,10 @@ function draw_view() {
 
             //$("#parentBox").animate({ scrollTop: 0 }, 1000);
             draw_view();
-            animatedDivs();
+            if (animate_trigger) { 
+                animatedDivs();
+            }
+
             //console.log("redrawing")
             //var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
             //draw_filtered_comments(filtered_comment, json)
@@ -1011,13 +1014,17 @@ function draw_view() {
                 filterobj.emotion = null
                 filterobj.topic = null
                 cellHistory.emo_switch = false
-                //animatedDivs()
+                if (animate_trigger) { 
+                    animatedDivs();
+                }
             }
             else {
                 this_cell.attr("stroke", "black")
                 this_cell.attr("opacity", 1)
                 cellHistory.emo_switch = true
-                //animatedDivs()
+                if (animate_trigger) { 
+                    animatedDivs();
+                }
             }
 
             //console.log(filterobj)
@@ -1326,15 +1333,18 @@ function draw_view() {
                 filterobj.idea_id = cellHistory.prev_idea_id
                 filterobj.topic = null
                 cellHistory.senti_switch = false
-                //animatedDivs()
+                if (animate_trigger) { 
+                    animatedDivs();
+                }
 
             }
             else {
                 this_cell.attr("stroke", "black")
                 this_cell.attr("opacity", 1)
                 cellHistory.senti_switch = true
-                //animatedDivs()
-
+                if (animate_trigger) { 
+                    animatedDivs();
+                }
             }
 
             //console.log(filterobj)
@@ -1644,14 +1654,18 @@ function draw_view() {
                 filterobj.subjectivity = null
                 filterobj.idea_id = cellHistory.prev_idea_id
                 cellHistory.sub_switch = false
-                //animatedDivs()
+                if (animate_trigger) { 
+                    animatedDivs();
+                }
 
             }
             else {
                 this_cell.attr("stroke", "black")
                 this_cell.attr("opacity", 1)
                 cellHistory.sub_switch = true
-                //animatedDivs()
+                if (animate_trigger) { 
+                    animatedDivs();
+                }
 
             }
 
