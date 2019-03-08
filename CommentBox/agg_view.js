@@ -621,7 +621,7 @@ function draw_view() {
 
     var divCaption =
         "<div class=\"search\"" + "\">" +
-        "<input type=\"text\" class=\"c_search_box\"" + "id=search_box\"" + " placeholder=\"Search...\"" + "style=\"width:280px\"" + ">" +
+        "<input type=\"text\" class=\"c_search_box\"" + " id=\"search_box\"" + " placeholder=\"Search...\"" + "style=\"width:280px\"" + ">" +
         "<i class=\"fa fa-search fa-lg\"></i>" + "</div>";
 
     top0.innerHTML = divCaption
