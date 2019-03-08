@@ -312,7 +312,7 @@ function draw_filtered_comments(filtered_comment, json) {
         // });
     });
 
-    //makeRevision(filterobj); mjasim - call for save
+    //makeRevision(filterobj); //mjasim - call for save
 }
 
 // get time passed
@@ -455,6 +455,7 @@ function emojiMouseClick(id) {
             for (var k in currentJSON.ideas[i].tasks[j].comments) {
                 if (currentJSON.ideas[i].id == all_ids[2] && currentJSON.ideas[i].tasks[j].id == all_ids[3]
                     && currentJSON.ideas[i].tasks[j].comments[k].comment_id == all_ids[4]) {
+
                     var new_emo = all_ids[0].charAt(0).toUpperCase() + all_ids[0].slice(1);
                     console.log("New Emotion ", String(new_emo));
                     currentJSON.ideas[i].tasks[j].comments[k].emotion = new_emo;
@@ -466,6 +467,8 @@ function emojiMouseClick(id) {
                         "<i class=" + "\"" + "fas " + awesome_emoticon + "\"" + "></i>" + "\xa0";
 
                     $('#span_id_emo_' + all_ids[1] + '-' + all_ids[2] + '-' + all_ids[3] + '-' + all_ids[4]).html(newEmotionButtonStr);
+                     makeRevision(currentJSON);
+
                 }
             }
         }
@@ -474,7 +477,6 @@ function emojiMouseClick(id) {
     // console.log(currentJSON)
     //after revising do this
 
-    //makeRevision(currentJSON);
 }
 function getEmojiString(commentID) {
 
@@ -658,18 +660,23 @@ function getInstrString() {
 
 // save revisions
 function makeRevision(obj) {
+    console.log('make revision');
+    // $.ajax({
+    //     url: 'save_file.php',
+    //     data: {myData: JSON.stringify(obj)},
+    //     type: 'POST',
+    //     success: function(response) {
+    //         console.log(response);
+    //     },
+    //     error:function(data){
+    //         console.log("error occured", data); //===Show Error Message====
+    //     }
+    // });
+    request= new XMLHttpRequest()
+    request.open("POST", "save_file.php", true)
+    request.setRequestHeader("Content-type", "application/json")
+    request.send(JSON.stringify(obj));
 
-    $.ajax({
-        type: "POST",
-        url: "http://localhost:8082/saveRevision/",
-        dataType: 'json',
-        data: {
-            jsonQuery: obj
-        },
-        success: function (output) {
-            console.log(saved);
-        }
-    });
 
 }
 
