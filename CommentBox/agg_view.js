@@ -945,8 +945,9 @@ function draw_view() {
         });
         rect.on("mouseout", function () {
             var currentEl = d3.select(this);
-            currentEl.attr("opacity", function () {
-                if (cellHistory.emo_switch) {
+            currentEl.attr("opacity", function (d) {
+                console.log(currentEl)
+                if (cellHistory.emo_switch && cellHistory.prev_idea_id_emo == idea_id && cellHistory.prev_emo_color == d.key) {
                     return 1
                 }
                 else {
@@ -1274,8 +1275,8 @@ function sentiment_rows(salesData, svg_id, div_id, idea_id) {
     });
     rect.on("mouseout", function () {
         var currentEl = d3.select(this);
-        currentEl.attr("opacity", function () {
-            if (cellHistory.emo_switch) {
+        currentEl.attr("opacity", function (d) {
+            if (cellHistory.senti_switch && cellHistory.prev_idea_id_senti == idea_id && cellHistory.prev_senti_color == d.key) {
                 return 1
             }
             else {
@@ -1589,8 +1590,8 @@ function subjectivity_rows(salesData, svg_id, div_id, idea_id) {
     });
     rect.on("mouseout", function () {
         var currentEl = d3.select(this);
-        currentEl.attr("opacity", function () {
-            if (cellHistory.emo_switch) {
+        currentEl.attr("opacity", function (d) {
+            if (cellHistory.sub_switch && cellHistory.sub_switch && cellHistory.prev_idea_id_sub == idea_id && cellHistory.prev_sub_color == d.key) {
                 return 1
             }
             else {
