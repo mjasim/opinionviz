@@ -38,6 +38,7 @@ body {
     -ms-overflow-style: none;
     overflow: -moz-scrollbars-none;
     transition: all .5s linear;
+    padding:0px 0px 00px 0px;
 }
 
 .top{

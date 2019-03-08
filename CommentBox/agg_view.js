@@ -32,9 +32,31 @@ var json = null;
 
 var selected_topic = null;
 
+
+
+function animatedDivs() {
+    if (!filterobj.idea_id && (filterobj.emotion || filterobj.sentiment_final || filterobj.subjectivity)) {
+        document.getElementById("aggregateDiv").setAttribute("style", "height:0px")
+        document.getElementById("parentBox").setAttribute("style", "height:80vh")
+        $("#parentBox").animate({ scrollTop: 0 }, 1000);
+        $("#aggregateDiv").animate({ scrollTop: 0 }, 1000);
+    }
+    else if (!filterobj.idea_id && !filterobj.emotion && !filterobj.sentiment_final && !filterobj.subjectivity){
+        document.getElementById("aggregateDiv").setAttribute("style", "height:80vh")
+        document.getElementById("parentBox").setAttribute("style", "height:0px")
+    }
+    else if (filterobj.idea_id){
+        document.getElementById(filterobj.idea_id).parentElement.parentElement.scrollIntoView({ block: 'start' });
+        document.getElementById("aggregateDiv").setAttribute("style", "height:55px")
+        document.getElementById("parentBox").setAttribute("style", "height:80vh")
+        $("#parentBox").animate({ scrollTop: 0 }, 1000);
+    }
+}
+
 d3.json("communitycrit_new.json", function (err, myjson) {
     json = myjson
     draw_view()
+    animatedDivs()
 })
 
 function draw_view() {
@@ -555,7 +577,7 @@ function draw_view() {
             //console.log(id)
             var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
             draw_filtered_comments(filtered_comment, json)
-            $("#parentBox").animate({ scrollTop: 0 }, 1000);
+            //$("#parentBox").animate({ scrollTop: 0 }, 1000);
             //console.log("redrawing")
             draw_view();
             //console.log("#"+ id)
@@ -567,8 +589,10 @@ function draw_view() {
             //     }
             // }
             //$("#aggregateDiv").animate({ scrollTop: $('#id').offset().top }, 1000);
-            document.getElementById(id).scrollIntoView({ block: 'center' });
+            //document.getElementById(id).scrollIntoView({ block: 'center' });
             document.getElementById(id).setAttribute("style", "background-color:#3DAADD")
+            console.log(id)
+            animatedDivs();
         });
         // $('.emoticon_button').mouseover(function() {
         //     var id = $(this).attr('id');
@@ -740,12 +764,12 @@ function draw_view() {
             filterobj.task_id = null
             filterobj.topic = null
 
-            $("#parentBox").animate({ scrollTop: 0 }, 1000);
-
+            //$("#parentBox").animate({ scrollTop: 0 }, 1000);
             draw_view();
+            animatedDivs();
             //console.log("redrawing")
-            var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
-            draw_filtered_comments(filtered_comment, json)
+            //var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
+            //draw_filtered_comments(filtered_comment, json)
 
         });
         // $('.emoticon_button').mouseover(function() {
@@ -946,7 +970,6 @@ function draw_view() {
         rect.on("mouseout", function () {
             var currentEl = d3.select(this);
             currentEl.attr("opacity", function (d) {
-                console.log(currentEl)
                 if (cellHistory.emo_switch && cellHistory.prev_idea_id_emo == idea_id && cellHistory.prev_emo_color == d.key) {
                     return 1
                 }
@@ -986,13 +1009,13 @@ function draw_view() {
             filterobj.emotion = null
             filterobj.topic = null
             cellHistory.emo_switch = false
-            //animatedDivs(false)
+            animatedDivs()
         }
         else {
             this_cell.attr("stroke", "black")
             this_cell.attr("opacity", 1)
             cellHistory.emo_switch = true
-            //animatedDivs(true)
+            animatedDivs()
         }
 
         //console.log(filterobj)
@@ -1071,18 +1094,6 @@ function draw_view() {
             };
         }
     };
-}
-
-function animatedDivs(isSelected) {
-    if (isSelected) {
-        document.getElementById("aggregateDiv").setAttribute("style", "height:60px")
-
-        document.getElementById("parentBox").setAttribute("style", "height:70vh")
-    } else {
-        document.getElementById("aggregateDiv").setAttribute("style", "height:28vh")
-
-        document.getElementById("parentBox").setAttribute("style", "height:50vh")
-    }
 }
 
 // draw sentiments
