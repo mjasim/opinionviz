@@ -780,11 +780,7 @@ function draw_view() {
                 left: 0
             },
 
-<<<<<<< HEAD
-            width = +svg.attr("width") - 2,
-=======
             width = +svg.attr("width")-2,
->>>>>>> f089af3912cb923f6f5c482c0562a8e627d8691b
             height = +svg.attr("height");
             if(width < 0){
                 width = 0;
