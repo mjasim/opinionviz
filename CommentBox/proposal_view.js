@@ -211,7 +211,7 @@ function draw_filtered_comments(filtered_comment, json) {
             //var node = document.createTextNode(filtered_comment.ideas[i].tasks[j].name)
             //divTask[j].appendChild(node)
 
-            var divTaskHTML = '<h2 style=margin-left:5px;color:#3DAADB>' + filtered_comment.ideas[i].tasks[j].name + '</h2>';
+            var divTaskHTML = '<h2 style=margin-left:5px;color:#337AB7>' + filtered_comment.ideas[i].tasks[j].name + '</h2>';
             divTask[j].innerHTML = divTaskHTML;
             var element = document.getElementById(divIdea[i].id);
             element.appendChild(divTask[j]);
@@ -289,13 +289,13 @@ function draw_filtered_comments(filtered_comment, json) {
                 var divCommentHTML =
 
                     "<div class=\"comment-author\">" +
-                    "<div style='float: left; padding-right: 15px;padding-top: 5px;'>" +
-                    "<img src=\"" + image + "\" width='27px' style='border-radius: 50%;'/></div>" +
-                    "<div><div>" + " author name" + "</div>" +
-                    '<div style="color: #888;"' + '>' + "posted on " + filtered_comment.ideas[i].tasks[j].comments[k].post_time + '</div></div>' +
+                    "<div style='float: left; padding-right: 5px;;'>" +
+                    "<img src=\"" + image + "\" width='24px' style='border-radius: 50%;'/></div>" +
+                    "<div style='padding-top: 5px'><div style='float: left;'>" + " Author name" + "</div>" +
+                    '<div style="color: #888;"' + '>' + " &nbsp;&nbsp; posted on " + filtered_comment.ideas[i].tasks[j].comments[k].post_time + '</div></div>' +
                     "</div>" +
                     "<div class=\"comment-body\"" + "\">" +
-                    '<span class="emoticon_button" id="span_id_emo_' + divComment[k].id + '">' +
+                    '<div style="float: left;padding-left: 2px;"><span class="emoticon_button" id="span_id_emo_' + divComment[k].id + '">' +
                     "<i class=" + "\"" + "fas " + awesome_emoticon + "\"" + "></i>" + "\xa0" + '</span>' +
                     '<span class="sentiment_button" id="span_id_sent_' + divComment[k].id + '" >' +
                     //"<i class=" + "\"" + "fas " + awesome_sentiment + "\"" + "></i>" +
@@ -306,8 +306,8 @@ function draw_filtered_comments(filtered_comment, json) {
                     "\xa0" + '</span>' +
                     '<span class="options_button" id="span_id_opt" >' +
                     "<i class=" + "\"fas fa-plus-circle fa-lg\"" + "></i>" +
-                    '</span>' +"\xa0\xa0" +
-                    '<p class="search_enable">'+filtered_comment.ideas[i].tasks[j].comments[k].comment + "\xa0" +
+                    '</span></div>' +"\xa0\xa0" +
+                    '<div style="float:left; padding-left: 5px"><p class="search_enable">'+filtered_comment.ideas[i].tasks[j].comments[k].comment + "\xa0" +
                     "</p></div>";
 
                 divComment[k].innerHTML = divCommentHTML;

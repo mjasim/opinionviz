@@ -273,7 +273,7 @@ body {
     font-size: 12px;
     font-weight: 700;
     text-align: left;
-    margin: 0 10px 10px 10px;
+    margin: 0 10px 10px 0px;
 }
 .btn .btn-warning .ideaButton{
     width: inherit;
