@@ -126,20 +126,27 @@ function get_filtered_comment(json, filterobj) {
                 //     flag = false
                 // }
 
-                if(flag && filterobj.topic != null){
-                    for (var l = 0; l < filterobj.topic.length; l++){
+                if (flag && filterobj.topic != null) {
+                    for (var l = 0; l < filterobj.topic.length; l++) {
+                        var flag = true
                         var topicFilter = json.ideas[i].topic_keyphrases[filterobj.topic[l]].topic_keyphrase
-                        if(!checkKeyphrase(topicFilter, json.ideas[i].tasks[j].comments[k].findTopicLabels)){
+                        if (!checkKeyphrase(topicFilter, json.ideas[i].tasks[j].comments[k].findTopicLabels)) {
                             flag = false
                         }
-                        else{
-                            console.log(json.ideas[i].tasks[j].comments[k])
+                        else {
+                            //console.log(flag, topicFilter, json.ideas[i].tasks[j].comments[k].comment)
+                            //comments.push(json.ideas[i].tasks[j].comments[k])
+
                         }
                     }
                 }
+                //console.log(flag, topicFilter)
+                //console.log("yolo")
+
 
                 if (flag) {
                     comments.push(json.ideas[i].tasks[j].comments[k])
+                    //console.log("yolo")
                 }
             }
             if (comments.length) {
@@ -241,7 +248,7 @@ function draw_filtered_comments(filtered_comment, json) {
                             "<i class=" + "\"fas fa-plus-circle fa-lg\"" + "></i>" +
                             '</span>' +
                             "\xa0\xa0" + filtered_comment.ideas[i].tasks[j].comments[k].question + "\xa0" +
-                             "</div>";
+                            "</div>";
                         if (filtered_comment.ideas[i].tasks[j].comments[k].sentiment_final == "neutral") {
                             divQuestionHTML = "<div class=\"comment-author\">" +
                                 "<div style='float: left; padding-right: 15px;padding-top: 5px;'>" +
@@ -479,7 +486,7 @@ function emojiMouseClick(id) {
                         "<i class=" + "\"" + "fas " + awesome_emoticon + "\"" + "></i>" + "\xa0";
 
                     $('#span_id_emo_' + all_ids[1] + '-' + all_ids[2] + '-' + all_ids[3] + '-' + all_ids[4]).html(newEmotionButtonStr);
-                     makeRevision(currentJSON);
+                    makeRevision(currentJSON);
 
                 }
             }
@@ -684,7 +691,7 @@ function makeRevision(obj) {
     //         console.log("error occured", data); //===Show Error Message====
     //     }
     // });
-    request= new XMLHttpRequest()
+    request = new XMLHttpRequest()
     request.open("POST", "save_file.php", true)
     request.setRequestHeader("Content-type", "application/json")
     request.send(JSON.stringify(obj));
