@@ -185,9 +185,8 @@ function draw_filtered_comments(filtered_comment, json) {
         divIdea[i].id = "ideaDivId-" + filtered_comment.ideas[i].id;
         //var node = document.createTextNode(filtered_comment.ideas[i].name);
         //divIdea[i].appendChild(node)
-        var divIdeaHTML = '<h1 class="search_enable" style=margin-left:5px;>' + filtered_comment.ideas[i].name + '</h1>' +
-            "<div class=\"comment-body\"" + "\">" +
-            "<p>" + "\xa0\xa0\xa0" +
+        var divIdeaHTML = '<div style=\"display:flex;align-items:flex-end"\"> <h1 class="search_enable" style=margin-left:5px;>' + filtered_comment.ideas[i].name + '</h1>' + 
+        "<p>" + "\xa0\xa0\xa0" +
             '<span class="commenters_button" id="span_id_opt" >' +
             "<i class=" + "\"fas fa-user fa-lg\"" + "></i>" +
             '</span>' + "\xa0" +
@@ -199,6 +198,8 @@ function draw_filtered_comments(filtered_comment, json) {
             '<span class="comments_number" id="span_id_opt" >' + filtered_comment.ideas[i].num_of_comments +
             '</span>' + "\xa0" +
             "</p>" +
+            '</div>' +
+            "<div class=\"comment-body\"" + "\">" +
             '<p style=margin-left:10px>' + proposalIntro[filtered_comment.ideas[i].id] + '</p>';
         divIdea[i].innerHTML = divIdeaHTML;
         var element = document.getElementById("parentBox")
@@ -305,8 +306,8 @@ function draw_filtered_comments(filtered_comment, json) {
                     "\xa0" + '</span>' +
                     '<span class="options_button" id="span_id_opt" >' +
                     "<i class=" + "\"fas fa-plus-circle fa-lg\"" + "></i>" +
-                    '</span></div>' +"\xa0\xa0" +
-                    '<div style="float:left; padding-left: 5px"><p class="search_enable">'+filtered_comment.ideas[i].tasks[j].comments[k].comment + "\xa0" +
+                    '</span></div>' + "\xa0\xa0" +
+                    '<div style="float:left; padding-left: 5px"><p class="search_enable">' + filtered_comment.ideas[i].tasks[j].comments[k].comment + "\xa0" +
                     "</p></div>";
 
                 divComment[k].innerHTML = divCommentHTML;
@@ -515,10 +516,6 @@ function getEmojiString(commentID) {
         "<p>" + "Sad" + "</p>" +
         "<p>" + '<span class="label-emo-button" id="span_id_sad' + '" onclick="emojiMouseClick(\'' + 'sad-' + commentID + '\')">' +
         "<i class=" + "\"fas fa-frown fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
-        "<div class=\"label-emo-body\"" + "\">" +
-        "<p>" + "Bored" + "</p>" +
-        "<p>" + '<span class="label-emo-button" id="span_id_bored' + '" onclick="emojiMouseClick(\'' + 'bored-' + commentID + '\')">' +
-        "<i class=" + "\"fas fa-meh fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Happy" + "</p>" +
         "<p>" + '<span class="label-emo-button" id="span_id_happy' + '" onclick="emojiMouseClick(\'' + 'happy-' + commentID + '\')">' +

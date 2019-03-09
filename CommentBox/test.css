@@ -46,7 +46,7 @@ body {
     flex-direction: row;
     align-items: center;
     width: 98%;
-    height: 36px;
+    height: 40px;
     overflow:hidden;
     padding: 0px 17px 0px 0px;
 }
@@ -90,7 +90,7 @@ body {
 }
 
 .label-info-body{
-    width: 50%;
+    width: 33%;
     padding: 5px 0;
 }
 
@@ -119,7 +119,7 @@ body {
     flex-direction: row;
     flex-wrap: wrap;
     width: 100%;
-    height: 36px;
+    height: 40px;
     margin: 10px 0px 10px 0px;
 }
 
@@ -154,13 +154,13 @@ body {
 } */
 
 .l_column0{
-    width: 10%;
+    width: 15%;
     height: inherit;
 }
 
 
 .l_column1{
-    width: 30%;
+    width: 25%;
     height: inherit;
 }
 
@@ -234,6 +234,7 @@ body {
 
 .ideaDiv{
     /*color:blue;*/
+    border-top:thin solid black;
     color: #545454;
     margin: 5px auto;
 }
@@ -241,8 +242,7 @@ body {
     font-weight: 700;
     color: #000;
     font-size: 22px;
-    border-top:thin solid black;
-    padding: 10px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
 }
 
 .taskDiv{

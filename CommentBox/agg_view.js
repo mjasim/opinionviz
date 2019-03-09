@@ -665,30 +665,30 @@ function draw_view(json) {
 
     // top emotions
     var top2 = document.getElementById("top2")
-    tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
-    tempSvg.id = "svgtop2"
-    tempSvg.setAttribute("class", "t_svg")
-    tempSvg.setAttribute("width", top2.clientWidth)
-    tempSvg.setAttribute("height", top2.clientHeight)
-    top2.appendChild(tempSvg)
+    // tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
+    tempSvg_id = "svgtop2"
+    // tempSvg.setAttribute("class", "t_svg")
+    // tempSvg.setAttribute("width", top2.clientWidth)
+    // tempSvg.setAttribute("height", top2.clientHeight)
+    // top2.appendChild(tempSvg)
 
     send_data = all_proposal_emotion_agg
-    emotion_rows(send_data, tempSvg.id, top2.id, null)
+    emotion_rows(send_data, tempSvg_id, top2.id, null)
 
     //============================ top column 2 end =========================//
     //============================ top column 3 =========================//
 
     // top sentiments
     var top3 = document.getElementById("top3")
-    tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
-    tempSvg.id = "svgtop3"
-    tempSvg.setAttribute("class", "t_svg")
-    tempSvg.setAttribute("width", top3.clientWidth)
-    tempSvg.setAttribute("height", top3.clientHeight)
-    top3.appendChild(tempSvg)
+    // tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
+    tempSvg_id = "svgtop3"
+    // tempSvg.setAttribute("class", "t_svg")
+    // tempSvg.setAttribute("width", top3.clientWidth)
+    // tempSvg.setAttribute("height", top3.clientHeight)
+    // top3.appendChild(tempSvg)
 
     send_data = all_proposal_sentiment_agg
-    sentiment_rows(send_data, tempSvg.id, top3.id, null)
+    sentiment_rows(send_data, tempSvg_id, top3.id, null)
 
     //============================ top column 3 end =========================//
 
@@ -981,17 +981,18 @@ function draw_view(json) {
         // column with proposal wise emotions
         var column2 = document.getElementById("row" + i + "column2")
         //console.log(json)
-        tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
-        tempSvg.id = "svg" + "row" + i + "column2"
-        tempSvg.setAttribute("class", "c_svg")
-        tempSvg.setAttribute("width", column2.clientWidth)
-        tempSvg.setAttribute("height", column2.clientHeight)
-        column2.appendChild(tempSvg)
-
+        // tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
+        // tempSvg.id = "svg" + "row" + i + "column2"
+        // tempSvg.setAttribute("class", "c_svg")
+        // tempSvg.setAttribute("width", column2.clientWidth)
+        // tempSvg.setAttribute("height", column2.clientHeight)
+        // column2.appendChild(tempSvg)
+        var svg_id = "svg" + "row" + i + "column2"
         send_data = []
         send_data.push(proposal_wise_emotion_agg[i])
         //console.log(send_data)
-        emotion_rows(send_data, tempSvg.id, column2.id, proposal_names[i].idea_id)
+        emotion_rows(send_data, svg_id,column2.id, proposal_names[i].idea_id)
+
 
         //============================end of column 2==================//
 
@@ -1000,16 +1001,16 @@ function draw_view(json) {
 
         var column3 = document.getElementById("row" + i + "column3")
         //console.log(proposal_wise_sentiment_agg)
-        tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
-        tempSvg.id = "svg" + "row" + i + "column3"
-        tempSvg.setAttribute("class", "c_svg")
-        tempSvg.setAttribute("width", column3.clientWidth)
-        tempSvg.setAttribute("height", column3.clientHeight)
-        column3.appendChild(tempSvg)
+        // tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
+        var tempSvg_id = "svg" + "row" + i + "column3"
+        // tempSvg.setAttribute("class", "c_svg")
+        // tempSvg.setAttribute("width", column3.clientWidth)
+        // tempSvg.setAttribute("height", column3.clientHeight)
+        // column3.appendChild(tempSvg)
 
         send_data = []
         send_data.push(proposal_wise_sentiment_agg[i])
-        sentiment_rows(send_data, tempSvg.id, column3.id, proposal_names[i].idea_id)
+        sentiment_rows(send_data, tempSvg_id, column3.id, proposal_names[i].idea_id)
 
         //============================end of column 3 ==================//
 
@@ -1462,27 +1463,64 @@ function draw_view(json) {
 }
 
 //functions for d3
+function responsivefy(svg) {
+    // get container + svg aspect ratio
+    var container = d3.select(svg.node().parentNode),
+        width = parseInt(svg.style("width")),
+        height = parseInt(svg.style("height")),
+        aspect = width / height;
 
+    // add viewBox and preserveAspectRatio properties,
+    // and call resize so that svg resizes on inital page load
+    svg.attr("viewBox", "0 0 " + width + " " + height)
+         .attr("preserveAspectRatio", "none")
+        .call(resize);
+
+    // to register multiple listeners for same event type,
+    // you need to add namespace, i.e., 'click.foo'
+    // necessary if you call invoke this function for multiple svgs
+    // api docs: https://github.com/mbostock/d3/wiki/Selections#on
+    d3.select(window).on("resize." + container.attr("id"), resize);
+
+    // get width of container and resize svg to fit it
+    function resize() {
+        var targetWidth = parseInt(container.style("width"));
+        var targetHeight = parseInt(container.style("height"));
+        console.log(targetWidth,targetHeight)
+        svg.attr("width", targetWidth);
+        svg.attr("height", targetHeight);
+        // svg.attr("height", Math.round(targetWidth / aspect));
+    }
+}
 // draw emotions
-function emotion_rows(salesData, svg_id, div_id, idea_id) {
-
+function emotion_rows(salesData,svg_id, div_id, idea_id) {
+    
     var group = ["angry", "worried", "sad", "happy", "excited"];
     var parseDate = d3.timeFormat("%b-%Y");
     var mainDiv = "#" + div_id;
     var mainDivName = div_id;
 
-    //console.log(salesData)
+    var column = document.getElementById(div_id)
+
+   var svg = d3.select(mainDiv)
+   .append("svg")
+   //responsive SVG needs these 2 attributes and no width and height attr
+    .attr("id",svg_id)
+   .attr("height", column.clientHeight)
+   .attr("width",column.clientWidth)
+   .call(responsivefy)
+   //class to make it responsive
 
     salesData.forEach(function (d) {
         d = type(d);
     });
+
     var layers = d3.stack()
         .keys(group)
         .offset(d3.stackOffsetDiverging)
         (salesData);
 
-    var svg = d3.select("#" + svg_id),
-        margin = {
+    var margin = {
             top: 0,
             right: 0,
             bottom: 0,
@@ -1575,7 +1613,7 @@ function emotion_rows(salesData, svg_id, div_id, idea_id) {
         .attr("stroke-width", function (d) {
             return "2px";
         })
-        .attr("height", 25)
+        .attr("height", 30)
         //.attr("height", y.bandwidth);
         .attr("opacity", 0.8);
 
@@ -1594,17 +1632,17 @@ function emotion_rows(salesData, svg_id, div_id, idea_id) {
             var xCo = 0;
             if (mouseCoords[0] + 10 >= width * 0.80) {
                 xCo = mouseCoords[0] - parseFloat(d3.selectAll("#recttooltipRect_" + mainDivName)
-                    .attr("width"));
+                    .attr("width")) - 10;
             } else {
                 xCo = mouseCoords[0] + 10;
             }
             var x = xCo;
             var yCo = 0;
-            if (mouseCoords[0] + 10 >= width * 0.80) {
-                yCo = mouseCoords[1] + 10;
-            } else {
-                yCo = mouseCoords[1];
-            }
+            // if (mouseCoords[0] + 10 >= width * 0.80) {
+            //     yCo = mouseCoords[1] + 10;
+            // } else {
+            //     yCo = mouseCoords[1];
+            // }
             var x = xCo;
             var y = yCo;
             return "translate(" + x + "," + y + ")";
@@ -1636,17 +1674,17 @@ function emotion_rows(salesData, svg_id, div_id, idea_id) {
                 var xCo = 0;
                 if (mouseCoords[0] + 10 >= width * 0.80) {
                     xCo = mouseCoords[0] - parseFloat(d3.selectAll("#recttooltipRect_" + mainDivName)
-                        .attr("width"));
+                        .attr("width")) - 10;
                 } else {
                     xCo = mouseCoords[0] + 10;
                 }
                 var x = xCo;
                 var yCo = 0;
-                if (mouseCoords[0] + 10 >= width * 0.80) {
-                    yCo = mouseCoords[1] + 10;
-                } else {
-                    yCo = mouseCoords[1];
-                }
+                // if (mouseCoords[0] + 10 >= width * 0.80) {
+                //     yCo = mouseCoords[1] + 10;
+                // } else {
+                //     yCo = mouseCoords[1];
+                // }
                 var x = xCo;
                 var y = yCo;
                 return "translate(" + x + "," + y + ")";
@@ -1796,6 +1834,16 @@ function sentiment_rows(salesData, svg_id, div_id, idea_id) {
     var mainDiv = "#" + div_id;
     var mainDivName = div_id;
 
+    var column = document.getElementById(div_id)
+
+    var svg = d3.select(mainDiv)
+    .append("svg")
+    //responsive SVG needs these 2 attributes and no width and height attr
+     .attr("id",svg_id)
+    .attr("height", column.clientHeight)
+    .attr("width",column.clientWidth)
+    .call(responsivefy)
+
     salesData.forEach(function (d) {
         d = type(d);
     });
@@ -1898,7 +1946,7 @@ function sentiment_rows(salesData, svg_id, div_id, idea_id) {
         .attr("stroke-width", function (d) {
             return "2px";
         })
-        .attr("height", 25)
+        .attr("height", 30)
         .attr("opacity", 0.8);
     //.attr("height", y.bandwidth);
 
@@ -1923,11 +1971,11 @@ function sentiment_rows(salesData, svg_id, div_id, idea_id) {
             }
             var x = xCo;
             var yCo = 0;
-            if (mouseCoords[0] + 10 >= width * 0.80) {
-                yCo = mouseCoords[1] + 10;
-            } else {
-                yCo = mouseCoords[1];
-            }
+            // if (mouseCoords[0] + 10 >= width * 0.80) {
+            //     yCo = mouseCoords[1] + 10;
+            // } else {
+            //     yCo = mouseCoords[1];
+            // }
             var x = xCo;
             var y = yCo;
             return "translate(" + x + "," + y + ")";
@@ -1965,11 +2013,11 @@ function sentiment_rows(salesData, svg_id, div_id, idea_id) {
                 }
                 var x = xCo;
                 var yCo = 0;
-                if (mouseCoords[0] + 10 >= width * 0.80) {
-                    yCo = mouseCoords[1] + 10;
-                } else {
-                    yCo = mouseCoords[1];
-                }
+                // if (mouseCoords[0] + 10 >= width * 0.80) {
+                //     yCo = mouseCoords[1] + 10;
+                // } else {
+                //     yCo = mouseCoords[1];
+                // }
                 var x = xCo;
                 var y = yCo;
                 return "translate(" + x + "," + y + ")";
