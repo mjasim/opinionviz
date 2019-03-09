@@ -17,7 +17,7 @@ function get_proposal_wise_topic(json) {
     for (var i in json["ideas"]) {
         var topics = json.ideas[i].topic_keyphrases
         topics.sort((function(a, b){
-            return a.length-b.length
+            return a.topic_keyphrase.length-b.topic_keyphrase.length
         }))
 
         proposal_topic_agg.push(topics)

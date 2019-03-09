@@ -186,7 +186,7 @@ function draw_filtered_comments(filtered_comment, json) {
         divIdea[i].id = "ideaDivId-" + filtered_comment.ideas[i].id;
         //var node = document.createTextNode(filtered_comment.ideas[i].name);
         //divIdea[i].appendChild(node)
-        var divIdeaHTML = '<h1 class="search_enable" style=margin-left:5px;color:#337AB7>' + filtered_comment.ideas[i].name + '</h1>' +
+        var divIdeaHTML = '<h1 class="search_enable" style=margin-left:5px;>' + filtered_comment.ideas[i].name + '</h1>' +
             "<div class=\"comment-body\"" + "\">" +
             "<p>" + "\xa0\xa0\xa0" +
             '<span class="commenters_button" id="span_id_opt" >' +
@@ -211,7 +211,7 @@ function draw_filtered_comments(filtered_comment, json) {
             //var node = document.createTextNode(filtered_comment.ideas[i].tasks[j].name)
             //divTask[j].appendChild(node)
 
-            var divTaskHTML = '<h2 style=margin-left:5px;color:#337AB7>' + filtered_comment.ideas[i].tasks[j].name + '</h2>';
+            var divTaskHTML = '<h2 style=margin-left:5px;>' + filtered_comment.ideas[i].tasks[j].name + '</h2>';
             divTask[j].innerHTML = divTaskHTML;
             var element = document.getElementById(divIdea[i].id);
             element.appendChild(divTask[j]);
@@ -260,7 +260,7 @@ function draw_filtered_comments(filtered_comment, json) {
                                 '<span class="emoticon_button" id="span_id_emo" >' +
                                 "<i class=" + "\"" + "fas " + awesome_emoticon + "\"" + "></i>" + "\xa0" + '</span>' +
                                 '<span class="sentiment_button" id="span_id_sent" >' +
-                                "<i class=" + "\"fas fa-thumbs-down fa-lg neutral\"" + " style=transform:rotate(90deg)" + "></i>" + "\xa0" + '</span>' +
+                                "<i class=" + "\"far fa-thumbs-down fa-lg neutral\"" + " style=transform:rotate(-90deg)" + "></i>" + "\xa0" + '</span>' +
                                 '<span class="subjectivity_button" id="span_id_sub" >' +
                                 "<i class=" + "\"" + "fas " + awesome_subjectivity + "\"" + "></i>" + "\xa0" + '</span>' +
                                 '<span class="options_button" id="span_id_opt" >' +
@@ -283,7 +283,7 @@ function draw_filtered_comments(filtered_comment, json) {
                 divComment[k].id = "commentDivId-" + filtered_comment.ideas[i].id + "-" + filtered_comment.ideas[i].tasks[j].id + "-" + filtered_comment.ideas[i].tasks[j].comments[k].comment_id;
                 var image = "/images/avatar.jpg";
                 var sentimentButton = filtered_comment.ideas[i].tasks[j].comments[k].sentiment_final == "neutral" ?
-                    "<i aria-haspopup=\"true\" aria-expanded=\"false\" class=" + "\"fas fa-thumbs-down fa-lg neutral\"" + " style=transform:rotate(-90deg)" + "></i>" :
+                    "<i aria-haspopup=\"true\" aria-expanded=\"false\" class=" + "\"far fa-thumbs-down fa-lg neutral\"" + " style=transform:rotate(-90deg)" + "></i>" :
                     "<i class=" + "\"" + "fas " + awesome_sentiment + "\"" + "></i>";
 
                 var divCommentHTML =
@@ -551,7 +551,7 @@ function sentiMouseClick(id) {
                     console.log(awesome_sentiment);
                     if (new_senti == "neutral") {
                         var newSentimentButtonStr =
-                            "<i class=" + "\"fas fa-thumbs-down fa-lg neutral\"" + " style=transform:rotate(-90deg)" + "></i>" + "\xa0";
+                            "<i class=" + "\"far fa-thumbs-down fa-lg neutral\"" + " style=transform:rotate(-90deg)" + "></i>" + "\xa0";
                         $('#span_id_sent_' + all_ids[1] + '-' + all_ids[2] + '-' + all_ids[3] + '-' + all_ids[4]).html(newSentimentButtonStr);
                     }
                     else {
@@ -577,7 +577,7 @@ function getSentiString(commentID) {
         "<div class=\"label-sent-body\"" + "\">" +
         "<p>" + "Neutral" + "</p>" +
         "<p>" + '<span class="label-sent-button" id="span_id_neutral' + '" onclick="sentiMouseClick(\'' + 'neutral-' + commentID + '\')">' +
-        "<i class=" + "\"fas fa-thumbs-down fa-3x neutral\"" + " style=transform:rotate(-90deg)" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<i class=" + "\"far fa-thumbs-down fa-3x neutral\"" + " style=transform:rotate(-90deg)" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-sent-body\"" + "\">" +
         "<p>" + "Positive" + "</p>" +
         "<p>" + '<span class="label-sent-button" id="span_id_positive' + '" onclick="sentiMouseClick(\'' + 'positive-' + commentID + '\')">' +
@@ -622,7 +622,7 @@ function getSubjectivityString(commentID) {
         "<p>" + '<span class="label-sub-button" id="span_id_fact' + commentID + '" onclick="subjectivityMouseClick(\'' + 'fact-' + commentID + '\')">' +
         "<i class=" + "\"fas fa-clipboard-check fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-sub-body\"" + "\">" +
-        "<p>" + "Neutral" + "</p>" +
+        "<p>" + "Opinion" + "</p>" +
         "<p>" + '<span class="label-sub-button" id="span_id_opinion' + '" onclick="subjectivityMouseClick(\'' + 'opinion-' + commentID + '\')">' +
         "<i class=" + "\"fas fa-comments fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>";
     return subjectivityDiv;
@@ -656,7 +656,7 @@ function getOptionString(commentID) {
         "<div class=\"label-opt-body\"" + "\">" +
         "<p>" + "Criteria" + "</p>" +
         "<p>" + '<span class="label-opt-button" id="span_id_criteria' + '" onclick="optionMouseClick(\'' + 'criteria-' + commentID + '\')">' +
-        "<i class=" + "\"fas fa-clipboard-list fa-3x neutral\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<i class=" + "\"fas fa-clipboard-list fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-opt-body\"" + "\">" +
         "<p>" + "Note" + "</p>" +
         "<p>" + '<span class="label-opt-button" id="span_id_note' + '" onclick="optionMouseClick(\'' + 'note-' + commentID + '\')">' +
