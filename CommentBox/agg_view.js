@@ -1165,7 +1165,7 @@ function draw_view() {
 
             var filtered_comment = { "ideas": all_filtered_topics }
             console.log(filtered_comment)
-            //draw_filtered_comments(filtered_comment, json)
+            draw_filtered_comments(filtered_comment, json)
 
             // filterobj.idea_id = split_str[1]
             // filterobj.emotion = null
