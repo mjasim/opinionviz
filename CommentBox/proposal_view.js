@@ -109,9 +109,9 @@ function get_filtered_comment(json, filterobj) {
             var comments = []
             for (var k in json.ideas[i].tasks[j].comments) {
 
-                if (filterobj.topic != null) {
-                    var topicFilter = json.ideas[i].topic_keyphrases[filterobj.topic].topic_keyphrase
-                }
+                // if (filterobj.topic != null) {
+                //     var topicFilter = json.ideas[i].topic_keyphrases[filterobj.topic].topic_keyphrase
+                // }
                 var flag = true
                 if (flag && filterobj.emotion != null && json.ideas[i].tasks[j].comments[k].emotion.toLowerCase() != filterobj.emotion.toLowerCase()) {
                     flag = false
@@ -122,9 +122,22 @@ function get_filtered_comment(json, filterobj) {
                 if (flag && filterobj.subjectivity != null && json.ideas[i].tasks[j].comments[k].subjectivity.toLowerCase() != filterobj.subjectivity.toLowerCase()) {
                     flag = false
                 }
-                if (flag && filterobj.topic != null && !checkKeyphrase(topicFilter, json.ideas[i].tasks[j].comments[k].findTopicLabels)) {
-                    flag = false
+                // if (flag && filterobj.topic != null && !checkKeyphrase(topicFilter, json.ideas[i].tasks[j].comments[k].findTopicLabels)) {
+                //     flag = false
+                // }
+
+                if(flag && filterobj.topic != null){
+                    for (var l = 0; l < filterobj.topic.length; l++){
+                        var topicFilter = json.ideas[i].topic_keyphrases[filterobj.topic[l]].topic_keyphrase
+                        if(!checkKeyphrase(topicFilter, json.ideas[i].tasks[j].comments[k].findTopicLabels)){
+                            flag = false
+                        }
+                        else{
+                            console.log(json.ideas[i].tasks[j].comments[k])
+                        }
+                    }
                 }
+
                 if (flag) {
                     comments.push(json.ideas[i].tasks[j].comments[k])
                 }
@@ -151,6 +164,8 @@ function draw_filtered_comments(filtered_comment, json) {
     while (myNode.firstChild) {
         myNode.removeChild(myNode.firstChild);
     }
+
+    //console.log(filtered_comment)
 
     var divIdea = []
     var divQuestion = []
@@ -216,7 +231,6 @@ function draw_filtered_comments(filtered_comment, json) {
                             '<div style="color: #888;"' + '>' + "posted on " + filtered_comment.ideas[i].tasks[j].comments[k].post_time + '</div></div>' +
                             "</div>" +
                             "<div class=\"comment-body\"" + "\">" +
-                            "<p>" +
                             '<span class="emoticon_button" id="span_id_emo" >' +
                             "<i class=" + "\"" + "fas " + awesome_emoticon + "\"" + "></i>" + "\xa0" + '</span>' +
                             '<span class="sentiment_button" id="span_id_sent" >' +
@@ -227,7 +241,7 @@ function draw_filtered_comments(filtered_comment, json) {
                             "<i class=" + "\"fas fa-plus-circle fa-lg\"" + "></i>" +
                             '</span>' +
                             "\xa0\xa0" + filtered_comment.ideas[i].tasks[j].comments[k].question + "\xa0" +
-                            "</p>";
+                             "</div>";
                         if (filtered_comment.ideas[i].tasks[j].comments[k].sentiment_final == "neutral") {
                             divQuestionHTML = "<div class=\"comment-author\">" +
                                 "<div style='float: left; padding-right: 15px;padding-top: 5px;'>" +
@@ -236,7 +250,6 @@ function draw_filtered_comments(filtered_comment, json) {
                                 '<div style="color: #888;"' + '>' + "posted on " + filtered_comment.ideas[i].tasks[j].comments[k].post_time + '</div></div>' +
                                 "</div>" +
                                 "<div class=\"comment-body\"" + "\">" +
-                                "<p>" +
                                 '<span class="emoticon_button" id="span_id_emo" >' +
                                 "<i class=" + "\"" + "fas " + awesome_emoticon + "\"" + "></i>" + "\xa0" + '</span>' +
                                 '<span class="sentiment_button" id="span_id_sent" >' +
@@ -247,7 +260,7 @@ function draw_filtered_comments(filtered_comment, json) {
                                 "<i class=" + "\"fas fa-plus-circle fa-lg\"" + "></i>" +
                                 '</span>' +
                                 "\xa0\xa0" + filtered_comment.ideas[i].tasks[j].comments[k].question + "\xa0" +
-                                "</p>";
+                                "</div>";
                         }
 
                         divQuestion[k].innerHTML = divQuestionHTML;
@@ -275,7 +288,6 @@ function draw_filtered_comments(filtered_comment, json) {
                     '<div style="color: #888;"' + '>' + "posted on " + filtered_comment.ideas[i].tasks[j].comments[k].post_time + '</div></div>' +
                     "</div>" +
                     "<div class=\"comment-body\"" + "\">" +
-                    "<p>" +
                     '<span class="emoticon_button" id="span_id_emo_' + divComment[k].id + '">' +
                     "<i class=" + "\"" + "fas " + awesome_emoticon + "\"" + "></i>" + "\xa0" + '</span>' +
                     '<span class="sentiment_button" id="span_id_sent_' + divComment[k].id + '" >' +
@@ -289,7 +301,7 @@ function draw_filtered_comments(filtered_comment, json) {
                     "<i class=" + "\"fas fa-plus-circle fa-lg\"" + "></i>" +
                     '</span>' +
                     "\xa0\xa0" + filtered_comment.ideas[i].tasks[j].comments[k].comment + "\xa0" +
-                    "</p>";
+                    "</div>";
 
                 divComment[k].innerHTML = divCommentHTML;
 
