@@ -284,7 +284,15 @@ function draw_one_row(one_row) {
         "<div class=\"label-body\"" + "\">" +
         "<div class=\"label-title\"" + ">" +
         "<p style=\"margin: 5px 0px 5px 0px;font-size:1.5em;text-align:left\"" + ">" + "Topics" + "</p>" + "</div>" +
-        "<div class=\"label-title-body\"" + ">" + "</p>" + "</div>"
+        "<div class=\"label-title-body\"" + ">" + "</p>" + "</div>" +
+        "<div class=\"label-emo-body\"" + ">" +
+        "<p>" + "Angry" + "</p>" +
+        "<p>" + '<span class="label-emo-button" id="span_id_angry" >' +
+        "<i class=" + "\"fas fa-angry fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<div class=\"label-emo-body\"" + "\">" +
+        "<p>" + "Worried" + "</p>" +
+        "<p>" + '<span class="label-emo-button" id="span_id_worried" >' +
+        "<i class=" + "\"fas fa-flushed fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>"
     //    "<p style=\"margin: 5px 0px 5px 0px;font-size:3em;color:#337AB7\"" + ">" + "78\xa0" + "</p>" + "</div>";
 
     labelColumn1Div.innerHTML = divCaption
@@ -763,7 +771,14 @@ function draw_view(json) {
         "<div class=\"label-body\"" + "\">" +
         "<div class=\"label-title\"" + ">" +
         "<p style=\"margin: 5px 0px 5px 0px;font-size:1.5em;text-align:left\"" + ">" + "Proposals" + "</p>" + "</div>" +
-        "<div class=\"label-title-body\"" + ">" + "</p>" + "</div>"
+        "<div class=\"label-info-body\"" + ">" +
+        "<p>" + "Users" + "</p>" +
+        "<p>" + '<span class="label-info-button" id="span_id_commenters" >' +
+        "<i class=" + "\"fas fa-user fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<div class=\"label-info-body\"" + "\">" +
+        "<p>" + "Comments" + "</p>" +
+        "<p>" + '<span class="label-info-button" id="span_id_comments" >' +
+        "<i class=" + "\"fas fa-comment-alt fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>"
     //    "<p style=\"margin: 5px 0px 5px 0px;font-size:3em;color:#337AB7\"" + ">" + "19\xa0" + "</p>" + "</div>"
 
     labelColumn0Div.innerHTML = divCaption
@@ -1123,7 +1138,6 @@ function draw_view(json) {
             this_sent = id.split("_")[2] + "_normalized"
             var sent_agg = get_proposal_wise_sentiment(json)
             sent_agg.sort((function (a, b) {
-                console.log(parseFloat(b[this_sent]) - parseFloat(a[this_sent]))
                 return parseFloat(b[this_sent]) - parseFloat(a[this_sent])
             }))
 
@@ -1145,6 +1159,28 @@ function draw_view(json) {
             }
             sorted_ideas = { "ideas": show_this }
             draw_view(sorted_ideas)
+        });
+        // $('.emoticon_button').mouseover(function() {
+        //     var id = $(this).attr('id');
+        //     console.log('emotion mouseover',id)
+        // });
+    });
+
+    // On click for sort icons by info
+    $(document).ready(function () {
+        $('.label-info-button').click(function () {
+            var id = $(this).attr('id');
+            console.log("inside iconClick", id)
+            this_info = "num_of_" + id.split("_")[2]
+
+            var copy_json = JSON.parse(JSON.stringify(json))
+
+            copy_json["ideas"].sort((function (a, b) {
+                console.log(parseFloat(a[this_info]) - parseFloat(b[this_info]))
+                return parseFloat(b[this_info]) - parseFloat(a[this_info])
+            }))
+
+            draw_view(copy_json)
         });
         // $('.emoticon_button').mouseover(function() {
         //     var id = $(this).attr('id');
@@ -1435,7 +1471,7 @@ function emotion_rows(salesData, svg_id, div_id, idea_id) {
     var mainDiv = "#" + div_id;
     var mainDivName = div_id;
 
-    console.log(salesData)
+    //console.log(salesData)
 
     salesData.forEach(function (d) {
         d = type(d);
