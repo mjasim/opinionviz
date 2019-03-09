@@ -930,9 +930,9 @@ function draw_view() {
         if (proposal_names[i].idea_name.length < 30) {
             //console.log(proposal_names[i].idea_name.length)
             var divIdeaName =
-                "<div class=\"idea-Name\"" + "\">" +
+                "<div class=\"idea-Name\" " + "\">" +
                 //'<div  class="btn btn-primary btn-block ideaName" id="' + proposal_names[i].idea_id + '">' + proposal_names[i].idea_name + "</div>";
-                '<div  class="ideaName" id="' + proposal_names[i].idea_id + '">' + '<p style="margin:5px 0px 5px 2px; word-wrap:break-word; text-align: left">' + proposal_names[i].idea_name + "</p></div>";
+                '<div  class="ideaName" id="' + proposal_names[i].idea_id + '">' + '<p class="search_enable" style="margin:5px 0px 5px 2px; word-wrap:break-word; text-align: left">' + proposal_names[i].idea_name + "</p></div>";
         }
         else {
             var divIdeaName =

@@ -21,21 +21,20 @@
 					
 					//search for any matches
 					var count = 0;
-					$(".commentDiv p").each(function(i, v) {
-					
+					$(".search_enable").each(function(i, v) {
 						//replace any matches
 						var block = $(v);
 						block.html(
 							block.text().replace(
-								new RegExp(phrase, "gi"), 
+								new RegExp(phrase, "gi"),
 								function(match) {
-									//console.log(match);
 									count++;
 									return ["<span class='highlight'>", match, "</span>"].join("");
 								}));
-						
+
 					});
-					
+
+
 					//update the count
 					//$(".result-count").text(count + " results on this page!");
                     console.log(count + " results on this page!");
@@ -48,13 +47,17 @@
 			
 				self.search;
 				self.input.keyup(function(e) {
-					if (self.search) { clearTimeout(self.search); }
-					
-					//start a timer to perform the search. On browsers like
-					//Chrome, Javascript works fine -- other less performant
-					//browsers like IE6 have a hard time doing this
-					self.search = setTimeout(self.performSearch, 300);
-					
+                    if (e.keyCode === 13) {
+
+                        if (self.search) {
+                            clearTimeout(self.search);
+                        }
+
+                        //start a timer to perform the search. On browsers like
+                        //Chrome, Javascript works fine -- other less performant
+                        //browsers like IE6 have a hard time doing this
+                        self.search = setTimeout(self.performSearch, 100);
+                    }
 				});
 			
 			});

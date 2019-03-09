@@ -175,11 +175,11 @@ function draw_filtered_comments(filtered_comment, json) {
     var prevQuestionId = ""
     for (var i in filtered_comment["ideas"]) {
         divIdea[i] = document.createElement("div")
-        divIdea[i].className = "ideaDiv"
+        divIdea[i].className = "ideaDiv";
         divIdea[i].id = "ideaDivId-" + filtered_comment.ideas[i].id;
         //var node = document.createTextNode(filtered_comment.ideas[i].name);
         //divIdea[i].appendChild(node)
-        var divIdeaHTML = '<h1 style=margin-left:5px;color:#337AB7>' + filtered_comment.ideas[i].name + '</h1>' +
+        var divIdeaHTML = '<h1 class="search_enable" style=margin-left:5px;color:#337AB7>' + filtered_comment.ideas[i].name + '</h1>' +
             "<div class=\"comment-body\"" + "\">" +
             "<p>" + "\xa0\xa0\xa0" +
             '<span class="commenters_button" id="span_id_opt" >' +
@@ -299,9 +299,9 @@ function draw_filtered_comments(filtered_comment, json) {
                     "\xa0" + '</span>' +
                     '<span class="options_button" id="span_id_opt" >' +
                     "<i class=" + "\"fas fa-plus-circle fa-lg\"" + "></i>" +
-                    '</span>' +
-                    "\xa0\xa0" + filtered_comment.ideas[i].tasks[j].comments[k].comment + "\xa0" +
-                    "</div>";
+                    '</span>' +"\xa0\xa0" +
+                    '<p class="search_enable">'+filtered_comment.ideas[i].tasks[j].comments[k].comment + "\xa0" +
+                    "</p></div>";
 
                 divComment[k].innerHTML = divCommentHTML;
 
