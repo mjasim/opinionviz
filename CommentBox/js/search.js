@@ -7,14 +7,15 @@
                 console.log(self.input);
 
                 //handles searching the document
-				self.performSearch = function() {
+				self.performSearch = function(keyCode) {
 					console.log('searchbox');
 					//create a search string
 					var phrase = self.input.val().replace(/^\s+|\s+$/g, "");					
 					phrase = phrase.replace(/\s+/g, "|");
 					
 					//make sure there are a couple letters
-					if (phrase.length < 3) { return; }			
+					if(keyCode!=8)
+						if (phrase.length <2) { return; }
 					
 					//append the rest of the expression
 					phrase = ["\\b(", phrase, ")"].join("");
@@ -56,7 +57,7 @@
                         //start a timer to perform the search. On browsers like
                         //Chrome, Javascript works fine -- other less performant
                         //browsers like IE6 have a hard time doing this
-                        self.search = setTimeout(self.performSearch, 100);
+                        self.search = setTimeout(self.performSearch(e.keyCode), 100);
                     //}
 				});
 			
