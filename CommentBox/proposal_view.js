@@ -134,9 +134,8 @@ function get_filtered_comment(json, filterobj) {
                             flag = false
                         }
                         else {
-                            //console.log(flag, topicFilter, json.ideas[i].tasks[j].comments[k].comment)
+                            console.log(flag, topicFilter, json.ideas[i].tasks[j].comments[k].comment)
                             //comments.push(json.ideas[i].tasks[j].comments[k])
-
                         }
                     }
                 }
