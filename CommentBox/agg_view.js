@@ -310,8 +310,8 @@ function draw_one_row(one_row) {
         "<p>" + '<span class="label-emo-button" id="span_id_angry" >' +
         "<i class=" + "\"fas fa-angry fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
-        "<p>" + "Fear" + "</p>" +
-        "<p>" + '<span class="label-emo-button" id="span_id_fear" >' +
+        "<p>" + "Worried" + "</p>" +
+        "<p>" + '<span class="label-emo-button" id="span_id_worried" >' +
         "<i class=" + "\"fas fa-flushed fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Sad" + "</p>" +
@@ -357,7 +357,7 @@ function draw_one_row(one_row) {
         "<i class=" + "\"far fa-thumbs-down fa-2x neutral label_icons\"" + " style=transform:rotate(-90deg)" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-sent-body\"" + "\">" +
         "<p>" + "Positive" + "</p>" +
-        "<p>" + '<span class="label-sent-button" id="span_id_sad" >' +
+        "<p>" + '<span class="label-sent-button" id="span_id_positive" >' +
         "<i class=" + "\"fas fa-thumbs-up fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>";
     labelColumn3Div.innerHTML = divCaption
     labelElement.appendChild(labelColumn3Div)
@@ -810,7 +810,7 @@ function draw_view(json) {
         "<i class=" + "\"fas fa-angry fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Worried" + "</p>" +
-        "<p>" + '<span class="label-emo-button" id="span_id_fear" >' +
+        "<p>" + '<span class="label-emo-button" id="span_id_worried" >' +
         "<i class=" + "\"fas fa-flushed fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Sad" + "</p>" +
@@ -856,7 +856,7 @@ function draw_view(json) {
         "<i class=" + "\"far fa-thumbs-down fa-2x neutral label_icons\"" + " style=transform:rotate(-90deg)" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-sent-body\"" + "\">" +
         "<p>" + "Positive" + "</p>" +
-        "<p>" + '<span class="label-sent-button" id="span_id_sad" >' +
+        "<p>" + '<span class="label-sent-button" id="span_id_positive" >' +
         "<i class=" + "\"fas fa-thumbs-up fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>";
     labelColumn3Div.innerHTML = divCaption
     labelElement.appendChild(labelColumn3Div)
@@ -906,7 +906,7 @@ function draw_view(json) {
     // Aggregate div fillup
     var titles = []
     var aggElement = document.getElementById("aggregateDiv")
-    for (var i = 0; i < numberOfColumns; i++) {
+    for (var i = 0; i < numberOfRows; i++) {
         var tempRowDiv = document.createElement("div")
         tempRowDiv.id = "row" + i
         //console.log(tempRowDiv.id)
@@ -965,7 +965,7 @@ function draw_view(json) {
 
         // column with proposal wise emotions
         var column2 = document.getElementById("row" + i + "column2")
-        console.log(json)
+        //console.log(json)
         tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
         tempSvg.id = "svg" + "row" + i + "column2"
         tempSvg.setAttribute("class", "c_svg")
@@ -1078,44 +1078,36 @@ function draw_view(json) {
         // divRefresh.innerHTML = divrefreshHTML;
     }
 
+    // On click for sort icons by emotion
     $(document).ready(function () {
-        $('.ideaName').click(function () {
+        $('.label-emo-button').click(function () {
             var id = $(this).attr('id');
-            if (selected_rows[id]) {
-                selected_rows[id] = null;
-                document.getElementById(id).setAttribute("style", "background-color:none")
-            }
-            else {
-                selected_rows[id] = true;
-                document.getElementById(id).setAttribute("style", "background-color:#3DAADD")
-            }
-            var all_filtered_comment = []
+            console.log("inside iconClick", id)
+            this_emo = id.split("_")[2] + "_normalized"
+            var emo_agg = get_proposal_wise_emotion(json)
+            emo_agg.sort((function (a, b) {
+                console.log(parseFloat(b[this_emo]) - parseFloat(a[this_emo]))
+                return parseFloat(b[this_emo]) - parseFloat(a[this_emo])
+            }))
 
-            for (var i = 0; i < selected_rows.length; i++) {
-                if (selected_rows[i]) {
-                    filterobj.idea_id = i
-                    filterobj.emotion = null
-                    filterobj.sentiment_final = null
-                    filterobj.subjectivity = null
-                    filterobj.task_id = null
-                    filterobj.topic = []
-                    var temp_comments = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
-                    all_filtered_comment.push(temp_comments.ideas[0])
+            var id_keys = []
+            for (var i = 0; i < emo_agg.length; i++) {
+                id_keys.push(emo_agg[i].key)
+            }
+
+            var show_this = []
+            for (var i = 0; i < id_keys.length; i++) {
+                for (var j = 0; j < json["ideas"].length; j++) {
+                    //console.log(json.ideas[j].id, id_keys[i])
+
+                    if (json.ideas[j].id == id_keys[i]) {
+                        //console.log(json.ideas[i])
+                        show_this.push(json.ideas[j])
+                    }
                 }
             }
-            var filtered_comment = { "ideas": all_filtered_comment }
-
-            // console.log(filtered_comment)
-            draw_filtered_comments(filtered_comment, json)
-
-            if (!animate_trigger) {
-                document.getElementById(id).scrollIntoView({ block: 'center' });
-            }
-
-            console.log(id)
-            if (animate_trigger) {
-                animatedDivs();
-            }
+            sorted_ideas = { "ideas": show_this }
+            draw_view(sorted_ideas)
         });
         // $('.emoticon_button').mouseover(function() {
         //     var id = $(this).attr('id');
@@ -1123,6 +1115,42 @@ function draw_view(json) {
         // });
     });
 
+    // On click for sort icons by sentiment
+    $(document).ready(function () {
+        $('.label-sent-button').click(function () {
+            var id = $(this).attr('id');
+            console.log("inside iconClick", id)
+            this_sent = id.split("_")[2] + "_normalized"
+            var sent_agg = get_proposal_wise_sentiment(json)
+            sent_agg.sort((function (a, b) {
+                console.log(parseFloat(b[this_sent]) - parseFloat(a[this_sent]))
+                return parseFloat(b[this_sent]) - parseFloat(a[this_sent])
+            }))
+
+            var id_keys = []
+            for (var i = 0; i < sent_agg.length; i++) {
+                id_keys.push(sent_agg[i].key)
+            }
+
+            var show_this = []
+            for (var i = 0; i < id_keys.length; i++) {
+                for (var j = 0; j < json["ideas"].length; j++) {
+                    //console.log(json.ideas[j].id, id_keys[i])
+
+                    if (json.ideas[j].id == id_keys[i]) {
+                        //console.log(json.ideas[i])
+                        show_this.push(json.ideas[j])
+                    }
+                }
+            }
+            sorted_ideas = { "ideas": show_this }
+            draw_view(sorted_ideas)
+        });
+        // $('.emoticon_button').mouseover(function() {
+        //     var id = $(this).attr('id');
+        //     console.log('emotion mouseover',id)
+        // });
+    });
 
     // On click for proposals
     $(document).ready(function () {
@@ -1186,11 +1214,11 @@ function draw_view(json) {
 
             if (selected_topics[split_str[1]][split_str[2]]) {
                 selected_topics[split_str[1]][split_str[2]] = null;
-                document.getElementById(id+"_id").setAttribute("style", "background-color:none")
+                document.getElementById(id + "_id").setAttribute("style", "background-color:none")
             }
             else {
                 selected_topics[split_str[1]][split_str[2]] = true;
-                document.getElementById(id+"_id").setAttribute("style", "background-color:#3DAADD")
+                document.getElementById(id + "_id").setAttribute("style", "background-color:#3DAADD")
             }
 
             all_filtered_topics = []
@@ -1204,7 +1232,7 @@ function draw_view(json) {
                 filterobj.task_id = null
                 filterobj.topic = getAllIndexes(selected_topics[i], true)
 
-                if(filterobj.topic.length != 0){
+                if (filterobj.topic.length != 0) {
                     var temp_comments = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
                     all_filtered_topics.push(temp_comments.ideas[0])
                 }
@@ -1406,6 +1434,8 @@ function emotion_rows(salesData, svg_id, div_id, idea_id) {
     var parseDate = d3.timeFormat("%b-%Y");
     var mainDiv = "#" + div_id;
     var mainDivName = div_id;
+
+    console.log(salesData)
 
     salesData.forEach(function (d) {
         d = type(d);
