@@ -1271,7 +1271,7 @@ function draw_view(json) {
                 function () {
                     console.log('scroll');
 
-                    $('#parentBox').scrollTo($('#ideaDivId-'+id) , 800);
+                    $('#parentBox').scrollTo($('#ideaDivId-'+id) , 500);
                 }, 100
             )
 
