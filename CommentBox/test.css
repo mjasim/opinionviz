@@ -95,23 +95,11 @@ body {
 }
 
 .fa-comment-alt.label_icons{
-    opacity:0.7;
-}
-
-.fa-comment-alt.label_icons:hover{
     opacity:1.0;
-    cursor: pointer;
-    outline: thin solid #337AB7;
 }
 
 .fa-user.label_icons{
-    opacity:0.7;
-}
-
-.fa-user.label_icons:hover{
     opacity:1.0;
-    cursor: pointer;
-    outline: thin solid #337AB7;
 }
 
 .label-emo-body{
@@ -393,13 +381,13 @@ body {
 
 .fa-thumbs-down.neutral{
     color: gray;
-    opacity: 0.7;
+    opacity: 1.0;
 }
-.fa-thumbs-down.neutral:hover{
+/* .fa-thumbs-down.neutral:hover{
     opacity: 1.0;
     cursor: pointer;
     outline:solid thin gray;
-}
+} */
 
 .tippy-tooltip.tomato-theme {
     background-color: tomato;
@@ -562,13 +550,13 @@ body {
 }
 
 .label_icons{
-    opacity:0.7;
+    opacity:1.0;
 }
-/* 
+
 .label_icons:hover{
     outline: none;
     cursor: default;
-} */
+}
 
 .badge{
     border-style:solid;

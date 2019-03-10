@@ -789,11 +789,14 @@ function draw_view(json) {
         "<div class=\"label-info-body\"" + ">" +
         "<p>" + "Users" + "</p>" +
         "<p>" + '<span class="label-info-button" id="span_id_commenters" >' +
-        "<i class=" + "\"fas fa-user fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<i class=" + "\"fas fa-user fa-2x label_icons\"" + "></i>" +
+        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<div class=\"label-info-body\"" + "\">" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-info-body\"" + "\">" +
         "<p>" + "Comments" + "</p>" +
         "<p>" + '<span class="label-info-button" id="span_id_comments" >' +
-        "<i class=" + "\"fas fa-comment-alt fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>"
+        "<i class=" + "\"fas fa-comment-alt fa-2x label_icons\"" + "></i>" + 
+        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>"
     //    "<p style=\"margin: 5px 0px 5px 0px;font-size:3em;color:#337AB7\"" + ">" + "19\xa0" + "</p>" + "</div>"
 
     labelColumn0Div.innerHTML = divCaption
@@ -837,15 +840,21 @@ function draw_view(json) {
         "<div class=\"label-emo-body\"" + ">" +
         "<p>" + "Angry" + "</p>" +
         "<p>" + '<span class="label-emo-button" id="span_id_angry" >' +
-        "<i class=" + "\"fas fa-angry fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<i class=" + "\"fas fa-angry fa-2x label_icons\"" + "></i>" + 
+        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+        '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Worried" + "</p>" +
         "<p>" + '<span class="label-emo-button" id="span_id_worried" >' +
-        "<i class=" + "\"fas fa-flushed fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<i class=" + "\"fas fa-flushed fa-2x label_icons\"" + "></i>" +
+        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+        '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Sad" + "</p>" +
         "<p>" + '<span class="label-emo-button" id="span_id_sad" >' +
-        "<i class=" + "\"fas fa-frown fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<i class=" + "\"fas fa-frown fa-2x label_icons\"" + "></i>" + 
+        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+        '</span>' + "</p>" + "</div>" +
         //"<div class=\"label-emo-body\"" + "\">" +
         // "<p>" + "Bored" + "</p>" +
         // "<p>" + '<span class="label-emo-button" id="span_id_bored" >' +
@@ -853,11 +862,15 @@ function draw_view(json) {
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Happy" + "</p>" +
         "<p>" + '<span class="label-emo-button" id="span_id_happy" >' +
-        "<i class=" + "\"fas fa-smile fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<i class=" + "\"fas fa-smile fa-2x label_icons\"" + "></i>" + 
+        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+        '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Excited" + "</p>" +
         "<p>" + '<span class="label-emo-button" id="span_id_excited" >' +
-        "<i class=" + "\"fas fa-smile-beam fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>";
+        "<i class=" + "\"fas fa-smile-beam fa-2x label_icons\"" + "></i>" + 
+        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+        '</span>' + "</p>" + "</div>";
 
     labelColumn2Div.innerHTML = divCaption
     labelElement.appendChild(labelColumn2Div)
@@ -881,15 +894,21 @@ function draw_view(json) {
         "<div class=\"label-sent-body\"" + ">" +
         "<p>" + "Negative" + "</p>" +
         "<p>" + '<span class="label-sent-button" id="span_id_negative" >' +
-        "<i class=" + "\"fas fa-thumbs-down fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<i class=" + "\"fas fa-thumbs-down fa-2x label_icons\"" + "></i>" + 
+        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+        '</span>' + "</p>" + "</div>" +
         "<div class=\"label-sent-body\"" + "\">" +
         "<p>" + "Neutral" + "</p>" +
         "<p>" + '<span class="label-sent-button" id="span_id_neutral" >' +
-        "<i class=" + "\"far fa-thumbs-down fa-2x neutral label_icons\"" + " style=transform:rotate(-90deg)" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<i class=" + "\"far fa-thumbs-down fa-2x neutral label_icons\"" + " style=transform:rotate(-90deg)" + "></i>" + 
+        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+        '</span>' + "</p>" + "</div>" +
         "<div class=\"label-sent-body\"" + "\">" +
         "<p>" + "Positive" + "</p>" +
         "<p>" + '<span class="label-sent-button" id="span_id_positive" >' +
-        "<i class=" + "\"fas fa-thumbs-up fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>";
+        "<i class=" + "\"fas fa-thumbs-up fa-2x label_icons\"" + "></i>" + 
+        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+        '</span>' + "</p>" + "</div>";
     labelColumn3Div.innerHTML = divCaption
     labelElement.appendChild(labelColumn3Div)
 
@@ -1120,23 +1139,6 @@ function draw_view(json) {
             var id = $(this).attr('id');
             console.log("inside iconClick", id)
             this_emo = id.split("_")[2] + "_normalized"
-
-            if(this_emo == prev_sort_trigger)
-            {
-                for(var x in selected_sort){
-                    selected_sort[x] = null;
-                }
-            }           
-
-            if(selected_sort[id]) {
-                selected_sort[id] = null;
-                document.getElementById(id).setAttribute("style", "opacity:0.7")
-                selected_sort.prev_trigger = document.getElementById(id)
-            }
-            else {
-                selected_sort[id] = true;
-                document.getElementById(id).setAttribute("style", "opacity:1.0")
-            }
 
             var emo_agg = get_proposal_wise_emotion(json)
             emo_agg.sort((function (a, b) {
