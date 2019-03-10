@@ -283,6 +283,7 @@ function draw_one_row(one_row) {
         "<div class=\"label-title-body\"" + ">" + "</p>" + "</div>"
     //    "<p style=\"margin: 5px 0px 5px 0px;font-size:3em;color:#337AB7\"" + ">" + "19\xa0" + "</p>" + "</div>"
 
+
     labelColumn0Div.innerHTML = divCaption
     labelElement.appendChild(labelColumn0Div)
 
@@ -1266,6 +1267,15 @@ function draw_view(json) {
             if (animate_trigger) {
                 animatedDivs();
             }
+            setTimeout(
+                function () {
+                    console.log('scroll');
+
+                    $('#parentBox').scrollTo($('#ideaDivId-'+id) , 800);
+                }, 100
+            )
+
+
         });
         // $('.emoticon_button').mouseover(function() {
         //     var id = $(this).attr('id');
