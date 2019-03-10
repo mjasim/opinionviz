@@ -39,8 +39,9 @@
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
-					<p class="navbar-text" style="font-size:1.5em; color:white"">CommunityPulse</p>
-					<li style="padding:5px;"><a href="#" style="color:white">User Guide</a></li>
+					<p class="navbar-text" style="font-size:1.5em; color:white">CommunityPulse</p>
+					<li><button class="btn btn-primary navbar-btn" id = "instr_button" type="button" data-toggle="tooltip" data-placement="bottom" title="User Guide"><i class="fas fa-book"></i></button></li>
+					<li><button class="btn btn-primary navbar-btn" id = "refresh_button" type="button" data-toggle="tooltip" data-placement="bottom" title="Refresh"><i class="fas fa-sync"></i></button></li>
 				</ul>
 				<form class="navbar-form navbar-right" >
 					<div class="input-group">
@@ -133,7 +134,10 @@
 		<!--<div id="comments" , class="comments"></div>
 		<div style="background-color:blueviolet; height:30vh; width: 100%"></div>
 		<button onclick="myFunction()">Try it</button>-->
-		<div id="parentBox" class="box"></div>
+		<div id="parentBox" class="box">
+			<div class="boxHeader" id="box_header"><p></p>
+			</div>
+		</div>
 	</div>
 </body>
 

@@ -32,23 +32,24 @@ body {
 
 .aggregate{
     align-items: center;
-    width: 98%;
-    height: 28vh;
+    width: 100%;
+    height: 32vh;
     overflow: scroll;
     /* -ms-overflow-style: none;
     overflow: -moz-scrollbars-none; */
     transition: all .5s linear;
-    padding:0px 0px 0px 0px;
+    padding:0px 0px 0px 17px;
 }
 
 .top{
     display: flex;
     flex-direction: row;
     align-items: center;
-    width: 98%;
+    background-color: #F1F1F1;
+    width: 100%;
     height: 40px;
     overflow:hidden;
-    padding: 0px 17px 0px 0px;
+    padding: 0px 17px 0px 17px;
 }
 
 .label{
@@ -56,12 +57,13 @@ body {
     flex-direction: row;
     flex-wrap: wrap;
     align-items: center;
-    width: 98%;
+    background-color: #F1F1F1;
+    width: 100%;
     height: 80px;
     color:black;
     padding: 0px;
-    margin: 0px 0px 5px 0px;
-    padding: 0px 17px 0px 0px;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 17px 0px 17px;
 }
 
 .label-body{
@@ -129,6 +131,7 @@ body {
     width: 100%;
     height: 40px;
     margin: 10px 0px 10px 0px;
+    border-top: solid thin #F1F1F1;
 }
 
 .t_column0{
@@ -144,11 +147,13 @@ body {
 .t_column2{
     width: 35%;
     height: inherit;
+    padding: 3px 0px 0px 0px;
 }
 
 .t_column3{
     width: 25%;
     height: inherit;
+    padding: 3px 0px 0px 0px;
 }
 /* 
 .t_column4{
@@ -198,26 +203,28 @@ body {
     border-color: black;
     font-size: 1.2em;
     font-weight: bold;
-    padding:2px;
+    padding:11px 0px 0px 0px;
 }
 
 .c_column1{
     width: 25%;
     height: inherit;
     border-color: black;
-    padding:2px;
+    padding:14px 0px 0px 0px;
 }
 
 .c_column2{
     width: 35%;
     height: inherit;
     border-color: black;
+    padding: 9px 0px 0px 0px;
 }
 
 .c_column3{
     width: 25%;
     height: inherit;
     border-color: black;
+    padding: 9px 0px 0px 0px;
 }
 /* 
 .c_column4{
@@ -233,9 +240,9 @@ body {
 } */
 
 .box{
-    width: 98%;
+    width: 100%;
     height: 50vh;
-    background-color: #ecf2f9;
+    background-color: #F1F1F1;
     overflow: scroll;
     transition: all .5s linear;
 
@@ -251,7 +258,7 @@ body {
     font-weight: 700;
     color: #000;
     font-size: 22px;
-    padding: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 5px;
 }
 
 .taskDiv{
@@ -263,6 +270,7 @@ body {
     font-weight: 700;
     color: #000;
     font-size: 16px;
+    padding: 0px 0px 0px 5px;
 }
 
 .questionDiv{
@@ -389,6 +397,16 @@ body {
     outline:solid thin gray;
 } */
 
+.fa-sort-amount-down.label_icons{
+    opacity: 0.7
+}
+
+.fa-sort-amount-down.label_icons:hover{
+    opacity: 1.0;
+    cursor:pointer;
+    outline: solid thin black;
+}
+
 .tippy-tooltip.tomato-theme {
     background-color: tomato;
     color: black;
@@ -470,7 +488,7 @@ body {
 }
 
 .topicName{
-    margin: 10px 0px 10px 0px;
+    margin: 0px 0px 0px 0px;
 }
 
 .topicName:hover{
@@ -519,7 +537,7 @@ body {
     color:#337AB7
 }
 
-.fa-info-circle{
+/* .fa-info-circle{
     color: #0099FF;
     opacity: 0.7;
 }
@@ -537,7 +555,7 @@ body {
     opacity: 1.0;
     cursor: pointer;
     outline:solid thin #0099FF;
-}
+} */
 
 .instrDiv{
     text-align: center;
@@ -576,14 +594,31 @@ body {
     color:black;
 }
 
-.idea-Name:hover{
+.badge.ideaName{
+    border-style: solid;
+    border-width:0px; 
+    background-color: white;
+    color:black;
+    margin: 4px 1px 1px 1px;
+}
+
+.badge.ideaName:hover{
     border-style:solid;
     border-width:1px;
     border-color:#337AB7;
     background-color:#ECF2F9;
-    border-radius: 10px;
+    color:black;
     cursor:pointer;
 }
+
+/* .idea-Name:hover{
+    border-style:solid;
+    border-width:1px;
+    border-color:#337AB7; 
+    border-radius: 10px;
+    background-color:#ECF2F9;
+    cursor:pointer;
+}*/
 
 .fa-search{
     padding: 7px 10px;
@@ -605,5 +640,10 @@ body {
     padding-top:10px !important; 
     padding-bottom:10px !important;
 }
+
+.btn, .btn-primary, .navbar-btn{
+    margin: 13px 10px 0px 0px;
+}
+
 .highlight{ background-color:yellow; }
 

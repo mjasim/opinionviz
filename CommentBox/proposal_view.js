@@ -171,6 +171,13 @@ function draw_filtered_comments(filtered_comment, json) {
         myNode.removeChild(myNode.firstChild);
     }
 
+    var divBoxHeader = document.createElement("div")
+    divBoxHeader.className = "boxHeader"
+    divBoxHeader.id = "box_header"
+    var divBoxHeaderHTML = "<div>" + "<p align=\"center\">" + "" + "</p>" + "</div>"
+    var parentBox = document.getElementById("parentBox")
+    divBoxHeader.innerHTML = divBoxHeaderHTML
+    parentBox.appendChild(divBoxHeader);
     //console.log(filtered_comment)
 
     var divIdea = []
@@ -179,14 +186,6 @@ function draw_filtered_comments(filtered_comment, json) {
     var divComment = []
     var topicFilter = ""
     var prevQuestionId = ""
-
-    var divBoxHeader = document.createElement("div")
-    divBoxHeader.className = "boxHeader"
-    divBoxHeader.id = "box_header"
-    var divBoxHeaderHTML = "<div>" + "<p align=\"center\">" + "" + "</p>" + "</div>"
-    var parentBox = document.getElementById("parentBox")
-    divBoxHeader.innerHTML = divBoxHeaderHTML
-    parentBox.appendChild(divBoxHeader);
 
     for (var i in filtered_comment["ideas"]) {
         divIdea[i] = document.createElement("div")

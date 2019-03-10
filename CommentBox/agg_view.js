@@ -17,21 +17,7 @@ for (var i = 0; i < selected_topics.length; i++) {
     selected_topics[i] = Array.apply(null, Array(7))
 }
 
-// global variable to track active sort
-selected_sort = {
-    angry: null,
-    worried: null,
-    sad: null,
-    happy: null,
-    excited: null,
-    negative: null,
-    neutral: null,
-    positive: null
-}
-
-var prev_sort_trigger = null;
-
-//console.log(selected_topics)
+var topic_row_length = 0
 
 // global variable to maintain filter selection
 var cellHistory = {
@@ -56,6 +42,16 @@ var cellHistory = {
 var json = null;
 
 var animate_trigger = false;
+
+function check_empty() {
+    if ($('.ideaDiv').length) {
+        return false;
+    }
+    else {
+        return true;
+    }
+
+}
 
 function animatedDivs() {
     if (!filterobj.idea_id && (filterobj.emotion || filterobj.sentiment_final || filterobj.subjectivity)) {
@@ -94,6 +90,10 @@ d3.json("communitycrit_new.json", function (err, myjson) {
     //draw_filtered_comments(filtered_comment, json)
     if (animate_trigger) {
         animatedDivs()
+    }
+    if (check_empty() == true) {
+        //console.log(document.getElementById("box_header"))
+        document.getElementById("box_header").innerHTML = "Click on a Proposal, Topic, Emotion or Sentiment to see related comments"
     }
 })
 
@@ -792,11 +792,10 @@ function draw_view(json) {
         "<p>" + '<span class="label-info-button" id="span_id_commenters" >' +
         "<i class=" + "\"fas fa-user fa-2x label_icons\"" + "></i>" +
         "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>" +
-        "<div class=\"label-info-body\"" + "\">" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-info-body\"" + "\">" +
         "<p>" + "Comments" + "</p>" +
         "<p>" + '<span class="label-info-button" id="span_id_comments" >' +
-        "<i class=" + "\"fas fa-comment-alt fa-2x label_icons\"" + "></i>" + 
+        "<i class=" + "\"fas fa-comment-alt fa-2x label_icons\"" + "></i>" +
         "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>"
     //    "<p style=\"margin: 5px 0px 5px 0px;font-size:3em;color:#337AB7\"" + ">" + "19\xa0" + "</p>" + "</div>"
 
@@ -841,7 +840,7 @@ function draw_view(json) {
         "<div class=\"label-emo-body\"" + ">" +
         "<p>" + "Angry" + "</p>" +
         "<p>" + '<span class="label-emo-button" id="span_id_angry" >' +
-        "<i class=" + "\"fas fa-angry fa-2x label_icons\"" + "></i>" + 
+        "<i class=" + "\"fas fa-angry fa-2x label_icons\"" + "></i>" +
         "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
         '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
@@ -853,7 +852,7 @@ function draw_view(json) {
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Sad" + "</p>" +
         "<p>" + '<span class="label-emo-button" id="span_id_sad" >' +
-        "<i class=" + "\"fas fa-frown fa-2x label_icons\"" + "></i>" + 
+        "<i class=" + "\"fas fa-frown fa-2x label_icons\"" + "></i>" +
         "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
         '</span>' + "</p>" + "</div>" +
         //"<div class=\"label-emo-body\"" + "\">" +
@@ -863,13 +862,13 @@ function draw_view(json) {
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Happy" + "</p>" +
         "<p>" + '<span class="label-emo-button" id="span_id_happy" >' +
-        "<i class=" + "\"fas fa-smile fa-2x label_icons\"" + "></i>" + 
+        "<i class=" + "\"fas fa-smile fa-2x label_icons\"" + "></i>" +
         "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
         '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Excited" + "</p>" +
         "<p>" + '<span class="label-emo-button" id="span_id_excited" >' +
-        "<i class=" + "\"fas fa-smile-beam fa-2x label_icons\"" + "></i>" + 
+        "<i class=" + "\"fas fa-smile-beam fa-2x label_icons\"" + "></i>" +
         "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
         '</span>' + "</p>" + "</div>";
 
@@ -895,19 +894,19 @@ function draw_view(json) {
         "<div class=\"label-sent-body\"" + ">" +
         "<p>" + "Negative" + "</p>" +
         "<p>" + '<span class="label-sent-button" id="span_id_negative" >' +
-        "<i class=" + "\"fas fa-thumbs-down fa-2x label_icons\"" + "></i>" + 
+        "<i class=" + "\"fas fa-thumbs-down fa-2x label_icons\"" + "></i>" +
         "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
         '</span>' + "</p>" + "</div>" +
         "<div class=\"label-sent-body\"" + "\">" +
         "<p>" + "Neutral" + "</p>" +
         "<p>" + '<span class="label-sent-button" id="span_id_neutral" >' +
-        "<i class=" + "\"far fa-thumbs-down fa-2x neutral label_icons\"" + " style=transform:rotate(-90deg)" + "></i>" + 
+        "<i class=" + "\"far fa-thumbs-down fa-2x neutral label_icons\"" + " style=transform:rotate(-90deg)" + "></i>" +
         "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
         '</span>' + "</p>" + "</div>" +
         "<div class=\"label-sent-body\"" + "\">" +
         "<p>" + "Positive" + "</p>" +
         "<p>" + '<span class="label-sent-button" id="span_id_positive" >' +
-        "<i class=" + "\"fas fa-thumbs-up fa-2x label_icons\"" + "></i>" + 
+        "<i class=" + "\"fas fa-thumbs-up fa-2x label_icons\"" + "></i>" +
         "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
         '</span>' + "</p>" + "</div>";
     labelColumn3Div.innerHTML = divCaption
@@ -984,13 +983,30 @@ function draw_view(json) {
             var divIdeaName =
                 "<div class=\"idea-Name\" " + "\">" +
                 //'<div  class="btn btn-primary btn-block ideaName" id="' + proposal_names[i].idea_id + '">' + proposal_names[i].idea_name + "</div>";
-                '<div  class="ideaName" id="' + proposal_names[i].idea_id + '">' + '<p class="search_enable" style="margin:5px 0px 5px 2px; word-wrap:break-word; text-align: left">' + proposal_names[i].idea_name + "</p></div>";
+                //'<div  class="ideaName" id="' + proposal_names[i].idea_id + '">' + '<p class="search_enable" style="margin:0px 0px 0px 0px; word-wrap:break-word; text-align: left">' + proposal_names[i].idea_name + "</p></div>";
+                '<div><span class="badge badge-warning ideaName" id="' + proposal_names[i].idea_id + '">' + proposal_names[i].idea_name + '</span></div>'
         }
         else {
+
+            var sentence_length = 0;
+            var sentence = ""
+            all_words = proposal_names[i].idea_name.split(" ")
+            for (var x = 0; x < all_words.length; x++){
+                sentence_length += all_words[x].length
+                console.log(sentence_length, all_words[x])
+                if(sentence_length > 18){
+                    sentence += "..."
+                    break;
+                }
+                else{
+                    sentence += all_words[x] + " "
+                }
+            }
+
             var divIdeaName =
                 "<div class=\"idea-Name\"" + "\">" +
                 //'<div  class="btn btn-primary btn-block ideaName" id="' + proposal_names[i].idea_id + '">' + proposal_names[i].idea_name + "</div>";
-                '<div  class="ideaName" id="' + proposal_names[i].idea_id + '">' + '<p style="margin:0px 0px 0px 2px; word-wrap:break-word; text-align: left">' + proposal_names[i].idea_name + "</p></div>";
+                '<div><span class="badge badge-warning ideaName" id="' + proposal_names[i].idea_id + '">' + sentence + '</span></div>'
         }
 
         column0.innerHTML = divIdeaName
@@ -1004,13 +1020,18 @@ function draw_view(json) {
         var column1 = document.getElementById("row" + i + "column1")
         //console.log(proposal_wise_topic_agg)
         for (var j = 0; j < proposal_wise_topic_agg[i].length; j++) {
-            if(j > 2){
+            topic_row_length += proposal_wise_topic_agg[i][j].topic_keyphrase.length
+            //console.log(proposal_wise_topic_agg[i][j].topic_keyphrase, topic_row_length)
+            if (topic_row_length > 40) {
                 break;
             }
-            divTopicName = divTopicName +
-                '<div  class="topicName" id="topic_' + proposal_names[i].idea_id + "_" + j + '\">' +
-                '<span class="badge badge-warning topic-name" id="topic_' + proposal_names[i].idea_id + "_" + j + "_id\">" + proposal_wise_topic_agg[i][j].topic_keyphrase + '</span></div>'
+            else {
+                divTopicName = divTopicName +
+                    '<div  class="topicName" id="topic_' + proposal_names[i].idea_id + "_" + j + '\">' +
+                    '<span class="badge badge-warning topic-name" id="topic_' + proposal_names[i].idea_id + "_" + j + "_id\">" + proposal_wise_topic_agg[i][j].topic_keyphrase + '</span></div>'
+            }
         }
+        topic_row_length = 0
         column1.innerHTML = divTopicName
 
         //============================ column 1 end =====================//
@@ -1031,7 +1052,7 @@ function draw_view(json) {
         send_data = []
         send_data.push(proposal_wise_emotion_agg[i])
         //console.log(send_data)
-        emotion_rows(send_data, svg_id,column2.id, proposal_names[i].idea_id)
+        emotion_rows(send_data, svg_id, column2.id, proposal_names[i].idea_id)
 
 
         //============================end of column 2==================//
@@ -1218,7 +1239,7 @@ function draw_view(json) {
             var copy_json = JSON.parse(JSON.stringify(json))
 
             copy_json["ideas"].sort((function (a, b) {
-           //     console.log(parseFloat(a[this_info]) - parseFloat(b[this_info]))
+                //     console.log(parseFloat(a[this_info]) - parseFloat(b[this_info]))
                 return parseFloat(b[this_info]) - parseFloat(a[this_info])
             }))
 
@@ -1234,6 +1255,7 @@ function draw_view(json) {
     $(document).ready(function () {
         $('.ideaName').click(function () {
             var id = $(this).attr('id');
+            console.log
             if (selected_rows[id]) {
                 selected_rows[id] = null;
                 document.getElementById(id).setAttribute("style", "background-color:none")
@@ -1265,6 +1287,11 @@ function draw_view(json) {
                 document.getElementById(id).scrollIntoView({ block: 'center' });
             }
 
+            if (check_empty() == true) {
+                console.log(document.getElementById("box_header"))
+                document.getElementById("box_header").innerHTML = "Click on a Proposal, Topic, Emotion or Sentiment to see related comments"
+            }
+
             console.log(id)
             if (animate_trigger) {
                 animatedDivs();
@@ -1273,7 +1300,7 @@ function draw_view(json) {
                 function () {
                     console.log('scroll');
 
-                    $('#parentBox').scrollTo($('#ideaDivId-'+id) , 500);
+                    $('#parentBox').scrollTo($('#ideaDivId-' + id), 500);
                 }, 100
             )
 
@@ -1328,6 +1355,11 @@ function draw_view(json) {
             var filtered_comment = { "ideas": all_filtered_topics }
             console.log(filtered_comment)
             draw_filtered_comments(filtered_comment, json)
+
+            if (check_empty() == true) {
+                console.log(document.getElementById("box_header"))
+                document.getElementById("box_header").innerHTML = "Click on a Proposal, Topic, Emotion or Sentiment to see related comments"
+            }
 
             // filterobj.idea_id = split_str[1]
             // filterobj.emotion = null
@@ -1523,7 +1555,7 @@ function responsivefy(svg) {
     // add viewBox and preserveAspectRatio properties,
     // and call resize so that svg resizes on inital page load
     svg.attr("viewBox", "0 0 " + width + " " + height)
-         .attr("preserveAspectRatio", "none")
+        .attr("preserveAspectRatio", "none")
         .call(resize);
 
     // to register multiple listeners for same event type,
@@ -1543,8 +1575,8 @@ function responsivefy(svg) {
     }
 }
 // draw emotions
-function emotion_rows(salesData,svg_id, div_id, idea_id) {
-    
+function emotion_rows(salesData, svg_id, div_id, idea_id) {
+
     var group = ["angry", "worried", "sad", "happy", "excited"];
     var parseDate = d3.timeFormat("%b-%Y");
     var mainDiv = "#" + div_id;
@@ -1552,14 +1584,14 @@ function emotion_rows(salesData,svg_id, div_id, idea_id) {
 
     var column = document.getElementById(div_id)
 
-   var svg = d3.select(mainDiv)
-   .append("svg")
-   //responsive SVG needs these 2 attributes and no width and height attr
-    .attr("id",svg_id)
-   .attr("height", column.clientHeight)
-   .attr("width",column.clientWidth)
-   .call(responsivefy)
-   //class to make it responsive
+    var svg = d3.select(mainDiv)
+        .append("svg")
+        //responsive SVG needs these 2 attributes and no width and height attr
+        .attr("id", svg_id)
+        .attr("height", column.clientHeight)
+        .attr("width", column.clientWidth)
+        .call(responsivefy)
+    //class to make it responsive
 
     salesData.forEach(function (d) {
         d = type(d);
@@ -1571,11 +1603,11 @@ function emotion_rows(salesData,svg_id, div_id, idea_id) {
         (salesData);
 
     var margin = {
-            top: 0,
-            right: 0,
-            bottom: 0,
-            left: 0
-        },
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0
+    },
 
         width = +svg.attr("width") - 2,
         height = +svg.attr("height");
@@ -1780,12 +1812,14 @@ function emotion_rows(salesData,svg_id, div_id, idea_id) {
         // deselect cell (check if previously selected row and column selected. Remove the column filter)
         if (cellHistory.emo_switch && cellHistory.prev_emo == d.key && cellHistory.prev_idea_id_emo == idea_id) {
             filterobj.idea_id = cellHistory.prev_idea_id
+            filterobj.idea_id = null
             filterobj.emotion = null
             filterobj.topic = null
             cellHistory.emo_switch = false
             if (animate_trigger) {
                 animatedDivs();
             }
+            check_empty();
         }
         else {
             if (animate_trigger) {
@@ -1808,6 +1842,14 @@ function emotion_rows(salesData,svg_id, div_id, idea_id) {
         cellHistory.prev_emo_color = z(d.key)
 
         $("#parentBox").animate({ scrollTop: 0 }, 1000);
+
+        if (check_empty() == true) {
+            console.log(document.getElementById("box_header"))
+            if (cellHistory.prev_senti) {
+                document.getElementById("box_header").innerHTML = "No comments for emotion - " + d.key + " and sentiment - " + cellHistory.prev_senti
+                alert("No comments for sentiment - " + d.key + " and emotion - " + cellHistory.prev_emo);
+            }
+        }
     }
 
     var rectTooltipg = svg.append("g")
@@ -1887,12 +1929,12 @@ function sentiment_rows(salesData, svg_id, div_id, idea_id) {
     var column = document.getElementById(div_id)
 
     var svg = d3.select(mainDiv)
-    .append("svg")
-    //responsive SVG needs these 2 attributes and no width and height attr
-     .attr("id",svg_id)
-    .attr("height", column.clientHeight)
-    .attr("width",column.clientWidth)
-    .call(responsivefy)
+        .append("svg")
+        //responsive SVG needs these 2 attributes and no width and height attr
+        .attr("id", svg_id)
+        .attr("height", column.clientHeight)
+        .attr("width", column.clientWidth)
+        .call(responsivefy)
 
     salesData.forEach(function (d) {
         d = type(d);
@@ -2116,7 +2158,7 @@ function sentiment_rows(salesData, svg_id, div_id, idea_id) {
             if (animate_trigger) {
                 animatedDivs();
             }
-
+            check_empty();
         }
         else {
             this_cell.attr("stroke", "black")
@@ -2139,6 +2181,14 @@ function sentiment_rows(salesData, svg_id, div_id, idea_id) {
         cellHistory.prev_senti_color = z(d.key)
 
         $("#parentBox").animate({ scrollTop: 0 }, 1000);
+
+        if (check_empty() == true) {
+            console.log(document.getElementById("box_header"))
+            if (cellHistory.prev_emo) {
+                document.getElementById("box_header").innerHTML = "No comments for sentiment - " + d.key + " and emotion - " + cellHistory.prev_emo
+                alert("No comments for sentiment - " + d.key + " and emotion - " + cellHistory.prev_emo);
+            }
+        }
     }
     var rectTooltipg = svg.append("g")
         .attr("font-family", "sans-serif")
