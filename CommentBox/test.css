@@ -94,6 +94,26 @@ body {
     padding: 5px 0;
 }
 
+.fa-comment-alt.label_icons{
+    opacity:0.7;
+}
+
+.fa-comment-alt.label_icons:hover{
+    opacity:1.0;
+    cursor: pointer;
+    outline: thin solid #337AB7;
+}
+
+.fa-user.label_icons{
+    opacity:0.7;
+}
+
+.fa-user.label_icons:hover{
+    opacity:1.0;
+    cursor: pointer;
+    outline: thin solid #337AB7;
+}
+
 .label-emo-body{
     width: 20%;
     padding: 5px 0;
@@ -188,7 +208,7 @@ body {
     width: 15%;
     height: inherit;
     border-color: black;
-    font-size: 1.25em;
+    font-size: 1.2em;
     font-weight: bold;
     padding:2px;
 }
@@ -197,6 +217,7 @@ body {
     width: 25%;
     height: inherit;
     border-color: black;
+    padding:2px;
 }
 
 .c_column2{
@@ -460,6 +481,10 @@ body {
     align-items: stretch;
 }
 
+.topicName{
+    margin: 10px 0px 10px 0px;
+}
+
 .topicName:hover{
     cursor:pointer;
 }
@@ -551,6 +576,8 @@ body {
     border-color:#337AB7;
     background-color: white;
     color:black;
+    margin: 1px 1px 1px 1px;
+    font-size:0.9em;
 }
 
 .badge:hover{

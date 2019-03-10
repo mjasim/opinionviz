@@ -179,6 +179,15 @@ function draw_filtered_comments(filtered_comment, json) {
     var divComment = []
     var topicFilter = ""
     var prevQuestionId = ""
+
+    var divBoxHeader = document.createElement("div")
+    divBoxHeader.className = "boxHeader"
+    divBoxHeader.id = "box_header"
+    var divBoxHeaderHTML = "<div>" + "<p align=\"center\">" + "" + "</p>" + "</div>"
+    var parentBox = document.getElementById("parentBox")
+    divBoxHeader.innerHTML = divBoxHeaderHTML
+    parentBox.appendChild(divBoxHeader);
+
     for (var i in filtered_comment["ideas"]) {
         divIdea[i] = document.createElement("div")
         divIdea[i].className = "ideaDiv";
@@ -353,7 +362,7 @@ function draw_filtered_comments(filtered_comment, json) {
 
 // tippy functions for categories
 function setTippy(commentID, json) {
-    //console.log('set tippy'+json);
+    //console.log(commentID);
     currentJSON = json;
     $(document).ready(function () {
         tippy('#' + commentID + ' .emoticon_button', {
@@ -440,11 +449,32 @@ function setTippy(commentID, json) {
             },
         });
 
-        tippy('#instr_button_id', {
+        tippy('# + commentID', {
             interactive: true,
             role: 'menu',
             // `focus` is not suitable for buttons with dropdowns
             trigger: 'click',
+            content: getLabelString(commentID.split("_")[2]),
+            theme: 'tomato',
+            // Don't announce the tooltip's contents when expanded
+            aria: null,
+            // Important: the tooltip should be DIRECTLY after the reference element
+            // in the DOM source order, which is why it has its own wrapper element
+            appendTo: 'parent',
+            // Let the user know the popup has been expanded
+            onMount({ reference }) {
+                reference.setAttribute('aria-expanded', 'true')
+            },
+            onHide({ reference }) {
+                reference.setAttribute('aria-expanded', 'false')
+            },
+        });
+
+        tippy('#instr_button_id', {
+            interactive: true,
+            role: 'menu',
+            // `focus` is not suitable for buttons with dropdowns
+            trigger: 'mouseenter',
             content: getInstrString(),
             theme: 'tomato',
             // Don't announce the tooltip's contents when expanded
@@ -671,6 +701,17 @@ function getInstrString() {
         "<p>" + "Instruction 1" + "</p>" +
         "</div>";
     return instrDiv;
+}
+
+function getLabelString(category)
+{
+   //console.log("inside labelstring", category);
+
+    var labelDiv =
+        "<div class=\"tippy-label-body\"" + "\">" +
+        "<div class=\"label-title\">" + "<p> " + "Sort proposals by " + category + "</p>" + "</div>" + "</div>";
+        //console.log(labelDiv)
+    return labelDiv;
 }
 
 // save revisions

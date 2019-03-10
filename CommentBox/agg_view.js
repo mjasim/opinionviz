@@ -10,10 +10,26 @@ var filterobj = {
 
 // global variable to track active ideas
 selected_rows = Array.apply(null, Array(36))
+
+// global variable to track active topics
 selected_topics = Array.apply(null, Array(36))
 for (var i = 0; i < selected_topics.length; i++) {
     selected_topics[i] = Array.apply(null, Array(7))
 }
+
+// global variable to track active sort
+selected_sort = {
+    angry: null,
+    worried: null,
+    sad: null,
+    happy: null,
+    excited: null,
+    negative: null,
+    neutral: null,
+    positive: null
+}
+
+var prev_sort_trigger = null;
 
 //console.log(selected_topics)
 
@@ -340,7 +356,6 @@ function draw_one_row(one_row) {
 
     labelColumn2Div.innerHTML = divCaption
     labelElement.appendChild(labelColumn2Div)
-
     // =========================== label column 2 end ===========================//
 
 
@@ -846,6 +861,8 @@ function draw_view(json) {
 
     labelColumn2Div.innerHTML = divCaption
     labelElement.appendChild(labelColumn2Div)
+    setTippy("span_id_angry", null);
+
 
     // =========================== label column 2 end ===========================//
 
@@ -942,7 +959,7 @@ function draw_view(json) {
         // column with all proposal names
         var column0 = document.getElementById("row" + i + "column0")
 
-        if (proposal_names[i].idea_name.length < 30) {
+        if (proposal_names[i].idea_name.length < 20) {
             //console.log(proposal_names[i].idea_name.length)
             var divIdeaName =
                 "<div class=\"idea-Name\" " + "\">" +
@@ -967,9 +984,12 @@ function draw_view(json) {
         var column1 = document.getElementById("row" + i + "column1")
         //console.log(proposal_wise_topic_agg)
         for (var j = 0; j < proposal_wise_topic_agg[i].length; j++) {
+            if(j > 2){
+                break;
+            }
             divTopicName = divTopicName +
                 '<div  class="topicName" id="topic_' + proposal_names[i].idea_id + "_" + j + '\">' +
-                '<span class="badge badge-warning topic-name" id="topic_' + proposal_names[i].idea_id + "_" + j + "_id\"" + 'style="margin: 1px 1px 1px 1px;font-size:1em;">' + proposal_wise_topic_agg[i][j].topic_keyphrase + '</span></div>'
+                '<span class="badge badge-warning topic-name" id="topic_' + proposal_names[i].idea_id + "_" + j + "_id\">" + proposal_wise_topic_agg[i][j].topic_keyphrase + '</span></div>'
         }
         column1.innerHTML = divTopicName
 
@@ -1100,9 +1120,27 @@ function draw_view(json) {
             var id = $(this).attr('id');
             console.log("inside iconClick", id)
             this_emo = id.split("_")[2] + "_normalized"
+
+            if(this_emo == prev_sort_trigger)
+            {
+                for(var x in selected_sort){
+                    selected_sort[x] = null;
+                }
+            }           
+
+            if(selected_sort[id]) {
+                selected_sort[id] = null;
+                document.getElementById(id).setAttribute("style", "opacity:0.7")
+                selected_sort.prev_trigger = document.getElementById(id)
+            }
+            else {
+                selected_sort[id] = true;
+                document.getElementById(id).setAttribute("style", "opacity:1.0")
+            }
+
             var emo_agg = get_proposal_wise_emotion(json)
             emo_agg.sort((function (a, b) {
-                console.log(parseFloat(b[this_emo]) - parseFloat(a[this_emo]))
+                //console.log(parseFloat(b[this_emo]) - parseFloat(a[this_emo]))
                 return parseFloat(b[this_emo]) - parseFloat(a[this_emo])
             }))
 
@@ -1177,7 +1215,7 @@ function draw_view(json) {
             var copy_json = JSON.parse(JSON.stringify(json))
 
             copy_json["ideas"].sort((function (a, b) {
-                console.log(parseFloat(a[this_info]) - parseFloat(b[this_info]))
+           //     console.log(parseFloat(a[this_info]) - parseFloat(b[this_info]))
                 return parseFloat(b[this_info]) - parseFloat(a[this_info])
             }))
 
@@ -1486,7 +1524,7 @@ function responsivefy(svg) {
     function resize() {
         var targetWidth = parseInt(container.style("width"));
         var targetHeight = parseInt(container.style("height"));
-        console.log(targetWidth,targetHeight)
+        //console.log(targetWidth,targetHeight)
         svg.attr("width", targetWidth);
         svg.attr("height", targetHeight);
         // svg.attr("height", Math.round(targetWidth / aspect));
