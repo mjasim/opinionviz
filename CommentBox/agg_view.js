@@ -8,12 +8,8 @@ var filterobj = {
     topic: []
 }
 
-var selected_sort = {
-    commenters: false,
-    users: false,
-    angry: false,
+var selected_sort = ["users","comments","angry","worried","sad","happy","excited","negative","neutral", "positive"];
 
-}
 
 // global variable to track active ideas
 selected_rows = Array.apply(null, Array(36))
@@ -339,27 +335,27 @@ function draw_one_row(one_row) {
         "<p style=\"margin: 5px 0px 5px 0px\"" + ">" + "Emotion" + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + ">" +
         "<p>" + "Angry" + "</p>" +
-        "<p>" + '<span class="label-emo-button" id="span_id_angry" >' +
+        "<p>" + '<span class="label-emo-button toplabel" id="span_id_angry" >' +
         "<i class=" + "\"fas fa-angry fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Worried" + "</p>" +
-        "<p>" + '<span class="label-emo-button" id="span_id_worried" >' +
+        "<p>" + '<span class="label-emo-button toplabel" id="span_id_worried" >' +
         "<i class=" + "\"fas fa-flushed fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Sad" + "</p>" +
-        "<p>" + '<span class="label-emo-button" id="span_id_sad" >' +
+        "<p>" + '<span class="label-emo-button toplabel" id="span_id_sad" >' +
         "<i class=" + "\"fas fa-frown fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Bored" + "</p>" +
-        "<p>" + '<span class="label-emo-button" id="span_id_bored" >' +
+        "<p>" + '<span class="label-emo-button toplabel" id="span_id_bored" >' +
         "<i class=" + "\"fas fa-meh fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Happy" + "</p>" +
-        "<p>" + '<span class="label-emo-button" id="span_id_happy" >' +
+        "<p>" + '<span class="label-emo-button toplabel" id="span_id_happy" >' +
         "<i class=" + "\"fas fa-smile fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Excited" + "</p>" +
-        "<p>" + '<span class="label-emo-button" id="span_id_excited" >' +
+        "<p>" + '<span class="label-emo-button toplabel" id="span_id_excited" >' +
         "<i class=" + "\"fas fa-smile-beam fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>";
 
     labelColumn2Div.innerHTML = divCaption
@@ -1000,7 +996,7 @@ function draw_view(json) {
             all_words = proposal_names[i].idea_name.split(" ")
             for (var x = 0; x < all_words.length; x++){
                 sentence_length += all_words[x].length
-                console.log(sentence_length, all_words[x])
+                //console.log(sentence_length, all_words[x])
                 if(sentence_length > 27){
                     sentence += "..."
                     break;
@@ -1200,6 +1196,15 @@ function draw_view(json) {
             while (myNode.firstChild) {
                 myNode.removeChild(myNode.firstChild);
             }
+
+            //console.log(selected_sort)
+            for(var i = 0; i < selected_sort.length; i++){
+                document.getElementById("span_id_"+selected_sort[i]).setAttribute("style", "opacity:0.5")
+               // console.log("span_id_"+selected_sort[i])
+            }
+
+            document.getElementById(id).setAttribute("style", "opacity:1.0");
+
         });
         // $('.emoticon_button').mouseover(function() {
         //     var id = $(this).attr('id');
@@ -1243,6 +1248,14 @@ function draw_view(json) {
             while (myNode.firstChild) {
                 myNode.removeChild(myNode.firstChild);
             }
+
+            //console.log(selected_sort)
+            for(var i = 0; i < selected_sort.length; i++){
+                document.getElementById("span_id_"+selected_sort[i]).setAttribute("style", "opacity:0.5")
+               // console.log("span_id_"+selected_sort[i])
+            }
+
+            document.getElementById(id).setAttribute("style", "opacity:1.0");
         });
         // $('.emoticon_button').mouseover(function() {
         //     var id = $(this).attr('id');
@@ -1275,6 +1288,14 @@ function draw_view(json) {
             while (myNode.firstChild) {
                 myNode.removeChild(myNode.firstChild);
             }
+
+            //console.log(selected_sort)
+            for(var i = 0; i < selected_sort.length; i++){
+                document.getElementById("span_id_"+selected_sort[i]).setAttribute("style", "opacity:0.5")
+               // console.log("span_id_"+selected_sort[i])
+            }
+
+            document.getElementById(id).setAttribute("style", "opacity:1.0");
         });
         // $('.emoticon_button').mouseover(function() {
         //     var id = $(this).attr('id');

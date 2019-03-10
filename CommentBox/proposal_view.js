@@ -371,7 +371,7 @@ function setTippy(commentID, json) {
             arrowType: 'sharp',
             theme: 'light',
             // `focus` is not suitable for buttons with dropdowns
-            trigger: 'mouseenter',
+            trigger: 'click',
             content: getEmojiString(commentID),
             // Don't announce the tooltip's contents when expanded
             aria: null,
@@ -649,7 +649,7 @@ function getSubjectivityString(commentID) {
 
     var subjectivityDiv =
         "<div class=\"tippy-label-body\"" + "\">" +
-        "<div class=\"label-title\"" + " style=border:none;font-size:1.5em" + ">" + "<p> " + "Click on an icon to set as the new subjective" + "</p>" + "</div>" +
+        "<div class=\"label-title\"" + " style=border:none;font-size:1.5em" + ">" + "<p> " + "Click on an icon to set as fact or opinion" + "</p>" + "</div>" +
         "<div class=\"label-sub-body\"" + ">" +
         "<p>" + "Fact" + "</p>" +
         "<p>" + '<span class="label-sub-button" id="span_id_fact' + commentID + '" onclick="subjectivityMouseClick(\'' + 'fact-' + commentID + '\')">' +
