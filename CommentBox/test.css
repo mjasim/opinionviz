@@ -130,14 +130,14 @@ body {
     flex-wrap: wrap;
     width: 100%;
     height: 40px;
-    margin: 10px 0px 10px 0px;
+    /*margin: 10px 0px 10px 0px;*/
     border: solid 2px white;
 
     /* border-top: solid thin #F1F1F1; */
 }
 
 .c_row:hover{
-    border: solid 2px darkgrey;
+    border: solid 2px #696969;
 }
 
 .t_column0{
