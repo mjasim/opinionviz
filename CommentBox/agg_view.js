@@ -8,6 +8,13 @@ var filterobj = {
     topic: []
 }
 
+var selected_sort = {
+    commenters: false,
+    users: false,
+    angry: false,
+
+}
+
 // global variable to track active ideas
 selected_rows = Array.apply(null, Array(36))
 
@@ -1250,6 +1257,10 @@ function draw_view(json) {
             console.log("inside iconClick", id)
             this_info = "num_of_" + id.split("_")[2]
 
+            if(id.split("_")[2] == "users"){
+                this_info = "num_of_commenters"
+            }
+
             var copy_json = JSON.parse(JSON.stringify(json))
 
             copy_json["ideas"].sort((function (a, b) {
@@ -1524,7 +1535,7 @@ function draw_view(json) {
                 else{
                     document.getElementById("box_header").innerHTML = ""
                 }
-                
+
                 //$("#parentBox").animate({ scrollTop: 0 }, 1000);
 
                 //console.log("redrawing")

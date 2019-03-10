@@ -97,13 +97,13 @@ body {
     padding: 5px 0;
 }
 
-.fa-comment-alt.label_icons{
+/* .fa-comment-alt.label_icons{
     opacity:0.7;
 }
 
 .fa-user.label_icons{
     opacity:0.7;
-}
+} */
 
 .label-emo-body{
     width: 20%;
@@ -329,7 +329,7 @@ body {
 .fa-angry:hover{
     opacity: 1.0;
     cursor: pointer;
-    outline:solid thin #E45756;
+    /* outline:solid thin #E45756; */
 }
 
 .fa-flushed{
@@ -339,7 +339,7 @@ body {
 .fa-flushed:hover{
     opacity: 1.0;
     cursor: pointer;
-    outline:solid thin #B279A2;
+    /* outline:solid thin #B279A2; */
 }
 
 .fa-frown{
@@ -349,7 +349,7 @@ body {
 .fa-frown:hover{
     opacity: 1.0;
     cursor: pointer;
-    outline:solid thin #4C78A8;
+    /* outline:solid thin #4C78A8; */
 }
 
 .fa-meh{
@@ -359,7 +359,7 @@ body {
 .fa-meh:hover{
     opacity: 1.0;
     cursor: pointer;
-    outline:solid thin #72B7B2;
+    /* outline:solid thin #72B7B2; */
 }
 
 .fa-smile{
@@ -369,7 +369,7 @@ body {
 .fa-smile:hover{
     opacity: 1.0;
     cursor: pointer;
-    outline:solid thin #EECA3B;
+    /* outline:solid thin #EECA3B; */
 }
 
 .fa-smile-beam{
@@ -379,7 +379,7 @@ body {
 .fa-smile-beam:hover{
     opacity: 1.0;
     cursor: pointer;
-    outline:solid thin #F58518;
+    /* outline:solid thin #F58518; */
 }
 
 .fa-thumbs-up{
@@ -389,7 +389,7 @@ body {
 .fa-thumbs-up:hover{
     opacity: 1.0;
     cursor: pointer;
-    outline:solid thin #5AB4AC;
+    /* outline:solid thin #5AB4AC; */
 }
 
 .fa-thumbs-down{
@@ -399,7 +399,7 @@ body {
 .fa-thumbs-down:hover{
     opacity: 1.0;
     cursor: pointer;
-    outline:solid thin #D8B365;
+    /* outline:solid thin #D8B365; */
 }
 
 .fa-thumbs-down.neutral{
@@ -412,15 +412,14 @@ body {
     outline:solid thin gray;
 } */
 
-.fa-sort-amount-down.label_icons{
+/* .fa-sort-amount-down.label_icons{
     opacity: 0.5
-}
+}*/
 
-.fa-sort-amount-down.label_icons:hover{
+/* .fa-sort-amount-down.label_icons:hover{
     opacity: 1.0;
-    cursor:pointer;
-    /* outline: solid thin black; */
-}
+    cursor:pointer; 
+} */
 
 .tippy-tooltip.tomato-theme {
     background-color: tomato;
@@ -442,7 +441,7 @@ body {
 .fa-clipboard-check:hover{
     opacity: 1.0;
     cursor: pointer;
-    outline:solid thin black;
+    /* outline:solid thin black; */
 }
 
 .fa-comments{
@@ -452,7 +451,7 @@ body {
 .fa-comments:hover{
     opacity: 1.0;
     cursor: pointer;
-    outline:solid thin gray;
+    /* outline:solid thin gray; */
 }
 
 .fa-plus-circle{
@@ -462,7 +461,7 @@ body {
 .fa-plus-circle:hover{
     opacity: 1.0;
     cursor: pointer;
-    outline:solid thin #0099FF;
+    /* outline:solid thin #0099FF; */
 }
 
 .fa-clipboard-list{
@@ -472,7 +471,7 @@ body {
 .fa-clipboard-list:hover{
     opacity: 1.0;
     cursor: pointer;
-    outline:solid thin #0099FF;
+    /* outline:solid thin #0099FF; */
 }
 
 .fa-save{
@@ -482,7 +481,7 @@ body {
 .fa-save:hover{
     opacity: 1.0;
     cursor: pointer;
-    outline:solid thin #0099FF;
+/* outline:solid thin #0099FF; */
 }
 
 .fa-exclamation-circle{
@@ -492,7 +491,7 @@ body {
 .fa-exclamation-circle:hover{
     opacity: 1.0;
     cursor: pointer;
-    outline:solid thin #0099FF;
+    /* outline:solid thin #0099FF; */
 }
 
 .topic-body{
@@ -584,14 +583,14 @@ body {
 }
 
 .label_icons{
-    opacity:0.7;
+    opacity:1.0;
 }
 
-.label_icons:hover{
+/* .label_icons:hover{
     opacity: 1.0;
     outline: none;
     cursor: pointer;
-}
+} */
 
 .badge{
     border-style:solid;
@@ -666,6 +665,10 @@ c_row    border-radius: 10px;
     border-color: #2C485B;
 }
 
+.btn, .btn-default{
+    color: white;
+}
+
 .highlight{ background-color:yellow; }
 
 .navbar-text:hover{
@@ -674,4 +677,41 @@ c_row    border-radius: 10px;
 
 #box_header{
     padding: 5px
+}
+
+.tippy-tooltip.light-theme {
+    background: white;
+    color: #333;
+    box-shadow: 0 3px 14px -0.5px rgba(0, 8, 16, 0.1);
+}
+
+.tippy-popper {
+    outline: 0;
+}
+
+.label-emo-button{
+      opacity: 0.5
+}
+
+.label-emo-button:hover{
+    opacity: 1.0;
+    cursor:pointer;
+}
+
+.label-sent-button{
+    opacity: 0.5
+}
+
+.label-sent-button:hover{
+  opacity: 1.0;
+  cursor:pointer;
+}
+
+.label-info-button{
+    opacity: 0.5
+}
+
+.label-info-button:hover{
+  opacity: 1.0;
+  cursor:pointer;
 }

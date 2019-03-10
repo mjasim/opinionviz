@@ -367,10 +367,12 @@ function setTippy(commentID, json) {
         tippy('#' + commentID + ' .emoticon_button', {
             interactive: true,
             role: 'menu',
+            arrow: true,
+            arrowType: 'sharp',
+            theme: 'light',
             // `focus` is not suitable for buttons with dropdowns
             trigger: 'mouseenter',
             content: getEmojiString(commentID),
-            theme: 'tomato',
             // Don't announce the tooltip's contents when expanded
             aria: null,
             // Important: the tooltip should be DIRECTLY after the reference element
@@ -388,10 +390,12 @@ function setTippy(commentID, json) {
         tippy('#' + commentID + ' .sentiment_button', {
             interactive: true,
             role: 'menu',
+            arrow: true,
+            arrowType: 'sharp',
             // `focus` is not suitable for buttons with dropdowns
             trigger: 'mouseenter',
             content: getSentiString(commentID),
-            theme: 'tomato',
+            theme: 'light',
             // Don't announce the tooltip's contents when expanded
             aria: null,
             // Important: the tooltip should be DIRECTLY after the reference element
@@ -409,10 +413,12 @@ function setTippy(commentID, json) {
         tippy('#' + commentID + ' .subjectivity_button', {
             interactive: true,
             role: 'menu',
+            arrow: true,
+            arrowType: 'sharp',
             // `focus` is not suitable for buttons with dropdowns
             trigger: 'mouseenter',
             content: getSubjectivityString(commentID),
-            theme: 'tomato',
+            theme: 'light',
             // Don't announce the tooltip's contents when expanded
             aria: null,
             // Important: the tooltip should be DIRECTLY after the reference element
@@ -430,10 +436,12 @@ function setTippy(commentID, json) {
         tippy('#' + commentID + ' .options_button', {
             interactive: true,
             role: 'menu',
+            arrow: true,
+            arrowType: 'sharp',
             // `focus` is not suitable for buttons with dropdowns
             trigger: 'mouseenter',
             content: getOptionString(commentID),
-            theme: 'tomato',
+            theme: 'light',
             // Don't announce the tooltip's contents when expanded
             aria: null,
             // Important: the tooltip should be DIRECTLY after the reference element
