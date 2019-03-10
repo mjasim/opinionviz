@@ -1301,14 +1301,18 @@ function draw_view(json) {
 
             console.log(filtered_comment)
             draw_filtered_comments(filtered_comment, json)
+            
+            // if (!animate_trigger) {
+            //     document.getElementById(id).scrollIntoView({ block: 'center' });
+            // }
 
-            if (!animate_trigger) {
-                document.getElementById(id).scrollIntoView({ block: 'center' });
-            }
+            console.log(check_empty())
 
             if (check_empty() == true) {
-                console.log(document.getElementById("box_header"))
                 document.getElementById("box_header").innerHTML = "Click on a Proposal, Topic, Emotion or Sentiment to see related comments"
+            }
+            else{
+                document.getElementById("box_header").innerHTML = ""
             }
 
             console.log(id)
@@ -1387,8 +1391,10 @@ function draw_view(json) {
             draw_filtered_comments(filtered_comment, json)
 
             if (check_empty() == true) {
-                console.log(document.getElementById("box_header"))
                 document.getElementById("box_header").innerHTML = "Click on a Proposal, Topic, Emotion or Sentiment to see related comments"
+            }
+            else{
+                document.getElementById("box_header").innerHTML = ""
             }
 
             // filterobj.idea_id = split_str[1]
@@ -1454,6 +1460,13 @@ function draw_view(json) {
                 var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
                 draw_filtered_comments(filtered_comment, json)
 
+                if (check_empty() == true) {
+                    document.getElementById("box_header").innerHTML = "Click on a Proposal, Topic, Emotion or Sentiment to see related comments"
+                }
+                else{
+                    document.getElementById("box_header").innerHTML = ""
+                }
+
                 $("#parentBox").animate({ scrollTop: 0 }, 1000);
 
                 //console.log("redrawing")
@@ -1505,6 +1518,13 @@ function draw_view(json) {
                 var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
                 draw_filtered_comments(filtered_comment, json)
 
+                if (check_empty() == true) {
+                    document.getElementById("box_header").innerHTML = "Click on a Proposal, Topic, Emotion or Sentiment to see related comments"
+                }
+                else{
+                    document.getElementById("box_header").innerHTML = ""
+                }
+                
                 //$("#parentBox").animate({ scrollTop: 0 }, 1000);
 
                 //console.log("redrawing")
@@ -1858,7 +1878,6 @@ function emotion_rows(salesData, svg_id, div_id, idea_id) {
             if (animate_trigger) {
                 animatedDivs();
             }
-            check_empty();
         }
         else {
             if (animate_trigger) {
@@ -1874,6 +1893,12 @@ function emotion_rows(salesData, svg_id, div_id, idea_id) {
 
         var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
         draw_filtered_comments(filtered_comment, json)
+        if (check_empty() == true) {
+            document.getElementById("box_header").innerHTML = "Click on a Proposal, Topic, Emotion or Sentiment to see related comments"
+        }
+        else{
+            document.getElementById("box_header").innerHTML = ""
+        }
         cellHistory.prev_emo_cell = this_cell
         cellHistory.prev_idea_id_emo = idea_id
         cellHistory.prev_idea_id = idea_id
@@ -2213,6 +2238,12 @@ function sentiment_rows(salesData, svg_id, div_id, idea_id) {
 
         var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
         draw_filtered_comments(filtered_comment, json)
+        if (check_empty() == true) {
+            document.getElementById("box_header").innerHTML = "Click on a Proposal, Topic, Emotion or Sentiment to see related comments"
+        }
+        else{
+            document.getElementById("box_header").innerHTML = ""
+        }
         cellHistory.prev_senti_cell = this_cell
         cellHistory.prev_idea_id_senti = idea_id
         cellHistory.prev_idea_id = idea_id
@@ -2542,6 +2573,12 @@ function subjectivity_rows(salesData, svg_id, div_id, idea_id) {
 
         var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
         draw_filtered_comments(filtered_comment, json)
+        if (check_empty() == true) {
+            document.getElementById("box_header").innerHTML = "Click on a Proposal, Topic, Emotion or Sentiment to see related comments"
+        }
+        else{
+            document.getElementById("box_header").innerHTML = ""
+        }
         cellHistory.prev_sub_cell = this_cell
         cellHistory.prev_idea_id_sub = idea_id
         cellHistory.prev_idea_id = idea_id

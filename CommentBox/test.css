@@ -210,14 +210,14 @@ body {
     border-color: black;
     font-size: 1.2em;
     font-weight: bold;
-    padding:4px 0px 0px 0px;
+    padding:3px 0px 0px 0px;
 }
 
 .c_column1{
     width: 25%;
     height: inherit;
     border-color: black;
-    padding:9px 0px 0px 0px;
+    padding:8px 0px 0px 0px;
 }
 
 .c_column2{
@@ -596,7 +596,7 @@ body {
     border-style:solid;
     border-width:1px;
     border-color:#337AB7;
-    background-color: white;
+    background-color: #F5F8FA;
     color:black;
     margin: 1px 1px 1px 1px;
     font-size:0.9em;
@@ -613,7 +613,7 @@ body {
 .badge.ideaName{
     border-style: solid;
     border-width:0px; 
-    background-color: white;
+    background-color: #F5F8FA;
     color:black;
     margin: 4px 1px 1px 1px;
 }
