@@ -1275,7 +1275,6 @@ function draw_view(json) {
     $(document).ready(function () {
         $('.ideaName').click(function () {
             var id = $(this).attr('id');
-            console.log
             if (selected_rows[id]) {
                 selected_rows[id] = null;
                 document.getElementById(id).setAttribute("style", "background-color:none")
@@ -1316,13 +1315,24 @@ function draw_view(json) {
             if (animate_trigger) {
                 animatedDivs();
             }
-            setTimeout(
-                function () {
-                    console.log('scroll');
+            if (!selected_rows[id]) {
+                setTimeout(
+                    function () {
+                        console.log('scroll');
+                        $('#parentBox').scrollTo(0);
+                    }, 100
+                )
+            }
+            else{
+                setTimeout(
+                    function () {
+                        console.log('scroll');
 
-                    $('#parentBox').scrollTo($('#ideaDivId-' + id), 500);
-                }, 100
-            )
+                        $('#parentBox').scrollTo($('#ideaDivId-' + id), 500);
+                    }, 100
+                )
+            }
+
 
 
         });
