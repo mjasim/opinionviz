@@ -789,7 +789,7 @@ function draw_view(json) {
         "<p style=\"margin: 5px 0px 5px 0px;font-size:1.5em;text-align:left\"" + ">" + "Proposals" + "</p>" + "</div>" +
         "<div class=\"label-info-body\"" + ">" +
         "<p>" + "Users" + "</p>" +
-        "<p>" + '<span class="label-info-button" id="span_id_commenters" >' +
+        "<p>" + '<span class="label-info-button" id="span_id_users" >' +
         "<i class=" + "\"fas fa-user fa-2x label_icons\"" + "></i>" +
         "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-info-body\"" + "\">" +
@@ -1187,11 +1187,18 @@ function draw_view(json) {
             }
             sorted_ideas = { "ideas": show_this }
             draw_view(sorted_ideas)
+            document.getElementById("box_header").innerHTML = "Sorted by " + id.split("_")[2] ;
+
+            var myNode = document.getElementById("parentBox");
+            while (myNode.firstChild) {
+                myNode.removeChild(myNode.firstChild);
+            }
         });
         // $('.emoticon_button').mouseover(function() {
         //     var id = $(this).attr('id');
         //     console.log('emotion mouseover',id)
         // });
+
     });
 
     // On click for sort icons by sentiment
@@ -1223,6 +1230,12 @@ function draw_view(json) {
             }
             sorted_ideas = { "ideas": show_this }
             draw_view(sorted_ideas)
+            document.getElementById("box_header").innerHTML = "Sorted by " + id.split("_")[2] ;
+
+            var myNode = document.getElementById("parentBox");
+            while (myNode.firstChild) {
+                myNode.removeChild(myNode.firstChild);
+            }
         });
         // $('.emoticon_button').mouseover(function() {
         //     var id = $(this).attr('id');
@@ -1245,6 +1258,12 @@ function draw_view(json) {
             }))
 
             draw_view(copy_json)
+            document.getElementById("box_header").innerHTML = "Sorted by number of " + id.split("_")[2] ;
+
+            var myNode = document.getElementById("parentBox");
+            while (myNode.firstChild) {
+                myNode.removeChild(myNode.firstChild);
+            }
         });
         // $('.emoticon_button').mouseover(function() {
         //     var id = $(this).attr('id');
@@ -1523,7 +1542,7 @@ function draw_view(json) {
 
             console.log("refreshing")
             //$("#parentBox").animate({ scrollTop: 0 }, 1000);
-            draw_view();
+            draw_view(json);
             if (animate_trigger) {
                 animatedDivs();
             }
@@ -1541,7 +1560,7 @@ function draw_view(json) {
 
             console.log("refreshing")
             //$("#parentBox").animate({ scrollTop: 0 }, 1000);
-            draw_view();
+            draw_view(json);
             if (animate_trigger) {
                 animatedDivs();
             }
@@ -1993,7 +2012,7 @@ function sentiment_rows(salesData, svg_id, div_id, idea_id) {
         });
     }
 
-    var z = d3.scaleOrdinal(["#D8B365", "#F5F5F5", "#5AB4AC"]);
+    var z = d3.scaleOrdinal(["#D8B365", "#D9D9D9", "#5AB4AC"]);
 
     var maing = svg.append("g")
         .selectAll("g")
@@ -2067,7 +2086,7 @@ function sentiment_rows(salesData, svg_id, div_id, idea_id) {
             var xCo = 0;
             if (mouseCoords[0] + 10 >= width * 0.80) {
                 xCo = mouseCoords[0] - parseFloat(d3.selectAll("#recttooltipRect_" + mainDivName)
-                    .attr("width"));
+                    .attr("width")) - 10;
             } else {
                 xCo = mouseCoords[0] + 10;
             }
@@ -2109,7 +2128,7 @@ function sentiment_rows(salesData, svg_id, div_id, idea_id) {
                 var xCo = 0;
                 if (mouseCoords[0] + 10 >= width * 0.80) {
                     xCo = mouseCoords[0] - parseFloat(d3.selectAll("#recttooltipRect_" + mainDivName)
-                        .attr("width"));
+                        .attr("width")) - 10;
                 } else {
                     xCo = mouseCoords[0] + 10;
                 }

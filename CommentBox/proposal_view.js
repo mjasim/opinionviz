@@ -171,14 +171,14 @@ function draw_filtered_comments(filtered_comment, json) {
         myNode.removeChild(myNode.firstChild);
     }
 
-    var divBoxHeader = document.createElement("div")
-    divBoxHeader.className = "boxHeader"
-    divBoxHeader.id = "box_header"
-    var divBoxHeaderHTML = "<div>" + "<p align=\"center\">" + "" + "</p>" + "</div>"
-    var parentBox = document.getElementById("parentBox")
-    divBoxHeader.innerHTML = divBoxHeaderHTML
-    parentBox.appendChild(divBoxHeader);
-    //console.log(filtered_comment)
+    // var divBoxHeader = document.createElement("div")
+    // divBoxHeader.className = "boxHeader"
+    // divBoxHeader.id = "box_header"
+    // var divBoxHeaderHTML = "<div>" + "<p align=\"center\">" + "" + "</p>" + "</div>"
+    // var parentBox = document.getElementById("parentBox")
+    // divBoxHeader.innerHTML = divBoxHeaderHTML
+    // parentBox.appendChild(divBoxHeader);
+    // //console.log(filtered_comment)
 
     var divIdea = []
     var divQuestion = []
@@ -731,8 +731,6 @@ function makeRevision(obj) {
     request.open("POST", "save_file.php", true)
     request.setRequestHeader("Content-type", "application/json")
     request.send(JSON.stringify(obj));
-
-
 }
 
 // check keyphrases for topics

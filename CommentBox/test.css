@@ -11,7 +11,7 @@ body {
 .parentDiv{
     display: flex;
     flex-direction: column;
-    height: 90%;
+    height: 99%;
     width: 100%;
     justify-content: start;
     align-items: center;
@@ -35,6 +35,7 @@ body {
     width: 100%;
     height: 32vh;
     overflow: scroll;
+    overflow-x: hidden;
     /* -ms-overflow-style: none;
     overflow: -moz-scrollbars-none; */
     transition: all .5s linear;
@@ -45,7 +46,7 @@ body {
     display: flex;
     flex-direction: row;
     align-items: center;
-    background-color: #E6F5FF;
+    background-color: #DEE5EA;
     width: 100%;
     height: 40px;
     overflow:hidden;
@@ -57,7 +58,7 @@ body {
     flex-direction: row;
     flex-wrap: wrap;
     align-items: center;
-    background-color: #E6F5FF;
+    background-color: #DEE5EA;
     width: 100%;
     height: 80px;
     color:black;
@@ -246,17 +247,17 @@ body {
 .box{
     width: 100%;
     height: 50vh;
-    background-color: #E6F5FF;
     overflow: scroll;
     transition: all .5s linear;
-
+    overflow-x:hidden;
 }
 
 .ideaDiv{
     /*color:blue;*/
-    border-top:thin solid black;
-    color: #545454;
-    margin: 5px auto;
+    background-color: #DEE5EA;
+    margin: 5px 10px;
+    padding: 5px 5px;
+    border-radius: 5px;
 }
 .ideaDiv h1{
     font-weight: 700;
@@ -265,8 +266,15 @@ body {
     padding: 0px 0px 0px 5px;
 }
 
+.boxHeader{
+    background-color: #DEE5EA;
+    width: inherit;
+    text-align: center;
+    margin: 5px 0px 0px 0px;
+}
+
 .taskDiv{
-    color:green;
+    color:Black;
     margin: 0 auto;
 }
 
@@ -278,7 +286,7 @@ body {
 }
 
 .questionDiv{
-    color:#4682B4;
+    color:black;
     margin-left: 20px
 }
 
@@ -527,6 +535,7 @@ body {
   } */
   .aggregate{
     transition: all .5s linear;
+    background-color:#F5F8FA;
   }
   .title-header{
       display:flex;
@@ -534,11 +543,11 @@ body {
   }
 
   .fa-comment-alt{
-      color:#337AB7
-  }
+      color: black
+}
 
   .fa-user{
-    color:#337AB7
+    color:black
 }
 
 /* .fa-info-circle{
@@ -638,7 +647,9 @@ body {
     padding-bottom:5px !important;
 }
 .navbar {
-    min-height:30px !important
+    min-height:30px !important;
+    margin-bottom: 0px;
+    border-radius: 0px;
 }
 
 .navbar-brand{
@@ -647,11 +658,17 @@ body {
 }
 
 .btn, .btn-primary, .navbar-btn{
-    margin: 13px 10px 0px 0px;
+    margin: 15px 0px 0px 0px;
+    background-color: #2C485B;
+    border-color: #2C485B;
 }
 
 .highlight{ background-color:yellow; }
 
 .navbar-text:hover{
     cursor:pointer
+}
+
+#box_header{
+    padding: 5px
 }
