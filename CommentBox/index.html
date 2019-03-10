@@ -23,7 +23,7 @@
 </head>
 
 <body>
-	<nav class="navbar navbar-dark" style= "background-color: #2C485B">
+	<nav class="navbar navbar-dark" style="background-color: #2C485B">
 		<div class="container-fluid">
 			<!-- Brand and toggle get grouped for better mobile display -->
 			<div class="navbar-header">
@@ -39,11 +39,15 @@
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
-					<p class="navbar-text" style="font-size:1.5em; color:white">CommunityPulse</p>
-					<li><button class="btn btn-primary navbar-btn" id = "instr_button" type="button" data-toggle="tooltip" data-placement="bottom" title="User Guide"><i class="fas fa-book"></i></button></li>
-					<li><button class="btn btn-primary navbar-btn" id = "refresh_button" type="button" data-toggle="tooltip" data-placement="bottom" title="Refresh"><i class="fas fa-sync"></i></button></li>
+					<p class="navbar-text" id="cp_refresh" style="font-size:1.5em; color:white">CommunityPulse</p>
+					<li><button class="btn btn-primary navbar-btn" id="instr_button" type="button" data-toggle="modal"
+							data-placement="bottom" title="User Guide" data-target="#instrModal"><i
+								class="fas fa-book"></i></button></li>
+					<li><button class="btn btn-primary navbar-btn" id="refresh_button" type="button"
+							data-toggle="tooltip" data-placement="bottom" title="Refresh"><i
+								class="fas fa-sync"></i></button></li>
 				</ul>
-				<form class="navbar-form navbar-right" >
+				<form class="navbar-form navbar-right">
 					<div class="input-group">
 						<input type="text" class="form-control" id="mysearch" placeholder="Search" name="search">
 					</div>
@@ -51,6 +55,27 @@
 			</div><!-- /.navbar-collapse -->
 		</div><!-- /.container-fluid -->
 	</nav>
+
+	<!-- Modal Instruction-->
+	<div class="modal fade" id="instrModal" tabindex="-1" role="dialog" aria-labelledby="instrModal"
+		aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="instrModalTitle">CommunityPulse User Guide</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<p></p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
 	<div id="parDiv" class="parentDiv">
 		<!--<div>-->
@@ -123,7 +148,6 @@
 							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 						</div>
 					</div>
-
 				</div>
 			</div>
 			<!-- <div id="note_save">
@@ -135,7 +159,8 @@
 		<div style="background-color:blueviolet; height:30vh; width: 100%"></div>
 		<button onclick="myFunction()">Try it</button>-->
 		<div id="parentBox" class="box">
-			<div class="boxHeader" id="box_header"><p></p>
+			<div class="boxHeader" id="box_header">
+				<p></p>
 			</div>
 		</div>
 	</div>

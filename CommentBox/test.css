@@ -45,7 +45,7 @@ body {
     display: flex;
     flex-direction: row;
     align-items: center;
-    background-color: #F1F1F1;
+    background-color: #E6F5FF;
     width: 100%;
     height: 40px;
     overflow:hidden;
@@ -57,7 +57,7 @@ body {
     flex-direction: row;
     flex-wrap: wrap;
     align-items: center;
-    background-color: #F1F1F1;
+    background-color: #E6F5FF;
     width: 100%;
     height: 80px;
     color:black;
@@ -97,11 +97,11 @@ body {
 }
 
 .fa-comment-alt.label_icons{
-    opacity:1.0;
+    opacity:0.7;
 }
 
 .fa-user.label_icons{
-    opacity:1.0;
+    opacity:0.7;
 }
 
 .label-emo-body{
@@ -139,7 +139,7 @@ body {
 }
 
 .t_column0{
-    width: 15%;
+    width: 20%;
     height: inherit;
 }
 
@@ -149,7 +149,7 @@ body {
 }
 
 .t_column2{
-    width: 35%;
+    width: 30%;
     height: inherit;
     padding: 3px 0px 0px 0px;
 }
@@ -171,7 +171,7 @@ body {
 } */
 
 .l_column0{
-    width: 15%;
+    width: 20%;
     height: inherit;
 }
 
@@ -182,7 +182,7 @@ body {
 }
 
 .l_column2{
-    width: 35%;
+    width: 30%;
     height: inherit;
 }
 
@@ -202,7 +202,7 @@ body {
 } */
 
 .c_column0{
-    width: 15%;
+    width: 20%;
     height: inherit;
     border-color: black;
     font-size: 1.2em;
@@ -218,7 +218,7 @@ body {
 }
 
 .c_column2{
-    width: 35%;
+    width: 30%;
     height: inherit;
     border-color: black;
     padding: 4px 0px 0px 0px;
@@ -246,7 +246,7 @@ body {
 .box{
     width: 100%;
     height: 50vh;
-    background-color: #F1F1F1;
+    background-color: #E6F5FF;
     overflow: scroll;
     transition: all .5s linear;
 
@@ -402,13 +402,13 @@ body {
 } */
 
 .fa-sort-amount-down.label_icons{
-    opacity: 0.7
+    opacity: 0.5
 }
 
 .fa-sort-amount-down.label_icons:hover{
     opacity: 1.0;
     cursor:pointer;
-    outline: solid thin black;
+    /* outline: solid thin black; */
 }
 
 .tippy-tooltip.tomato-theme {
@@ -572,12 +572,13 @@ body {
 }
 
 .label_icons{
-    opacity:1.0;
+    opacity:0.7;
 }
 
 .label_icons:hover{
+    opacity: 1.0;
     outline: none;
-    cursor: default;
+    cursor: pointer;
 }
 
 .badge{
@@ -651,3 +652,6 @@ body {
 
 .highlight{ background-color:yellow; }
 
+.navbar-text:hover{
+    cursor:pointer
+}

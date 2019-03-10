@@ -978,13 +978,13 @@ function draw_view(json) {
         // column with all proposal names
         var column0 = document.getElementById("row" + i + "column0")
 
-        if (proposal_names[i].idea_name.length < 20) {
+        if (proposal_names[i].idea_name.length < 27) {
             //console.log(proposal_names[i].idea_name.length)
             var divIdeaName =
                 "<div class=\"idea-Name\" " + "\">" +
                 //'<div  class="btn btn-primary btn-block ideaName" id="' + proposal_names[i].idea_id + '">' + proposal_names[i].idea_name + "</div>";
                 //'<div  class="ideaName" id="' + proposal_names[i].idea_id + '">' + '<p class="search_enable" style="margin:0px 0px 0px 0px; word-wrap:break-word; text-align: left">' + proposal_names[i].idea_name + "</p></div>";
-                '<div><span class="badge badge-warning ideaName" id="' + proposal_names[i].idea_id + '">' + proposal_names[i].idea_name + '</span></div>'
+                '<div><span class="badge badge-warning ideaName" id="' + proposal_names[i].idea_id + '" data-toggle="tooltip" data-placement="bottom">' + proposal_names[i].idea_name + '</span></div>'
         }
         else {
 
@@ -994,7 +994,7 @@ function draw_view(json) {
             for (var x = 0; x < all_words.length; x++){
                 sentence_length += all_words[x].length
                 console.log(sentence_length, all_words[x])
-                if(sentence_length > 18){
+                if(sentence_length > 27){
                     sentence += "..."
                     break;
                 }
@@ -1006,10 +1006,11 @@ function draw_view(json) {
             var divIdeaName =
                 "<div class=\"idea-Name\"" + "\">" +
                 //'<div  class="btn btn-primary btn-block ideaName" id="' + proposal_names[i].idea_id + '">' + proposal_names[i].idea_name + "</div>";
-                '<div><span class="badge badge-warning ideaName" id="' + proposal_names[i].idea_id + '">' + sentence + '</span></div>'
+                '<div><span class="badge badge-warning ideaName" id="' + proposal_names[i].idea_id + '"data-toggle="tooltip" data-placement="bottom">' + sentence + '</span></div>'
         }
 
         column0.innerHTML = divIdeaName
+        column0.setAttribute("title", proposal_names[i].idea_name)
 
         //============================end of column 0==================//
 
@@ -1280,7 +1281,7 @@ function draw_view(json) {
             }
             var filtered_comment = { "ideas": all_filtered_comment }
 
-            // console.log(filtered_comment)
+            console.log(filtered_comment)
             draw_filtered_comments(filtered_comment, json)
 
             if (!animate_trigger) {
@@ -1516,14 +1517,9 @@ function draw_view(json) {
 
     // On click for refresh //
     $(document).ready(function () {
-        $('#refresh_button_id').click(function () {
-            var row_num = ""
-            filterobj.idea_id = null
-            filterobj.emotion = null
-            filterobj.sentiment_final = null
-            filterobj.subjectivity = null
-            filterobj.task_id = null
-            filterobj.topic = null
+        $('#refresh_button').click(function () {
+
+            location.reload(true);
 
             console.log("refreshing")
             //$("#parentBox").animate({ scrollTop: 0 }, 1000);
@@ -1532,9 +1528,23 @@ function draw_view(json) {
                 animatedDivs();
             }
 
-            //console.log("redrawing")
-            //var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
-            //draw_filtered_comments(filtered_comment, json)
+        });
+        // $('.emoticon_button').mouseover(function() {
+        //     var id = $(this).attr('id');
+        //     console.log('emotion mouseover',id)
+        // });
+    });
+    $(document).ready(function () {
+        $('#cp_refresh').click(function () {
+
+            location.reload(true);
+
+            console.log("refreshing")
+            //$("#parentBox").animate({ scrollTop: 0 }, 1000);
+            draw_view();
+            if (animate_trigger) {
+                animatedDivs();
+            }
 
         });
         // $('.emoticon_button').mouseover(function() {
