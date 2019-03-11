@@ -735,10 +735,17 @@ function makeRevision(obj) {
     //         console.log("error occured", data); //===Show Error Message====
     //     }
     // });
-    request = new XMLHttpRequest()
-    request.open("POST", "save_file.php", true)
-    request.setRequestHeader("Content-type", "application/json")
-    request.send(JSON.stringify(obj));
+
+    var str_json = JSON.stringify(obj);
+    // request = new XMLHttpRequest()
+    // request.open("POST", "save_file.php", true)
+    // request.setRequestHeader("Content-type", "application/json")
+    // request.send(JSON.stringify(obj));
+
+    request= new XMLHttpRequest();
+    request.open("POST", "save_file.php");
+    request.setRequestHeader("Content-type", "application/json");
+    request.send(str_json);
 }
 
 // check keyphrases for topics
