@@ -1321,6 +1321,8 @@ function draw_view(json) {
     $(document).ready(function () {
         $('.ideaName').click(function () {
             var id = $(this).attr('id');
+            logInteraction('click, ideaName, '+id);
+
             if (selected_rows[id]) {
                 selected_rows[id] = null;
                 document.getElementById(id).setAttribute("style", "background-color:none")
