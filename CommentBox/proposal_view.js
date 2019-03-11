@@ -91,7 +91,6 @@ function draw_proposal_wise_comments(json, idea_id) {
     }
 }
 
-
 // Get filtered comments
 function get_filtered_comment(json, filterobj) {
     var ideas = []
@@ -312,7 +311,7 @@ function draw_filtered_comments(filtered_comment, json) {
                     '<span class="subjectivity_button" id="span_id_sub_' + divComment[k].id + '" >' +
                     "<i class=" + "\"" + "fas " + awesome_subjectivity + "\"" + "></i>" +
                     "\xa0" + '</span>' +
-                    '<span class="options_button" id="span_id_opt" >' +
+                    '<span class="options_button" id="span_id_opt_' + divComment[k].id + '" >' +
                     "<i class=" + "\"fas fa-plus-circle fa-lg\"" + "></i>" +
                     '</span></div>' + "\xa0\xa0" +
                     '<div style="float:left; padding-left: 5px"><p class="search_enable">' + filtered_comment.ideas[i].tasks[j].comments[k].comment + "\xa0" +
@@ -455,48 +454,6 @@ function setTippy(commentID, json) {
                 reference.setAttribute('aria-expanded', 'false')
             },
         });
-
-        tippy('# + commentID', {
-            interactive: true,
-            role: 'menu',
-            // `focus` is not suitable for buttons with dropdowns
-            trigger: 'click',
-            content: getLabelString(commentID.split("_")[2]),
-            theme: 'tomato',
-            // Don't announce the tooltip's contents when expanded
-            aria: null,
-            // Important: the tooltip should be DIRECTLY after the reference element
-            // in the DOM source order, which is why it has its own wrapper element
-            appendTo: 'parent',
-            // Let the user know the popup has been expanded
-            onMount({ reference }) {
-                reference.setAttribute('aria-expanded', 'true')
-            },
-            onHide({ reference }) {
-                reference.setAttribute('aria-expanded', 'false')
-            },
-        });
-
-        tippy('#instr_button_id', {
-            interactive: true,
-            role: 'menu',
-            // `focus` is not suitable for buttons with dropdowns
-            trigger: 'mouseenter',
-            content: getInstrString(),
-            theme: 'tomato',
-            // Don't announce the tooltip's contents when expanded
-            aria: null,
-            // Important: the tooltip should be DIRECTLY after the reference element
-            // in the DOM source order, which is why it has its own wrapper element
-            appendTo: 'parent',
-            // Let the user know the popup has been expanded
-            onMount({ reference }) {
-                reference.setAttribute('aria-expanded', 'true')
-            },
-            onHide({ reference }) {
-                reference.setAttribute('aria-expanded', 'false')
-            },
-        });
     });
 }
 
@@ -505,6 +462,10 @@ function emojiMouseClick(id) {
     console.log("inside emoclick");
 
     var all_ids = id.split("-");
+
+    console.log(all_ids)
+
+    logInteraction('click, revision, ' + 'idea, ' + all_ids[2] + ' task, ' + all_ids[3] + ' comment' + all_ids[4] + ' revision, ' + all_ids[0]);
 
     for (var i in currentJSON["ideas"]) {
         for (var j in currentJSON.ideas[i].tasks) {
@@ -571,6 +532,8 @@ function sentiMouseClick(id) {
     var all_ids = id.split("-")
     //console.log(all_ids)
 
+    logInteraction('click, revision, ' + 'idea, ' + all_ids[2] + ' task, ' + all_ids[3] + ' comment' + all_ids[4] + ' revision, ' + all_ids[0]);
+
     for (var i in currentJSON["ideas"]) {
         for (var j in currentJSON.ideas[i].tasks) {
             for (var k in currentJSON.ideas[i].tasks[j].comments) {
@@ -624,6 +587,8 @@ function subjectivityMouseClick(id) {
 
     var all_ids = id.split("-")
     //console.log(all_ids)
+
+    logInteraction('click, revision, ' + 'idea, ' + all_ids[2] + ' task, ' + all_ids[3] + ' comment' + all_ids[4] + ' revision, ' + all_ids[0]);
 
     for (var i in currentJSON["ideas"]) {
         for (var j in currentJSON.ideas[i].tasks) {
@@ -697,30 +662,6 @@ function getOptionString(commentID) {
     return optDiv;
 }
 
-function getInstrString() {
-
-    var instrDiv =
-        "<div class=\"tippy-label-body\"" + "\">" +
-        "<div class=\"label-title\"" + " style=border:none;font-size:1.5em" + ">" + "<p> " + "The instructions go here" + "</p>" + "</div>" +
-        "<div class=\"label-instr-body\"" + " style=border:none;font-size:1.5em" + ">" +
-        "<p>" + "Instruction 1" + "</p>" +
-        "<p>" + "Instruction 2" + "</p>" +
-        "<p>" + "Instruction 1" + "</p>" +
-        "</div>";
-    return instrDiv;
-}
-
-function getLabelString(category)
-{
-   //console.log("inside labelstring", category);
-
-    var labelDiv =
-        "<div class=\"tippy-label-body\"" + "\">" +
-        "<div class=\"label-title\">" + "<p> " + "Sort proposals by " + category + "</p>" + "</div>" + "</div>";
-        //console.log(labelDiv)
-    return labelDiv;
-}
-
 // save revisions
 function makeRevision(obj) {
     console.log('make revision');
@@ -764,11 +705,14 @@ function checkKeyphrase(prop_topic, all_topics) {
 
 // save as issues
 function save_issue(id) {
+
     $('#issueModal').modal('show')
     $('#issue_save_button').on('click', function () {
         //console.log(currentJSON)
         var all_ids = id.split("-")
         //console.log(all_ids)
+
+        logInteraction('click, revision, ' + 'idea, ' + all_ids[2] + ' task, ' + all_ids[3] + ' comment' + all_ids[4] + ' issue');
 
         for (var i in currentJSON["ideas"]) {
             for (var j in currentJSON.ideas[i].tasks) {
@@ -798,6 +742,8 @@ function save_criteria(id) {
         var all_ids = id.split("-")
         //console.log(all_ids)
 
+        logInteraction('click, revision, ' + 'idea, ' + all_ids[2] + ' task, ' + all_ids[3] + ' comment' + all_ids[4] + ' criteria');
+
         for (var i in currentJSON["ideas"]) {
             for (var j in currentJSON.ideas[i].tasks) {
                 for (var k in currentJSON.ideas[i].tasks[j].comments) {
@@ -822,6 +768,9 @@ function save_notes(id) {
     var all_ids = id.split("-")
     var new_note = ""
     count = 0
+
+    logInteraction('click, revision, ' + 'idea, ' + all_ids[2] + ' task, ' + all_ids[3] + ' comment' + all_ids[4] + ' note');
+
     for (var i in currentJSON["ideas"]) {
         for (var j in currentJSON.ideas[i].tasks) {
             for (var k in currentJSON.ideas[i].tasks[j].comments) {
