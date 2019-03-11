@@ -134,7 +134,7 @@ function get_filtered_comment(json, filterobj) {
                             flag = false
                         }
                         else {
-                            console.log(flag, topicFilter, json.ideas[i].tasks[j].comments[k].comment)
+                            //console.log(flag, topicFilter, json.ideas[i].tasks[j].comments[k].comment)
                             //comments.push(json.ideas[i].tasks[j].comments[k])
                         }
                     }
@@ -371,7 +371,7 @@ function setTippy(commentID, json) {
             arrowType: 'sharp',
             theme: 'light',
             // `focus` is not suitable for buttons with dropdowns
-            trigger: 'click',
+            trigger: 'mouseenter',
             content: getEmojiString(commentID),
             // Don't announce the tooltip's contents when expanded
             aria: null,

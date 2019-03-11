@@ -8,7 +8,7 @@ var filterobj = {
     topic: []
 }
 
-var selected_sort = ["users","comments","angry","worried","sad","happy","excited","negative","neutral", "positive"];
+var selected_sort = ["users", "comments", "angry", "worried", "sad", "happy", "excited", "negative", "neutral", "positive"];
 
 
 // global variable to track active ideas
@@ -54,6 +54,17 @@ function check_empty() {
         return true;
     }
 
+}
+
+function animate()
+{
+    if(check_empty() == false)
+    {
+        document.getElementById("aggregateDiv").setAttribute("style", "height:20%")
+        document.getElementById("parentBox").setAttribute("style", "height:80vh")
+        $("#parentBox").animate({ scrollTop: 0 }, 100);
+        $("#aggregateDiv").animate({ scrollTop: 0 }, 100);
+    }
 }
 
 function animatedDivs() {
@@ -789,7 +800,7 @@ function draw_view(json) {
     var divCaption =
         "<div class=\"label-body\"" + "\">" +
         "<div class=\"label-title\"" + ">" +
-        "<p style=\"margin: 5px 0px 5px 0px;font-size:1.5em;text-align:left\"" + ">" + "Proposals" + "</p>" + "</div>" +
+        "<p style=\"margin: 5px 0px 5px 0px;font-size:1.5em;text-align:left\"" + ">" + "Proposals (19)" + "</p>" + "</div>" +
         "<div class=\"label-info-body\"" + ">" +
         "<p>" + "Users" + "</p>" +
         "<p>" + '<span class="label-info-button" id="span_id_users" >' +
@@ -818,7 +829,7 @@ function draw_view(json) {
     var divCaption =
         "<div class=\"label-body\"" + "\">" +
         "<div class=\"label-title\"" + ">" +
-        "<p style=\"margin: 5px 0px 5px 0px;font-size:1.5em;text-align:left\"" + ">" + "Topics" + "</p>" + "</div>" +
+        "<p style=\"margin: 5px 0px 5px 0px;font-size:1.5em;text-align:left\"" + ">" + "Topics (60)" + "</p>" + "</div>" +
         "<div class=\"label-title-body\"" + ">" + "</p>" + "</div>"
     //    "<p style=\"margin: 5px 0px 5px 0px;font-size:3em;color:#337AB7\"" + ">" + "78\xa0" + "</p>" + "</div>";
 
@@ -967,7 +978,7 @@ function draw_view(json) {
         tempRowDiv.className = "c_row"
         for (var j = 0; j < numberOfColumns; j++) {
             var tempColumnDiv = document.createElement("div")
-            tempColumnDiv.id = "row" + i + "column" + j
+            tempColumnDiv.id = "row" + i + "-column" + j
             //console.log(tempColumnDiv.id)
             tempColumnDiv.className = "c_column" + j
             tempRowDiv.appendChild(tempColumnDiv)
@@ -979,7 +990,7 @@ function draw_view(json) {
         //============================ column 0=========================//
 
         // column with all proposal names
-        var column0 = document.getElementById("row" + i + "column0")
+        var column0 = document.getElementById("row" + i + "-column0")
 
         if (proposal_names[i].idea_name.length < 27) {
             //console.log(proposal_names[i].idea_name.length)
@@ -994,14 +1005,14 @@ function draw_view(json) {
             var sentence_length = 0;
             var sentence = ""
             all_words = proposal_names[i].idea_name.split(" ")
-            for (var x = 0; x < all_words.length; x++){
+            for (var x = 0; x < all_words.length; x++) {
                 sentence_length += all_words[x].length
                 //console.log(sentence_length, all_words[x])
-                if(sentence_length > 27){
+                if (sentence_length > 27) {
                     sentence += "..."
                     break;
                 }
-                else{
+                else {
                     sentence += all_words[x] + " "
                 }
             }
@@ -1021,7 +1032,7 @@ function draw_view(json) {
 
         // column with proposal wise topics
         var divTopicName = "<div class=\"topic-body\"" + "\">"
-        var column1 = document.getElementById("row" + i + "column1")
+        var column1 = document.getElementById("row" + i + "-column1")
         //console.log(proposal_wise_topic_agg)
         for (var j = 0; j < proposal_wise_topic_agg[i].length; j++) {
             topic_row_length += proposal_wise_topic_agg[i][j].topic_keyphrase.length
@@ -1044,7 +1055,7 @@ function draw_view(json) {
         //============================ column 2 =========================//
 
         // column with proposal wise emotions
-        var column2 = document.getElementById("row" + i + "column2")
+        var column2 = document.getElementById("row" + i + "-column2")
         //console.log(json)
         // tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
         // tempSvg.id = "svg" + "row" + i + "column2"
@@ -1052,7 +1063,7 @@ function draw_view(json) {
         // tempSvg.setAttribute("width", column2.clientWidth)
         // tempSvg.setAttribute("height", column2.clientHeight)
         // column2.appendChild(tempSvg)
-        var svg_id = "svg" + "row" + i + "column2"
+        var svg_id = "svg" + "row" + i + "-column2"
         send_data = []
         send_data.push(proposal_wise_emotion_agg[i])
         //console.log(send_data)
@@ -1064,10 +1075,10 @@ function draw_view(json) {
         //============================ column 3 =========================//
         // column with proposal wise sentiments
 
-        var column3 = document.getElementById("row" + i + "column3")
+        var column3 = document.getElementById("row" + i + "-column3")
         //console.log(proposal_wise_sentiment_agg)
         // tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
-        var tempSvg_id = "svg" + "row" + i + "column3"
+        var tempSvg_id = "svg" + "row" + i + "-column3"
         // tempSvg.setAttribute("class", "c_svg")
         // tempSvg.setAttribute("width", column3.clientWidth)
         // tempSvg.setAttribute("height", column3.clientHeight)
@@ -1190,7 +1201,7 @@ function draw_view(json) {
             }
             sorted_ideas = { "ideas": show_this }
             draw_view(sorted_ideas)
-            document.getElementById("box_header").innerHTML = "Sorted by " + id.split("_")[2] ;
+            document.getElementById("box_header").innerHTML = "Sorted by " + id.split("_")[2];
 
             var myNode = document.getElementById("parentBox");
             while (myNode.firstChild) {
@@ -1198,13 +1209,14 @@ function draw_view(json) {
             }
 
             //console.log(selected_sort)
-            for(var i = 0; i < selected_sort.length; i++){
-                document.getElementById("span_id_"+selected_sort[i]).setAttribute("style", "opacity:0.5")
-               // console.log("span_id_"+selected_sort[i])
+            for (var i = 0; i < selected_sort.length; i++) {
+                document.getElementById("span_id_" + selected_sort[i]).setAttribute("style", "opacity:0.5")
+                // console.log("span_id_"+selected_sort[i])
             }
 
             document.getElementById(id).setAttribute("style", "opacity:1.0");
 
+            selected_rows = Array.apply(null, Array(36));
         });
         // $('.emoticon_button').mouseover(function() {
         //     var id = $(this).attr('id');
@@ -1242,7 +1254,7 @@ function draw_view(json) {
             }
             sorted_ideas = { "ideas": show_this }
             draw_view(sorted_ideas)
-            document.getElementById("box_header").innerHTML = "Sorted by " + id.split("_")[2] ;
+            document.getElementById("box_header").innerHTML = "Sorted by " + id.split("_")[2];
 
             var myNode = document.getElementById("parentBox");
             while (myNode.firstChild) {
@@ -1250,12 +1262,13 @@ function draw_view(json) {
             }
 
             //console.log(selected_sort)
-            for(var i = 0; i < selected_sort.length; i++){
-                document.getElementById("span_id_"+selected_sort[i]).setAttribute("style", "opacity:0.5")
-               // console.log("span_id_"+selected_sort[i])
+            for (var i = 0; i < selected_sort.length; i++) {
+                document.getElementById("span_id_" + selected_sort[i]).setAttribute("style", "opacity:0.5")
+                // console.log("span_id_"+selected_sort[i])
             }
 
             document.getElementById(id).setAttribute("style", "opacity:1.0");
+            selected_rows = Array.apply(null, Array(36));
         });
         // $('.emoticon_button').mouseover(function() {
         //     var id = $(this).attr('id');
@@ -1270,7 +1283,7 @@ function draw_view(json) {
             console.log("inside iconClick", id)
             this_info = "num_of_" + id.split("_")[2]
 
-            if(id.split("_")[2] == "users"){
+            if (id.split("_")[2] == "users") {
                 this_info = "num_of_commenters"
             }
 
@@ -1282,7 +1295,7 @@ function draw_view(json) {
             }))
 
             draw_view(copy_json)
-            document.getElementById("box_header").innerHTML = "Sorted by number of " + id.split("_")[2] ;
+            document.getElementById("box_header").innerHTML = "Sorted by number of " + id.split("_")[2];
 
             var myNode = document.getElementById("parentBox");
             while (myNode.firstChild) {
@@ -1290,12 +1303,13 @@ function draw_view(json) {
             }
 
             //console.log(selected_sort)
-            for(var i = 0; i < selected_sort.length; i++){
-                document.getElementById("span_id_"+selected_sort[i]).setAttribute("style", "opacity:0.5")
-               // console.log("span_id_"+selected_sort[i])
+            for (var i = 0; i < selected_sort.length; i++) {
+                document.getElementById("span_id_" + selected_sort[i]).setAttribute("style", "opacity:0.5")
+                // console.log("span_id_"+selected_sort[i])
             }
 
             document.getElementById(id).setAttribute("style", "opacity:1.0");
+            selected_rows = Array.apply(null, Array(36));
         });
         // $('.emoticon_button').mouseover(function() {
         //     var id = $(this).attr('id');
@@ -1333,17 +1347,17 @@ function draw_view(json) {
 
             console.log(filtered_comment)
             draw_filtered_comments(filtered_comment, json)
-            
+
             // if (!animate_trigger) {
             //     document.getElementById(id).scrollIntoView({ block: 'center' });
             // }
 
-            console.log(check_empty())
+            //console.log(check_empty())
 
             if (check_empty() == true) {
                 document.getElementById("box_header").innerHTML = "Click on a Proposal, Topic, Emotion or Sentiment to see related comments"
             }
-            else{
+            else {
                 document.getElementById("box_header").innerHTML = ""
             }
 
@@ -1359,7 +1373,7 @@ function draw_view(json) {
                     }, 100
                 )
             }
-            else{
+            else {
                 setTimeout(
                     function () {
                         console.log('scroll');
@@ -1393,12 +1407,26 @@ function draw_view(json) {
             var split_str = id.split("_")
 
             if (selected_topics[split_str[1]][split_str[2]]) {
+                var top_cnt = 0;
+                for (var x = 0; x < selected_topics[split_str[1]].length; x++) {
+                    console.log(selected_topics[split_str[1]][x], x)
+                    if (selected_topics[split_str[1]][x] == true) {
+                        top_cnt += 1;
+                    }
+                }
+                if(top_cnt == 1){
+                    document.getElementById(id.split("_")[1]).setAttribute("style", "background-color:none")    
+                }
+
                 selected_topics[split_str[1]][split_str[2]] = null;
                 document.getElementById(id + "_id").setAttribute("style", "background-color:none")
+
             }
             else {
                 selected_topics[split_str[1]][split_str[2]] = true;
+                console.log(id)
                 document.getElementById(id + "_id").setAttribute("style", "background-color:#3DAADD")
+                document.getElementById(id.split("_")[1]).setAttribute("style", "background-color:#3DAADD")
             }
 
             all_filtered_topics = []
@@ -1425,7 +1453,7 @@ function draw_view(json) {
             if (check_empty() == true) {
                 document.getElementById("box_header").innerHTML = "Click on a Proposal, Topic, Emotion or Sentiment to see related comments"
             }
-            else{
+            else {
                 document.getElementById("box_header").innerHTML = ""
             }
 
@@ -1495,7 +1523,7 @@ function draw_view(json) {
                 if (check_empty() == true) {
                     document.getElementById("box_header").innerHTML = "Click on a Proposal, Topic, Emotion or Sentiment to see related comments"
                 }
-                else{
+                else {
                     document.getElementById("box_header").innerHTML = ""
                 }
 
@@ -1553,7 +1581,7 @@ function draw_view(json) {
                 if (check_empty() == true) {
                     document.getElementById("box_header").innerHTML = "Click on a Proposal, Topic, Emotion or Sentiment to see related comments"
                 }
-                else{
+                else {
                     document.getElementById("box_header").innerHTML = ""
                 }
 
@@ -1889,6 +1917,8 @@ function emotion_rows(salesData, svg_id, div_id, idea_id) {
 
     function clicked_emotion(d) {
 
+        // document.getElementById(div_id.split("-")[0]).setAttribute("style", "outline:solid thin gray");
+
         console.log("oneclick")
         var this_cell = d3.select(this)
         filterobj.idea_id = idea_id
@@ -1928,7 +1958,7 @@ function emotion_rows(salesData, svg_id, div_id, idea_id) {
         if (check_empty() == true) {
             document.getElementById("box_header").innerHTML = "Click on a Proposal, Topic, Emotion or Sentiment to see related comments"
         }
-        else{
+        else {
             document.getElementById("box_header").innerHTML = ""
         }
         cellHistory.prev_emo_cell = this_cell
@@ -1946,6 +1976,21 @@ function emotion_rows(salesData, svg_id, div_id, idea_id) {
                 alert("No comments for sentiment - " + d.key + " and emotion - " + cellHistory.prev_emo);
             }
         }
+
+        if(!filterobj.emotion && !filterobj.sentiment_final)
+        {
+            var myNode = document.getElementById("parentBox");
+            while (myNode.firstChild) {
+                myNode.removeChild(myNode.firstChild);
+            }
+            // document.getElementById(div_id.split("-")[0]).setAttribute("style", "outline:0");
+        }
+
+        if(cellHistory.prev_senti && cellHistory.prev_idea_id_emo != cellHistory.prev_idea_id_senti)
+        {
+            document.getElementById("box_header").innerHTML = "Please select emotion and sentiment from the same category";
+        }
+
     }
 
     var rectTooltipg = svg.append("g")
@@ -2273,7 +2318,7 @@ function sentiment_rows(salesData, svg_id, div_id, idea_id) {
         if (check_empty() == true) {
             document.getElementById("box_header").innerHTML = "Click on a Proposal, Topic, Emotion or Sentiment to see related comments"
         }
-        else{
+        else {
             document.getElementById("box_header").innerHTML = ""
         }
         cellHistory.prev_senti_cell = this_cell
@@ -2291,7 +2336,20 @@ function sentiment_rows(salesData, svg_id, div_id, idea_id) {
                 alert("No comments for sentiment - " + d.key + " and emotion - " + cellHistory.prev_emo);
             }
         }
+        if(!filterobj.emotion && !filterobj.sentiment_final)
+        {
+            var myNode = document.getElementById("parentBox");
+            while (myNode.firstChild) {
+                myNode.removeChild(myNode.firstChild);
+            }
+        }
+
+        if(cellHistory.prev_emo && cellHistory.prev_idea_id_emo != cellHistory.prev_idea_id_senti)
+        {
+            document.getElementById("box_header").innerHTML = "Please select emotion and sentiment from the same category";
+        }
     }
+
     var rectTooltipg = svg.append("g")
         .attr("font-family", "sans-serif")
         .attr("font-size", 10)
@@ -2608,7 +2666,7 @@ function subjectivity_rows(salesData, svg_id, div_id, idea_id) {
         if (check_empty() == true) {
             document.getElementById("box_header").innerHTML = "Click on a Proposal, Topic, Emotion or Sentiment to see related comments"
         }
-        else{
+        else {
             document.getElementById("box_header").innerHTML = ""
         }
         cellHistory.prev_sub_cell = this_cell
