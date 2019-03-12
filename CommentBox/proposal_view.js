@@ -244,16 +244,16 @@ function draw_filtered_comments(filtered_comment, json) {
                             "<div><div>" + " author name" + "</div>" +
                             '<div style="color: #888;"' + '>' + "posted on " + filtered_comment.ideas[i].tasks[j].comments[k].post_time + '</div></div>' +
                             "</div>" +
-                            "<div class=\"comment-body\"" + "\">" +
-                            '<span class="emoticon_button" id="span_id_emo" >' +
-                            "<i class=" + "\"" + "fas " + awesome_emoticon + "\"" + "></i>" + "\xa0" + '</span>' +
-                            '<span class="sentiment_button" id="span_id_sent" >' +
-                            "<i class=" + "\"" + "fas " + awesome_sentiment + "\"" + "></i>" + "\xa0" + '</span>' +
-                            '<span class="subjectivity_button" id="span_id_sub" >' +
-                            "<i class=" + "\"" + "fas " + awesome_subjectivity + "\"" + "></i>" + "\xa0" + '</span>' +
-                            '<span class="options_button" id="span_id_opt" >' +
-                            "<i class=" + "\"fas fa-plus-circle fa-lg\"" + "></i>" +
-                            '</span>' +
+                            "<div class=\"question-body\"" + "\">" +
+                            // '<span class="emoticon_button" id="span_id_emo" >' +
+                            // "<i class=" + "\"" + "fas " + awesome_emoticon + "\"" + "></i>" + "\xa0" + '</span>' +
+                            // '<span class="sentiment_button" id="span_id_sent" >' +
+                            // "<i class=" + "\"" + "fas " + awesome_sentiment + "\"" + "></i>" + "\xa0" + '</span>' +
+                            // '<span class="subjectivity_button" id="span_id_sub" >' +
+                            // "<i class=" + "\"" + "fas " + awesome_subjectivity + "\"" + "></i>" + "\xa0" + '</span>' +
+                            // '<span class="options_button" id="span_id_opt" >' +
+                            // "<i class=" + "\"fas fa-plus-circle fa-lg\"" + "></i>" +
+                            // '</span>' +
                             "\xa0\xa0" + filtered_comment.ideas[i].tasks[j].comments[k].question + "\xa0" +
                             "</div>";
                         if (filtered_comment.ideas[i].tasks[j].comments[k].sentiment_final == "neutral") {
@@ -263,16 +263,16 @@ function draw_filtered_comments(filtered_comment, json) {
                                 "<div><div>" + " author name" + "</div>" +
                                 '<div style="color: #888;"' + '>' + "posted on " + filtered_comment.ideas[i].tasks[j].comments[k].post_time + '</div></div>' +
                                 "</div>" +
-                                "<div class=\"comment-body\"" + "\">" +
-                                '<span class="emoticon_button" id="span_id_emo" >' +
-                                "<i class=" + "\"" + "fas " + awesome_emoticon + "\"" + "></i>" + "\xa0" + '</span>' +
-                                '<span class="sentiment_button" id="span_id_sent" >' +
-                                "<i class=" + "\"far fa-thumbs-down fa-lg neutral\"" + " style=transform:rotate(-90deg)" + "></i>" + "\xa0" + '</span>' +
-                                '<span class="subjectivity_button" id="span_id_sub" >' +
-                                "<i class=" + "\"" + "fas " + awesome_subjectivity + "\"" + "></i>" + "\xa0" + '</span>' +
-                                '<span class="options_button" id="span_id_opt" >' +
-                                "<i class=" + "\"fas fa-plus-circle fa-lg\"" + "></i>" +
-                                '</span>' +
+                                "<div class=\"question-body\"" + "\">" +
+                                // '<span class="emoticon_button" id="span_id_emo" >' +
+                                // "<i class=" + "\"" + "fas " + awesome_emoticon + "\"" + "></i>" + "\xa0" + '</span>' +
+                                // '<span class="sentiment_button" id="span_id_sent" >' +
+                                // "<i class=" + "\"far fa-thumbs-down fa-lg neutral\"" + " style=transform:rotate(-90deg)" + "></i>" + "\xa0" + '</span>' +
+                                // '<span class="subjectivity_button" id="span_id_sub" >' +
+                                // "<i class=" + "\"" + "fas " + awesome_subjectivity + "\"" + "></i>" + "\xa0" + '</span>' +
+                                // '<span class="options_button" id="span_id_opt" >' +
+                                // "<i class=" + "\"fas fa-plus-circle fa-lg\"" + "></i>" +
+                                // '</span>' +
                                 "\xa0\xa0" + filtered_comment.ideas[i].tasks[j].comments[k].question + "\xa0" +
                                 "</div>";
                         }
