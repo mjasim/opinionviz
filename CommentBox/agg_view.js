@@ -1744,6 +1744,8 @@ function emotion_rows(salesData, svg_id, div_id, idea_id) {
             document.getElementById("box_header").innerHTML = "Please select emotion and sentiment from the same category";
         }
 
+        divMove();
+
     }
 
     var rectTooltipg = svg.append("g")
@@ -2120,6 +2122,8 @@ function sentiment_rows(salesData, svg_id, div_id, idea_id) {
         if (cellHistory.prev_emo && cellHistory.prev_idea_id_emo != cellHistory.prev_idea_id_senti) {
             document.getElementById("box_header").innerHTML = "Please select emotion and sentiment from the same category";
         }
+
+        divMove();
     }
 
     var rectTooltipg = svg.append("g")
@@ -2448,6 +2452,8 @@ function subjectivity_rows(salesData, svg_id, div_id, idea_id) {
         cellHistory.prev_sub_color = z(d.key)
 
         $("#parentBox").animate({ scrollTop: 0 }, 1000);
+
+        divMove();
     }
 
     var rectTooltipg = svg.append("g")
