@@ -364,7 +364,7 @@ body {
 }
 
 .fa-angry{
-    color: #E45756;
+    color: #FF5756;
     opacity: 0.7;
 }
 
@@ -375,7 +375,7 @@ body {
 }
 
 .fa-flushed{
-    color: #B279A2;
+    color: #B279AF;
     opacity: 0.7;
 }
 .fa-flushed:hover{
@@ -385,7 +385,7 @@ body {
 }
 
 .fa-frown{
-    color: #4C78A8;
+    color: #4C78BF;
     opacity: 0.7;
 }
 .fa-frown:hover{
@@ -405,7 +405,7 @@ body {
 }
 
 .fa-smile{
-    color: #EECA3B;
+    color: #FFCA3B;
     opacity: 0.7;
 }
 .fa-smile:hover{
@@ -415,7 +415,7 @@ body {
 }
 
 .fa-smile-beam{
-    color: #F58518;
+    color: #EF8518;
     opacity: 0.7;
 }
 .fa-smile-beam:hover{
@@ -425,7 +425,7 @@ body {
 }
 
 .fa-thumbs-up{
-    color: #5AB4AC;
+    color: #5ABAAC;
     opacity: 0.7;
 }
 .fa-thumbs-up:hover{
@@ -435,7 +435,7 @@ body {
 }
 
 .fa-thumbs-down{
-    color: #D8B365;
+    color: #D9B965;
     opacity: 0.7;
 }
 .fa-thumbs-down:hover{

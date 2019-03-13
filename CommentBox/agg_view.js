@@ -1463,8 +1463,8 @@ function emotion_rows(salesData, svg_id, div_id, idea_id) {
         });
     }
 
-    //var z = d3.scaleOrdinal(["#E45756", "#B279A2", "#4C78A8", "#EECA3B", "#F58518"]);
-    var z = d3.scaleOrdinal(["#F58518", "#EECA3B", "#4C78A8", "#B279A2", "#E45756"]).domain(group);
+    //var z = d3.scaleOrdinal(["#E45756", "#B279A2", "#4C78A8", "#EECA3B", "#F58518"]); IN REVERSE
+    var z = d3.scaleOrdinal(["#EF8518", "#FFCA3B", "#4C78BF", "#B279AF", "#FF5756"]).domain(group);
     var maing = svg.append("g")
         .selectAll("g")
         .data(layers)
@@ -1878,7 +1878,7 @@ function sentiment_rows(salesData, svg_id, div_id, idea_id) {
     }
 
     //var z = d3.scaleOrdinal(["#D8B365", "#D9D9D9", "#5AB4AC"]);
-    var z = d3.scaleOrdinal(["#5AB4AC", "#D9D9D9", "#D8B365"]);
+    var z = d3.scaleOrdinal(["#5ABAAC", "#D9D9D9", "#D9B965"]);
 
     var maing = svg.append("g")
         .selectAll("g")
