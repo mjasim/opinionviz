@@ -48,7 +48,7 @@
 			
 				self.search;
 				self.input.keyup(function(e) {
-                    //if (e.keyCode === 13) {
+                    if (e.keyCode === 13) {
 
                         if (self.search) {
                             clearTimeout(self.search);
@@ -58,7 +58,7 @@
                         //Chrome, Javascript works fine -- other less performant
                         //browsers like IE6 have a hard time doing this
                         self.search = setTimeout(self.performSearch(e.keyCode), 100);
-                    //}
+                    }
 				});
 			
 			});
