@@ -766,6 +766,14 @@ function draw_view(json) {
                 selected_rows = Array.apply(null, Array(36));
 
                 document.getElementById("box_header").innerHTML = "";
+
+                selected_rows_stack = [];
+
+                var myNode = document.getElementById("parentBox");
+                while (myNode.firstChild) {
+                    myNode.removeChild(myNode.firstChild);
+                }
+                
             }
             else {
                 this_emo = id.split("_")[2] + "_normalized"
@@ -848,6 +856,13 @@ function draw_view(json) {
                 selected_rows = Array.apply(null, Array(36));
 
                 document.getElementById("box_header").innerHTML = "";
+
+                selected_rows_stack = [];
+
+                var myNode = document.getElementById("parentBox");
+                while (myNode.firstChild) {
+                    myNode.removeChild(myNode.firstChild);
+                }
             }
             else {
                 logInteraction('click, sortby, ' + id.split("_")[2]);
@@ -925,6 +940,13 @@ function draw_view(json) {
                 selected_rows = Array.apply(null, Array(36));
 
                 document.getElementById("box_header").innerHTML = "";
+
+                selected_rows_stack = [];
+
+                var myNode = document.getElementById("parentBox");
+                while (myNode.firstChild) {
+                    myNode.removeChild(myNode.firstChild);
+                }
             }
             else {
                 logInteraction('click, sortby, ' + id.split("_")[2]);
