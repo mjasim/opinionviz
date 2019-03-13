@@ -1,5 +1,3 @@
-
-
 // global variable to maintain what will be filtered
 var filterobj = {
     emotion: null,
@@ -120,11 +118,12 @@ function draw_view(json) {
     }
 
     var numberOfRows = 19;
-    var numberOfColumns = 6;
+    var numberOfColumns = 7;
 
     var proposal_names = get_proposal_names(json)
     var proposal_wise_emotion_agg = get_proposal_wise_emotion(json)
     var proposal_wise_sentiment_agg = get_proposal_wise_sentiment(json)
+    var proposal_wise_serial = get_serial_number(json)
     var proposal_wise_subjectivity_agg = get_proposal_wise_subjectivity(json)
     var proposal_wise_profanity_agg = get_proposal_wise_profanity(json)
     var proposal_wise_topic_agg = get_proposal_wise_topic(json)
@@ -274,43 +273,22 @@ function draw_view(json) {
 
     // =========================== label column 0 ===============================//
 
-    // labels and search bars for proposals
     var labelColumn0Div = document.createElement("div")
     labelColumn0Div.id = "labelcolumn0"
     labelColumn0Div.className = "l_column0"
 
     var divCaption =
-        "<div class=\"label-body\"" + "\">" +
-        "<div class=\"label-title\"" + ">" +
-        "<p style=\"margin: 5px 0px 5px 0px;font-size:1.5em;text-align:left\"" + ">" + "Proposals (19)" + "</p>" + "</div>" +
-        "<div class=\"label-info-body\"" + ">" +
-        "<p>" + "Participants" + "</p>" +
-        "<p>" + '<span class="label-info-button" id="span_id_participants" >' +
-        "<i class=" + "\"fas fa-user fa-2x label_icons\"" + "></i>" +
-        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>" +
-        "<div class=\"label-info-body\"" + "\">" +
-        "<p>" + "Comments" + "</p>" +
-        "<p>" + '<span class="label-info-button" id="span_id_comments" >' +
-        "<i class=" + "\"fas fa-comment-alt fa-2x label_icons\"" + "></i>" +
-        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>"
+        "<div class=\"label-body\"" + "\">" ;
+      //  "<div class=\"label-title\"" + ">" +
+     //   "<p style=\"margin: 5px 0px 5px 0px;font-size:1.5em;text-align:left;border-bottom:solid\"" + ">" + "\xa0" + "</p>" + "</div>";
     //    "<p style=\"margin: 5px 0px 5px 0px;font-size:3em;color:#337AB7\"" + ">" + "19\xa0" + "</p>" + "</div>"
 
     labelColumn0Div.innerHTML = divCaption
     labelElement.appendChild(labelColumn0Div)
 
-    // =========================== label column 0 end ===========================//
+    // =========================== label column 1 ===============================//
 
-
-    // ========================= label column x =================================//
-
-
-
-    //========================== label column x end =============================//
-
-
-    //============================ label column 1 =========================//
-
-    // label and search bars for topics
+    // labels and search bars for proposals
     var labelColumn1Div = document.createElement("div")
     labelColumn1Div.id = "labelcolumn1"
     labelColumn1Div.className = "l_column1"
@@ -318,23 +296,71 @@ function draw_view(json) {
     var divCaption =
         "<div class=\"label-body\"" + "\">" +
         "<div class=\"label-title\"" + ">" +
-        "<p style=\"margin: 5px 0px 5px 0px;font-size:1.5em;text-align:left\"" + ">" + "Topics (60)" + "</p>" + "</div>" +
-        "<div class=\"label-title-body\"" + ">" + "</p>" + "</div>"
-    //    "<p style=\"margin: 5px 0px 5px 0px;font-size:3em;color:#337AB7\"" + ">" + "78\xa0" + "</p>" + "</div>";
+        "<p style=\"margin: 5px 0px 5px 0px;font-size:1.5em;text-align:left\"" + ">" + "\xa0 Proposals (19)" + "</p>" + "</div>";
+    //    "<p style=\"margin: 5px 0px 5px 0px;font-size:3em;color:#337AB7\"" + ">" + "19\xa0" + "</p>" + "</div>"
 
     labelColumn1Div.innerHTML = divCaption
     labelElement.appendChild(labelColumn1Div)
 
-    //============================ label column 1 end =====================//
+    // =========================== label column 1 end ===========================//
 
 
+    // ========================= label column 2 =================================//
 
-    // =========================== label column 2 ===============================//
-
-    // labels and icons for emotions
+    // label and search bars for topics
     var labelColumn2Div = document.createElement("div")
     labelColumn2Div.id = "labelcolumn2"
     labelColumn2Div.className = "l_column2"
+
+    var divCaption =
+        "<div class=\"label-body\"" + "\">" +
+        "<div class=\"label-title\"" + ">" +
+        "<p style=\"margin: 5px 0px 5px 0px;font-size:1.5em;text-align:left\"" + ">" + "\xa0" + "</p>" + "</div>" +
+        "<div class=\"label-info-body\"" + ">" +
+        "<p>" + "Participants" + "</p>" +
+        "<p>" + '<span class="label-info-button" id="span_id_participants" >' +
+        "<i class=" + "\"fas fa-user fa-lg label_icons\"" + "></i>" +
+        "<i class=" + "\"fas fa-sort-amount-down fa-lg label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<div class=\"label-info-body\"" + "\">" +
+        "<p>" + "Comments" + "</p>" +
+        "<p>" + '<span class="label-info-button" id="span_id_comments" >' +
+        "<i class=" + "\"fas fa-comment-alt fa-lg label_icons\"" + "></i>" +
+        "<i class=" + "\"fas fa-sort-amount-down fa-lg label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>";
+    // "<div class=\"label-title-body\"" + ">" + "</p>" + "</div>"
+    //    "<p style=\"margin: 5px 0px 5px 0px;font-size:3em;color:#337AB7\"" + ">" + "78\xa0" + "</p>" + "</div>";
+
+    labelColumn2Div.innerHTML = divCaption
+    labelElement.appendChild(labelColumn2Div)
+
+    //========================== label column 2 end =============================//
+
+    //============================ label column 3 =========================//
+
+    // label and search bars for topics
+    var labelColumn3Div = document.createElement("div")
+    labelColumn3Div.id = "labelcolumn3"
+    labelColumn3Div.className = "l_column3"
+
+    var divCaption =
+        "<div class=\"label-body\"" + "\">" +
+        "<div class=\"label-title\"" + ">" +
+        "<p style=\"margin: 5px 0px 5px 0px;font-size:1.5em;text-align:left;margin-left:10px\"" + ">" + "Topics (60)" + "</p>" + "</div>" +
+        "<div class=\"label-title-body\"" + ">" + "</p>" + "</div>"
+    //    "<p style=\"margin: 5px 0px 5px 0px;font-size:3em;color:#337AB7\"" + ">" + "78\xa0" + "</p>" + "</div>";
+
+    labelColumn3Div.innerHTML = divCaption
+    labelElement.appendChild(labelColumn3Div)
+
+    //============================ label column 3 end =====================//
+
+
+
+    // =========================== label column 4 ===============================//
+
+    // labels and icons for emotions
+    var labelColumn4Div = document.createElement("div")
+    labelColumn4Div.id = "labelcolumn4"
+    labelColumn4Div.className = "l_column4"
 
     var divCaption =
         "<div class=\"label-body\"" + "\">" +
@@ -377,20 +403,20 @@ function draw_view(json) {
         "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
         '</span>' + "</p>" + "</div>";
 
-    labelColumn2Div.innerHTML = divCaption
-    labelElement.appendChild(labelColumn2Div)
+    labelColumn4Div.innerHTML = divCaption
+    labelElement.appendChild(labelColumn4Div)
     setTippy("span_id_angry", null);
 
 
-    // =========================== label column 2 end ===========================//
+    // =========================== label column 4 end ===========================//
 
 
-    // =========================== label column 3 ===============================//
+    // =========================== label column 5 ===============================//
 
     // labels and icons for sentiments
-    var labelColumn3Div = document.createElement("div")
-    labelColumn3Div.id = "labelcolumn3"
-    labelColumn3Div.className = "l_column3"
+    var labelColumn5Div = document.createElement("div")
+    labelColumn5Div.id = "labelcolumn5"
+    labelColumn5Div.className = "l_column5"
 
     var divCaption =
         "<div class=\"label-body\"" + "\">" +
@@ -418,17 +444,17 @@ function draw_view(json) {
         "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
         '</span>' + "</p>" + "</div>";
 
-    labelColumn3Div.innerHTML = divCaption
-    labelElement.appendChild(labelColumn3Div)
+    labelColumn5Div.innerHTML = divCaption
+    labelElement.appendChild(labelColumn5Div)
 
-    // =========================== label column 3 end ===========================//
+    // =========================== label column 5 end ===========================//
 
-    // =========================== label column 4 ===============================//
+    // =========================== label column 5 ===============================//
 
     // // labels and icons for subjectivity
     // var labelColumn4Div = document.createElement("div")
-    // labelColumn4Div.id = "labelcolumn4"
-    // labelColumn4Div.className = "l_column4"
+    // labelColumn5Div.id = "labelcolumn5"
+    // labelColumn5Div.className = "l_column5"
 
     // var divCaption =
     //     "<div class=\"label-body\"" + "\">" +
@@ -442,23 +468,23 @@ function draw_view(json) {
     //     "<p>" + "Opinion" + "</p>" +
     //     "<p>" + '<span class="label-sent-button" id="span_id_neutral" >' +
     //     "<i class=" + "\"fas fa-comments fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>";
-    // labelColumn4Div.innerHTML = divCaption
-    // labelElement.appendChild(labelColumn4Div)
+    // labelColumn5Div.innerHTML = divCaption
+    // labelElement.appendChild(labelColumn5Div)
 
-    // =========================== label column 4 end ===========================//
+    // =========================== label column 5 end ===========================//
 
-    // =========================== label column 5 ===============================//
+    // =========================== label column 6 ===============================//
 
     // // labels for profanity
-    // var labelColumn5Div = document.createElement("div")
-    // labelColumn5Div.id = "labelcolumn5"
-    // labelColumn5Div.className = "l_column5"
+    // var labelColumn6Div = document.createElement("div")
+    // labelColumn6Div.id = "labelcolumn6"
+    // labelColumn6Div.className = "l_column6"
 
     // var divCaption =
     //     "<div class=\"label-body\"" + "\">" +
     //     "<div class=\"label-title\"" + ">" +
     //     "<p style=\"margin: 5px 0px 5px 0px\"" + ">" + "Profanity" + "</p>" + "</div>";
-    // labelColumn5Div.innerHTML = divCaption
+    // labelColumn6Div.innerHTML = divCaption
     // labelElement.appendChild(labelColumn5Div)
 
     // =========================== label column 5 end ===========================//
@@ -481,23 +507,22 @@ function draw_view(json) {
 
         aggElement.appendChild(tempRowDiv)
 
+        console.log(proposal_wise_serial[i].serial_number)
+
+        var column0 = document.getElementById("row" + i + "-column0")
+        var divIdeaSerial =
+            "<div class=\"serial-Name\"" + "\">" +
+            //'<div  class="btn btn-primary btn-block ideaName" id="' + proposal_names[i].idea_id + '">' + proposal_names[i].idea_name + "</div>";
+            "<div class=\"serial\">" + proposal_wise_serial[i].serial_number + "</div>";
+
+        column0.innerHTML = divIdeaSerial
+        column0.setAttribute("title", proposal_wise_serial[i].serial_number)
+
         //console.log(proposal_names[i]);
-        //============================ column 0=========================//
+        //============================ column 1=========================//
 
         // column with all proposal names
-        var column0 = document.getElementById("row" + i + "-column0")
-        var buttons = "<div>" + "<p>" + "\xa0" +
-            '<span class="commenters_button" id="span_id_opt" >' +
-            "<i class=" + "\"fas fa-user fa-xs\"" + "></i>" + "\xa0" +
-            '</span>' +
-            '<span class="commenters_number" id="span_id_opt" style="font-size:0.7em">' + ("0" + json.ideas[i].num_of_commenters).slice(-2) +
-            '</span>' + "\xa0" + "\xa0" + "\xa0" + "\xa0" + "\xa0" +
-            '<span class="comments_button" id="span_id_opt" >' +
-            "<i class=" + "\"fas fa-comment-alt fa-xs\"" + "></i>" + "\xa0" +
-            '</span>' +
-            '<span class="comments_number" id="span_id_opt" style="font-size:0.7em" >' + json.ideas[i].num_of_comments +
-            '</span>' +
-            "</p>" + "</div>";
+        var column1 = document.getElementById("row" + i + "-column1")
         if (proposal_names[i].idea_name.length < 18) {
 
 
@@ -516,7 +541,7 @@ function draw_view(json) {
             for (var x = 0; x < all_words.length; x++) {
                 sentence_length += all_words[x].length
                 //console.log(sentence_length, all_words[x])
-                if (sentence_length > 18) {
+                if (sentence_length > column1.clientWidth / 10) {
                     sentence += "..."
                     break;
                 }
@@ -531,21 +556,44 @@ function draw_view(json) {
                 '<div><span class="badge badge-warning ideaName" id="' + proposal_names[i].idea_id + '"data-toggle="tooltip" data-placement="bottom">' + sentence + '</span></div></div>'
         }
 
-        column0.innerHTML = divIdeaName + buttons
-        column0.setAttribute("title", proposal_names[i].idea_name)
+        column1.innerHTML = divIdeaName
+        column1.setAttribute("title", proposal_names[i].idea_name)
 
-        //============================end of column 0==================//
+        //============================end of column 1==================//
 
-        //============================ column 1 =========================//
+
+        // column with proposal wise topics
+        var divTopicName = "<div class=\"info-body\"" + "\">"
+        var column2 = document.getElementById("row" + i + "-column2")
+        //console.log(proposal_wise_topic_agg)
+
+        var buttons = "<div class='participantInfoColumn'>" + "\xa0" +
+            '<span class="commenters_button" id="span_id_opt" >' +
+            "<i class=" + "\"fas fa-user fa-xs\"" + "></i>" + "\xa0" +
+            '</span>' +
+            '<span class="commenters_number" id="span_id_opt" style="font-size:0.8em">' + ("0" + json.ideas[i].num_of_commenters).slice(-2) +
+            '</span>' + "\xa0" + "</div>" + "<div  class='participantInfoColumn'>" +
+            '<span class="comments_button" id="span_id_opt" >' +
+            "<i class=" + "\"fas fa-comment-alt fa-xs\"" + "></i>" + "\xa0" +
+            '</span>' +
+            '<span class="comments_number" id="span_id_opt" style="font-size:0.8em" >' + json.ideas[i].num_of_comments +
+            '</span>' +
+            "</div>";
+
+        topic_row_length = 0
+        column2.innerHTML = buttons
+
+
+        //============================ column 3 =========================//
 
         // column with proposal wise topics
         var divTopicName = "<div class=\"topic-body\"" + "\">"
-        var column1 = document.getElementById("row" + i + "-column1")
+        var column3 = document.getElementById("row" + i + "-column3")
         //console.log(proposal_wise_topic_agg)
         for (var j = 0; j < proposal_wise_topic_agg[i].length; j++) {
             topic_row_length += proposal_wise_topic_agg[i][j].topic_keyphrase.length
             //console.log(proposal_wise_topic_agg[i][j].topic_keyphrase, topic_row_length)
-            if (topic_row_length > column1.clientWidth / 10) {
+            if (topic_row_length > column3.clientWidth / 10) {
                 break;
             }
             else {
@@ -555,15 +603,15 @@ function draw_view(json) {
             }
         }
         topic_row_length = 0
-        column1.innerHTML = divTopicName
+        column3.innerHTML = divTopicName
 
-        //============================ column 1 end =====================//
+        //============================ column 3 end =====================//
 
 
-        //============================ column 2 =========================//
+        //============================ column 4 =========================//
 
         // column with proposal wise emotions
-        var column2 = document.getElementById("row" + i + "-column2")
+        var column4 = document.getElementById("row" + i + "-column4")
         //console.log(json)
         // tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
         // tempSvg.id = "svg" + "row" + i + "column2"
@@ -571,22 +619,22 @@ function draw_view(json) {
         // tempSvg.setAttribute("width", column2.clientWidth)
         // tempSvg.setAttribute("height", column2.clientHeight)
         // column2.appendChild(tempSvg)
-        var svg_id = "svg" + "row" + i + "-column2"
+        var svg_id = "svg" + "row" + i + "-column4"
         send_data = []
         send_data.push(proposal_wise_emotion_agg[i])
         //console.log(send_data)
-        emotion_rows(send_data, svg_id, column2.id, proposal_names[i].idea_id)
+        emotion_rows(send_data, svg_id, column4.id, proposal_names[i].idea_id)
 
 
-        //============================end of column 2==================//
+        //============================end of column 4==================//
 
-        //============================ column 3 =========================//
+        //============================ column 5 =========================//
         // column with proposal wise sentiments
 
-        var column3 = document.getElementById("row" + i + "-column3")
+        var column5 = document.getElementById("row" + i + "-column5")
         //console.log(proposal_wise_sentiment_agg)
         // tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
-        var tempSvg_id = "svg" + "row" + i + "-column3"
+        var tempSvg_id = "svg" + "row" + i + "-column5"
         // tempSvg.setAttribute("class", "c_svg")
         // tempSvg.setAttribute("width", column3.clientWidth)
         // tempSvg.setAttribute("height", column3.clientHeight)
@@ -594,41 +642,41 @@ function draw_view(json) {
 
         send_data = []
         send_data.push(proposal_wise_sentiment_agg[i])
-        sentiment_rows(send_data, tempSvg_id, column3.id, proposal_names[i].idea_id)
+        sentiment_rows(send_data, tempSvg_id, column5.id, proposal_names[i].idea_id)
 
-        //============================end of column 3 ==================//
-
-        //============================ column 4 =========================//
-        // // column with proposal wise subjectivity
-
-        // var column4 = document.getElementById("row" + i + "column4")
-        // //console.log(proposal_wise_subjectivity_agg)
-        // tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
-        // tempSvg.id = "svg" + "row" + i + "column4"
-        // tempSvg.setAttribute("class", "c_svg")
-        // tempSvg.setAttribute("width", column4.clientWidth)
-        // tempSvg.setAttribute("height", column4.clientHeight)
-        // column4.appendChild(tempSvg)
-
-        // send_data = []
-        // send_data.push(proposal_wise_subjectivity_agg[i])
-        // subjectivity_rows(send_data, tempSvg.id, column4.id, proposal_names[i].idea_id)
-
-        //============================ end of column 4 ==================//
+        //============================end of column 5 ==================//
 
         //============================ column 5 =========================//
-
-        // // column with proposal wise profanity
+        // // column with proposal wise subjectivity
 
         // var column5 = document.getElementById("row" + i + "column5")
+        // //console.log(proposal_wise_subjectivity_agg)
         // tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
         // tempSvg.id = "svg" + "row" + i + "column5"
         // tempSvg.setAttribute("class", "c_svg")
         // tempSvg.setAttribute("width", column5.clientWidth)
         // tempSvg.setAttribute("height", column5.clientHeight)
+        // column4.appendChild(tempSvg)
+
+        // send_data = []
+        // send_data.push(proposal_wise_subjectivity_agg[i])
+        // subjectivity_rows(send_data, tempSvg.id, column5.id, proposal_names[i].idea_id)
+
+        //============================ end of column 5 ==================//
+
+        //============================ column 6 =========================//
+
+        // // column with proposal wise profanity
+
+        // var column6 = document.getElementById("row" + i + "column6")
+        // tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
+        // tempSvg.id = "svg" + "row" + i + "column6"
+        // tempSvg.setAttribute("class", "c_svg")
+        // tempSvg.setAttribute("width", column5.clientWidth)
+        // tempSvg.setAttribute("height", column5.clientHeight)
         // column5.appendChild(tempSvg)
 
-        // var column5 = document.getElementById("row" + i + "column5")
+        // var column6 = document.getElementById("row" + i + "column6")
         // var send_data = proposal_wise_profanity_agg[i].profanity_distribution;
         // count_very_low = 0, count_low = 0, count_mid = 0, count_high = 0, count_very_high = 0;
         // for (var x = 0; x < send_data.length; x++) {
@@ -661,7 +709,7 @@ function draw_view(json) {
         //     very_high: count_very_high,
         // })
 
-        // profanity_rows(prof_data, tempSvg.id, column5.id, proposal_names[i].idea_id)
+        // profanity_rows(prof_data, tempSvg.id, column6.id, proposal_names[i].idea_id)
         //============================ end of column 5 ==================//
 
         // // Instructions
@@ -932,7 +980,7 @@ function draw_view(json) {
             if (check_empty() == true) {
                 document.getElementById("box_header").innerHTML = "Click on a Proposal, Topic, Emotion or Sentiment to see related comments"
             }
-            else {
+            else if (current_sort == "") {
                 document.getElementById("box_header").innerHTML = ""
             }
 
@@ -1341,14 +1389,30 @@ function emotion_rows(salesData, svg_id, div_id, idea_id) {
     var z = d3.scaleOrdinal(["#F58518", "#EECA3B", "#4C78A8", "#B279A2", "#E45756"]).domain(group);
     var maing = svg.append("g")
         .selectAll("g")
-        .data(layers);
+        .data(layers)
     var g = maing.enter().append("g")
         // .attr("fill", function (d) {
         //     return z(d.key);
         // })
         // .attr("style", "outline: solid;")
         // .attr("style", "outline-color: #F2F2F2")
-        .style("cursor", "pointer");
+        .style("cursor", "pointer")
+
+    maing.selectAll('text')
+        .data(layers)
+        .enter()
+        .append('text')
+        .attr("x", function (d) {
+            return x(d.key) + x.rangeBand() / 2 - 3;
+        })
+        .attr("y", function (d) {
+            return y(d.value);
+        })
+        .attr('dy', '.75em')
+        .style('fill', 'black')
+        .text(function (d) {
+            return (d.value)
+        })
     var rect = g.selectAll("rect")
         .data(function (d) {
             d.forEach(function (d1) {
@@ -1414,10 +1478,10 @@ function emotion_rows(salesData, svg_id, div_id, idea_id) {
             if (current_sort === "" || current_sort == selected_sort[0] || current_sort == selected_sort[1])
                 return 0.8
             else if (d.key == current_sort) {
-                return 0.8
+                return 1.0
             }
             else {
-                return 0.4
+                return 0.5
             }
         });
 
@@ -1500,14 +1564,13 @@ function emotion_rows(salesData, svg_id, div_id, idea_id) {
             if (current_sort === "" || current_sort == selected_sort[0] || current_sort == selected_sort[1])
                 return 0.8
             if (d.key == current_sort) {
-                return 0.8
+                return 1.0
             }
             if (cellHistory.emo_switch && cellHistory.prev_idea_id_emo == idea_id && cellHistory.prev_emo_color == z(d.key)) {
-                return 1
+                return 1.0
             }
-            if(current_sort !== "")
-            {
-                return 0.4
+            if (current_sort !== "") {
+                return 0.5
             }
             else {
                 return 0.8
@@ -1587,7 +1650,7 @@ function emotion_rows(salesData, svg_id, div_id, idea_id) {
             console.log(document.getElementById("box_header"))
             if (cellHistory.prev_senti) {
                 document.getElementById("box_header").innerHTML = "No comments for emotion - " + d.key + " and sentiment - " + cellHistory.prev_senti
-                alert("No comments for sentiment - " + d.key + " and emotion - " + cellHistory.prev_emo);
+                //alert("No comments for sentiment - " + d.key + " and emotion - " + cellHistory.prev_emo);
             }
         }
 
@@ -1793,14 +1856,14 @@ function sentiment_rows(salesData, svg_id, div_id, idea_id) {
             return "2px";
         })
         .attr("height", 30)
-        .attr("opacity", function (d){
+        .attr("opacity", function (d) {
             if (current_sort === "" || current_sort == selected_sort[0] || current_sort == selected_sort[1])
                 return 0.8
             else if (d.key == current_sort) {
-                return 0.8
+                return 1.0
             }
             else {
-                return 0.4
+                return 0.5
             }
         });
     //.attr("height", y.bandwidth);
@@ -1884,14 +1947,13 @@ function sentiment_rows(salesData, svg_id, div_id, idea_id) {
             if (current_sort === "" || current_sort == selected_sort[0] || current_sort == selected_sort[1])
                 return 0.8
             if (d.key == current_sort) {
-                return 0.8
+                return 1.0
             }
             if (cellHistory.senti_switch && cellHistory.prev_idea_id_senti == idea_id && cellHistory.prev_senti_color == z(d.key)) {
                 return 1
             }
-            if(current_sort !== "")
-            {
-                return 0.4
+            if (current_sort !== "") {
+                return 0.5
             }
             else {
                 return 0.8
@@ -1967,7 +2029,7 @@ function sentiment_rows(salesData, svg_id, div_id, idea_id) {
             console.log(document.getElementById("box_header"))
             if (cellHistory.prev_emo) {
                 document.getElementById("box_header").innerHTML = "No comments for sentiment - " + d.key + " and emotion - " + cellHistory.prev_emo
-                alert("No comments for sentiment - " + d.key + " and emotion - " + cellHistory.prev_emo);
+                //alert("No comments for sentiment - " + d.key + " and emotion - " + cellHistory.prev_emo);
             }
         }
         if (!filterobj.emotion && !filterobj.sentiment_final) {

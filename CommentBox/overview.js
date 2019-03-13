@@ -1,4 +1,17 @@
 // Get proposal names
+
+function get_serial_number(json){
+    var serial_numbers = []
+    //console.log(json)
+    for (var i in json["ideas"]){
+        serial_numbers.push({
+            idea_id: json.ideas[i].id,
+            serial_number: json.ideas[i].serial
+        })
+    }
+    return serial_numbers;
+}
+
 function get_proposal_names(json){
     var proposal_names = []
     //console.log(json)

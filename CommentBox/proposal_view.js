@@ -503,25 +503,25 @@ function getEmojiString(commentID) {
         "<div class=\"tippy-label-body\"" + "\">" +
         "<div class=\"label-title\"" + " style=border:none;font-size:1.5em" + ">" + "<p> " + "Click on an icon to set as the new emotion" + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + ">" +
-        "<p>" + "Angry" + "</p>" +
-        "<p>" + '<span class="label-emo-button" id="span_id_angry' + commentID + '" onclick="emojiMouseClick(\'' + 'angry-' + commentID + '\')">' +
-        "<i class=" + "\"fas fa-angry fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
-        "<div class=\"label-emo-body\"" + "\">" +
-        "<p>" + "Fear" + "</p>" +
-        "<p>" + '<span class="label-emo-button" id="span_id_worried' + '" onclick="emojiMouseClick(\'' + 'worried-' + commentID + '\')">' +
-        "<i class=" + "\"fas fa-flushed fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
-        "<div class=\"label-emo-body\"" + "\">" +
-        "<p>" + "Sad" + "</p>" +
-        "<p>" + '<span class="label-emo-button" id="span_id_sad' + '" onclick="emojiMouseClick(\'' + 'sad-' + commentID + '\')">' +
-        "<i class=" + "\"fas fa-frown fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<p>" + "Excited" + "</p>" +
+        "<p>" + '<span class="label-emo-button" id="span_id_excited' + commentID + '" onclick="emojiMouseClick(\'' + 'excited-' + commentID + '\')">' +
+        "<i class=" + "\"fas fa-smile-beam fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Happy" + "</p>" +
         "<p>" + '<span class="label-emo-button" id="span_id_happy' + '" onclick="emojiMouseClick(\'' + 'happy-' + commentID + '\')">' +
         "<i class=" + "\"fas fa-smile fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
-        "<p>" + "Excited" + "</p>" +
-        "<p>" + '<span class="label-emo-button" id="span_id_excited' + '" onclick="emojiMouseClick(\'' + 'excited-' + commentID + '\')">' +
-        "<i class=" + "\"fas fa-smile-beam fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>";
+        "<p>" + "Sad" + "</p>" +
+        "<p>" + '<span class="label-emo-button" id="span_id_sad' + '" onclick="emojiMouseClick(\'' + 'sad-' + commentID + '\')">' +
+        "<i class=" + "\"fas fa-frown fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<div class=\"label-emo-body\"" + "\">" +
+        "<p>" + "Worried" + "</p>" +
+        "<p>" + '<span class="label-emo-button" id="span_id_worried' + '" onclick="emojiMouseClick(\'' + 'worried-' + commentID + '\')">' +
+        "<i class=" + "\"fas fa-flushed fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<div class=\"label-emo-body\"" + "\">" +
+        "<p>" + "Angry" + "</p>" +
+        "<p>" + '<span class="label-emo-button" id="span_id_angry' + '" onclick="emojiMouseClick(\'' + 'angry-' + commentID + '\')">' +
+        "<i class=" + "\"fas fa-angry fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>";
     return emojiDiv;
 }
 
@@ -567,17 +567,17 @@ function getSentiString(commentID) {
         "<div class=\"tippy-label-body\"" + "\">" +
         "<div class=\"label-title\"" + " style=border:none;font-size:1.5em" + ">" + "<p> " + "Click on an icon to set as the new sentiment" + "</p>" + "</div>" +
         "<div class=\"label-sent-body\"" + ">" +
-        "<p>" + "Negative" + "</p>" +
-        "<p>" + '<span class="label-sent-button" id="span_id_negative' + commentID + '" onclick="sentiMouseClick(\'' + 'negative-' + commentID + '\')">' +
-        "<i class=" + "\"fas fa-thumbs-down fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<p>" + "Positive" + "</p>" +
+        "<p>" + '<span class="label-sent-button" id="span_id_positive' + commentID + '" onclick="sentiMouseClick(\'' + 'positive-' + commentID + '\')">' +
+        "<i class=" + "\"fas fa-thumbs-up fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-sent-body\"" + "\">" +
         "<p>" + "Neutral" + "</p>" +
         "<p>" + '<span class="label-sent-button" id="span_id_neutral' + '" onclick="sentiMouseClick(\'' + 'neutral-' + commentID + '\')">' +
         "<i class=" + "\"far fa-thumbs-down fa-3x neutral\"" + " style=transform:rotate(-90deg)" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-sent-body\"" + "\">" +
-        "<p>" + "Positive" + "</p>" +
-        "<p>" + '<span class="label-sent-button" id="span_id_positive' + '" onclick="sentiMouseClick(\'' + 'positive-' + commentID + '\')">' +
-        "<i class=" + "\"fas fa-thumbs-up fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>";
+        "<p>" + "Negative" + "</p>" +
+        "<p>" + '<span class="label-sent-button" id="span_id_negative' + '" onclick="sentiMouseClick(\'' + 'negative-' + commentID + '\')">' +
+        "<i class=" + "\"fas fa-thumbs-down fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>";
     return sentiDiv;
 }
 
