@@ -1878,7 +1878,7 @@ function sentiment_rows(salesData, svg_id, div_id, idea_id) {
     }
 
     //var z = d3.scaleOrdinal(["#D8B365", "#D9D9D9", "#5AB4AC"]);
-    var z = d3.scaleOrdinal(["#5ABAAC", "#D9D9D9", "#D9B965"]);
+    var z = d3.scaleOrdinal(["#5ABAAC", "#CCCCCC", "#D9B965"]);
 
     var maing = svg.append("g")
         .selectAll("g")
