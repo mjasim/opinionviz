@@ -278,7 +278,7 @@ function draw_filtered_comments(filtered_comment, json) {
                         }
 
                         divQuestion[k].innerHTML = divQuestionHTML;
-                        setTippy(divQuestion[k].id, json);
+                        // setTippy(divQuestion[k].id, json);
 
                         var element = document.getElementById(divTask[j].id)
                         element.appendChild(divQuestion[k])
@@ -318,6 +318,8 @@ function draw_filtered_comments(filtered_comment, json) {
                     "</p></div>";
 
                 divComment[k].innerHTML = divCommentHTML;
+
+                //console.log('draw filter comment', json);
 
                 setTippy(divComment[k].id, json);
 
@@ -361,6 +363,9 @@ function draw_filtered_comments(filtered_comment, json) {
 // tippy functions for categories
 function setTippy(commentID, json) {
     //console.log(commentID);
+
+    //console.log("printing", json)
+
     currentJSON = json;
     $(document).ready(function () {
         tippy('#' + commentID + ' .emoticon_button', {
@@ -463,9 +468,11 @@ function emojiMouseClick(id) {
 
     var all_ids = id.split("-");
 
-    console.log(all_ids)
+    //console.log(all_ids)
 
     logInteraction('click, revision, ' + 'idea, ' + all_ids[2] + ' task, ' + all_ids[3] + ' comment' + all_ids[4] + ' revision, ' + all_ids[0]);
+
+    //console.log(currentJSON);
 
     for (var i in currentJSON["ideas"]) {
         for (var j in currentJSON.ideas[i].tasks) {

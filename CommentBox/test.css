@@ -109,6 +109,7 @@ body {
 .label-emo-body{
     width: 20%;
     padding: 5px 0;
+    opacity:1.0;
 }
 
 .label-sent-body{
@@ -741,7 +742,7 @@ c_row    border-radius: 10px;
 }
 
 .label-emo-button{
-      opacity: 0.7
+      opacity: 0.8
 }
 
 .label-emo-button:hover{
@@ -750,7 +751,7 @@ c_row    border-radius: 10px;
 }
 
 .label-sent-button{
-    opacity: 0.7
+    opacity: 0.8
 }
 
 .label-sent-button:hover{
@@ -759,7 +760,7 @@ c_row    border-radius: 10px;
 }
 
 .label-info-button{
-    opacity: 0.7
+    opacity: 0.8
 }
 
 .label-info-button:hover{

@@ -13,6 +13,7 @@ var current_sort = ""
 
 // global variable to track active ideas
 selected_rows = Array.apply(null, Array(36))
+selected_rows_stack = []
 
 // global variable to track active topics
 selected_topics = Array.apply(null, Array(36))
@@ -43,6 +44,7 @@ var cellHistory = {
 }
 
 var raw_json = null;
+var prop_json = null;
 
 var animate_trigger = false;
 
@@ -56,37 +58,50 @@ function check_empty() {
 
 }
 
-function animatedDivs() {
-    if (!filterobj.idea_id && (filterobj.emotion || filterobj.sentiment_final || filterobj.subjectivity)) {
-        draw_view();
-        document.getElementById("aggregateDiv").setAttribute("style", "height:0px")
-        document.getElementById("parentBox").setAttribute("style", "height:80vh")
-        $("#parentBox").animate({ scrollTop: 0 }, 1000);
-        $("#aggregateDiv").animate({ scrollTop: 0 }, 1000);
+function divMove() {
+    if (check_empty() == true) {
+        document.getElementById("parentBox").setAttribute("style", "height:0px")
+        document.getElementById("aggregateDiv").setAttribute("style", "height:74%")
     }
-    else if (!filterobj.idea_id && !filterobj.emotion && !filterobj.sentiment_final && !filterobj.subjectivity) {
-        //draw_view();
-        document.getElementById("aggregateDiv").setAttribute("style", "height:80vh")
-        document.getElementById("parentBox").setAttribute("style", "height:50px")
-    }
-    else if (filterobj.idea_id) {
-        temp = get_proposal_names(raw_json)
-        for (var i = 0; i < temp.length; i++) {
-            if (temp[i].idea_id == filterobj.idea_id) {
-                one_row = i
-            }
-        }
-        draw_one_row(one_row)
-        document.getElementById(filterobj.idea_id).parentElement.parentElement.scrollIntoView({ block: 'start' });
-        document.getElementById("aggregateDiv").setAttribute("style", "height:50px")
-        document.getElementById("parentBox").setAttribute("style", "height:80vh")
-        $("#parentBox").animate({ scrollTop: 0 }, 1000);
-        //document.getElementById("emo_cell").setAttribute("style", "stroke:red");
+    else if (check_empty() == false) {
+        document.getElementById("parentBox").setAttribute("style", "height:60vh")
+        document.getElementById("aggregateDiv").setAttribute("style", "height:20vh")
+        //document.getElementById(filterobj.idea_id).parentElement.parentElement.scrollIntoView({ block: 'start' });
     }
 }
 
+// function animatedDivs() {
+//     if (!filterobj.idea_id && (filterobj.emotion || filterobj.sentiment_final || filterobj.subjectivity)) {
+//         draw_view();
+//         document.getElementById("aggregateDiv").setAttribute("style", "height:0px")
+//         document.getElementById("parentBox").setAttribute("style", "height:80vh")
+//         $("#parentBox").animate({ scrollTop: 0 }, 1000);
+//         $("#aggregateDiv").animate({ scrollTop: 0 }, 1000);
+//     }
+//     else if (!filterobj.idea_id && !filterobj.emotion && !filterobj.sentiment_final && !filterobj.subjectivity) {
+//         //draw_view();
+//         document.getElementById("aggregateDiv").setAttribute("style", "height:80vh")
+//         document.getElementById("parentBox").setAttribute("style", "height:50px")
+//     }
+//     else if (filterobj.idea_id) {
+//         temp = get_proposal_names(raw_json)
+//         for (var i = 0; i < temp.length; i++) {
+//             if (temp[i].idea_id == filterobj.idea_id) {
+//                 one_row = i
+//             }
+//         }
+//         draw_one_row(one_row)
+//         document.getElementById(filterobj.idea_id).parentElement.parentElement.scrollIntoView({ block: 'start' });
+//         document.getElementById("aggregateDiv").setAttribute("style", "height:50px")
+//         document.getElementById("parentBox").setAttribute("style", "height:80vh")
+//         $("#parentBox").animate({ scrollTop: 0 }, 1000);
+//         //document.getElementById("emo_cell").setAttribute("style", "stroke:red");
+//     }
+// }
+
 d3.json("communitycrit_revised.json", function (err, myjson) {
     raw_json = JSON.parse(JSON.stringify(myjson))
+    prop_json = JSON.parse(JSON.stringify(myjson))
     console.log()
     draw_view(raw_json)
     //var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
@@ -98,6 +113,9 @@ d3.json("communitycrit_revised.json", function (err, myjson) {
         //console.log(document.getElementById("box_header"))
         document.getElementById("box_header").innerHTML = "Click on a Proposal, Topic, Emotion or Sentiment to see related comments"
     }
+
+    divMove();
+
 })
 
 function draw_view(json) {
@@ -278,9 +296,9 @@ function draw_view(json) {
     labelColumn0Div.className = "l_column0"
 
     var divCaption =
-        "<div class=\"label-body\"" + "\">" ;
-      //  "<div class=\"label-title\"" + ">" +
-     //   "<p style=\"margin: 5px 0px 5px 0px;font-size:1.5em;text-align:left;border-bottom:solid\"" + ">" + "\xa0" + "</p>" + "</div>";
+        "<div class=\"label-body\"" + "\">";
+    //  "<div class=\"label-title\"" + ">" +
+    //   "<p style=\"margin: 5px 0px 5px 0px;font-size:1.5em;text-align:left;border-bottom:solid\"" + ">" + "\xa0" + "</p>" + "</div>";
     //    "<p style=\"margin: 5px 0px 5px 0px;font-size:3em;color:#337AB7\"" + ">" + "19\xa0" + "</p>" + "</div>"
 
     labelColumn0Div.innerHTML = divCaption
@@ -405,7 +423,7 @@ function draw_view(json) {
 
     labelColumn4Div.innerHTML = divCaption
     labelElement.appendChild(labelColumn4Div)
-    setTippy("span_id_angry", null);
+    //setTippy("span_id_angry", null);
 
 
     // =========================== label column 4 end ===========================//
@@ -507,7 +525,7 @@ function draw_view(json) {
 
         aggElement.appendChild(tempRowDiv)
 
-        console.log(proposal_wise_serial[i].serial_number)
+        //console.log(proposal_wise_serial[i].serial_number)
 
         var column0 = document.getElementById("row" + i + "-column0")
         var divIdeaSerial =
@@ -734,12 +752,14 @@ function draw_view(json) {
 
             if (id.split("_")[2] == current_sort) {
                 current_sort = "";
+                console.log("here")
                 selected_rows = Array.apply(null, Array(36));
                 console.log(raw_json)
                 draw_view(raw_json)
+                prop_json = raw_json;
 
                 for (var i = 0; i < selected_sort.length; i++) {
-                    document.getElementById("span_id_" + selected_sort[i]).setAttribute("style", "opacity:0.5")
+                    document.getElementById("span_id_" + selected_sort[i]).setAttribute("style", "opacity:0.8")
                     // console.log("span_id_"+selected_sort[i])
                 }
                 logInteraction('click, sortby, ' + id.split("_")[2]);
@@ -778,6 +798,7 @@ function draw_view(json) {
                 }
                 sorted_ideas = { "ideas": show_this }
                 draw_view(sorted_ideas)
+                prop_json = sorted_ideas;
                 document.getElementById("box_header").innerHTML = "Sorted by " + id.split("_")[2];
 
                 var myNode = document.getElementById("parentBox");
@@ -787,18 +808,22 @@ function draw_view(json) {
 
                 //console.log(selected_sort)
                 for (var i = 0; i < selected_sort.length; i++) {
-                    document.getElementById("span_id_" + selected_sort[i]).setAttribute("style", "opacity:0.5")
+                    document.getElementById("span_id_" + selected_sort[i]).setAttribute("style", "opacity:0.8")
                     // console.log("span_id_"+selected_sort[i])
                 }
 
+                console.log(id)
                 document.getElementById(id).setAttribute("style", "opacity:1.0");
+                $( "#"+id ).children().css( "opacity", "1.0" );
             }
-
         });
         // $('.emoticon_button').mouseover(function() {
         //     var id = $(this).attr('id');
         //     console.log('emotion mouseover',id)
         // });
+
+        divMove();
+
 
     });
 
@@ -814,9 +839,9 @@ function draw_view(json) {
                 selected_rows = Array.apply(null, Array(36));
                 console.log(raw_json)
                 draw_view(raw_json)
-
+                prop_json = raw_json;
                 for (var i = 0; i < selected_sort.length; i++) {
-                    document.getElementById("span_id_" + selected_sort[i]).setAttribute("style", "opacity:0.5")
+                    document.getElementById("span_id_" + selected_sort[i]).setAttribute("style", "opacity:0.8")
                     // console.log("span_id_"+selected_sort[i])
                 }
                 logInteraction('click, sortby, ' + id.split("_")[2]);
@@ -861,12 +886,15 @@ function draw_view(json) {
 
                 //console.log(selected_sort)
                 for (var i = 0; i < selected_sort.length; i++) {
-                    document.getElementById("span_id_" + selected_sort[i]).setAttribute("style", "opacity:0.5")
+                    document.getElementById("span_id_" + selected_sort[i]).setAttribute("style", "opacity:0.8")
                     // console.log("span_id_"+selected_sort[i])
                 }
 
                 document.getElementById(id).setAttribute("style", "opacity:1.0");
+                $( "#"+id ).children().css( "opacity", "1.0" );
+
                 selected_rows = Array.apply(null, Array(36));
+                prop_json = sorted_ideas;
             }
         });
         // $('.emoticon_button').mouseover(function() {
@@ -887,9 +915,10 @@ function draw_view(json) {
                 selected_rows = Array.apply(null, Array(36));
                 console.log(raw_json)
                 draw_view(raw_json)
+                prop_json = raw_json;
 
                 for (var i = 0; i < selected_sort.length; i++) {
-                    document.getElementById("span_id_" + selected_sort[i]).setAttribute("style", "opacity:0.5")
+                    document.getElementById("span_id_" + selected_sort[i]).setAttribute("style", "opacity:0.8")
                     // console.log("span_id_"+selected_sort[i])
                 }
                 logInteraction('click, sortby, ' + id.split("_")[2]);
@@ -923,12 +952,14 @@ function draw_view(json) {
 
                 //console.log(selected_sort)
                 for (var i = 0; i < selected_sort.length; i++) {
-                    document.getElementById("span_id_" + selected_sort[i]).setAttribute("style", "opacity:0.5")
+                    document.getElementById("span_id_" + selected_sort[i]).setAttribute("style", "opacity:0.8")
                     // console.log("span_id_"+selected_sort[i])
                 }
 
                 document.getElementById(id).setAttribute("style", "opacity:1.0");
+                $( "#"+id ).children().css( "opacity", "1.0" );
                 selected_rows = Array.apply(null, Array(36));
+                prop_json = copy_json;
             }
         });
         // $('.emoticon_button').mouseover(function() {
@@ -946,30 +977,73 @@ function draw_view(json) {
 
             if (selected_rows[id]) {
                 selected_rows[id] = null;
+                selected_rows_stack.splice(selected_rows_stack.indexOf(id), 1);
                 document.getElementById(id).setAttribute("style", "background-color:none")
             }
             else {
                 selected_rows[id] = true;
+                selected_rows_stack.push(id)
                 document.getElementById(id).setAttribute("style", "background-color:#3DAADD")
             }
             var all_filtered_comment = []
 
-            for (var i = 0; i < selected_rows.length; i++) {
-                if (selected_rows[i]) {
-                    filterobj.idea_id = i
-                    filterobj.emotion = null
-                    filterobj.sentiment_final = null
-                    filterobj.subjectivity = null
-                    filterobj.task_id = null
-                    filterobj.topic = []
-                    var temp_comments = get_filtered_comment(JSON.parse(JSON.stringify(raw_json)), filterobj)
-                    all_filtered_comment.push(temp_comments.ideas[0])
+            // for (var i = 0; i < selected_rows.length; i++) {
+            //     if (selected_rows[i]) {
+            //         filterobj.idea_id = i
+            //         filterobj.emotion = null
+            //         filterobj.sentiment_final = null
+            //         filterobj.subjectivity = null
+            //         filterobj.task_id = null
+            //         filterobj.topic = []
+            //         var temp_comments = get_filtered_comment(JSON.parse(JSON.stringify(raw_json)), filterobj)
+            //         all_filtered_comment.push(temp_comments.ideas[0])
+            //     }
+            // }
+
+            iterate = selected_rows_stack.slice(0, selected_rows_stack.length)
+            var copy_json = []; 
+
+            while (iterate.length > 0) {
+                x = iterate.pop()
+                filterobj.idea_id = x
+                filterobj.emotion = null
+                filterobj.sentiment_final = null
+                filterobj.subjectivity = null
+                filterobj.task_id = null
+                filterobj.topic = []
+                var temp_comments = get_filtered_comment(JSON.parse(JSON.stringify(raw_json)), filterobj)
+                all_filtered_comment.push(temp_comments.ideas[0])
+
+                for(var t in prop_json["ideas"]){
+                    if(x == prop_json.ideas[t].id){
+                        copy_json.push(prop_json.ideas[t])
+                    }
                 }
             }
+
+            for(var t in prop_json["ideas"]){
+                if(selected_rows_stack.indexOf(prop_json.ideas[t].id) > -1){
+                    continue;
+                }
+                else{
+                    copy_json.push(prop_json.ideas[t])
+                }
+            }
+
+            var new_view = {"ideas": copy_json}
             var filtered_comment = { "ideas": all_filtered_comment }
 
-            console.log(filtered_comment)
-            draw_filtered_comments(filtered_comment, raw_json)
+            //console.log(new_view)
+
+            //console.log(filtered_comment)
+            draw_filtered_comments(filtered_comment, new_view)
+            draw_view(new_view)
+            divMove();
+
+            for(var x = 0; x < selected_rows_stack.length; x++){
+                //console.log("here")
+                document.getElementById(selected_rows_stack[x]).setAttribute("style", "background-color:#3DAADD")
+            }
 
             // if (!animate_trigger) {
             //     document.getElementById(id).scrollIntoView({ block: 'center' });
@@ -984,14 +1058,19 @@ function draw_view(json) {
                 document.getElementById("box_header").innerHTML = ""
             }
 
-            console.log(id)
+            if(current_sort != ""){
+                console.log(current_sort)
+                $( "#span_id_"+ current_sort ).children().css( "opacity", "1.0" );
+            }
+
+            //console.log(id)
             if (animate_trigger) {
                 animatedDivs();
             }
             if (!selected_rows[id]) {
                 setTimeout(
                     function () {
-                        console.log('scroll');
+                        //console.log('scroll');
                         $('#parentBox').scrollTo(0);
                     }, 100
                 )
@@ -999,14 +1078,12 @@ function draw_view(json) {
             else {
                 setTimeout(
                     function () {
-                        console.log('scroll');
+                        //console.log('scroll');
 
                         $('#parentBox').scrollTo($('#ideaDivId-' + id), 500);
                     }, 100
                 )
             }
-
-
 
         });
         // $('.emoticon_button').mouseover(function() {
@@ -1073,6 +1150,7 @@ function draw_view(json) {
             var filtered_comment = { "ideas": all_filtered_topics }
             console.log(filtered_comment)
             draw_filtered_comments(filtered_comment, raw_json)
+            divMove();
 
             if (check_empty() == true) {
                 document.getElementById("box_header").innerHTML = "Click on a Proposal, Topic, Emotion or Sentiment to see related comments"
@@ -1683,7 +1761,7 @@ function emotion_rows(salesData, svg_id, div_id, idea_id) {
         .attr("x", 0)
         .attr("width", 120)
         .attr("height", 80)
-        .attr("opacity", 0.71)
+        .attr("opacity", 0.7)
         .style("fill", "#000000");
 
     rectTooltipg
@@ -2060,7 +2138,7 @@ function sentiment_rows(salesData, svg_id, div_id, idea_id) {
         .attr("x", 0)
         .attr("width", 120)
         .attr("height", 80)
-        .attr("opacity", 0.71)
+        .attr("opacity", 0.7)
         .style("fill", "#000000");
 
     rectTooltipg
@@ -2387,7 +2465,7 @@ function subjectivity_rows(salesData, svg_id, div_id, idea_id) {
         .attr("x", 0)
         .attr("width", 120)
         .attr("height", 80)
-        .attr("opacity", 0.71)
+        .attr("opacity", 0.7)
         .style("fill", "#000000");
 
     rectTooltipg
@@ -2652,7 +2730,7 @@ function profanity_rows(salesData, svg_id, div_id, idea_id) {
         .attr("x", 0)
         .attr("width", 120)
         .attr("height", 80)
-        .attr("opacity", 0.71)
+        .attr("opacity", 0.7)
         .style("fill", "#000000");
 
     rectTooltipg
