@@ -1,0 +1,10 @@
+5Br8vq6,Mon, 11 Mar 2019 11:10:32 GMT,click, ideaName, 22
+5Br8vq6,Mon, 11 Mar 2019 11:10:38 GMT,click, ideaName, 1
+5Br8vq6,Mon, 11 Mar 2019 11:11:26 GMT,click, ideaName, 6
+5Br8vq6,Mon, 11 Mar 2019 11:22:10 GMT,click, ideaName, 22
+5Br8vq6,Mon, 11 Mar 2019 11:22:11 GMT,click, ideaName, 1
+5Br8vq6,Mon, 11 Mar 2019 11:22:11 GMT,click, ideaName, 6
+5Br8vq6,Mon, 11 Mar 2019 11:23:16 GMT,click, ideaName, 4
+5Br8vq6,Mon, 11 Mar 2019 11:23:19 GMT,click, ideaName, 32
+5Br8vq6,Mon, 11 Mar 2019 13:29:54 GMT,click, ideaName, 1
+5Br8vq6,Mon, 11 Mar 2019 18:13:26 GMT,click, ideaName, 32

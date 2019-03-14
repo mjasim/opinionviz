@@ -492,7 +492,7 @@ function emojiMouseClick(id) {
 
                     $('#span_id_emo_' + all_ids[1] + '-' + all_ids[2] + '-' + all_ids[3] + '-' + all_ids[4]).html(newEmotionButtonStr);
                     makeRevision(currentJSON);
-
+                    raw_json = currentJSON;
                 }
             }
         }
@@ -561,6 +561,8 @@ function sentiMouseClick(id) {
                         var newSentimentButtonStr =
                             "<i class=" + "\"" + "fas " + awesome_sentiment + "\"" + "></i>" + "\xa0";
                         $('#span_id_sent_' + all_ids[1] + '-' + all_ids[2] + '-' + all_ids[3] + '-' + all_ids[4]).html(newSentimentButtonStr);
+                        makeRevision(currentJSON);
+                        raw_json = currentJSON;
                     }
                 }
             }
@@ -611,6 +613,8 @@ function subjectivityMouseClick(id) {
                     var newSubjectivityButtonStr =
                         "<i class=" + "\"" + "fas " + awesome_subjectivity + "\"" + "></i>" + "\xa0";
                     $('#span_id_sub_' + all_ids[1] + '-' + all_ids[2] + '-' + all_ids[3] + '-' + all_ids[4]).html(newSubjectivityButtonStr);
+                    makeRevision(currentJSON);
+                    raw_json = currentJSON;
                 }
             }
         }
@@ -736,6 +740,9 @@ function save_issue(id) {
             }
         }
 
+        makeRevision(currentJSON);
+        raw_json = currentJSON;
+
         //console.log(currentJSON)
         $('#issueModal').modal('hide')
     });
@@ -765,6 +772,9 @@ function save_criteria(id) {
                 }
             }
         }
+
+        makeRevision(currentJSON);
+        raw_json = currentJSON;
 
         console.log(currentJSON)
         $('#criteriaModal').modal('hide')
