@@ -88,9 +88,9 @@ function get_proposal_wise_emotion(json) {
                 else if (json.ideas[i].tasks[j].comments[k].emotion == "Sad") {
                     count_sad++;
                 }
-                else if (json.ideas[i].tasks[j].comments[k].emotion == "Bored") {
-                    count_bored++;
-                }
+                // else if (json.ideas[i].tasks[j].comments[k].emotion == "Bored") {
+                //     count_bored++;
+                // }
                 else if (json.ideas[i].tasks[j].comments[k].emotion == "Happy") {
                     count_happy++;
                 }
@@ -99,19 +99,20 @@ function get_proposal_wise_emotion(json) {
                 }
             }
         }
-        count_comment = count_angry + count_fear + count_sad + count_bored + count_happy + count_excited
+        //count_comment = count_angry + count_fear + count_sad + count_bored + count_happy + count_excited
+        count_comment = count_angry + count_fear + count_sad + count_happy + count_excited
         proposal_emotion_agg.push({
             key: idea_id,
             angry: count_angry,
             worried: count_fear,
             sad: count_sad,
-            bored: count_bored,
+            //bored: count_bored,
             happy: count_happy,
             excited: count_excited,
             angry_normalized: count_angry / count_comment,
             worried_normalized: count_fear / count_comment,
             sad_normalized: count_sad / count_comment,
-            bored_normalized: count_bored / count_comment,
+            //bored_normalized: count_bored / count_comment,
             happy_normalized: count_happy / count_comment,
             excited_normalized: count_excited / count_comment,
             num_comments_normalized: count_comment
@@ -204,23 +205,24 @@ function get_all_proposal_emotion(json) {
         count_angry = count_angry + proposal_wise_emotion_agg[i].angry
         count_fear = count_fear + proposal_wise_emotion_agg[i].worried
         count_sad = count_sad + proposal_wise_emotion_agg[i].sad
-        count_bored = count_bored + proposal_wise_emotion_agg[i].bored
+        //count_bored = count_bored + proposal_wise_emotion_agg[i].bored
         count_happy = count_happy + proposal_wise_emotion_agg[i].happy
         count_excited = count_excited + proposal_wise_emotion_agg[i].excited
     }
     count_comment = count_angry + count_fear + count_sad + count_bored + count_happy + count_excited
+    count_comment = count_angry + count_fear + count_sad + count_happy + count_excited
     proposal_emotion_agg.push({
         key: "emotion",
         angry: count_angry,
         worried: count_fear,
         sad: count_sad,
-        bored: count_bored,
+        //bored: count_bored,
         happy: count_happy,
         excited: count_excited,
         angry_normalized: count_angry / count_comment,
         worried_normalized: count_fear / count_comment,
         sad_normalized: count_sad / count_comment,
-        bored_normalized: count_bored / count_comment,
+        //bored_normalized: count_bored / count_comment,
         happy_normalized: count_happy / count_comment,
         excited_normalized: count_excited / count_comment,
         num_comments: count_comment

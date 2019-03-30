@@ -594,7 +594,7 @@ function draw_view(json) {
             '<span class="comments_button" id="span_id_opt" >' +
             "<i class=" + "\"fas fa-comment-alt fa-xs\"" + "></i>" + "\xa0" +
             '</span>' +
-            '<span class="comments_number" id="span_id_opt" style="font-size:0.8em" >' + json.ideas[i].num_of_comments +
+            '<span class="comments_number" id="span_id_opt" style="font-size:0.8em" >' + ("0" + json.ideas[i].num_of_comments).slice(-2) +
             '</span>' +
             "</div>";
 
@@ -783,8 +783,9 @@ function draw_view(json) {
                 var x = (JSON.parse(JSON.stringify(raw_json)));
                 console.log(x)
                 var emo_agg = get_proposal_wise_emotion(x)
+                console.log(emo_agg)
                 emo_agg.sort((function (a, b) {
-                    //console.log(parseFloat(b[this_emo]) - parseFloat(a[this_emo]))
+                    console.log(parseFloat(b[this_emo]) - parseFloat(a[this_emo]))
                     return parseFloat(b[this_emo]) - parseFloat(a[this_emo])
                 }))
 
@@ -1127,7 +1128,7 @@ function draw_view(json) {
         $('.topicName').click(function () {
             var id = $(this).attr('id');
             var split_str = id.split("_")
-            logInteraction('click, idea, ' + split_str[1], 'topic ', split_str[2]);
+            logInteraction('click, idea, ' + split_str[1] + 'topic ' + split_str[2]);
 
             if (selected_topics[split_str[1]][split_str[2]]) {
                 var top_cnt = 0;
