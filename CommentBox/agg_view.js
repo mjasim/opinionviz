@@ -1419,7 +1419,7 @@ function responsivefy(svg) {
     }
 }
 // draw emotions
-function emotion_rows(salesData, svg_id, div_id, idea_id) {
+function emotion_rows(salesDatasalesData, svg_id, div_id, idea_id) {
 
     //var group = ["angry", "worried", "sad", "happy", "excited"];
     var group = ["excited", "happy", "sad", "worried", "angry"];
