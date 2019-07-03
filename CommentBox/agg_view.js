@@ -1128,7 +1128,7 @@ function draw_view(json) {
         $('.topicName').click(function () {
             var id = $(this).attr('id');
             var split_str = id.split("_")
-            logInteraction('click, idea, ' + split_str[1] + 'topic ' + split_str[2]);
+            logInteraction('click, idea, ' + split_str[1], 'topic ', split_str[2]);
 
             if (selected_topics[split_str[1]][split_str[2]]) {
                 var top_cnt = 0;
@@ -1419,7 +1419,7 @@ function responsivefy(svg) {
     }
 }
 // draw emotions
-function emotion_rows(salesDatasalesData, svg_id, div_id, idea_id) {
+function emotion_rows(salesData, svg_id, div_id, idea_id) {
 
     //var group = ["angry", "worried", "sad", "happy", "excited"];
     var group = ["excited", "happy", "sad", "worried", "angry"];
