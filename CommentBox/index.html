@@ -15,7 +15,6 @@
 	<script src="//cdn.jsdelivr.net/npm/jquery.scrollto@2.1.2/jquery.scrollTo.min.js"></script>
 	<script src="interaction_log.js"></script>
 
-
 	<link rel="stylesheet" href="test.css">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
 		integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
@@ -41,8 +40,11 @@
 				<ul class="nav navbar-nav">
 					<p class="navbar-text" id="cp_refresh" style="font-size:1.5em; color:white">CommunityPulse</p>
 					<li><button class="btn btn-primary navbar-btn" id="instr_button" type="button" data-toggle="modal"
-							data-placement="bottom" title="User Guide" data-target="#instrModal"><i
-								class="fas fa-book"></i></button></li>
+							data-placement="bottom" title="User Guide" data-target="#instrModal">User Guide</button>
+					</li>
+					<li><button class="btn btn-primary navbar-btn" id="notes_all_button" type="button" data-toggle="modal"
+							data-placement="bottom" title="allNotes" data-target="#notesAllModal">Notes</button>
+					</li>
 				</ul>
 				<form class="navbar-form navbar-right">
 					<div class="input-group">
@@ -54,8 +56,7 @@
 	</nav>
 
 	<!-- Modal Instruction-->
-	<div class="modal fade" id="instrModal" tabindex="-1" role="dialog" aria-labelledby="instrModal"
-		aria-hidden="true">
+	<div class="modal fade" id="instrModal" tabindex="-1" role="dialog" aria-labelledby="instrModal" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -66,6 +67,26 @@
 				</div>
 				<div class="modal-body">
 					<img class="img-responsive" style="margin:0 auto;" src="https://i.imgur.com/FieANdN.png" alt="">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal Instruction-->
+	<div class="modal fade" id="notesAllModal" tabindex="-1" role="dialog" aria-labelledby="notesAllModal" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="notesAllModalTitle">List of Notes</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<!-- <img class="img-responsive" style="margin:0 auto;" src="https://i.imgur.com/FieANdN.png" alt=""> -->
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
@@ -87,30 +108,30 @@
 			<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open
 				Modal</button> -->
 
-			<!-- Modal Issue-->
-			<div class="modal fade" id="issueModal" role="dialog">
+			<!-- Modal Note-->
+			<div class="modal fade" id="noteModal" role="dialog">
 				<div class="modal-dialog">
 					<!-- Modal content-->
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal">&times;</button>
-							<h4 class="modal-title">Save as an issue</h4>
+							<h4 class="modal-title">Save a note</h4>
 						</div>
 						<div class="modal-body">
 							<form action="/action_page.php">
-								Issue Title:<br>
-								<input id="issue_title" type="text" name="issue_title" value="">
+								Note Title:<br>
+								<input id="note_title" type="text" name="note_title" value="">
 								<br>
-								Issue Type:<br>
-								<input id="issue_type" type="text" name="issue_type" value="">
+								Note Type:<br>
+								<input id="note_type" type="text" name="note_type" value="">
 								<br>
-								Issue Text:<br>
-								<input id="issue_text" type="text" name="issue_text" value="">
+								Note Text:<br>
+								<input id="note_text" type="text" name="note_text" value="">
 								<br>
 							</form>
 						</div>
 						<div class="modal-footer">
-							<input id="issue_save_button" class="btn btn-primary" type="button" value="Save">
+							<input id="note_save_button" class="btn btn-primary" type="button" value="Save">
 							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 						</div>
 					</div>
@@ -119,9 +140,9 @@
 			</div>
 
 			<!-- Modal Criteria-->
+			<!-- 			
 			<div class="modal fade" id="criteriaModal" role="dialog">
 				<div class="modal-dialog">
-					<!-- Modal content-->
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -146,7 +167,8 @@
 						</div>
 					</div>
 				</div>
-			</div>
+			</div> -->
+
 			<!-- <div id="note_save">
 				<input type="button" name="note_button" onclick="f()">
 			</div> -->

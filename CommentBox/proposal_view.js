@@ -1,6 +1,6 @@
 var currentJSON = null;
 
-var notes = []
+var notes = [];
 
 var attributeObj = {
     Angry: "fa-angry fa-lg",
@@ -12,9 +12,7 @@ var attributeObj = {
     negative: "fa-thumbs-down fa-lg",
     neutral: "fa-thumbs-down fa-lg",
     positive: "fa-thumbs-up fa-lg",
-    Fact: "fa-clipboard-check fa-lg",
-    Opinion: "fa-comments fa-lg"
-}
+};
 
 var image = "/images/avatar.jpg";
 
@@ -38,7 +36,7 @@ var proposalIntro = {
     33: "The spires intersect to support three sky paths suspended by cables allowing complete access around the streets above transit modes passing below. The elevation of the paths remains consistent, approximately 16-18 feet above grade.",
     34: "Named because the primary archway and supporting cables are reminiscent of this musical instrument. This suspension bridge’s sky paths slope through the air moving above the streets below. The lowest level begins approximately 14-16 feet above the street on the corner adjacent to the transit center.",
     35: "Open Air Market - weekly activations, events, farmer's markets, etc."
-}
+};
 
 // Draw proposal-wise comments inside commentBox
 function draw_proposal_wise_comments(json, idea_id) {
@@ -48,12 +46,12 @@ function draw_proposal_wise_comments(json, idea_id) {
         myNode.removeChild(myNode.firstChild);
     }
 
-    var divTask = []
-    var divQuestion = []
-    var divComment = []
-    var prevQuestionId
-    var divIdea = document.createElement("div")
-    divIdea.className = "ideaDiv"
+    var divTask = [];
+    var divQuestion = [];
+    var divComment = [];
+    var prevQuestionId;
+    var divIdea = document.createElement("div");
+    divIdea.className = "ideaDiv";
     divIdea.id = "ideaDivId-" + json.ideas[idea_id].id
     var node = document.createTextNode(json.ideas[idea_id].name)
     divIdea.appendChild(node)
@@ -93,6 +91,7 @@ function draw_proposal_wise_comments(json, idea_id) {
 
 // Get filtered comments
 function get_filtered_comment(json, filterobj) {
+    // console.log(json, filterobj)
     var ideas = []
     for (var i in json["ideas"]) {
         if (filterobj.idea_id != null && json.ideas[i].id != filterobj.idea_id) {
@@ -115,12 +114,9 @@ function get_filtered_comment(json, filterobj) {
                 if (flag && filterobj.emotion != null && json.ideas[i].tasks[j].comments[k].emotion.toLowerCase() != filterobj.emotion.toLowerCase()) {
                     flag = false
                 }
-                if (flag && filterobj.sentiment_final != null && (json.ideas[i].tasks[j].comments[k].sentiment_final).toLowerCase() != filterobj.sentiment_final.toLowerCase()) {
-                    flag = false
-                }
-                if (flag && filterobj.subjectivity != null && json.ideas[i].tasks[j].comments[k].subjectivity.toLowerCase() != filterobj.subjectivity.toLowerCase()) {
-                    flag = false
-                }
+                // if (flag && filterobj.sentiment_final != null && (json.ideas[i].tasks[j].comments[k].sentiment_final).toLowerCase() != filterobj.sentiment_final.toLowerCase()) {
+                //     flag = false
+                // }
                 // if (flag && filterobj.topic != null && !checkKeyphrase(topicFilter, json.ideas[i].tasks[j].comments[k].findTopicLabels)) {
                 //     flag = false
                 // }
@@ -131,8 +127,7 @@ function get_filtered_comment(json, filterobj) {
                         var topicFilter = json.ideas[i].topic_keyphrases[filterobj.topic[l]].topic_keyphrase
                         if (!checkKeyphrase(topicFilter, json.ideas[i].tasks[j].comments[k].findTopicLabels)) {
                             flag = false
-                        }
-                        else {
+                        } else {
                             //console.log(flag, topicFilter, json.ideas[i].tasks[j].comments[k].comment)
                             //comments.push(json.ideas[i].tasks[j].comments[k])
                         }
@@ -159,12 +154,14 @@ function get_filtered_comment(json, filterobj) {
             ideas.push(tempidea)
         }
     }
-    var filtered_comment = { "ideas": ideas }
+    var filtered_comment = {
+        "ideas": ideas
+    }
     return filtered_comment
 }
 
 function draw_filtered_comments(filtered_comment, json) {
-    //console.log('draw filter comment', json);
+    // console.log('draw filter comment', filtered_comment, json);
     var myNode = document.getElementById("parentBox");
     while (myNode.firstChild) {
         myNode.removeChild(myNode.firstChild);
@@ -192,8 +189,8 @@ function draw_filtered_comments(filtered_comment, json) {
         divIdea[i].id = "ideaDivId-" + filtered_comment.ideas[i].id;
         //var node = document.createTextNode(filtered_comment.ideas[i].name);
         //divIdea[i].appendChild(node)
-        var divIdeaHTML = '<div style=\"display:flex;align-items:flex-end"\"> <h1 class="search_enable" style=margin-left:5px;>' + filtered_comment.ideas[i].name + '</h1>' + 
-        "<p>" + "\xa0\xa0\xa0" +
+        var divIdeaHTML = '<div style=\"display:flex;align-items:flex-end"\"> <h1 class="search_enable" style=margin-left:5px;>' + filtered_comment.ideas[i].name + '</h1>' +
+            "<p>" + "\xa0\xa0\xa0" +
             '<span class="commenters_button" id="span_id_opt" >' +
             "<i class=" + "\"fas fa-user fa-lg\"" + "></i>" +
             '</span>' + "\xa0" +
@@ -226,8 +223,7 @@ function draw_filtered_comments(filtered_comment, json) {
             for (var k in filtered_comment.ideas[i].tasks[j].comments) {
 
                 var awesome_emoticon = attributeObj[filtered_comment.ideas[i].tasks[j].comments[k].emotion]
-                var awesome_sentiment = attributeObj[filtered_comment.ideas[i].tasks[j].comments[k].sentiment_final]
-                var awesome_subjectivity = attributeObj[filtered_comment.ideas[i].tasks[j].comments[k].subjectivity]
+                // var awesome_sentiment = attributeObj[filtered_comment.ideas[i].tasks[j].comments[k].sentiment_final]
 
                 if (filtered_comment.ideas[i].tasks[j].id == 12) {
                     divQuestion[k] = document.createElement("div")
@@ -245,37 +241,19 @@ function draw_filtered_comments(filtered_comment, json) {
                             '<div style="color: #888;"' + '>' + "posted on " + filtered_comment.ideas[i].tasks[j].comments[k].post_time + '</div></div>' +
                             "</div>" +
                             "<div class=\"question-body\"" + "\">" +
-                            // '<span class="emoticon_button" id="span_id_emo" >' +
-                            // "<i class=" + "\"" + "fas " + awesome_emoticon + "\"" + "></i>" + "\xa0" + '</span>' +
-                            // '<span class="sentiment_button" id="span_id_sent" >' +
-                            // "<i class=" + "\"" + "fas " + awesome_sentiment + "\"" + "></i>" + "\xa0" + '</span>' +
-                            // '<span class="subjectivity_button" id="span_id_sub" >' +
-                            // "<i class=" + "\"" + "fas " + awesome_subjectivity + "\"" + "></i>" + "\xa0" + '</span>' +
-                            // '<span class="options_button" id="span_id_opt" >' +
-                            // "<i class=" + "\"fas fa-plus-circle fa-lg\"" + "></i>" +
-                            // '</span>' +
                             "\xa0\xa0" + filtered_comment.ideas[i].tasks[j].comments[k].question + "\xa0" +
                             "</div>";
-                        if (filtered_comment.ideas[i].tasks[j].comments[k].sentiment_final == "neutral") {
-                            divQuestionHTML = "<div class=\"comment-author\">" +
-                                "<div style='float: left; padding-right: 15px;padding-top: 5px;'>" +
-                                "<img src=\"" + image + "\" width='27px' style='border-radius: 50%;'/></div>" +
-                                "<div><div>" + " author name" + "</div>" +
-                                '<div style="color: #888;"' + '>' + "posted on " + filtered_comment.ideas[i].tasks[j].comments[k].post_time + '</div></div>' +
-                                "</div>" +
-                                "<div class=\"question-body\"" + "\">" +
-                                // '<span class="emoticon_button" id="span_id_emo" >' +
-                                // "<i class=" + "\"" + "fas " + awesome_emoticon + "\"" + "></i>" + "\xa0" + '</span>' +
-                                // '<span class="sentiment_button" id="span_id_sent" >' +
-                                // "<i class=" + "\"far fa-thumbs-down fa-lg neutral\"" + " style=transform:rotate(-90deg)" + "></i>" + "\xa0" + '</span>' +
-                                // '<span class="subjectivity_button" id="span_id_sub" >' +
-                                // "<i class=" + "\"" + "fas " + awesome_subjectivity + "\"" + "></i>" + "\xa0" + '</span>' +
-                                // '<span class="options_button" id="span_id_opt" >' +
-                                // "<i class=" + "\"fas fa-plus-circle fa-lg\"" + "></i>" +
-                                // '</span>' +
-                                "\xa0\xa0" + filtered_comment.ideas[i].tasks[j].comments[k].question + "\xa0" +
-                                "</div>";
-                        }
+                        // if (filtered_comment.ideas[i].tasks[j].comments[k].sentiment_final == "neutral") {
+                        //     divQuestionHTML = "<div class=\"comment-author\">" +
+                        //         "<div style='float: left; padding-right: 15px;padding-top: 5px;'>" +
+                        //         "<img src=\"" + image + "\" width='27px' style='border-radius: 50%;'/></div>" +
+                        //         "<div><div>" + " author name" + "</div>" +
+                        //         '<div style="color: #888;"' + '>' + "posted on " + filtered_comment.ideas[i].tasks[j].comments[k].post_time + '</div></div>' +
+                        //         "</div>" +
+                        //         "<div class=\"question-body\"" + "\">" +
+                        //         "\xa0\xa0" + filtered_comment.ideas[i].tasks[j].comments[k].question + "\xa0" +
+                        //         "</div>";
+                        // }
 
                         divQuestion[k].innerHTML = divQuestionHTML;
                         // setTippy(divQuestion[k].id, json);
@@ -289,9 +267,9 @@ function draw_filtered_comments(filtered_comment, json) {
                 divComment[k].className = "commentDiv"
                 divComment[k].id = "commentDivId-" + filtered_comment.ideas[i].id + "-" + filtered_comment.ideas[i].tasks[j].id + "-" + filtered_comment.ideas[i].tasks[j].comments[k].comment_id;
                 var image = "/images/avatar.jpg";
-                var sentimentButton = filtered_comment.ideas[i].tasks[j].comments[k].sentiment_final == "neutral" ?
-                    "<i aria-haspopup=\"true\" aria-expanded=\"false\" class=" + "\"far fa-thumbs-down fa-lg neutral\"" + " style=transform:rotate(-90deg)" + "></i>" :
-                    "<i class=" + "\"" + "fas " + awesome_sentiment + "\"" + "></i>";
+                // var sentimentButton = filtered_comment.ideas[i].tasks[j].comments[k].sentiment_final == "neutral" ?
+                //     "<i aria-haspopup=\"true\" aria-expanded=\"false\" class=" + "\"far fa-thumbs-down fa-lg neutral\"" + " style=transform:rotate(-90deg)" + "></i>" :
+                //     "<i class=" + "\"" + "fas " + awesome_sentiment + "\"" + "></i>";
 
                 var divCommentHTML =
 
@@ -304,13 +282,10 @@ function draw_filtered_comments(filtered_comment, json) {
                     "<div class=\"comment-body\"" + "\">" +
                     '<div style="float: left;padding-left: 2px;"><span class="emoticon_button" id="span_id_emo_' + divComment[k].id + '">' +
                     "<i class=" + "\"" + "fas " + awesome_emoticon + "\"" + "></i>" + "\xa0" + '</span>' +
-                    '<span class="sentiment_button" id="span_id_sent_' + divComment[k].id + '" >' +
-                    //"<i class=" + "\"" + "fas " + awesome_sentiment + "\"" + "></i>" +
-                    sentimentButton + "\xa0" +
+                    // '<span class="sentiment_button" id="span_id_sent_' + divComment[k].id + '" >' +
+                    // //"<i class=" + "\"" + "fas " + awesome_sentiment + "\"" + "></i>" +
+                    // sentimentButton + "\xa0" +
                     '</span>' +
-                    '<span class="subjectivity_button" id="span_id_sub_' + divComment[k].id + '" >' +
-                    "<i class=" + "\"" + "fas " + awesome_subjectivity + "\"" + "></i>" +
-                    "\xa0" + '</span>' +
                     '<span class="options_button" id="span_id_opt_' + divComment[k].id + '" >' +
                     "<i class=" + "\"fas fa-plus-circle fa-lg\"" + "></i>" +
                     '</span></div>' + "\xa0\xa0" +
@@ -330,17 +305,14 @@ function draw_filtered_comments(filtered_comment, json) {
     }
 
     $(document).ready(function () {
-        $('.sentiment_button').click(function () {
+        $('.options_button').click(function () {
             var id = $(this).attr('id');
-            console.log('sentiment clicked', id)
+            console.log('options clicked', id)
+            save_notes(id)
         });
-        // $('.emoticon_button').mouseover(function() {
-        //     var id = $(this).attr('id');
-        //     console.log('emotion mouseover',id)
-        // });
     });
 
-    //makeRevision(filterobj); //mjasim - call for save
+    makeRevision(filterobj); //mjasim - call for save
 }
 
 // get time passed
@@ -383,82 +355,44 @@ function setTippy(commentID, json) {
             // in the DOM source order, which is why it has its own wrapper element
             appendTo: 'parent',
             // Let the user know the popup has been expanded
-            onMount({ reference }) {
+            onMount({
+                reference
+            }) {
                 reference.setAttribute('aria-expanded', 'true')
             },
-            onHide({ reference }) {
+            onHide({
+                reference
+            }) {
                 reference.setAttribute('aria-expanded', 'false')
             },
         });
 
-        tippy('#' + commentID + ' .sentiment_button', {
-            interactive: true,
-            role: 'menu',
-            arrow: true,
-            arrowType: 'sharp',
-            // `focus` is not suitable for buttons with dropdowns
-            trigger: 'mouseenter',
-            content: getSentiString(commentID),
-            theme: 'light',
-            // Don't announce the tooltip's contents when expanded
-            aria: null,
-            // Important: the tooltip should be DIRECTLY after the reference element
-            // in the DOM source order, which is why it has its own wrapper element
-            appendTo: 'parent',
-            // Let the user know the popup has been expanded
-            onMount({ reference }) {
-                reference.setAttribute('aria-expanded', 'true')
-            },
-            onHide({ reference }) {
-                reference.setAttribute('aria-expanded', 'false')
-            },
-        });
-
-        tippy('#' + commentID + ' .subjectivity_button', {
-            interactive: true,
-            role: 'menu',
-            arrow: true,
-            arrowType: 'sharp',
-            // `focus` is not suitable for buttons with dropdowns
-            trigger: 'mouseenter',
-            content: getSubjectivityString(commentID),
-            theme: 'light',
-            // Don't announce the tooltip's contents when expanded
-            aria: null,
-            // Important: the tooltip should be DIRECTLY after the reference element
-            // in the DOM source order, which is why it has its own wrapper element
-            appendTo: 'parent',
-            // Let the user know the popup has been expanded
-            onMount({ reference }) {
-                reference.setAttribute('aria-expanded', 'true')
-            },
-            onHide({ reference }) {
-                reference.setAttribute('aria-expanded', 'false')
-            },
-        });
-
-        tippy('#' + commentID + ' .options_button', {
-            interactive: true,
-            role: 'menu',
-            arrow: true,
-            arrowType: 'sharp',
-            // `focus` is not suitable for buttons with dropdowns
-            trigger: 'mouseenter',
-            content: getOptionString(commentID),
-            theme: 'light',
-            // Don't announce the tooltip's contents when expanded
-            aria: null,
-            // Important: the tooltip should be DIRECTLY after the reference element
-            // in the DOM source order, which is why it has its own wrapper element
-            appendTo: 'parent',
-            // Let the user know the popup has been expanded
-            onMount({ reference }) {
-                reference.setAttribute('aria-expanded', 'true')
-            },
-            onHide({ reference }) {
-                reference.setAttribute('aria-expanded', 'false')
-            },
-        });
+        // tippy('#' + commentID + ' .options_button', {
+        //     interactive: true,
+        //     role: 'menu',
+        //     arrow: true,
+        //     arrowType: 'sharp',
+        //     // `focus` is not suitable for buttons with dropdowns
+        //     trigger: 'mouseenter',
+        //     content: getOptionString(commentID),
+        //     theme: 'light',
+        //     // Don't announce the tooltip's contents when expanded
+        //     aria: null,
+        //     // Important: the tooltip should be DIRECTLY after the reference element
+        //     // in the DOM source order, which is why it has its own wrapper element
+        //     appendTo: 'parent',
+        //     // Let the user know the popup has been expanded
+        //     onMount({
+        //         reference
+        //     }) {
+        //         reference.setAttribute('aria-expanded', 'true')
+        //     },
+        //     onHide({
+        //         reference
+        //     }) {
+        //         reference.setAttribute('aria-expanded', 'false')
+        //     },
+        // });
     });
 }
 
@@ -477,8 +411,8 @@ function emojiMouseClick(id) {
     for (var i in currentJSON["ideas"]) {
         for (var j in currentJSON.ideas[i].tasks) {
             for (var k in currentJSON.ideas[i].tasks[j].comments) {
-                if (currentJSON.ideas[i].id == all_ids[2] && currentJSON.ideas[i].tasks[j].id == all_ids[3]
-                    && currentJSON.ideas[i].tasks[j].comments[k].comment_id == all_ids[4]) {
+                if (currentJSON.ideas[i].id == all_ids[2] && currentJSON.ideas[i].tasks[j].id == all_ids[3] &&
+                    currentJSON.ideas[i].tasks[j].comments[k].comment_id == all_ids[4]) {
 
                     var new_emo = all_ids[0].charAt(0).toUpperCase() + all_ids[0].slice(1);
                     console.log("New Emotion ", String(new_emo));
@@ -502,6 +436,8 @@ function emojiMouseClick(id) {
     //after revising do this
 
 }
+
+
 function getEmojiString(commentID) {
 
     //console.log(commentID)
@@ -528,150 +464,54 @@ function getEmojiString(commentID) {
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Angry" + "</p>" +
         "<p>" + '<span class="label-emo-button" id="span_id_angry' + '" onclick="emojiMouseClick(\'' + 'angry-' + commentID + '\')">' +
-        "<i class=" + "\"fas fa-angry fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>";
+        "<i class=" + "\"fas fa-angry fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<div class=\"label-emo-body\"" + "\">" +
+        "<p>" + "Negative" + "</p>" +
+        "<p>" + '<span class="label-emo-button" id="span_id_negative' + '" onclick="emojiMouseClick(\'' + 'negative-' + commentID + '\')">' +
+        "<i class=" + "\"fas fa-flushed fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<div class=\"label-emo-body\"" + "\">" +
+        "<p>" + "Neutral" + "</p>" +
+        "<p>" + '<span class="label-emo-button" id="span_id_neutral' + '" onclick="emojiMouseClick(\'' + 'neutral-' + commentID + '\')">' +
+        "<i class=" + "\"fas fa-flushed fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<div class=\"label-emo-body\"" + "\">" +
+        "<p>" + "Positive" + "</p>" +
+        "<p>" + '<span class="label-emo-button" id="span_id_positive' + '" onclick="emojiMouseClick(\'' + 'positive-' + commentID + '\')">' +
+        "<i class=" + "\"fas fa-flushed fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>";
     return emojiDiv;
 }
 
-function sentiMouseClick(id) {
-    console.log('senti id ' + id);
-    console.log("inside senticlick", currentJSON)
+// function optionMouseClick(id) {
+//     console.log('option id ' + id);
+//     console.log("inside optclick", currentJSON)
 
-    var all_ids = id.split("-")
-    //console.log(all_ids)
+//     if (id.includes("issue")) {
+//         save_issue(id)
+//     } else if (id.includes("criteria")) {
+//         save_criteria(id)
+//     } else if (id.includes("note")) {
+//         save_notes(id)
+//     }
+// }
 
-    logInteraction('click, revision, ' + 'idea, ' + all_ids[2] + ' task, ' + all_ids[3] + ' comment' + all_ids[4] + ' revision, ' + all_ids[0]);
+// function getOptionString(commentID) {
 
-    for (var i in currentJSON["ideas"]) {
-        for (var j in currentJSON.ideas[i].tasks) {
-            for (var k in currentJSON.ideas[i].tasks[j].comments) {
-                if (currentJSON.ideas[i].id == all_ids[2] && currentJSON.ideas[i].tasks[j].id == all_ids[3] && currentJSON.ideas[i].tasks[j].comments[k].comment_id == all_ids[4]) {
-                    var new_senti = all_ids[0]
-                    console.log("New Sentiment ", String(new_senti))
-                    currentJSON.ideas[i].tasks[j].comments[k].sentiment_final = new_senti
-
-                    console.log(new_senti.toLowerCase());
-                    var awesome_sentiment = attributeObj[new_senti];
-                    console.log(awesome_sentiment);
-                    if (new_senti == "neutral") {
-                        var newSentimentButtonStr =
-                            "<i class=" + "\"far fa-thumbs-down fa-lg neutral\"" + " style=transform:rotate(-90deg)" + "></i>" + "\xa0";
-                        $('#span_id_sent_' + all_ids[1] + '-' + all_ids[2] + '-' + all_ids[3] + '-' + all_ids[4]).html(newSentimentButtonStr);
-                    }
-                    else {
-                        var newSentimentButtonStr =
-                            "<i class=" + "\"" + "fas " + awesome_sentiment + "\"" + "></i>" + "\xa0";
-                        $('#span_id_sent_' + all_ids[1] + '-' + all_ids[2] + '-' + all_ids[3] + '-' + all_ids[4]).html(newSentimentButtonStr);
-                        makeRevision(currentJSON);
-                        raw_json = currentJSON;
-                    }
-                }
-            }
-        }
-    }
-
-}
-function getSentiString(commentID) {
-
-    var sentiDiv =
-        "<div class=\"tippy-label-body\"" + "\">" +
-        "<div class=\"label-title\"" + " style=border:none;font-size:1.5em" + ">" + "<p> " + "Click on an icon to set as the new sentiment" + "</p>" + "</div>" +
-        "<div class=\"label-sent-body\"" + ">" +
-        "<p>" + "Positive" + "</p>" +
-        "<p>" + '<span class="label-sent-button" id="span_id_positive' + commentID + '" onclick="sentiMouseClick(\'' + 'positive-' + commentID + '\')">' +
-        "<i class=" + "\"fas fa-thumbs-up fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
-        "<div class=\"label-sent-body\"" + "\">" +
-        "<p>" + "Neutral" + "</p>" +
-        "<p>" + '<span class="label-sent-button" id="span_id_neutral' + '" onclick="sentiMouseClick(\'' + 'neutral-' + commentID + '\')">' +
-        "<i class=" + "\"far fa-thumbs-down fa-3x neutral\"" + " style=transform:rotate(-90deg)" + "></i>" + '</span>' + "</p>" + "</div>" +
-        "<div class=\"label-sent-body\"" + "\">" +
-        "<p>" + "Negative" + "</p>" +
-        "<p>" + '<span class="label-sent-button" id="span_id_negative' + '" onclick="sentiMouseClick(\'' + 'negative-' + commentID + '\')">' +
-        "<i class=" + "\"fas fa-thumbs-down fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>";
-    return sentiDiv;
-}
-
-function subjectivityMouseClick(id) {
-    console.log('subjectivity id ' + id);
-    console.log("inside subclick", currentJSON)
-
-    var all_ids = id.split("-")
-    //console.log(all_ids)
-
-    logInteraction('click, revision, ' + 'idea, ' + all_ids[2] + ' task, ' + all_ids[3] + ' comment' + all_ids[4] + ' revision, ' + all_ids[0]);
-
-    for (var i in currentJSON["ideas"]) {
-        for (var j in currentJSON.ideas[i].tasks) {
-            for (var k in currentJSON.ideas[i].tasks[j].comments) {
-                if (currentJSON.ideas[i].id == all_ids[2] && currentJSON.ideas[i].tasks[j].id == all_ids[3] && currentJSON.ideas[i].tasks[j].comments[k].comment_id == all_ids[4]) {
-                    var new_sub = all_ids[0].charAt(0).toUpperCase() + all_ids[0].slice(1)
-                    console.log("New Subjectivity ", String(new_sub))
-                    currentJSON.ideas[i].tasks[j].comments[k].subjectivity = new_sub
-
-                    console.log(new_sub.toLowerCase());
-                    var awesome_subjectivity = attributeObj[new_sub];
-                    console.log(awesome_subjectivity);
-                    var newSubjectivityButtonStr =
-                        "<i class=" + "\"" + "fas " + awesome_subjectivity + "\"" + "></i>" + "\xa0";
-                    $('#span_id_sub_' + all_ids[1] + '-' + all_ids[2] + '-' + all_ids[3] + '-' + all_ids[4]).html(newSubjectivityButtonStr);
-                    makeRevision(currentJSON);
-                    raw_json = currentJSON;
-                }
-            }
-        }
-    }
-}
-
-function getSubjectivityString(commentID) {
-
-    var subjectivityDiv =
-        "<div class=\"tippy-label-body\"" + "\">" +
-        "<div class=\"label-title\"" + " style=border:none;font-size:1.5em" + ">" + "<p> " + "Click on an icon to set as fact or opinion" + "</p>" + "</div>" +
-        "<div class=\"label-sub-body\"" + ">" +
-        "<p>" + "Fact" + "</p>" +
-        "<p>" + '<span class="label-sub-button" id="span_id_fact' + commentID + '" onclick="subjectivityMouseClick(\'' + 'fact-' + commentID + '\')">' +
-        "<i class=" + "\"fas fa-clipboard-check fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
-        "<div class=\"label-sub-body\"" + "\">" +
-        "<p>" + "Opinion" + "</p>" +
-        "<p>" + '<span class="label-sub-button" id="span_id_opinion' + '" onclick="subjectivityMouseClick(\'' + 'opinion-' + commentID + '\')">' +
-        "<i class=" + "\"fas fa-comments fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>";
-    return subjectivityDiv;
-}
-
-function optionMouseClick(id) {
-    console.log('option id ' + id);
-    console.log("inside optclick", currentJSON)
-
-    if (id.includes("issue")) {
-        save_issue(id)
-    }
-
-    else if (id.includes("criteria")) {
-        save_criteria(id)
-    }
-
-    else if (id.includes("note")) {
-        save_notes(id)
-    }
-}
-function getOptionString(commentID) {
-
-    var optDiv =
-        "<div class=\"tippy-label-body\"" + "\">" +
-        "<div class=\"label-title\"" + " style=border:none;font-size:1.5em" + ">" + "<p> " + "Click on an icon to save as an issue, criteria or note" + "</p>" + "</div>" +
-        "<div class=\"label-opt-body\"" + ">" +
-        "<p>" + "Issue" + "</p>" +
-        "<p>" + '<span class="label-opt-button" id="span_id_issue' + commentID + '" onclick="optionMouseClick(\'' + 'issue-' + commentID + '\')">' +
-        "<i class=" + "\"fas fa-exclamation-circle fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
-        "<div class=\"label-opt-body\"" + "\">" +
-        "<p>" + "Criteria" + "</p>" +
-        "<p>" + '<span class="label-opt-button" id="span_id_criteria' + '" onclick="optionMouseClick(\'' + 'criteria-' + commentID + '\')">' +
-        "<i class=" + "\"fas fa-clipboard-list fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
-        "<div class=\"label-opt-body\"" + "\">" +
-        "<p>" + "Note" + "</p>" +
-        "<p>" + '<span class="label-opt-button" id="span_id_note' + '" onclick="optionMouseClick(\'' + 'note-' + commentID + '\')">' +
-        "<i class=" + "\"fas fa-save fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>";
-    return optDiv;
-}
+//     var optDiv =
+//         "<div class=\"tippy-label-body\"" + "\">" +
+//         "<div class=\"label-title\"" + " style=border:none;font-size:1.5em" + ">" + "<p> " + "Click on an icon to save as an issue, criteria or note" + "</p>" + "</div>" +
+//         "<div class=\"label-opt-body\"" + ">" +
+//         "<p>" + "Issue" + "</p>" +
+//         "<p>" + '<span class="label-opt-button" id="span_id_issue' + commentID + '" onclick="optionMouseClick(\'' + 'issue-' + commentID + '\')">' +
+//         "<i class=" + "\"fas fa-exclamation-circle fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+//         "<div class=\"label-opt-body\"" + "\">" +
+//         "<p>" + "Criteria" + "</p>" +
+//         "<p>" + '<span class="label-opt-button" id="span_id_criteria' + '" onclick="optionMouseClick(\'' + 'criteria-' + commentID + '\')">' +
+//         "<i class=" + "\"fas fa-clipboard-list fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+//         "<div class=\"label-opt-body\"" + "\">" +
+//         "<p>" + "Note" + "</p>" +
+//         "<p>" + '<span class="label-opt-button" id="span_id_note' + '" onclick="optionMouseClick(\'' + 'note-' + commentID + '\')">' +
+//         "<i class=" + "\"fas fa-save fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>";
+//     return optDiv;
+// }
 
 // save revisions
 function makeRevision(obj) {
@@ -694,7 +534,7 @@ function makeRevision(obj) {
     // request.setRequestHeader("Content-type", "application/json")
     // request.send(JSON.stringify(obj));
 
-    request= new XMLHttpRequest();
+    request = new XMLHttpRequest();
     request.open("POST", "save_file.php");
     request.setRequestHeader("Content-type", "application/json");
     request.send(str_json);
@@ -714,27 +554,42 @@ function checkKeyphrase(prop_topic, all_topics) {
     return false;
 }
 
-// save as issues
-function save_issue(id) {
+// save notes
+function save_notes(id) {
 
-    $('#issueModal').modal('show')
-    $('#issue_save_button').on('click', function () {
+    $('#noteModal').modal('show')
+    $('#note_save_button').on('click', function () {
         //console.log(currentJSON)
         var all_ids = id.split("-")
         //console.log(all_ids)
 
-        logInteraction('click, revision, ' + 'idea, ' + all_ids[2] + ' task, ' + all_ids[3] + ' comment' + all_ids[4] + ' issue');
+        var all_ids = id.split("-")
+        var new_note = ""
+        count = 0
+
+        logInteraction('click, revision, ' + 'idea, ' + all_ids[2] + ' task, ' + all_ids[3] + ' comment' + all_ids[4] + ' note');
 
         for (var i in currentJSON["ideas"]) {
             for (var j in currentJSON.ideas[i].tasks) {
                 for (var k in currentJSON.ideas[i].tasks[j].comments) {
-                    if (currentJSON.ideas[i].id == all_ids[2] && currentJSON.ideas[i].tasks[j].id == all_ids[3] && currentJSON.ideas[i].tasks[j].comments[k].comment_id == all_ids[4]) {
-                        console.log("Issue Title", $('#issue_title').val())
-                        console.log("Issue Type", $('#issue_type').val())
-                        console.log("Issue Text", $('#issue_text').val())
-                        currentJSON.ideas[i].tasks[j].comments[k].issue_title = $('#issue_title').val()
-                        currentJSON.ideas[i].tasks[j].comments[k].issue_type = $('#issue_type').val()
-                        currentJSON.ideas[i].tasks[j].comments[k].issue_text = $('#issue_text').val()
+                    if (currentJSON.ideas[i].id == all_ids[2]) {
+                        if (currentJSON.ideas[i].tasks[j].id == all_ids[3]) {
+                            if (currentJSON.ideas[i].tasks[j].comments[k].comment_id == all_ids[4]) {
+                                if (currentJSON.ideas[i].tasks[j].comments[k].quesion_id == null) {
+                                    new_note = "Proposal Title: " + currentJSON.ideas[i].name + "\n" +
+                                        "Task: " + currentJSON.ideas[i].tasks[j].name + "\n" +
+                                        "Comment: " + currentJSON.ideas[i].tasks[j].comments[k].comment + "\n" +
+                                        "Emotion " + currentJSON.ideas[i].tasks[j].comments[k].emotion + "\n"
+                                } else {
+                                    new_note = "Proposal Title: " + currentJSON.ideas[i].name + "\n" +
+                                        "Task: " + currentJSON.ideas[i].tasks[j].name + "\n" +
+                                        "Question: " + currentJSON.ideas[i].tasks[j].comments[k].question + "\n" +
+                                        "Comment: " + currentJSON.ideas[i].tasks[j].comments[k].comment + "\n" +
+                                        "Emotion " + currentJSON.ideas[i].tasks[j].comments[k].emotion + "\n"
+                                }
+                            }
+                            notes.push(new_note);
+                        }
                     }
                 }
             }
@@ -744,79 +599,73 @@ function save_issue(id) {
         raw_json = currentJSON;
 
         //console.log(currentJSON)
-        $('#issueModal').modal('hide')
+        $('#noteModal').modal('hide')
     });
 }
 
 // save as criteria
-function save_criteria(id) {
-    $('#criteriaModal').modal('show')
-    $('#criteria_save_button').on('click', function () {
-        //console.log(currentJSON)
-        var all_ids = id.split("-")
-        //console.log(all_ids)
+// function save_criteria(id) {
+//     $('#criteriaModal').modal('show')
+//     $('#criteria_save_button').on('click', function () {
+//         //console.log(currentJSON)
+//         var all_ids = id.split("-")
+//         //console.log(all_ids)
 
-        logInteraction('click, revision, ' + 'idea, ' + all_ids[2] + ' task, ' + all_ids[3] + ' comment' + all_ids[4] + ' criteria');
+//         logInteraction('click, revision, ' + 'idea, ' + all_ids[2] + ' task, ' + all_ids[3] + ' comment' + all_ids[4] + ' criteria');
 
-        for (var i in currentJSON["ideas"]) {
-            for (var j in currentJSON.ideas[i].tasks) {
-                for (var k in currentJSON.ideas[i].tasks[j].comments) {
-                    if (currentJSON.ideas[i].id == all_ids[2] && currentJSON.ideas[i].tasks[j].id == all_ids[3] && currentJSON.ideas[i].tasks[j].comments[k].comment_id == all_ids[4]) {
-                        console.log("Criteria Title", $('#criteria_title').val())
-                        console.log("Criteria Type", $('#criteria_type').val())
-                        console.log("Criteria Text", $('#criteria_text').val())
-                        currentJSON.ideas[i].tasks[j].comments[k].criteria_title = $('#criteria_title').val()
-                        currentJSON.ideas[i].tasks[j].comments[k].criteria_type = $('#criteria_type').val()
-                        currentJSON.ideas[i].tasks[j].comments[k].criteria_text = $('#criteria_text').val()
-                    }
-                }
-            }
-        }
+//         for (var i in currentJSON["ideas"]) {
+//             for (var j in currentJSON.ideas[i].tasks) {
+//                 for (var k in currentJSON.ideas[i].tasks[j].comments) {
+//                     if (currentJSON.ideas[i].id == all_ids[2] && currentJSON.ideas[i].tasks[j].id == all_ids[3] && currentJSON.ideas[i].tasks[j].comments[k].comment_id == all_ids[4]) {
+//                         console.log("Criteria Title", $('#criteria_title').val())
+//                         console.log("Criteria Type", $('#criteria_type').val())
+//                         console.log("Criteria Text", $('#criteria_text').val())
+//                         currentJSON.ideas[i].tasks[j].comments[k].criteria_title = $('#criteria_title').val()
+//                         currentJSON.ideas[i].tasks[j].comments[k].criteria_type = $('#criteria_type').val()
+//                         currentJSON.ideas[i].tasks[j].comments[k].criteria_text = $('#criteria_text').val()
+//                     }
+//                 }
+//             }
+//         }
 
-        makeRevision(currentJSON);
-        raw_json = currentJSON;
+//         makeRevision(currentJSON);
+//         raw_json = currentJSON;
 
-        console.log(currentJSON)
-        $('#criteriaModal').modal('hide')
-    });
-}
+//         console.log(currentJSON)
+//         $('#criteriaModal').modal('hide')
+//     });
+// }
 
-function save_notes(id) {
-    var all_ids = id.split("-")
-    var new_note = ""
-    count = 0
+// function save_notes(id) {
+//     var all_ids = id.split("-")
+//     var new_note = ""
+//     count = 0
 
-    logInteraction('click, revision, ' + 'idea, ' + all_ids[2] + ' task, ' + all_ids[3] + ' comment' + all_ids[4] + ' note');
+//     logInteraction('click, revision, ' + 'idea, ' + all_ids[2] + ' task, ' + all_ids[3] + ' comment' + all_ids[4] + ' note');
 
-    for (var i in currentJSON["ideas"]) {
-        for (var j in currentJSON.ideas[i].tasks) {
-            for (var k in currentJSON.ideas[i].tasks[j].comments) {
-                if (currentJSON.ideas[i].id == all_ids[2]) {
-                    if (currentJSON.ideas[i].tasks[j].id == all_ids[3]) {
-                        if (currentJSON.ideas[i].tasks[j].comments[k].comment_id == all_ids[4]) {
-                            if (currentJSON.ideas[i].tasks[j].comments[k].quesion_id == null) {
-                                new_note = "Proposal Title: " + currentJSON.ideas[i].name + "\n" +
-                                    "Task: " + currentJSON.ideas[i].tasks[j].name + "\n" +
-                                    "Comment: " + currentJSON.ideas[i].tasks[j].comments[k].comment + "\n" +
-                                    "Emotion " + currentJSON.ideas[i].tasks[j].comments[k].emotion + "\n" +
-                                    "Sentiment " + currentJSON.ideas[i].tasks[j].comments[k].sentiment_final + "\n" +
-                                    "Subjectivity " + currentJSON.ideas[i].tasks[j].comments[k].subjectivity + "\n"
-                            }
-                            else {
-                                new_note = "Proposal Title: " + currentJSON.ideas[i].name + "\n" +
-                                    "Task: " + currentJSON.ideas[i].tasks[j].name + "\n" +
-                                    "Question: " + currentJSON.ideas[i].tasks[j].comments[k].question + "\n" +
-                                    "Comment: " + currentJSON.ideas[i].tasks[j].comments[k].comment + "\n" +
-                                    "Emotion " + currentJSON.ideas[i].tasks[j].comments[k].emotion + "\n" +
-                                    "Sentiment " + currentJSON.ideas[i].tasks[j].comments[k].sentiment_final + "\n" +
-                                    "Subjectivity " + currentJSON.ideas[i].tasks[j].comments[k].subjectivity + "\n"
-                            }
-                        }
-                        notes.push(new_note);
-                    }
-                }
-            }
-        }
-    }
-}
-
+//     for (var i in currentJSON["ideas"]) {
+//         for (var j in currentJSON.ideas[i].tasks) {
+//             for (var k in currentJSON.ideas[i].tasks[j].comments) {
+//                 if (currentJSON.ideas[i].id == all_ids[2]) {
+//                     if (currentJSON.ideas[i].tasks[j].id == all_ids[3]) {
+//                         if (currentJSON.ideas[i].tasks[j].comments[k].comment_id == all_ids[4]) {
+//                             if (currentJSON.ideas[i].tasks[j].comments[k].quesion_id == null) {
+//                                 new_note = "Proposal Title: " + currentJSON.ideas[i].name + "\n" +
+//                                     "Task: " + currentJSON.ideas[i].tasks[j].name + "\n" +
+//                                     "Comment: " + currentJSON.ideas[i].tasks[j].comments[k].comment + "\n" +
+//                                     "Emotion " + currentJSON.ideas[i].tasks[j].comments[k].emotion + "\n"
+//                             } else {
+//                                 new_note = "Proposal Title: " + currentJSON.ideas[i].name + "\n" +
+//                                     "Task: " + currentJSON.ideas[i].tasks[j].name + "\n" +
+//                                     "Question: " + currentJSON.ideas[i].tasks[j].comments[k].question + "\n" +
+//                                     "Comment: " + currentJSON.ideas[i].tasks[j].comments[k].comment + "\n" +
+//                                     "Emotion " + currentJSON.ideas[i].tasks[j].comments[k].emotion + "\n"
+//                             }
+//                         }
+//                         notes.push(new_note);
+//                     }
+//                 }
+//             }
+//         }
+//     }
+// }

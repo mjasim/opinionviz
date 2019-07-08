@@ -1,8 +1,6 @@
 // global variable to maintain what will be filtered
 var filterobj = {
     emotion: null,
-    sentiment_final: null,
-    subjectivity: null,
     idea_id: null,
     task_id: null,
     topic: []
@@ -12,35 +10,30 @@ var selected_sort = ["participants", "comments", "angry", "worried", "sad", "hap
 var current_sort = ""
 
 // global variable to track active ideas
-selected_rows = Array.apply(null, Array(36))
-selected_rows_stack = []
+// selected_rows = Array.apply(null, Array(36))
+selected_row = ""
+prev_row = ""
+//selected_rows_stack = []
 
 // global variable to track active topics
-selected_topics = Array.apply(null, Array(36))
-for (var i = 0; i < selected_topics.length; i++) {
-    selected_topics[i] = Array.apply(null, Array(7))
-}
+// selected_topics = Array.apply(null, Array(36))
+// for (var i = 0; i < selected_topics.length; i++) {
+//     selected_topics[i] = Array.apply(null, Array(7))
+// }
 
-var topic_row_length = 0
+selected_topic = ""
+prev_topic = ""
+
+// var topic_row_length = 0
 
 // global variable to maintain filter selection
 var cellHistory = {
     prev_idea_id: null,
     prev_emo_cell: null,
-    prev_senti_cell: null,
-    prev_sub_cell: null,
     prev_idea_id_emo: null,
-    prev_idea_id_senti: null,
-    prev_idea_id_sub: null,
     prev_emo_color: null,
-    prev_senti_color: null,
-    prev_sub_color: null,
     prev_emo: null,
-    prev_senti: null,
-    prev_sub: null,
     emo_switch: false,
-    senti_switch: false,
-    sub_switch: false
 }
 
 var raw_json = null;
@@ -51,8 +44,7 @@ var animate_trigger = false;
 function check_empty() {
     if ($('.ideaDiv').length) {
         return false;
-    }
-    else {
+    } else {
         return true;
     }
 
@@ -62,8 +54,7 @@ function divMove() {
     if (check_empty() == true) {
         document.getElementById("parentBox").setAttribute("style", "height:0px")
         document.getElementById("aggregateDiv").setAttribute("style", "height:74%")
-    }
-    else if (check_empty() == false) {
+    } else if (check_empty() == false) {
         document.getElementById("parentBox").setAttribute("style", "height:60vh")
         document.getElementById("aggregateDiv").setAttribute("style", "height:20vh")
         //document.getElementById(filterobj.idea_id).parentElement.parentElement.scrollIntoView({ block: 'start' });
@@ -71,14 +62,14 @@ function divMove() {
 }
 
 // function animatedDivs() {
-//     if (!filterobj.idea_id && (filterobj.emotion || filterobj.sentiment_final || filterobj.subjectivity)) {
+//     if (!filterobj.idea_id && (filterobj.emotion || filterobj.sentiment_final)) {
 //         draw_view();
 //         document.getElementById("aggregateDiv").setAttribute("style", "height:0px")
 //         document.getElementById("parentBox").setAttribute("style", "height:80vh")
 //         $("#parentBox").animate({ scrollTop: 0 }, 1000);
 //         $("#aggregateDiv").animate({ scrollTop: 0 }, 1000);
 //     }
-//     else if (!filterobj.idea_id && !filterobj.emotion && !filterobj.sentiment_final && !filterobj.subjectivity) {
+//     else if (!filterobj.idea_id && !filterobj.emotion && !filterobj.sentiment_final) {
 //         //draw_view();
 //         document.getElementById("aggregateDiv").setAttribute("style", "height:80vh")
 //         document.getElementById("parentBox").setAttribute("style", "height:50px")
@@ -111,7 +102,7 @@ d3.json("communitycrit_revised.json", function (err, myjson) {
     }
     if (check_empty() == true) {
         //console.log(document.getElementById("box_header"))
-        document.getElementById("box_header").innerHTML = "Click on a Proposal, Topic, Emotion or Sentiment to see related comments"
+        document.getElementById("box_header").innerHTML = "Click on a Proposal, Topic or Emotionto see related comments"
     }
 
     divMove();
@@ -136,153 +127,15 @@ function draw_view(json) {
     }
 
     var numberOfRows = 19;
-    var numberOfColumns = 7;
+    var numberOfColumns = 5;
 
     var proposal_names = get_proposal_names(json)
     var proposal_wise_emotion_agg = get_proposal_wise_emotion(json)
-    var proposal_wise_sentiment_agg = get_proposal_wise_sentiment(json)
     var proposal_wise_serial = get_serial_number(json)
-    var proposal_wise_subjectivity_agg = get_proposal_wise_subjectivity(json)
-    var proposal_wise_profanity_agg = get_proposal_wise_profanity(json)
     var proposal_wise_topic_agg = get_proposal_wise_topic(json)
-    var all_proposal_sentiment_agg = get_all_proposal_sentiment(json)
-    var all_proposal_emotion_agg = get_all_proposal_emotion(json)
-    var all_proposal_subjectivity_agg = get_all_proposal_subjectivity(json)
-    var all_proposal_profanity_agg = get_all_proposal_profanity(json)
 
     // backup data
     this.data = json
-
-    // Top div fillup
-    // var topElement = document.getElementById("topDiv")
-    // for (var i = 0; i < numberOfColumns; i++) {
-    //     var tempTopDiv = document.createElement("div")
-    //     tempTopDiv.id = "top" + i
-    //     tempTopDiv.className = "t_column" + i
-    //     topElement.appendChild(tempTopDiv)
-    // }
-
-    //============================ top column 0 =========================//
-
-    // var top0 = document.getElementById("top0")
-
-    // var divCaption =
-    //     "<div class=\"search\"" + "\">" +
-    //     "<input type=\"text\" class=\"c_search_box\"" + " id=\"search_box\"" + " placeholder=\"Search...\"" + "style=\"width:280px\"" + ">" +
-    //     "<i class=\"fa fa-search fa-lg\"></i>" + "</div>";
-
-    // top0.innerHTML = ""
-
-    //'<button type=\"submit\" id="search_button">' + "<i class=" + "\"fas fa-search fa-lg\"" + "></i>" + "</div>";
-
-    //============================ top column 0 end =====================//
-
-
-    //============================ top column 1 =========================//
-
-    //var top1 = document.getElementById("top0")
-    //tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
-    //tempSvg.id = "svgtop0"
-    //tempSvg.setAttribute("class", "t_svg")
-    //tempSvg.setAttribute("width", top1.clientWidth)
-    //tempSvg.setAttribute("height", top1.clientHeight)
-    //top1.appendChild(tempSvg)
-
-    //============================ top column 1 end =====================//
-
-    //============================ top column 2 =========================//
-
-    // top emotions
-    // var top2 = document.getElementById("top2")
-    // // tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
-    // tempSvg_id = "svgtop2"
-    // // tempSvg.setAttribute("class", "t_svg")
-    // // tempSvg.setAttribute("width", top2.clientWidth)
-    // // tempSvg.setAttribute("height", top2.clientHeight)
-    // // top2.appendChild(tempSvg)
-
-    // send_data = all_proposal_emotion_agg
-    // emotion_rows(send_data, tempSvg_id, top2.id, null)
-
-    //============================ top column 2 end =========================//
-    //============================ top column 3 =========================//
-
-    // top sentiments
-    // var top3 = document.getElementById("top3")
-    // // tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
-    // tempSvg_id = "svgtop3"
-    // // tempSvg.setAttribute("class", "t_svg")
-    // // tempSvg.setAttribute("width", top3.clientWidth)
-    // // tempSvg.setAttribute("height", top3.clientHeight)
-    // // top3.appendChild(tempSvg)
-
-    // send_data = all_proposal_sentiment_agg
-    // sentiment_rows(send_data, tempSvg_id, top3.id, null)
-
-    //============================ top column 3 end =========================//
-
-    //============================ top column 4 =========================//
-
-    // // top subjectivity
-    // var top4 = document.getElementById("top4")
-    // tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
-    // tempSvg.id = "svgtop4"
-    // tempSvg.setAttribute("class", "t_svg")
-    // tempSvg.setAttribute("width", top4.clientWidth)
-    // tempSvg.setAttribute("height", top4.clientHeight)
-    // top4.appendChild(tempSvg)
-
-    // send_data = all_proposal_subjectivity_agg
-    // subjectivity_rows(send_data, tempSvg.id, top4.id, null)
-
-    //============================ top column 4 end =========================//
-
-    //============================ top column 5 =========================//
-
-    // top profanity
-    // var top5 = document.getElementById("top5")
-    // tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
-    // tempSvg.id = "svgtop5"
-    // tempSvg.setAttribute("class", "t_svg")
-    // tempSvg.setAttribute("width", top5.clientWidth)
-    // tempSvg.setAttribute("height", top5.clientHeight)
-    // top5.appendChild(tempSvg)
-    // send_data = all_proposal_profanity_agg[0].profanity_distribution;
-
-    // count_very_low = 0, count_low = 0, count_mid = 0, count_high = 0, count_very_high = 0;
-    // for (var x = 0; x < send_data.length; x++) {
-    //     if (send_data[x] > 0.0 && send_data[x] <= 0.1) {
-    //         count_very_low++;
-    //     }
-    //     else if (parseFloat(send_data[x]) > 0.1 && parseFloat(send_data[x]) <= 0.2) {
-    //         count_low++;
-    //     }
-    //     else if (parseFloat(send_data[x]) > 0.2 && parseFloat(send_data[x]) <= 0.3) {
-    //         count_mid++;
-    //     }
-    //     else if (parseFloat(send_data[x]) > 0.3 && parseFloat(send_data[x]) <= 0.4) {
-    //         count_high++;
-    //     }
-    //     else if (parseFloat(send_data[x]) > 0.4 && parseFloat(send_data[x]) <= 0.5) {
-    //         count_very_high++;
-    //     }
-    // }
-
-    // var prof_data = []
-    // //console.log(prof_data)
-
-    // prof_data.push({
-    //     key: proposal_names[i].idea_id,
-    //     very_low: count_very_low,
-    //     low: count_low,
-    //     medium: count_mid,
-    //     high: count_high,
-    //     very_high: count_very_high,
-    // })
-
-    // profanity_rows(prof_data, tempSvg.id, top5.id, null)
-
-    //============================ top column 5 end =========================//
 
 
     // Label div fillup
@@ -419,6 +272,27 @@ function draw_view(json) {
         "<p>" + '<span class="label-emo-button" id="span_id_angry" >' +
         "<i class=" + "\"fas fa-angry fa-2x label_icons\"" + "></i>" +
         "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+        '</span>' + "</p>" + "</div>" +
+
+        "<div class=\"label-emo-body\"" + "\">" +
+        "<p>" + "Positive" + "</p>" +
+        "<p>" + '<span class="label-emo-button" id="span_id_positive" >' +
+        "<i class=" + "\"fas fa-thumbs-up fa-2x label_icons\"" + "></i>" +
+        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+        '</span>' + "</p>" + "</div>" +
+
+        "<div class=\"label-emo-body\"" + "\">" +
+        "<p>" + "Neutral" + "</p>" +
+        "<p>" + '<span class="label-emo-button" id="span_id_neutral" >' +
+        "<i class=" + "\"far fa-thumbs-down fa-2x neutral label_icons\"" + " style=transform:rotate(-90deg)" + "></i>" +
+        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+        '</span>' + "</p>" + "</div>" +
+
+        "<div class=\"label-emo-body\"" + ">" +
+        "<p>" + "Negative" + "</p>" +
+        "<p>" + '<span class="label-emo-button" id="span_id_negative" >' +
+        "<i class=" + "\"fas fa-thumbs-down fa-2x label_icons\"" + "></i>" +
+        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
         '</span>' + "</p>" + "</div>";
 
     labelColumn4Div.innerHTML = divCaption
@@ -428,84 +302,6 @@ function draw_view(json) {
 
     // =========================== label column 4 end ===========================//
 
-
-    // =========================== label column 5 ===============================//
-
-    // labels and icons for sentiments
-    var labelColumn5Div = document.createElement("div")
-    labelColumn5Div.id = "labelcolumn5"
-    labelColumn5Div.className = "l_column5"
-
-    var divCaption =
-        "<div class=\"label-body\"" + "\">" +
-        "<div class=\"label-title\"" + ">" +
-        "<p style=\"margin: 5px 0px 5px 0px;font-size:1.5em;\"" + ">" + "Sentiment" + "</p>" + "</div>" +
-
-        "<div class=\"label-sent-body\"" + "\">" +
-        "<p>" + "Positive" + "</p>" +
-        "<p>" + '<span class="label-sent-button" id="span_id_positive" >' +
-        "<i class=" + "\"fas fa-thumbs-up fa-2x label_icons\"" + "></i>" +
-        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
-        '</span>' + "</p>" + "</div>" +
-
-        "<div class=\"label-sent-body\"" + "\">" +
-        "<p>" + "Neutral" + "</p>" +
-        "<p>" + '<span class="label-sent-button" id="span_id_neutral" >' +
-        "<i class=" + "\"far fa-thumbs-down fa-2x neutral label_icons\"" + " style=transform:rotate(-90deg)" + "></i>" +
-        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
-        '</span>' + "</p>" + "</div>" +
-
-        "<div class=\"label-sent-body\"" + ">" +
-        "<p>" + "Negative" + "</p>" +
-        "<p>" + '<span class="label-sent-button" id="span_id_negative" >' +
-        "<i class=" + "\"fas fa-thumbs-down fa-2x label_icons\"" + "></i>" +
-        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
-        '</span>' + "</p>" + "</div>";
-
-    labelColumn5Div.innerHTML = divCaption
-    labelElement.appendChild(labelColumn5Div)
-
-    // =========================== label column 5 end ===========================//
-
-    // =========================== label column 5 ===============================//
-
-    // // labels and icons for subjectivity
-    // var labelColumn4Div = document.createElement("div")
-    // labelColumn5Div.id = "labelcolumn5"
-    // labelColumn5Div.className = "l_column5"
-
-    // var divCaption =
-    //     "<div class=\"label-body\"" + "\">" +
-    //     "<div class=\"label-title\"" + ">" +
-    //     "<p style=\"margin: 5px 0px 5px 0px\"" + ">" + "Subjectivity" + "</p>" + "</div>" +
-    //     "<div class=\"label-sub-body\"" + ">" +
-    //     "<p>" + "Fact" + "</p>" +
-    //     "<p>" + '<span class="label-sub-button" id="span_id_negative" >' +
-    //     "<i class=" + "\"fas fa-clipboard-check fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>" +
-    //     "<div class=\"label-sub-body\"" + "\">" +
-    //     "<p>" + "Opinion" + "</p>" +
-    //     "<p>" + '<span class="label-sent-button" id="span_id_neutral" >' +
-    //     "<i class=" + "\"fas fa-comments fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>";
-    // labelColumn5Div.innerHTML = divCaption
-    // labelElement.appendChild(labelColumn5Div)
-
-    // =========================== label column 5 end ===========================//
-
-    // =========================== label column 6 ===============================//
-
-    // // labels for profanity
-    // var labelColumn6Div = document.createElement("div")
-    // labelColumn6Div.id = "labelcolumn6"
-    // labelColumn6Div.className = "l_column6"
-
-    // var divCaption =
-    //     "<div class=\"label-body\"" + "\">" +
-    //     "<div class=\"label-title\"" + ">" +
-    //     "<p style=\"margin: 5px 0px 5px 0px\"" + ">" + "Profanity" + "</p>" + "</div>";
-    // labelColumn6Div.innerHTML = divCaption
-    // labelElement.appendChild(labelColumn5Div)
-
-    // =========================== label column 5 end ===========================//
 
     // Aggregate div fillup
     var titles = []
@@ -551,8 +347,7 @@ function draw_view(json) {
                 //'<div  class="btn btn-primary btn-block ideaName" id="' + proposal_names[i].idea_id + '">' + proposal_names[i].idea_name + "</div>";
                 //'<div  class="ideaName" id="' + proposal_names[i].idea_id + '">' + '<p class="search_enable" style="margin:0px 0px 0px 0px; word-wrap:break-word; text-align: left">' + proposal_names[i].idea_name + "</p></div>";
                 '<div><span class="badge badge-warning ideaName" id="' + proposal_names[i].idea_id + '" data-toggle="tooltip" data-placement="bottom">' + proposal_names[i].idea_name + '</span></div></div>'
-        }
-        else {
+        } else {
             var sentence_length = 0;
             var sentence = ""
             all_words = proposal_names[i].idea_name.split(" ")
@@ -562,8 +357,7 @@ function draw_view(json) {
                 if (sentence_length > column1.clientWidth / 10) {
                     sentence += "..."
                     break;
-                }
-                else {
+                } else {
                     sentence += all_words[x] + " "
                 }
             }
@@ -613,8 +407,7 @@ function draw_view(json) {
             //console.log(proposal_wise_topic_agg[i][j].topic_keyphrase, topic_row_length)
             if (topic_row_length > column3.clientWidth / 10) {
                 break;
-            }
-            else {
+            } else {
                 divTopicName = divTopicName +
                     '<div  class="topicName" id="topic_' + proposal_names[i].idea_id + "_" + j + '\">' +
                     '<span class="badge badge-warning topic-name" id="topic_' + proposal_names[i].idea_id + "_" + j + "_id\">" + proposal_wise_topic_agg[i][j].topic_keyphrase + '</span></div>'
@@ -630,118 +423,14 @@ function draw_view(json) {
 
         // column with proposal wise emotions
         var column4 = document.getElementById("row" + i + "-column4")
-        //console.log(json)
-        // tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
-        // tempSvg.id = "svg" + "row" + i + "column2"
-        // tempSvg.setAttribute("class", "c_svg")
-        // tempSvg.setAttribute("width", column2.clientWidth)
-        // tempSvg.setAttribute("height", column2.clientHeight)
-        // column2.appendChild(tempSvg)
         var svg_id = "svg" + "row" + i + "-column4"
         send_data = []
         send_data.push(proposal_wise_emotion_agg[i])
-        //console.log(send_data)
+        console.log(send_data)
         emotion_rows(send_data, svg_id, column4.id, proposal_names[i].idea_id)
 
 
         //============================end of column 4==================//
-
-        //============================ column 5 =========================//
-        // column with proposal wise sentiments
-
-        var column5 = document.getElementById("row" + i + "-column5")
-        //console.log(proposal_wise_sentiment_agg)
-        // tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
-        var tempSvg_id = "svg" + "row" + i + "-column5"
-        // tempSvg.setAttribute("class", "c_svg")
-        // tempSvg.setAttribute("width", column3.clientWidth)
-        // tempSvg.setAttribute("height", column3.clientHeight)
-        // column3.appendChild(tempSvg)
-
-        send_data = []
-        send_data.push(proposal_wise_sentiment_agg[i])
-        sentiment_rows(send_data, tempSvg_id, column5.id, proposal_names[i].idea_id)
-
-        //============================end of column 5 ==================//
-
-        //============================ column 5 =========================//
-        // // column with proposal wise subjectivity
-
-        // var column5 = document.getElementById("row" + i + "column5")
-        // //console.log(proposal_wise_subjectivity_agg)
-        // tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
-        // tempSvg.id = "svg" + "row" + i + "column5"
-        // tempSvg.setAttribute("class", "c_svg")
-        // tempSvg.setAttribute("width", column5.clientWidth)
-        // tempSvg.setAttribute("height", column5.clientHeight)
-        // column4.appendChild(tempSvg)
-
-        // send_data = []
-        // send_data.push(proposal_wise_subjectivity_agg[i])
-        // subjectivity_rows(send_data, tempSvg.id, column5.id, proposal_names[i].idea_id)
-
-        //============================ end of column 5 ==================//
-
-        //============================ column 6 =========================//
-
-        // // column with proposal wise profanity
-
-        // var column6 = document.getElementById("row" + i + "column6")
-        // tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
-        // tempSvg.id = "svg" + "row" + i + "column6"
-        // tempSvg.setAttribute("class", "c_svg")
-        // tempSvg.setAttribute("width", column5.clientWidth)
-        // tempSvg.setAttribute("height", column5.clientHeight)
-        // column5.appendChild(tempSvg)
-
-        // var column6 = document.getElementById("row" + i + "column6")
-        // var send_data = proposal_wise_profanity_agg[i].profanity_distribution;
-        // count_very_low = 0, count_low = 0, count_mid = 0, count_high = 0, count_very_high = 0;
-        // for (var x = 0; x < send_data.length; x++) {
-        //     if (send_data[x] > 0.0 && send_data[x] <= 0.1) {
-        //         count_very_low++;
-        //     }
-        //     else if (parseFloat(send_data[x]) > 0.1 && parseFloat(send_data[x]) <= 0.2) {
-        //         count_low++;
-        //     }
-        //     else if (parseFloat(send_data[x]) > 0.2 && parseFloat(send_data[x]) <= 0.3) {
-        //         count_mid++;
-        //     }
-        //     else if (parseFloat(send_data[x]) > 0.3 && parseFloat(send_data[x]) <= 0.4) {
-        //         count_high++;
-        //     }
-        //     else if (parseFloat(send_data[x]) > 0.4 && parseFloat(send_data[x]) <= 0.5) {
-        //         count_very_high++;
-        //     }
-        // }
-
-        // var prof_data = []
-        // //console.log(prof_data)
-
-        // prof_data.push({
-        //     key: proposal_names[i].idea_id,
-        //     very_low: count_very_low,
-        //     low: count_low,
-        //     medium: count_mid,
-        //     high: count_high,
-        //     very_high: count_very_high,
-        // })
-
-        // profanity_rows(prof_data, tempSvg.id, column6.id, proposal_names[i].idea_id)
-        //============================ end of column 5 ==================//
-
-        // // Instructions
-        // var divInstr = document.getElementById("instr")
-        // var divInstrHTML =
-        //     "<span class=\"c_instr_button\" id=\"instr_button_id\"><i class=\"fas fa-info-circle fa-lg\"></i></span>";
-        // divInstr.innerHTML = divInstrHTML;
-        // setTippy(divInstr.id, json)
-
-        // // refresh
-        // var divRefresh = document.getElementById("refresh")
-        // var divrefreshHTML =
-        //     "<span class=\"c_refresh_button\" id=\"refresh_button_id\"><i class=\"fas fa-sync-alt fa-lg\"></i></span>";
-        // divRefresh.innerHTML = divrefreshHTML;
     }
 
     // On click for sort icons by emotion
@@ -773,9 +462,8 @@ function draw_view(json) {
                 while (myNode.firstChild) {
                     myNode.removeChild(myNode.firstChild);
                 }
-                
-            }
-            else {
+
+            } else {
                 this_emo = id.split("_")[2] + "_normalized"
 
                 current_sort = id.split("_")[2];
@@ -805,7 +493,9 @@ function draw_view(json) {
                         }
                     }
                 }
-                sorted_ideas = { "ideas": show_this }
+                sorted_ideas = {
+                    "ideas": show_this
+                }
                 draw_view(sorted_ideas)
                 prop_json = sorted_ideas;
                 document.getElementById("box_header").innerHTML = "Sorted by " + id.split("_")[2];
@@ -823,7 +513,7 @@ function draw_view(json) {
 
                 console.log(id)
                 document.getElementById(id).setAttribute("style", "opacity:1.0");
-                $( "#"+id ).children().css( "opacity", "1.0" );
+                $("#" + id).children().css("opacity", "1.0");
             }
         });
         // $('.emoticon_button').mouseover(function() {
@@ -834,89 +524,6 @@ function draw_view(json) {
         divMove();
 
 
-    });
-
-    // On click for sort icons by sentiment
-    $(document).ready(function () {
-        $('.label-sent-button').click(function () {
-            var id = $(this).attr('id');
-            console.log("inside iconClick", id)
-            this_sent = id.split("_")[2] + "_normalized"
-
-            if (id.split("_")[2] == current_sort) {
-                current_sort = "";
-                selected_rows = Array.apply(null, Array(36));
-                console.log(raw_json)
-                draw_view(raw_json)
-                prop_json = raw_json;
-                for (var i = 0; i < selected_sort.length; i++) {
-                    document.getElementById("span_id_" + selected_sort[i]).setAttribute("style", "opacity:0.8")
-                    // console.log("span_id_"+selected_sort[i])
-                }
-                logInteraction('click, sortby, ' + id.split("_")[2]);
-                selected_rows = Array.apply(null, Array(36));
-
-                document.getElementById("box_header").innerHTML = "";
-
-                selected_rows_stack = [];
-
-                var myNode = document.getElementById("parentBox");
-                while (myNode.firstChild) {
-                    myNode.removeChild(myNode.firstChild);
-                }
-            }
-            else {
-                logInteraction('click, sortby, ' + id.split("_")[2]);
-
-                current_sort = id.split("_")[2];
-
-                var sent_agg = get_proposal_wise_sentiment(JSON.parse(JSON.stringify(json)))
-                sent_agg.sort((function (a, b) {
-                    return parseFloat(b[this_sent]) - parseFloat(a[this_sent])
-                }))
-
-                var id_keys = []
-                for (var i = 0; i < sent_agg.length; i++) {
-                    id_keys.push(sent_agg[i].key)
-                }
-
-                var show_this = []
-                for (var i = 0; i < id_keys.length; i++) {
-                    for (var j = 0; j < raw_json["ideas"].length; j++) {
-                        //console.log(json.ideas[j].id, id_keys[i])
-
-                        if (raw_json.ideas[j].id == id_keys[i]) {
-                            //console.log(json.ideas[i])
-                            show_this.push(raw_json.ideas[j])
-                        }
-                    }
-                }
-                sorted_ideas = { "ideas": show_this }
-                draw_view(sorted_ideas)
-                document.getElementById("box_header").innerHTML = "Sorted by " + id.split("_")[2];
-
-                var myNode = document.getElementById("parentBox");
-                while (myNode.firstChild) {
-                    myNode.removeChild(myNode.firstChild);
-                }
-
-                //console.log(selected_sort)
-                for (var i = 0; i < selected_sort.length; i++) {
-                    document.getElementById("span_id_" + selected_sort[i]).setAttribute("style", "opacity:0.8")
-                    // console.log("span_id_"+selected_sort[i])
-                }
-
-                document.getElementById(id).setAttribute("style", "opacity:1.0");
-                $( "#"+id ).children().css( "opacity", "1.0" );
-
-                selected_rows = Array.apply(null, Array(36));
-                prop_json = sorted_ideas;
-            }
-        });
-        // $('.emoticon_button').mouseover(function() {
-        //     var id = $(this).attr('id');
-        //     console.log('emotion mouseover',id)
-        // });
     });
 
     // On click for sort icons by info
@@ -948,8 +555,7 @@ function draw_view(json) {
                 while (myNode.firstChild) {
                     myNode.removeChild(myNode.firstChild);
                 }
-            }
-            else {
+            } else {
                 logInteraction('click, sortby, ' + id.split("_")[2]);
 
                 if (id.split("_")[2] == "participants") {
@@ -980,7 +586,7 @@ function draw_view(json) {
                 }
 
                 document.getElementById(id).setAttribute("style", "opacity:1.0");
-                $( "#"+id ).children().css( "opacity", "1.0" );
+                $("#" + id).children().css("opacity", "1.0");
                 selected_rows = Array.apply(null, Array(36));
                 prop_json = copy_json;
             }
@@ -991,132 +597,194 @@ function draw_view(json) {
         // });
     });
 
+    // // On click for proposals
+    // $(document).ready(function () {
+    //     $('.ideaName').click(function () {
+    //         var id = $(this).attr('id');
+
+    //         logInteraction('click, idea, ' + id);
+
+    //         if (selected_rows[id]) {
+    //             selected_rows[id] = null;
+    //             selected_rows_stack.splice(selected_rows_stack.indexOf(id), 1);
+    //             document.getElementById(id).setAttribute("style", "background-color:none")
+    //         }
+    //         else {
+    //             selected_rows[id] = true;
+    //             selected_rows_stack.push(id)
+    //             document.getElementById(id).setAttribute("style", "background-color:#3DAADD")
+    //         }
+    //         var all_filtered_comment = []
+
+    //         // for (var i = 0; i < selected_rows.length; i++) {
+    //         //     if (selected_rows[i]) {
+    //         //         filterobj.idea_id = i
+    //         //         filterobj.emotion = null
+    //         //         filterobj.sentiment_final = null
+    //         //         filterobj.task_id = null
+    //         //         filterobj.topic = []
+    //         //         var temp_comments = get_filtered_comment(JSON.parse(JSON.stringify(raw_json)), filterobj)
+    //         //         all_filtered_comment.push(temp_comments.ideas[0])
+    //         //     }
+    //         // }
+
+    //         iterate = selected_rows_stack.slice(0, selected_rows_stack.length)
+    //         var copy_json = []; 
+
+    //         while (iterate.length > 0) {
+    //             x = iterate.pop()
+    //             filterobj.idea_id = x
+    //             filterobj.emotion = null
+    //             filterobj.sentiment_final = null
+    //             filterobj.task_id = null
+    //             filterobj.topic = []
+    //             var temp_comments = get_filtered_comment(JSON.parse(JSON.stringify(raw_json)), filterobj)
+    //             all_filtered_comment.push(temp_comments.ideas[0])
+
+    //             for(var t in prop_json["ideas"]){
+    //                 if(x == prop_json.ideas[t].id){
+    //                     copy_json.push(prop_json.ideas[t])
+    //                 }
+    //             }
+    //         }
+
+    //         for(var t in prop_json["ideas"]){
+    //             if(selected_rows_stack.indexOf(prop_json.ideas[t].id) > -1){
+    //                 continue;
+    //             }
+    //             else{
+    //                 copy_json.push(prop_json.ideas[t])
+    //             }
+    //         }
+
+    //         var new_view = {"ideas": copy_json}
+    //         var filtered_comment = { "ideas": all_filtered_comment }
+
+    //         //console.log(new_view)
+
+    //         //console.log(filtered_comment)
+    //         draw_filtered_comments(filtered_comment, new_view)
+    //         draw_view(new_view)
+    //         divMove();
+
+    //         for(var x = 0; x < selected_rows_stack.length; x++){
+    //             //console.log("here")
+    //             document.getElementById(selected_rows_stack[x]).setAttribute("style", "background-color:#3DAADD")
+    //         }
+
+    //         // if (!animate_trigger) {
+    //         //     document.getElementById(id).scrollIntoView({ block: 'center' });
+    //         // }
+
+    //         //console.log(check_empty())
+
+    //         if (check_empty() == true) {
+    //             document.getElementById("box_header").innerHTML = "Click on a Proposal, Topic, Emotion or Sentiment to see related comments"
+    //         }
+    //         else if (current_sort == "") {
+    //             document.getElementById("box_header").innerHTML = ""
+    //         }
+
+    //         if(current_sort != ""){
+    //             console.log(current_sort)
+    //             $( "#span_id_"+ current_sort ).children().css( "opacity", "1.0" );
+    //         }
+
+    //         //console.log(id)
+    //         if (animate_trigger) {
+    //             animatedDivs();
+    //         }
+    //         if (!selected_rows[id]) {
+    //             setTimeout(
+    //                 function () {
+    //                     //console.log('scroll');
+    //                     $('#parentBox').scrollTo(0);
+    //                 }, 100
+    //             )
+    //         }
+    //         else {
+    //             setTimeout(
+    //                 function () {
+    //                     //console.log('scroll');
+
+    //                     $('#parentBox').scrollTo($('#ideaDivId-' + id), 500);
+    //                 }, 100
+    //             )
+    //         }
+
+    //     });
+    //     // $('.emoticon_button').mouseover(function() {
+    //     //     var id = $(this).attr('id');
+    //     //     console.log('emotion mouseover',id)
+    //     // });
+    // });
+
     // On click for proposals
     $(document).ready(function () {
         $('.ideaName').click(function () {
-            var id = $(this).attr('id');
 
+            if(selected_topic){
+                draw_view(json)
+                prev_row = ""
+                prev_topic = ""
+                selected_topic = ""
+            }
+
+            var id = $(this).attr('id');
+            selected_row = id
             logInteraction('click, idea, ' + id);
 
-            if (selected_rows[id]) {
-                selected_rows[id] = null;
-                selected_rows_stack.splice(selected_rows_stack.indexOf(id), 1);
-                document.getElementById(id).setAttribute("style", "background-color:none")
-            }
-            else {
-                selected_rows[id] = true;
-                selected_rows_stack.push(id)
-                document.getElementById(id).setAttribute("style", "background-color:#3DAADD")
-            }
-            var all_filtered_comment = []
-
-            // for (var i = 0; i < selected_rows.length; i++) {
-            //     if (selected_rows[i]) {
-            //         filterobj.idea_id = i
-            //         filterobj.emotion = null
-            //         filterobj.sentiment_final = null
-            //         filterobj.subjectivity = null
-            //         filterobj.task_id = null
-            //         filterobj.topic = []
-            //         var temp_comments = get_filtered_comment(JSON.parse(JSON.stringify(raw_json)), filterobj)
-            //         all_filtered_comment.push(temp_comments.ideas[0])
-            //     }
-            // }
-
-            iterate = selected_rows_stack.slice(0, selected_rows_stack.length)
-            var copy_json = []; 
-
-            while (iterate.length > 0) {
-                x = iterate.pop()
-                filterobj.idea_id = x
+            if (selected_row != prev_row && selected_row != "") {
+                filterobj.idea_id = id
                 filterobj.emotion = null
-                filterobj.sentiment_final = null
-                filterobj.subjectivity = null
                 filterobj.task_id = null
                 filterobj.topic = []
-                var temp_comments = get_filtered_comment(JSON.parse(JSON.stringify(raw_json)), filterobj)
-                all_filtered_comment.push(temp_comments.ideas[0])
+                filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(raw_json)), filterobj)
 
-                for(var t in prop_json["ideas"]){
-                    if(x == prop_json.ideas[t].id){
-                        copy_json.push(prop_json.ideas[t])
-                    }
+                // console.log(filtered_comment)
+
+                new_view = JSON.parse(JSON.stringify(prop_json))
+                draw_filtered_comments(filtered_comment, new_view)
+                document.getElementById(id).setAttribute("style", "background-color:#3DAADD")
+                if (prev_row) {
+                    document.getElementById(prev_row).setAttribute("style", "background-color:none")
                 }
-            }
 
-            for(var t in prop_json["ideas"]){
-                if(selected_rows_stack.indexOf(prop_json.ideas[t].id) > -1){
-                    continue;
+                divMove();
+                prev_row = selected_row;
+            } else {
+
+                console.log("here")
+                var myNode = document.getElementById("parentBox");
+                while (myNode.firstChild) {
+                    myNode.removeChild(myNode.firstChild);
                 }
-                else{
-                    copy_json.push(prop_json.ideas[t])
-                }
+
+                document.getElementById(id).setAttribute("style", "background-color:none")
+                draw_view(json)
+                divMove();
+                selected_row = ""
+                prev_row = ""
             }
-
-            var new_view = {"ideas": copy_json}
-            var filtered_comment = { "ideas": all_filtered_comment }
-
-            //console.log(new_view)
-
-            //console.log(filtered_comment)
-            draw_filtered_comments(filtered_comment, new_view)
-            draw_view(new_view)
-            divMove();
-
-            for(var x = 0; x < selected_rows_stack.length; x++){
-                //console.log("here")
-                document.getElementById(selected_rows_stack[x]).setAttribute("style", "background-color:#3DAADD")
-            }
-
-            // if (!animate_trigger) {
-            //     document.getElementById(id).scrollIntoView({ block: 'center' });
-            // }
 
             //console.log(check_empty())
 
             if (check_empty() == true) {
-                document.getElementById("box_header").innerHTML = "Click on a Proposal, Topic, Emotion or Sentiment to see related comments"
-            }
-            else if (current_sort == "") {
+                document.getElementById("box_header").innerHTML = "Click on a Proposal, Topic or Emotion to see related comments"
+            } else if (current_sort == "") {
                 document.getElementById("box_header").innerHTML = ""
             }
 
-            if(current_sort != ""){
+            if (current_sort != "") {
                 console.log(current_sort)
-                $( "#span_id_"+ current_sort ).children().css( "opacity", "1.0" );
+                $("#span_id_" + current_sort).children().css("opacity", "1.0");
             }
-
-            //console.log(id)
-            if (animate_trigger) {
-                animatedDivs();
-            }
-            if (!selected_rows[id]) {
-                setTimeout(
-                    function () {
-                        //console.log('scroll');
-                        $('#parentBox').scrollTo(0);
-                    }, 100
-                )
-            }
-            else {
-                setTimeout(
-                    function () {
-                        //console.log('scroll');
-
-                        $('#parentBox').scrollTo($('#ideaDivId-' + id), 500);
-                    }, 100
-                )
-            }
-
         });
-        // $('.emoticon_button').mouseover(function() {
-        //     var id = $(this).attr('id');
-        //     console.log('emotion mouseover',id)
-        // });
     });
 
     function getAllIndexes(arr, val) {
-        var indexes = [], i;
+        var indexes = [],
+            i;
         for (i = 0; i < arr.length; i++)
             if (arr[i] === val)
                 indexes.push(i);
@@ -1126,227 +794,127 @@ function draw_view(json) {
     // On click for topics //
     $(document).ready(function () {
         $('.topicName').click(function () {
+
+            if(!selected_topic && selected_row){
+
+                draw_view(json)
+                selected_row = ""
+                prev_row = ""
+                prev_topic = ""
+            }
+
             var id = $(this).attr('id');
             var split_str = id.split("_")
             logInteraction('click, idea, ' + split_str[1], 'topic ', split_str[2]);
 
-            if (selected_topics[split_str[1]][split_str[2]]) {
-                var top_cnt = 0;
-                for (var x = 0; x < selected_topics[split_str[1]].length; x++) {
-                    console.log(selected_topics[split_str[1]][x], x)
-                    if (selected_topics[split_str[1]][x] == true) {
-                        top_cnt += 1;
-                    }
-                }
-                if (top_cnt == 1) {
-                    document.getElementById(id.split("_")[1]).setAttribute("style", "background-color:none")
-                }
+            selected_row = split_str[1]
+            selected_topic = split_str[2]
 
-                selected_topics[split_str[1]][split_str[2]] = null;
-                document.getElementById(id + "_id").setAttribute("style", "background-color:none")
+            console.log(id, prev_topic)
 
-            }
-            else {
-                selected_topics[split_str[1]][split_str[2]] = true;
-                console.log(id)
-                document.getElementById(id + "_id").setAttribute("style", "background-color:#3DAADD")
-                document.getElementById(id.split("_")[1]).setAttribute("style", "background-color:#3DAADD")
-            }
-
-            all_filtered_topics = []
-
-            for (var i = 0; i < selected_topics.length; i++) {
-                //console.log(filterobj.topic)
-                filterobj.idea_id = i
+            if (id != prev_topic) {
+                filterobj.idea_id = selected_row
                 filterobj.emotion = null
-                filterobj.sentiment_final = null
-                filterobj.subjectivity = null
                 filterobj.task_id = null
-                filterobj.topic = getAllIndexes(selected_topics[i], true)
+                filterobj.topic = selected_topic
 
-                if (filterobj.topic.length != 0) {
-                    var temp_comments = get_filtered_comment(JSON.parse(JSON.stringify(raw_json)), filterobj)
-                    all_filtered_topics.push(temp_comments.ideas[0])
+                filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(raw_json)), filterobj)
+
+                // console.log(filtered_comment)
+
+                new_view = JSON.parse(JSON.stringify(prop_json))
+                draw_filtered_comments(filtered_comment, new_view)
+                document.getElementById(id + "_id").setAttribute("style", "background-color:#3DAADD")
+                // document.getElementById(selected_row).setAttribute("style", "background-color:#3DAADD")
+                if (prev_topic) {
+                    document.getElementById(prev_topic + "_id").setAttribute("style", "background-color:none")
                 }
-            }
 
-            var filtered_comment = { "ideas": all_filtered_topics }
-            console.log(filtered_comment)
-            draw_filtered_comments(filtered_comment, raw_json)
-            divMove();
+                divMove();
+                prev_topic = id;
+                prev_row = selected_row;
+            } 
+            
+            else {
+                console.log("here")
+                var myNode = document.getElementById("parentBox");
+                while (myNode.firstChild) {
+                    myNode.removeChild(myNode.firstChild);
+                }
+
+                document.getElementById(id + "_id").setAttribute("style", "background-color:none")
+                draw_view(json)
+                divMove();
+                selected_topic = ""
+                prev_topic = ""
+            }
 
             if (check_empty() == true) {
-                document.getElementById("box_header").innerHTML = "Click on a Proposal, Topic, Emotion or Sentiment to see related comments"
-            }
-            else {
+                document.getElementById("box_header").innerHTML = "Click on a Proposal, Topic or Emotion to see related comments"
+            } else {
                 document.getElementById("box_header").innerHTML = ""
             }
-
-            // filterobj.idea_id = split_str[1]
-            // filterobj.emotion = null
-            // filterobj.sentiment_final = null
-            // filterobj.subjectivity = null
-            // filterobj.task_id = null
-            // filterobj.topic = split_str[2]
-            // var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
-            // draw_filtered_comments(filtered_comment, json)
-
-            //console.log()
-            //$("#parentBox").animate({ scrollTop: 0 }, 1000);
-            // draw_view();
-
-            // id = id + "_id"
-
-            // if (animate_trigger) {
-            //     animatedDivs();
-            // }
-            // if (!animate_trigger) {
-            //     $("#aggregateDiv").animate({ scrollTop: $('#' + filterobj.idea_id).offset().top }, 1000);
-            //     document.getElementById(id).scrollIntoView({ block: 'center' });
-            // }
-
-            // document.getElementById(id).setAttribute("style", "background-color:#3DAADD")
         });
-        // $('.emoticon_button').mouseover(function() {
-        //     var id = $(this).attr('id');
-        //     console.log('emotion mouseover',id)
-        // });
     });
 
-    // On click function for proposal search box
+    // // On click for topics //
     // $(document).ready(function () {
-
-    //     $("#text-proposal").keyup(function (event) {
-    //         if (event.keyCode === 13) {
-    //             $("#span_id_proposal").click();
-    //         }
-    //     });
-
-    //     $('.label-search-button-proposal').click(function () {
+    //     $('.topicName').click(function () {
     //         var id = $(this).attr('id');
-    //         var text_box = document.getElementById("text-proposal")
-    //         var text = text_box.value
-    //         var flag = true
-    //         var proposal_names = get_proposal_names(json)
+    //         var split_str = id.split("_")
+    //         logInteraction('click, idea, ' + split_str[1], 'topic ', split_str[2]);
 
-    //         for (var i = 0; i < proposal_names.length; i++) {
-    //             if (text.toLowerCase().replace(/\s+/g, '') == proposal_names[i].idea_name.toLowerCase().replace(/\s+/g, '')) {
-    //                 filterobj.idea_id = proposal_names[i].idea_id
-    //                 filterobj.emotion = null
-    //                 filterobj.sentiment_final = null
-    //                 filterobj.subjectivity = null
-    //                 filterobj.task_id = null
-    //                 filterobj.topic = null
-    //                 flag = false
-    //             }
-    //         }
-
-    //         if (flag == false) {
-    //             var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(raw_json)), filterobj)
-    //             draw_filtered_comments(filtered_comment, raw_json)
-
-    //             if (check_empty() == true) {
-    //                 document.getElementById("box_header").innerHTML = "Click on a Proposal, Topic, Emotion or Sentiment to see related comments"
-    //             }
-    //             else {
-    //                 document.getElementById("box_header").innerHTML = ""
-    //             }
-
-    //             $("#parentBox").animate({ scrollTop: 0 }, 1000);
-
-    //             //console.log("redrawing")
-    //             draw_view(raw_json);
-    //         }
-    //         else {
-    //             text_box.value = "No match found"
-    //         }
-    //     });
-    //     // $('.emoticon_button').mouseover(function() {
-    //     //     var id = $(this).attr('id');
-    //     //     console.log('emotion mouseover',id)
-    //     // });
-    // });
-
-    // // On click function for topic search box
-    // $(document).ready(function () {
-
-    //     $("#text-topic").keyup(function (event) {
-    //         if (event.keyCode === 13) {
-    //             $("#span_id_topic").click();
-    //         }
-    //     });
-
-    //     $('.label-search-button-topic').click(function () {
-    //         var id = $(this).attr('id');
-    //         var text_box = document.getElementById("text-topic")
-    //         var text = text_box.value
-    //         var flag = true
-    //         var all_topic_names = get_proposal_wise_topic(raw_json)
-    //         var proposal_names = get_proposal_names(raw_json)
-
-    //         for (var i = 0; i < all_topic_names.length; i++) {
-    //             for (var j in all_topic_names[i]) {
-    //                 if (text.toLowerCase().replace(/\s+/g, '') == all_topic_names[i][j].topic_keyphrase.toLowerCase().replace(/\s+/g, '')) {
-    //                     filterobj.idea_id = proposal_names[i].idea_id
-    //                     filterobj.emotion = null
-    //                     filterobj.sentiment_final = null
-    //                     filterobj.subjectivity = null
-    //                     filterobj.task_id = null
-    //                     filterobj.topic = j
-    //                     flag = false
+    //         if (selected_topics[split_str[1]][split_str[2]]) {
+    //             var top_cnt = 0;
+    //             for (var x = 0; x < selected_topics[split_str[1]].length; x++) {
+    //                 console.log(selected_topics[split_str[1]][x], x)
+    //                 if (selected_topics[split_str[1]][x] == true) {
+    //                     top_cnt += 1;
     //                 }
     //             }
-
-    //         }
-
-    //         if (flag == false) {
-    //             var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
-    //             draw_filtered_comments(filtered_comment, json)
-
-    //             if (check_empty() == true) {
-    //                 document.getElementById("box_header").innerHTML = "Click on a Proposal, Topic, Emotion or Sentiment to see related comments"
-    //             }
-    //             else {
-    //                 document.getElementById("box_header").innerHTML = ""
+    //             if (top_cnt == 1) {
+    //                 document.getElementById(id.split("_")[1]).setAttribute("style", "background-color:none")
     //             }
 
-    //             //$("#parentBox").animate({ scrollTop: 0 }, 1000);
+    //             selected_topics[split_str[1]][split_str[2]] = null;
+    //             document.getElementById(id + "_id").setAttribute("style", "background-color:none")
 
-    //             //console.log("redrawing")
-    //             draw_view(json);
+    //         } else {
+    //             selected_topics[split_str[1]][split_str[2]] = true;
+    //             console.log(id)
+    //             document.getElementById(id + "_id").setAttribute("style", "background-color:#3DAADD")
+    //             document.getElementById(id.split("_")[1]).setAttribute("style", "background-color:#3DAADD")
     //         }
-    //         else {
-    //             text_box.value = "No match found"
+
+    //         all_filtered_topics = []
+
+    //         for (var i = 0; i < selected_topics.length; i++) {
+    //             //console.log(filterobj.topic)
+    //             filterobj.idea_id = i
+    //             filterobj.emotion = null
+    //             filterobj.sentiment_final = null
+    //             filterobj.task_id = null
+    //             filterobj.topic = getAllIndexes(selected_topics[i], true)
+
+    //             if (filterobj.topic.length != 0) {
+    //                 var temp_comments = get_filtered_comment(JSON.parse(JSON.stringify(raw_json)), filterobj)
+    //                 all_filtered_topics.push(temp_comments.ideas[0])
+    //             }
+    //         }
+
+    //         var filtered_comment = {
+    //             "ideas": all_filtered_topics
+    //         }
+    //         console.log(filtered_comment)
+    //         draw_filtered_comments(filtered_comment, raw_json)
+    //         divMove();
+
+    //         if (check_empty() == true) {
+    //             document.getElementById("box_header").innerHTML = "Click on a Proposal, Topic, Emotion or Sentiment to see related comments"
+    //         } else {
+    //             document.getElementById("box_header").innerHTML = ""
     //         }
     //     });
-    // $('.emoticon_button').mouseover(function() {
-    //     var id = $(this).attr('id');
-    //     console.log('emotion mouseover',id)
-    // });
-
-    // });
-
-    // // functions for removing text from searchboxes
-    // $(document).ready(function () {
-    //     $('.text-box-topic').click(function () {
-    //         var id = $(this).attr('id');
-    //         document.getElementById("text-topic").value = ""
-    //     });
-    //     // $('.emoticon_button').mouseover(function() {
-    //     //     var id = $(this).attr('id');
-    //     //     console.log('emotion mouseover',id)
-    //     // });
-    // });
-
-    // $(document).ready(function () {
-    //     $('.text-box-proposal').click(function () {
-    //         var id = $(this).attr('id');
-    //         document.getElementById("text-proposal").value = ""
-    //     });
-    //     // $('.emoticon_button').mouseover(function() {
-    //     //     var id = $(this).attr('id');
-    //     //     console.log('emotion mouseover',id)
-    //     // });
     // });
 
     // On click for refresh //
@@ -1363,11 +931,8 @@ function draw_view(json) {
             }
 
         });
-        // $('.emoticon_button').mouseover(function() {
-        //     var id = $(this).attr('id');
-        //     console.log('emotion mouseover',id)
-        // });
     });
+
     $(document).ready(function () {
         $('#cp_refresh').click(function () {
             logInteraction('click, cpRefresh');
@@ -1381,10 +946,6 @@ function draw_view(json) {
             }
 
         });
-        // $('.emoticon_button').mouseover(function() {
-        //     var id = $(this).attr('id');
-        //     console.log('emotion mouseover',id)
-        // });
     });
 }
 
@@ -1422,7 +983,7 @@ function responsivefy(svg) {
 function emotion_rows(salesData, svg_id, div_id, idea_id) {
 
     //var group = ["angry", "worried", "sad", "happy", "excited"];
-    var group = ["excited", "happy", "sad", "worried", "angry"];
+    var group = ["excited", "happy", "sad", "worried", "angry", "positive", "neutral", "negative"];
 
     var parseDate = d3.timeFormat("%b-%Y");
     var mainDiv = "#" + div_id;
@@ -1449,11 +1010,11 @@ function emotion_rows(salesData, svg_id, div_id, idea_id) {
         (salesData);
 
     var margin = {
-        top: 0,
-        right: 0,
-        bottom: 0,
-        left: 0
-    },
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0
+        },
 
         width = +svg.attr("width") - 2,
         height = +svg.attr("height");
@@ -1487,7 +1048,7 @@ function emotion_rows(salesData, svg_id, div_id, idea_id) {
     }
 
     //var z = d3.scaleOrdinal(["#E45756", "#B279A2", "#4C78A8", "#EECA3B", "#F58518"]); IN REVERSE
-    var z = d3.scaleOrdinal(["#EF8518", "#FFCA3B", "#4C78BF", "#B279AF", "#FF5756"]).domain(group);
+    var z = d3.scaleOrdinal(["#EF8518", "#FFCA3B", "#4C78BF", "#B279AF", "#FF5756", "#5ABAAC", "#CCCCCC", "#D9B965"]).domain(group);
     var maing = svg.append("g")
         .selectAll("g")
         .data(layers)
@@ -1537,8 +1098,7 @@ function emotion_rows(salesData, svg_id, div_id, idea_id) {
         .attr("width", function (d) {
             if (x(d[1]) - x(d[0]) - 2 < 0) {
                 return 0;
-            }
-            else {
+            } else {
                 return x(d[1]) - x(d[0]) - 2;
             }
         })
@@ -1580,8 +1140,7 @@ function emotion_rows(salesData, svg_id, div_id, idea_id) {
                 return 0.8
             else if (d.key == current_sort) {
                 return 1.0
-            }
-            else {
+            } else {
                 return 0.5
             }
         });
@@ -1672,8 +1231,7 @@ function emotion_rows(salesData, svg_id, div_id, idea_id) {
             }
             if (current_sort !== "") {
                 return 0.5
-            }
-            else {
+            } else {
                 return 0.8
             }
         })
@@ -1700,6 +1258,7 @@ function emotion_rows(salesData, svg_id, div_id, idea_id) {
         console.log("oneclick")
         var this_cell = d3.select(this)
         filterobj.idea_id = idea_id
+
         filterobj.emotion = d.key
 
         // remove outline from previous cell 
@@ -1718,8 +1277,7 @@ function emotion_rows(salesData, svg_id, div_id, idea_id) {
             if (animate_trigger) {
                 animatedDivs();
             }
-        }
-        else {
+        } else {
             if (animate_trigger) {
                 animatedDivs();
             }
@@ -1734,9 +1292,8 @@ function emotion_rows(salesData, svg_id, div_id, idea_id) {
         var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(raw_json)), filterobj)
         draw_filtered_comments(filtered_comment, raw_json)
         if (check_empty() == true) {
-            document.getElementById("box_header").innerHTML = "Click on a Proposal, Topic, Emotion or Sentiment to see related comments"
-        }
-        else {
+            document.getElementById("box_header").innerHTML = "Click on a Proposal, Topic, or Emotion to see related comments"
+        } else {
             document.getElementById("box_header").innerHTML = ""
         }
         cellHistory.prev_emo_cell = this_cell
@@ -1745,17 +1302,16 @@ function emotion_rows(salesData, svg_id, div_id, idea_id) {
         cellHistory.prev_emo = d.key
         cellHistory.prev_emo_color = z(d.key)
 
-        $("#parentBox").animate({ scrollTop: 0 }, 1000);
+        $("#parentBox").animate({
+            scrollTop: 0
+        }, 1000);
 
         if (check_empty() == true) {
-            console.log(document.getElementById("box_header"))
-            if (cellHistory.prev_senti) {
-                document.getElementById("box_header").innerHTML = "No comments for emotion - " + d.key + " and sentiment - " + cellHistory.prev_senti
-                //alert("No comments for sentiment - " + d.key + " and emotion - " + cellHistory.prev_emo);
-            }
+                // console.log(document.getElementById("box_header"))
+                document.getElementById("box_header").innerHTML = "No comments for emotion - " + d.key 
         }
 
-        if (!filterobj.emotion && !filterobj.sentiment_final) {
+        if (!filterobj.emotion) {
             var myNode = document.getElementById("parentBox");
             while (myNode.firstChild) {
                 myNode.removeChild(myNode.firstChild);
@@ -1763,389 +1319,6 @@ function emotion_rows(salesData, svg_id, div_id, idea_id) {
             // document.getElementById(div_id.split("-")[0]).setAttribute("style", "outline:0");
         }
 
-        if (cellHistory.prev_senti && cellHistory.prev_idea_id_emo != cellHistory.prev_idea_id_senti) {
-            document.getElementById("box_header").innerHTML = "Please select emotion and sentiment from the same category";
-        }
-
-        divMove();
-
-    }
-
-    var rectTooltipg = svg.append("g")
-        .attr("font-family", "sans-serif")
-        .attr("font-size", 10)
-        .attr("text-anchor", "end")
-        .attr("id", "recttooltip_" + mainDivName)
-        .attr("style", "opacity:0")
-        .attr("transform", "translate(-500,-500)")
-        .attr("style", "position:absolute")
-        .attr("style", "z-index:30");
-
-    rectTooltipg.append("rect")
-        .attr("id", "recttooltipRect_" + mainDivName)
-        .attr("x", 0)
-        .attr("width", 120)
-        .attr("height", 80)
-        .attr("opacity", 0.7)
-        .style("fill", "#000000");
-
-    rectTooltipg
-        .append("text")
-        .attr("id", "recttooltipText_" + mainDivName)
-        .attr("x", 30)
-        .attr("y", 15)
-        .attr("fill", function () {
-            return "#fff"
-        })
-        .style("font-size", function (d) {
-            return 10;
-        })
-        .style("font-family", function (d) {
-            return "arial";
-        })
-        .text(function (d, i) {
-            return "";
-        });
-
-
-    function type(d) {
-        //d.date = parseDate(new Date(d.date));
-        group.forEach(function (c) {
-            d[c] = +d[c];
-        });
-        return d;
-    }
-
-    var helpers = {
-        getDimensions: function (id) {
-            var el = document.getElementById(id);
-            var w = 0,
-                h = 0;
-            if (el) {
-                var dimensions = el.getBBox();
-                w = dimensions.width;
-                h = dimensions.height;
-            } else {
-                console.log("error: getDimensions() " + id + " not found.");
-            }
-            return {
-                w: w,
-                h: h
-            };
-        }
-    };
-}
-
-// draw sentiments
-function sentiment_rows(salesData, svg_id, div_id, idea_id) {
-
-    var group = ["positive", "neutral", "negative"];
-    var parseDate = d3.timeFormat("%b-%Y");
-
-    var mainDiv = "#" + div_id;
-    var mainDivName = div_id;
-
-    var column = document.getElementById(div_id)
-
-    var svg = d3.select(mainDiv)
-        .append("svg")
-        //responsive SVG needs these 2 attributes and no width and height attr
-        .attr("id", svg_id)
-        .attr("height", column.clientHeight)
-        .attr("width", column.clientWidth)
-        .call(responsivefy)
-
-    salesData.forEach(function (d) {
-        d = type(d);
-    });
-    var layers = d3.stack()
-        .keys(group)
-        .offset(d3.stackOffsetDiverging)
-        (salesData);
-
-    var svg = d3.select("#" + svg_id),
-        margin = {
-            top: 0,
-            right: 0,
-            bottom: 0,
-            left: 0
-        },
-
-        width = +svg.attr("width") - 2,
-        height = +svg.attr("height");
-    if (width < 0) {
-        width = 0;
-    }
-
-    var x = d3.scaleLinear()
-        .rangeRound([margin.left, width - margin.right]);
-
-    x.domain([d3.min(layers, stackMin), d3.max(layers, stackMax)]);
-
-    var y = d3.scaleBand()
-        .rangeRound([height - margin.bottom, margin.top])
-        .padding(0.0);
-
-    y.domain(salesData.map(function (d) {
-        return d.date;
-    }))
-
-    function stackMin(layers) {
-        return d3.min(layers, function (d) {
-            return d[0];
-        });
-    }
-
-    function stackMax(layers) {
-        return d3.max(layers, function (d) {
-            return d[1];
-        });
-    }
-
-    //var z = d3.scaleOrdinal(["#D8B365", "#D9D9D9", "#5AB4AC"]);
-    var z = d3.scaleOrdinal(["#5ABAAC", "#CCCCCC", "#D9B965"]);
-
-    var maing = svg.append("g")
-        .selectAll("g")
-        .data(layers);
-    var g = maing.enter().append("g")
-        // .attr("fill", function (d) {
-        //     return z(d.key);
-        // })
-        // .attr("style", "outline: solid;")
-        // .attr("style", "outline-color: #F2F2F2")
-        .style("cursor", "pointer");
-    var rect = g.selectAll("rect")
-        .data(function (d) {
-            d.forEach(function (d1) {
-                d1.key = d.key;
-                return d1;
-            });
-            return d;
-        })
-        .enter().append("rect")
-        .attr("data", function (d) {
-            var data = {};
-            data["key"] = d.key;
-            data["value"] = d.data[d.key];
-            var total = 0;
-            group.map(function (d1) {
-                total = total + d.data[d1]
-            });
-            data["total"] = total;
-            return JSON.stringify(data);
-        })
-        .attr("width", function (d) {
-            if (x(d[1]) - x(d[0]) - 2 < 0) {
-                return 0;
-            }
-            else {
-                return x(d[1]) - x(d[0]) - 2;
-            }
-        })
-        .attr("x", function (d) {
-            return x(d[0]);
-        })
-        .attr("y", function (d) {
-            return y(d.data.date);
-        })
-        .attr("fill", function (d) {
-            return z(d.key);
-        })
-        .attr("stroke", function (d) {
-            return z(d.key)
-        })
-        .attr("stroke-width", function (d) {
-            return "2px";
-        })
-        .attr("height", 30)
-        .attr("opacity", function (d) {
-            if (current_sort === "" || current_sort == selected_sort[0] || current_sort == selected_sort[1])
-                return 0.8
-            else if (d.key == current_sort) {
-                return 1.0
-            }
-            else {
-                return 0.5
-            }
-        });
-    //.attr("height", y.bandwidth);
-
-    rect.on("mouseover", function () {
-        var currentEl = d3.select(this);
-        currentEl.attr("opacity", 1)
-        var fadeInSpeed = 120;
-        d3.select("#recttooltip_" + mainDivName)
-            .transition()
-            .duration(fadeInSpeed)
-            .style("opacity", function (d) {
-                return 1;
-            });
-        d3.select("#recttooltip_" + mainDivName).attr("transform", function (d) {
-            var mouseCoords = d3.mouse(this.parentNode);
-            var xCo = 0;
-            if (mouseCoords[0] + 10 >= width * 0.80) {
-                xCo = mouseCoords[0] - parseFloat(d3.selectAll("#recttooltipRect_" + mainDivName)
-                    .attr("width")) - 10;
-            } else {
-                xCo = mouseCoords[0] + 10;
-            }
-            var x = xCo;
-            var yCo = 0;
-            // if (mouseCoords[0] + 10 >= width * 0.80) {
-            //     yCo = mouseCoords[1] + 10;
-            // } else {
-            //     yCo = mouseCoords[1];
-            // }
-            var x = xCo;
-            var y = yCo;
-            return "translate(" + x + "," + y + ")";
-        });
-        //CBT:calculate tooltips text
-        var tooltipData = JSON.parse(currentEl.attr("data"));
-        var tooltipsText = "";
-        d3.selectAll("#recttooltipText_" + mainDivName).text("");
-        var yPos = 0;
-        d3.selectAll("#recttooltipText_" + mainDivName).append("tspan").attr("x", 0).attr("y", yPos * 10).attr("dy", "1.9em").text(tooltipData.key + ":  " + tooltipData.value);
-        yPos = yPos + 1;
-        d3.selectAll("#recttooltipText_" + mainDivName).append("tspan").attr("x", 0).attr("y", yPos * 10).attr("dy", "1.9em").text("Total" + ":  " + tooltipData.total);
-        //CBT:calculate width of the text based on characters
-        var dims = helpers.getDimensions("recttooltipText_" + mainDivName);
-        d3.selectAll("#recttooltipText_" + mainDivName + " tspan")
-            .attr("x", dims.w + 4);
-
-        d3.selectAll("#recttooltipRect_" + mainDivName)
-            .attr("width", dims.w + 10)
-            .attr("height", dims.h + 20);
-    });
-
-    rect.on("mousemove", function () {
-        var currentEl = d3.select(this);
-        currentEl.attr("r", 7);
-        d3.selectAll("#recttooltip_" + mainDivName)
-            .attr("transform", function (d) {
-                var mouseCoords = d3.mouse(this.parentNode);
-                var xCo = 0;
-                if (mouseCoords[0] + 10 >= width * 0.80) {
-                    xCo = mouseCoords[0] - parseFloat(d3.selectAll("#recttooltipRect_" + mainDivName)
-                        .attr("width")) - 10;
-                } else {
-                    xCo = mouseCoords[0] + 10;
-                }
-                var x = xCo;
-                var yCo = 0;
-                // if (mouseCoords[0] + 10 >= width * 0.80) {
-                //     yCo = mouseCoords[1] + 10;
-                // } else {
-                //     yCo = mouseCoords[1];
-                // }
-                var x = xCo;
-                var y = yCo;
-                return "translate(" + x + "," + y + ")";
-            });
-    });
-    rect.on("mouseout", function () {
-        var currentEl = d3.select(this);
-        currentEl.attr("opacity", function (d) {
-            if (current_sort === "" || current_sort == selected_sort[0] || current_sort == selected_sort[1])
-                return 0.8
-            if (d.key == current_sort) {
-                return 1.0
-            }
-            if (cellHistory.senti_switch && cellHistory.prev_idea_id_senti == idea_id && cellHistory.prev_senti_color == z(d.key)) {
-                return 1
-            }
-            if (current_sort !== "") {
-                return 0.5
-            }
-            else {
-                return 0.8
-            }
-        })
-        d3.select("#recttooltip_" + mainDivName)
-            .style("opacity", function () {
-                return 0;
-            })
-            .attr("transform", function (d, i) {
-                // klutzy, but it accounts for tooltip padding which could push it onscreen
-                var x = -500;
-                var y = -500;
-                return "translate(" + x + "," + y + ")";
-            });
-    });
-
-    rect.on("click", clicked_sentiment);
-
-    function clicked_sentiment(d) {
-
-        logInteraction('click, idea, ' + idea_id + 'sentiment ' + d.key);
-
-        var this_cell = d3.select(this)
-        filterobj.idea_id = idea_id
-        filterobj.sentiment_final = d.key
-
-        if (cellHistory.prev_senti_cell) {
-            cellHistory.prev_senti_cell.attr("stroke", cellHistory.prev_senti_color)
-            cellHistory.prev_senti_cell.attr("opacity", 0.8)
-        }
-
-        // deselect cell (check if previously selected row and column selected. Remove the column filter and revert back to last row)
-        if (cellHistory.senti_switch && cellHistory.prev_senti == d.key && cellHistory.prev_idea_id_senti == idea_id) {
-            filterobj.sentiment_final = null
-            filterobj.idea_id = cellHistory.prev_idea_id
-            filterobj.topic = null
-            cellHistory.senti_switch = false
-            if (animate_trigger) {
-                animatedDivs();
-            }
-            check_empty();
-        }
-        else {
-            this_cell.attr("stroke", "black")
-            this_cell.attr("opacity", 1)
-            cellHistory.senti_switch = true
-            if (animate_trigger) {
-                animatedDivs();
-            }
-        }
-
-        //console.log(filterobj)
-
-
-        var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(raw_json)), filterobj)
-        draw_filtered_comments(filtered_comment, raw_json)
-        if (check_empty() == true) {
-            document.getElementById("box_header").innerHTML = "Click on a Proposal, Topic, Emotion or Sentiment to see related comments"
-        }
-        else {
-            document.getElementById("box_header").innerHTML = ""
-        }
-        cellHistory.prev_senti_cell = this_cell
-        cellHistory.prev_idea_id_senti = idea_id
-        cellHistory.prev_idea_id = idea_id
-        cellHistory.prev_senti = d.key
-        cellHistory.prev_senti_color = z(d.key)
-
-        $("#parentBox").animate({ scrollTop: 0 }, 1000);
-
-        if (check_empty() == true) {
-            console.log(document.getElementById("box_header"))
-            if (cellHistory.prev_emo) {
-                document.getElementById("box_header").innerHTML = "No comments for sentiment - " + d.key + " and emotion - " + cellHistory.prev_emo
-                //alert("No comments for sentiment - " + d.key + " and emotion - " + cellHistory.prev_emo);
-            }
-        }
-        if (!filterobj.emotion && !filterobj.sentiment_final) {
-            var myNode = document.getElementById("parentBox");
-            while (myNode.firstChild) {
-                myNode.removeChild(myNode.firstChild);
-            }
-        }
-
-        if (cellHistory.prev_emo && cellHistory.prev_idea_id_emo != cellHistory.prev_idea_id_senti) {
-            document.getElementById("box_header").innerHTML = "Please select emotion and sentiment from the same category";
-        }
-
         divMove();
     }
 
@@ -2159,7 +1332,6 @@ function sentiment_rows(salesData, svg_id, div_id, idea_id) {
         .attr("style", "position:absolute")
         .attr("style", "z-index:30");
 
-
     rectTooltipg.append("rect")
         .attr("id", "recttooltipRect_" + mainDivName)
         .attr("x", 0)
@@ -2214,603 +1386,3 @@ function sentiment_rows(salesData, svg_id, div_id, idea_id) {
         }
     };
 }
-
-// draw subjectivity
-function subjectivity_rows(salesData, svg_id, div_id, idea_id) {
-
-    var group = ["fact", "opinion"];
-    var parseDate = d3.timeFormat("%b-%Y");
-
-    var mainDiv = "#" + div_id;
-    var mainDivName = div_id;
-
-    salesData.forEach(function (d) {
-        d = type(d);
-    });
-    var layers = d3.stack()
-        .keys(group)
-        .offset(d3.stackOffsetDiverging)
-        (salesData);
-
-    var svg = d3.select("#" + svg_id),
-        margin = {
-            top: 0,
-            right: 0,
-            bottom: 0,
-            left: 0
-        },
-
-        width = +svg.attr("width") - 2,
-        height = +svg.attr("height");
-    if (width < 0) {
-        width = 0;
-    }
-
-    var x = d3.scaleLinear()
-        .rangeRound([margin.left, width - margin.right]);
-
-    x.domain([d3.min(layers, stackMin), d3.max(layers, stackMax)]);
-
-    var y = d3.scaleBand()
-        .rangeRound([height - margin.bottom, margin.top])
-        .padding(0.0);
-
-    y.domain(salesData.map(function (d) {
-        return d.date;
-    }))
-
-    function stackMin(layers) {
-        return d3.min(layers, function (d) {
-            return d[0];
-        });
-    }
-
-    function stackMax(layers) {
-        return d3.max(layers, function (d) {
-            return d[1];
-        });
-    }
-
-    var z = d3.scaleOrdinal(["#bfbfbf", "#4d4d4d"]);
-
-    var maing = svg.append("g")
-        .selectAll("g")
-        .data(layers);
-    var g = maing.enter().append("g")
-        // .attr("fill", function (d) {
-        //     return z(d.key);
-        // })
-        // .attr("style", "outline: solid;")
-        // .attr("style", "outline-color: #F2F2F2")
-        .style("cursor", "pointer");
-    var rect = g.selectAll("rect")
-        .data(function (d) {
-            d.forEach(function (d1) {
-                d1.key = d.key;
-                return d1;
-            });
-            return d;
-        })
-        .enter().append("rect")
-        .attr("data", function (d) {
-            var data = {};
-            data["key"] = d.key;
-            data["value"] = d.data[d.key];
-            var total = 0;
-            group.map(function (d1) {
-                total = total + d.data[d1]
-            });
-            data["total"] = total;
-            return JSON.stringify(data);
-        })
-        .attr("width", function (d) {
-            if (x(d[1]) - x(d[0]) - 2 < 0) {
-                return 0;
-            }
-            else {
-                return x(d[1]) - x(d[0]) - 2;
-            }
-        })
-        .attr("x", function (d) {
-            return x(d[0]);
-        })
-        .attr("y", function (d) {
-            return y(d.data.date);
-        })
-        .attr("fill", function (d) {
-            return z(d.key);
-        })
-        .attr("stroke", function (d) {
-            return z(d.key);
-        })
-        .attr("stroke-width", function (d) {
-            return "2px";
-        })
-        .attr("height", 25)
-        .attr("opacity", 0.8);
-    //.attr("height", y.bandwidth);
-
-    rect.on("mouseover", function () {
-        var currentEl = d3.select(this);
-        currentEl.attr("opacity", 1)
-        var fadeInSpeed = 120;
-        d3.select("#recttooltip_" + mainDivName)
-            .transition()
-            .duration(fadeInSpeed)
-            .style("opacity", function () {
-                return 1;
-            });
-        d3.select("#recttooltip_" + mainDivName).attr("transform", function (d) {
-            var mouseCoords = d3.mouse(this.parentNode);
-            var xCo = 0;
-            if (mouseCoords[0] + 10 >= width * 0.80) {
-                xCo = mouseCoords[0] - parseFloat(d3.selectAll("#recttooltipRect_" + mainDivName)
-                    .attr("width"));
-            } else {
-                xCo = mouseCoords[0] + 10;
-            }
-            var x = xCo;
-            var yCo = 0;
-            if (mouseCoords[0] + 10 >= width * 0.80) {
-                yCo = mouseCoords[1] + 10;
-            } else {
-                yCo = mouseCoords[1];
-            }
-            var x = xCo;
-            var y = yCo;
-            return "translate(" + x + "," + y + ")";
-        });
-        //CBT:calculate tooltips text
-        var tooltipData = JSON.parse(currentEl.attr("data"));
-        var tooltipsText = "";
-        d3.selectAll("#recttooltipText_" + mainDivName).text("");
-        var yPos = 0;
-        d3.selectAll("#recttooltipText_" + mainDivName).append("tspan").attr("x", 0).attr("y", yPos * 10).attr("dy", "1.9em").text(tooltipData.key + ":  " + tooltipData.value);
-        yPos = yPos + 1;
-        d3.selectAll("#recttooltipText_" + mainDivName).append("tspan").attr("x", 0).attr("y", yPos * 10).attr("dy", "1.9em").text("Total" + ":  " + tooltipData.total);
-        //CBT:calculate width of the text based on characters
-        var dims = helpers.getDimensions("recttooltipText_" + mainDivName);
-        d3.selectAll("#recttooltipText_" + mainDivName + " tspan")
-            .attr("x", dims.w + 4);
-
-        d3.selectAll("#recttooltipRect_" + mainDivName)
-            .attr("width", dims.w + 10)
-            .attr("height", dims.h + 20);
-
-    });
-
-    rect.on("mousemove", function () {
-        var currentEl = d3.select(this);
-        currentEl.attr("r", 7);
-        d3.selectAll("#recttooltip_" + mainDivName)
-            .attr("transform", function (d) {
-                var mouseCoords = d3.mouse(this.parentNode);
-                var xCo = 0;
-                if (mouseCoords[0] + 10 >= width * 0.80) {
-                    xCo = mouseCoords[0] - parseFloat(d3.selectAll("#recttooltipRect_" + mainDivName)
-                        .attr("width"));
-                } else {
-                    xCo = mouseCoords[0] + 10;
-                }
-                var x = xCo;
-                var yCo = 0;
-                if (mouseCoords[0] + 10 >= width * 0.80) {
-                    yCo = mouseCoords[1] + 10;
-                } else {
-                    yCo = mouseCoords[1];
-                }
-                var x = xCo;
-                var y = yCo;
-                return "translate(" + x + "," + y + ")";
-            });
-    });
-    rect.on("mouseout", function () {
-        var currentEl = d3.select(this);
-        currentEl.attr("opacity", function (d) {
-            if (cellHistory.sub_switch && cellHistory.sub_switch && cellHistory.prev_idea_id_sub == idea_id && cellHistory.prev_sub_color == z(d.key)) {
-                return 1
-            }
-            else {
-                return 0.8
-            }
-        })
-        d3.select("#recttooltip_" + mainDivName)
-            .style("opacity", function () {
-                return 0;
-            })
-            .attr("transform", function (d, i) {
-                // klutzy, but it accounts for tooltip padding which could push it onscreen
-                var x = -500;
-                var y = -500;
-                return "translate(" + x + "," + y + ")";
-            });
-    });
-
-    rect.on("click", clicked_subjectivity);
-
-    function clicked_subjectivity(d) {
-        var this_cell = d3.select(this)
-        filterobj.idea_id = idea_id
-        filterobj.subjectivity = d.key
-
-        if (cellHistory.prev_sub_cell) {
-            cellHistory.prev_sub_cell.attr("stroke", cellHistory.prev_sub_color)
-            cellHistory.prev_sub_cell.attr("opacity", 0.8)
-        }
-
-        // deselect cell (check if previously selected row and column selected. Remove the column filter and revert back to last row)
-        if (cellHistory.sub_switch && cellHistory.prev_sub == d.key && cellHistory.prev_idea_id_sub == idea_id) {
-            filterobj.subjectivity = null
-            filterobj.idea_id = cellHistory.prev_idea_id
-            cellHistory.sub_switch = false
-            if (animate_trigger) {
-                animatedDivs();
-            }
-
-        }
-        else {
-            this_cell.attr("stroke", "black")
-            this_cell.attr("opacity", 1)
-            cellHistory.sub_switch = true
-            if (animate_trigger) {
-                animatedDivs();
-            }
-
-        }
-
-        //console.log(filterobj)
-
-        var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(raw_json)), filterobj)
-        draw_filtered_comments(filtered_comment, raw_json)
-        if (check_empty() == true) {
-            document.getElementById("box_header").innerHTML = "Click on a Proposal, Topic, Emotion or Sentiment to see related comments"
-        }
-        else {
-            document.getElementById("box_header").innerHTML = ""
-        }
-        cellHistory.prev_sub_cell = this_cell
-        cellHistory.prev_idea_id_sub = idea_id
-        cellHistory.prev_idea_id = idea_id
-        cellHistory.prev_sub = d.key
-        cellHistory.prev_sub_color = z(d.key)
-
-        $("#parentBox").animate({ scrollTop: 0 }, 1000);
-
-        divMove();
-    }
-
-    var rectTooltipg = svg.append("g")
-        .attr("font-family", "sans-serif")
-        .attr("font-size", 10)
-        .attr("text-anchor", "end")
-        .attr("id", "recttooltip_" + mainDivName)
-        .attr("style", "opacity:0")
-        .attr("transform", "translate(-500,-500)")
-        .attr("style", "position:absolute")
-        .attr("style", "z-index:30");;
-
-    rectTooltipg.append("rect")
-        .attr("id", "recttooltipRect_" + mainDivName)
-        .attr("x", 0)
-        .attr("width", 120)
-        .attr("height", 80)
-        .attr("opacity", 0.7)
-        .style("fill", "#000000");
-
-    rectTooltipg
-        .append("text")
-        .attr("id", "recttooltipText_" + mainDivName)
-        .attr("x", 30)
-        .attr("y", 15)
-        .attr("fill", function () {
-            return "#fff"
-        })
-        .style("font-size", function (d) {
-            return 10;
-        })
-        .style("font-family", function (d) {
-            return "arial";
-        })
-        .text(function (d, i) {
-            return "";
-        });
-
-
-    function type(d) {
-        //d.date = parseDate(new Date(d.date));
-        group.forEach(function (c) {
-            d[c] = +d[c];
-        });
-        return d;
-    }
-
-    var helpers = {
-        getDimensions: function (id) {
-            var el = document.getElementById(id);
-            var w = 0,
-                h = 0;
-            if (el) {
-                var dimensions = el.getBBox();
-                w = dimensions.width;
-                h = dimensions.height;
-            } else {
-                console.log("error: getDimensions() " + id + " not found.");
-            }
-            return {
-                w: w,
-                h: h
-            };
-        }
-    };
-}
-
-// draw profanity
-function profanity_rows(salesData, svg_id, div_id, idea_id) {
-
-    //console.log(salesData)
-    var group = ["very_low", "low", "medium", "high", "very_high"];
-    var parseDate = d3.timeFormat("%b-%Y");
-    var mainDiv = "#" + div_id;
-    var mainDivName = div_id;
-
-    salesData.forEach(function (d) {
-        d = type(d);
-    });
-    var layers = d3.stack()
-        .keys(group)
-        .offset(d3.stackOffsetDiverging)
-        (salesData);
-
-    var svg = d3.select("#" + svg_id),
-        margin = {
-            top: 0,
-            right: 0,
-            bottom: 0,
-            left: 0
-        },
-
-        width = +svg.attr("width") - 2,
-        height = +svg.attr("height");
-    if (width < 0) {
-        width = 0;
-    }
-
-    var x = d3.scaleLinear()
-        .rangeRound([margin.left, width - margin.right]);
-
-    x.domain([d3.min(layers, stackMin), d3.max(layers, stackMax)]);
-
-    var y = d3.scaleBand()
-        .rangeRound([height - margin.bottom, margin.top])
-        .padding(0.0);
-
-    y.domain(salesData.map(function (d) {
-        return d.date;
-    }))
-
-    function stackMin(layers) {
-        return d3.min(layers, function (d) {
-            return d[0];
-        });
-    }
-
-    function stackMax(layers) {
-        return d3.max(layers, function (d) {
-            return d[1];
-        });
-    }
-
-    var z = d3.scaleOrdinal(["#B3CCE6", "#8CB1D9", "#6697CC", "#407DBF", "#264B73"]);
-
-    var maing = svg.append("g")
-        .selectAll("g")
-        .data(layers);
-    var g = maing.enter().append("g")
-        .attr("fill", function (d) {
-            return z(d.key);
-        })
-    // .attr("style", "outline: solid;")
-    // .attr("style", "outline-color: #F2F2F2");
-
-    var rect = g.selectAll("rect")
-        .data(function (d) {
-            d.forEach(function (d1) {
-                d1.key = d.key;
-                return d1;
-            });
-            return d;
-        })
-        .enter().append("rect")
-        .attr("data", function (d) {
-            var data = {};
-            data["key"] = d.key;
-            data["value"] = d.data[d.key];
-            var total = 0;
-            group.map(function (d1) {
-                total = total + d.data[d1]
-            });
-            data["total"] = total;
-            return JSON.stringify(data);
-        })
-        .attr("width", function (d) {
-            if (x(d[1]) - x(d[0]) - 2 < 0) {
-                return 0;
-            }
-            else {
-                return x(d[1]) - x(d[0]) - 2;
-            }
-        })
-        .attr("x", function (d) {
-            return x(d[0]);
-        })
-        .attr("y", function (d) {
-            return y(d.data.date);
-        })
-        .style("fill", function (d) {
-
-        })
-        .attr("height", 25);
-    //.attr("height", y.bandwidth);
-
-    rect.on("mouseover", function () {
-        var currentEl = d3.select(this);
-        var fadeInSpeed = 120;
-        d3.select("#recttooltip_" + mainDivName)
-            .transition()
-            .duration(fadeInSpeed)
-            .style("opacity", function () {
-                return 1;
-            });
-        d3.select("#recttooltip_" + mainDivName).attr("transform", function (d) {
-            var mouseCoords = d3.mouse(this.parentNode);
-            var xCo = 0;
-            if (mouseCoords[0] + 10 >= width * 0.80) {
-                xCo = mouseCoords[0] - parseFloat(d3.selectAll("#recttooltipRect_" + mainDivName)
-                    .attr("width"));
-            } else {
-                xCo = mouseCoords[0] + 10;
-            }
-            var x = xCo;
-            var yCo = 0;
-            if (mouseCoords[0] + 10 >= width * 0.80) {
-                yCo = mouseCoords[1] + 10;
-            } else {
-                yCo = mouseCoords[1];
-            }
-            var x = xCo;
-            var y = yCo;
-            return "translate(" + x + "," + y + ")";
-        });
-        //CBT:calculate tooltips text
-        var tooltipData = JSON.parse(currentEl.attr("data"));
-        var tooltipsText = "";
-        d3.selectAll("#recttooltipText_" + mainDivName).text("");
-        var yPos = 0;
-        d3.selectAll("#recttooltipText_" + mainDivName).append("tspan").attr("x", 0).attr("y", yPos * 10).attr("dy", "1.9em").text(tooltipData.key + ":  " + tooltipData.value);
-        yPos = yPos + 1;
-        d3.selectAll("#recttooltipText_" + mainDivName).append("tspan").attr("x", 0).attr("y", yPos * 10).attr("dy", "1.9em").text("Total" + ":  " + tooltipData.total);
-        //CBT:calculate width of the text based on characters
-        var dims = helpers.getDimensions("recttooltipText_" + mainDivName);
-        d3.selectAll("#recttooltipText_" + mainDivName + " tspan")
-            .attr("x", dims.w + 4);
-
-        d3.selectAll("#recttooltipRect_" + mainDivName)
-            .attr("width", dims.w + 10)
-            .attr("height", dims.h + 20);
-    });
-
-    rect.on("mousemove", function () {
-        var currentEl = d3.select(this);
-        currentEl.attr("r", 7);
-        d3.selectAll("#recttooltip_" + mainDivName)
-            .attr("transform", function (d) {
-                var mouseCoords = d3.mouse(this.parentNode);
-                var xCo = 0;
-                if (mouseCoords[0] + 10 >= width * 0.80) {
-                    xCo = mouseCoords[0] - parseFloat(d3.selectAll("#recttooltipRect_" + mainDivName)
-                        .attr("width"));
-                } else {
-                    xCo = mouseCoords[0] + 10;
-                }
-                var x = xCo;
-                var yCo = 0;
-                if (mouseCoords[0] + 10 >= width * 0.80) {
-                    yCo = mouseCoords[1] + 10;
-                } else {
-                    yCo = mouseCoords[1];
-                }
-                var x = xCo;
-                var y = yCo;
-                return "translate(" + x + "," + y + ")";
-            });
-    });
-    rect.on("mouseout", function () {
-        var currentEl = d3.select(this);
-        d3.select("#recttooltip_" + mainDivName)
-            .style("opacity", function () {
-                return 0;
-            })
-            .attr("transform", function (d, i) {
-                // klutzy, but it accounts for tooltip padding which could push it onscreen
-                var x = -500;
-                var y = -500;
-                return "translate(" + x + "," + y + ")";
-            });
-    });
-
-    //clicking on the rectangles for profanity // mjasim - discuss if it needs to be implemented
-    rect.on("click", clicked_profanity);
-
-    function clicked_profanity(d) {
-    }
-
-    var rectTooltipg = svg.append("g")
-        .attr("font-family", "sans-serif")
-        .attr("font-size", 10)
-        .attr("text-anchor", "end")
-        .attr("id", "recttooltip_" + mainDivName)
-        .attr("style", "opacity:0")
-        .attr("transform", "translate(-500,-500)")
-        .attr("style", "position:absolute")
-        .attr("style", "z-index:30");
-
-    rectTooltipg.append("rect")
-        .attr("id", "recttooltipRect_" + mainDivName)
-        .attr("x", 0)
-        .attr("width", 120)
-        .attr("height", 80)
-        .attr("opacity", 0.7)
-        .style("fill", "#000000");
-
-    rectTooltipg
-        .append("text")
-        .attr("id", "recttooltipText_" + mainDivName)
-        .attr("x", 30)
-        .attr("y", 15)
-        .attr("fill", function () {
-            return "#fff"
-        })
-        .style("font-size", function (d) {
-            return 10;
-        })
-        .style("font-family", function (d) {
-            return "arial";
-        })
-        .text(function (d, i) {
-            return "";
-        });
-
-
-    function type(d) {
-        //d.date = parseDate(new Date(d.date));
-        group.forEach(function (c) {
-            d[c] = +d[c];
-        });
-        return d;
-    }
-
-    var helpers = {
-        getDimensions: function (id) {
-            var el = document.getElementById(id);
-            var w = 0,
-                h = 0;
-            if (el) {
-                var dimensions = el.getBBox();
-                w = dimensions.width;
-                h = dimensions.height;
-            } else {
-                console.log("error: getDimensions() " + id + " not found.");
-            }
-            return {
-                w: w,
-                h: h
-            };
-        }
-    };
-}
-
-
-
-
-
-
