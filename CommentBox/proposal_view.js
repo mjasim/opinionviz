@@ -91,7 +91,7 @@ function draw_proposal_wise_comments(json, idea_id) {
 
 // Get filtered comments
 function get_filtered_comment(json, filterobj) {
-    // console.log(json, filterobj)
+    console.log("get filtered comment", filterobj)
     var ideas = []
     for (var i in json["ideas"]) {
         if (filterobj.idea_id != null && json.ideas[i].id != filterobj.idea_id) {
@@ -136,10 +136,20 @@ function get_filtered_comment(json, filterobj) {
                 //console.log(flag, topicFilter)
                 //console.log("yolo")
 
+                if (flag && filterobj.cloudkey != null) {
+                    // console.log("inside cloud loop", filterobj)
+                    if (!(json.ideas[i].tasks[j].comments[k].comment.includes(filterobj.cloudkey))) {
+                        // console.log(json.ideas[i].tasks[j].comments[k].comment)
+                        flag = false
+
+                        // console.log(json.ideas[i].tasks[j].comments[k].comment.includes(filterobj.cloudkey))
+
+                    }
+                }
 
                 if (flag) {
                     comments.push(json.ideas[i].tasks[j].comments[k])
-                    //console.log("yolo")
+                    // console.log("yolo")
                 }
             }
             if (comments.length) {
@@ -434,7 +444,6 @@ function emojiMouseClick(id) {
 
     // console.log(currentJSON)
     //after revising do this
-
 }
 
 

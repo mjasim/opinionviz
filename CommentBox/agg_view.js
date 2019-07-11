@@ -3,28 +3,21 @@ var filterobj = {
     emotion: null,
     idea_id: null,
     task_id: null,
-    topic: []
+    topic: [],
+    cloudkey: null
 }
+
+selected_cloud = "";
 
 var selected_sort = ["participants", "comments", "angry", "worried", "sad", "happy", "excited", "negative", "neutral", "positive"];
 var current_sort = ""
-
-// global variable to track active ideas
-// selected_rows = Array.apply(null, Array(36))
+var sort_opt = 0
+var sort_opt_emo = 0
 selected_row = ""
 prev_row = ""
-//selected_rows_stack = []
-
-// global variable to track active topics
-// selected_topics = Array.apply(null, Array(36))
-// for (var i = 0; i < selected_topics.length; i++) {
-//     selected_topics[i] = Array.apply(null, Array(7))
-// }
 
 selected_topic = ""
 prev_topic = ""
-
-// var topic_row_length = 0
 
 // global variable to maintain filter selection
 var cellHistory = {
@@ -47,7 +40,6 @@ function check_empty() {
     } else {
         return true;
     }
-
 }
 
 function divMove() {
@@ -61,35 +53,6 @@ function divMove() {
     }
 }
 
-// function animatedDivs() {
-//     if (!filterobj.idea_id && (filterobj.emotion || filterobj.sentiment_final)) {
-//         draw_view();
-//         document.getElementById("aggregateDiv").setAttribute("style", "height:0px")
-//         document.getElementById("parentBox").setAttribute("style", "height:80vh")
-//         $("#parentBox").animate({ scrollTop: 0 }, 1000);
-//         $("#aggregateDiv").animate({ scrollTop: 0 }, 1000);
-//     }
-//     else if (!filterobj.idea_id && !filterobj.emotion && !filterobj.sentiment_final) {
-//         //draw_view();
-//         document.getElementById("aggregateDiv").setAttribute("style", "height:80vh")
-//         document.getElementById("parentBox").setAttribute("style", "height:50px")
-//     }
-//     else if (filterobj.idea_id) {
-//         temp = get_proposal_names(raw_json)
-//         for (var i = 0; i < temp.length; i++) {
-//             if (temp[i].idea_id == filterobj.idea_id) {
-//                 one_row = i
-//             }
-//         }
-//         draw_one_row(one_row)
-//         document.getElementById(filterobj.idea_id).parentElement.parentElement.scrollIntoView({ block: 'start' });
-//         document.getElementById("aggregateDiv").setAttribute("style", "height:50px")
-//         document.getElementById("parentBox").setAttribute("style", "height:80vh")
-//         $("#parentBox").animate({ scrollTop: 0 }, 1000);
-//         //document.getElementById("emo_cell").setAttribute("style", "stroke:red");
-//     }
-// }
-
 d3.json("communitycrit_revised.json", function (err, myjson) {
     raw_json = JSON.parse(JSON.stringify(myjson))
     prop_json = JSON.parse(JSON.stringify(myjson))
@@ -97,9 +60,7 @@ d3.json("communitycrit_revised.json", function (err, myjson) {
     draw_view(raw_json)
     //var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(json)), filterobj)
     //draw_filtered_comments(filtered_comment, json)
-    if (animate_trigger) {
-        animatedDivs()
-    }
+
     if (check_empty() == true) {
         //console.log(document.getElementById("box_header"))
         document.getElementById("box_header").innerHTML = "Click on a Proposal, Topic or Emotionto see related comments"
@@ -127,12 +88,13 @@ function draw_view(json) {
     }
 
     var numberOfRows = 19;
-    var numberOfColumns = 5;
+    var numberOfColumns = 6;
 
     var proposal_names = get_proposal_names(json)
     var proposal_wise_emotion_agg = get_proposal_wise_emotion(json)
     var proposal_wise_serial = get_serial_number(json)
     var proposal_wise_topic_agg = get_proposal_wise_topic(json)
+    var proposal_wise_cloudword_agg = get_proposal_wise_cloudwords(json)
 
     // backup data
     this.data = json
@@ -178,7 +140,7 @@ function draw_view(json) {
 
     // ========================= label column 2 =================================//
 
-    // label and search bars for topics
+    // label and search bars for info
     var labelColumn2Div = document.createElement("div")
     labelColumn2Div.id = "labelcolumn2"
     labelColumn2Div.className = "l_column2"
@@ -190,12 +152,12 @@ function draw_view(json) {
         "<div class=\"label-info-body\"" + ">" +
         "<p>" + "Participants" + "</p>" +
         "<p>" + '<span class="label-info-button" id="span_id_participants" >' +
-        "<i class=" + "\"fas fa-user fa-lg label_icons\"" + "></i>" +
+        "<i class=" + "\"fas fa-user fa-lg label_icons\"" + "></i>" + "\xa0" +
         "<i class=" + "\"fas fa-sort-amount-down fa-lg label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-info-body\"" + "\">" +
         "<p>" + "Comments" + "</p>" +
         "<p>" + '<span class="label-info-button" id="span_id_comments" >' +
-        "<i class=" + "\"fas fa-comment-alt fa-lg label_icons\"" + "></i>" +
+        "<i class=" + "\"fas fa-comment-alt fa-lg label_icons\"" + "></i>" + "\xa0" +
         "<i class=" + "\"fas fa-sort-amount-down fa-lg label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>";
     // "<div class=\"label-title-body\"" + ">" + "</p>" + "</div>"
     //    "<p style=\"margin: 5px 0px 5px 0px;font-size:3em;color:#337AB7\"" + ">" + "78\xa0" + "</p>" + "</div>";
@@ -225,13 +187,32 @@ function draw_view(json) {
     //============================ label column 3 end =====================//
 
 
-
     // =========================== label column 4 ===============================//
 
-    // labels and icons for emotions
+    // label and search bars for topics
     var labelColumn4Div = document.createElement("div")
     labelColumn4Div.id = "labelcolumn4"
     labelColumn4Div.className = "l_column4"
+
+    var divCaption =
+        "<div class=\"label-body\"" + "\">" +
+        "<div class=\"label-title\"" + ">" +
+        "<p style=\"margin: 5px 0px 5px 0px;font-size:1.5em;\"" + ">" + "Word Clouds" + "</p>" + "</div>" +
+        "<div class=\"label-title-body\"" + ">" + "</p>" + "</div>"
+    //    "<p style=\"margin: 5px 0px 5px 0px;font-size:3em;color:#337AB7\"" + ">" + "78\xa0" + "</p>" + "</div>";
+
+    labelColumn4Div.innerHTML = divCaption
+    labelElement.appendChild(labelColumn4Div)
+
+
+    //============================ label column 4 end ==========================//
+
+    // =========================== label column 5 ===============================//
+
+    // labels and icons for emotions
+    var labelColumn5Div = document.createElement("div")
+    labelColumn5Div.id = "labelcolumn5"
+    labelColumn5Div.className = "l_column5"
 
     var divCaption =
         "<div class=\"label-body\"" + "\">" +
@@ -242,61 +223,61 @@ function draw_view(json) {
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Excited" + "</p>" +
         "<p>" + '<span class="label-emo-button" id="span_id_excited" >' +
-        "<i class=" + "\"fas fa-smile-beam fa-2x label_icons\"" + "></i>" +
+        "<i class=" + "\"fas fa-smile-beam fa-2x label_icons\"" + "></i>" + "\xa0" +
         "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
         '</span>' + "</p>" + "</div>" +
 
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Happy" + "</p>" +
         "<p>" + '<span class="label-emo-button" id="span_id_happy" >' +
-        "<i class=" + "\"fas fa-smile fa-2x label_icons\"" + "></i>" +
+        "<i class=" + "\"fas fa-smile fa-2x label_icons\"" + "></i>" + "\xa0" +
         "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
         '</span>' + "</p>" + "</div>" +
 
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Sad" + "</p>" +
         "<p>" + '<span class="label-emo-button" id="span_id_sad" >' +
-        "<i class=" + "\"fas fa-frown fa-2x label_icons\"" + "></i>" +
+        "<i class=" + "\"fas fa-frown fa-2x label_icons\"" + "></i>" + "\xa0" +
         "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
         '</span>' + "</p>" + "</div>" +
 
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Worried" + "</p>" +
         "<p>" + '<span class="label-emo-button" id="span_id_worried" >' +
-        "<i class=" + "\"fas fa-flushed fa-2x label_icons\"" + "></i>" +
+        "<i class=" + "\"fas fa-flushed fa-2x label_icons\"" + "></i>" + "\xa0" +
         "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
         '</span>' + "</p>" + "</div>" +
 
         "<div class=\"label-emo-body\"" + ">" +
         "<p>" + "Angry" + "</p>" +
         "<p>" + '<span class="label-emo-button" id="span_id_angry" >' +
-        "<i class=" + "\"fas fa-angry fa-2x label_icons\"" + "></i>" +
+        "<i class=" + "\"fas fa-angry fa-2x label_icons\"" + "></i>" + "\xa0" +
         "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
         '</span>' + "</p>" + "</div>" +
 
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Positive" + "</p>" +
         "<p>" + '<span class="label-emo-button" id="span_id_positive" >' +
-        "<i class=" + "\"fas fa-thumbs-up fa-2x label_icons\"" + "></i>" +
+        "<i class=" + "\"fas fa-thumbs-up fa-2x label_icons\"" + "></i>" + "\xa0" +
         "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
         '</span>' + "</p>" + "</div>" +
 
         "<div class=\"label-emo-body\"" + "\">" +
         "<p>" + "Neutral" + "</p>" +
         "<p>" + '<span class="label-emo-button" id="span_id_neutral" >' +
-        "<i class=" + "\"far fa-thumbs-down fa-2x neutral label_icons\"" + " style=transform:rotate(-90deg)" + "></i>" +
+        "<i class=" + "\"far fa-thumbs-down fa-2x neutral label_icons\"" + " style=transform:rotate(-90deg)" + "></i>" + "\xa0" +
         "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
         '</span>' + "</p>" + "</div>" +
 
         "<div class=\"label-emo-body\"" + ">" +
         "<p>" + "Negative" + "</p>" +
         "<p>" + '<span class="label-emo-button" id="span_id_negative" >' +
-        "<i class=" + "\"fas fa-thumbs-down fa-2x label_icons\"" + "></i>" +
+        "<i class=" + "\"fas fa-thumbs-down fa-2x label_icons\"" + "></i>" + "\xa0" +
         "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
         '</span>' + "</p>" + "</div>";
 
-    labelColumn4Div.innerHTML = divCaption
-    labelElement.appendChild(labelColumn4Div)
+    labelColumn5Div.innerHTML = divCaption
+    labelElement.appendChild(labelColumn5Div)
     //setTippy("span_id_angry", null);
 
 
@@ -374,7 +355,7 @@ function draw_view(json) {
         //============================end of column 1==================//
 
 
-        // column with proposal wise topics
+        // column with proposal wise stats
         var divTopicName = "<div class=\"info-body\"" + "\">"
         var column2 = document.getElementById("row" + i + "-column2")
         //console.log(proposal_wise_topic_agg)
@@ -392,11 +373,12 @@ function draw_view(json) {
             '</span>' +
             "</div>";
 
-        topic_row_length = 0
         column2.innerHTML = buttons
 
 
         //============================ column 3 =========================//
+
+        topic_row_length = 0
 
         // column with proposal wise topics
         var divTopicName = "<div class=\"topic-body\"" + "\">"
@@ -405,7 +387,7 @@ function draw_view(json) {
         for (var j = 0; j < proposal_wise_topic_agg[i].length; j++) {
             topic_row_length += proposal_wise_topic_agg[i][j].topic_keyphrase.length
             //console.log(proposal_wise_topic_agg[i][j].topic_keyphrase, topic_row_length)
-            if (topic_row_length > column3.clientWidth / 10) {
+            if (topic_row_length > column3.clientWidth / 9) {
                 break;
             } else {
                 divTopicName = divTopicName +
@@ -421,13 +403,29 @@ function draw_view(json) {
 
         //============================ column 4 =========================//
 
-        // column with proposal wise emotions
+        // column with proposal wise wcloud
+        var divTopicName = "<div class=\"wcloud-body\"" + "\">"
         var column4 = document.getElementById("row" + i + "-column4")
-        var svg_id = "svg" + "row" + i + "-column4"
+        //console.log(proposal_wise_topic_agg)
+
+        var wcloud_buttons = '<span class="wcloud_button" id="span_id_wcloud_' + proposal_names[i].idea_id + '">' +
+            "<i class=" + "\"fas fa-cloud fa-lg\"" + "style=color:#2C485B" + "></i>" + "\xa0" + "</div>"
+
+        column4.innerHTML = wcloud_buttons
+
+        cloudTippy("span_id_wcloud_" + proposal_names[i].idea_id);
+
+        //============================ column 4 end =====================//
+
+        //============================ column 5 =========================//
+
+        // column with proposal wise emotions
+        var column5 = document.getElementById("row" + i + "-column5")
+        var svg_id = "svg" + "row" + i + "-column5"
         send_data = []
         send_data.push(proposal_wise_emotion_agg[i])
-        console.log(send_data)
-        emotion_rows(send_data, svg_id, column4.id, proposal_names[i].idea_id)
+        // console.log(send_data)
+        emotion_rows(send_data, svg_id, column5.id, proposal_names[i].idea_id)
 
 
         //============================end of column 4==================//
@@ -439,41 +437,567 @@ function draw_view(json) {
             var id = $(this).attr('id');
             console.log("inside iconClick", id)
 
-            if (id.split("_")[2] == current_sort) {
-                current_sort = "";
-                console.log("here")
-                selected_rows = Array.apply(null, Array(36));
-                console.log(raw_json)
-                draw_view(raw_json)
-                prop_json = raw_json;
+            // if (id.split("_")[2] == current_sort) {
+            //     current_sort = "";
+            //     console.log("here")
+            //     selected_rows = Array.apply(null, Array(36));
+            //     // console.log(raw_json)
+            //     draw_view(raw_json)
+            //     prop_json = raw_json;
 
-                for (var i = 0; i < selected_sort.length; i++) {
-                    document.getElementById("span_id_" + selected_sort[i]).setAttribute("style", "opacity:0.8")
-                    // console.log("span_id_"+selected_sort[i])
-                }
-                logInteraction('click, sortby, ' + id.split("_")[2]);
-                selected_rows = Array.apply(null, Array(36));
+            //     for (var i = 0; i < selected_sort.length; i++) {
+            //         document.getElementById("span_id_" + selected_sort[i]).setAttribute("style", "opacity:0.8")
+            //         // console.log("span_id_"+selected_sort[i])
+            //     }
+            //     logInteraction('click, sortby, ' + id.split("_")[2]);
+            //     selected_rows = Array.apply(null, Array(36));
 
-                document.getElementById("box_header").innerHTML = "";
+            //     document.getElementById("box_header").innerHTML = "";
 
-                selected_rows_stack = [];
+            //     selected_rows_stack = [];
+
+            //     var myNode = document.getElementById("parentBox");
+            //     while (myNode.firstChild) {
+            //         myNode.removeChild(myNode.firstChild);
+            //     }
+
+            // }
+            if (sort_opt_emo == 2) {
+                this_emo = id.split("_")[2] + "_normalized"
+
+                current_sort = id.split("_")[2];
+
+                var x = (JSON.parse(JSON.stringify(raw_json)));
+                // console.log(x)
+                var emo_agg = get_proposal_wise_emotion(x)
+                // console.log(emo_agg)
+
+                // emo_agg.sort((function (a, b) {
+                //     // console.log(parseFloat(b[this_emo]) - parseFloat(a[this_emo]))
+                //     return parseFloat(a[this_emo]) - parseFloat(b[this_emo])
+                // }))
+
+                // var id_keys = []
+                // for (var i = 0; i < emo_agg.length; i++) {
+                //     id_keys.push(emo_agg[i].key)
+                // }
+
+                // var show_this = []
+                // for (var i = 0; i < id_keys.length; i++) {
+                //     for (var j = 0; j < raw_json["ideas"].length; j++) {
+                //         //console.log(json.ideas[j].id, id_keys[i])
+
+                //         if (raw_json.ideas[j].id == id_keys[i]) {
+                //             //console.log(json.ideas[i])
+                //             show_this.push(raw_json.ideas[j])
+                //         }
+                //     }
+                // }
+                // sorted_ideas = {
+                //     "ideas": show_this
+                // }
+
+                // draw_view(x)
+                // prop_json = sorted_ideas;
+                document.getElementById("box_header").innerHTML = "Click on a Proposal, Topic or Emotionto see related comments";
 
                 var myNode = document.getElementById("parentBox");
                 while (myNode.firstChild) {
                     myNode.removeChild(myNode.firstChild);
                 }
 
-            } else {
+                //console.log(selected_sort)
+                for (var i = 0; i < selected_sort.length; i++) {
+                    document.getElementById("span_id_" + selected_sort[i]).setAttribute("style", "opacity:0.8")
+                    // console.log("span_id_"+selected_sort[i])
+                }
+
+                if (id == "span_id_excited") {
+                    var labelColumn5Div = document.getElementById("labelcolumn5")
+
+                    var divCaption =
+                        "<div class=\"label-body\"" + "\">" +
+                        "<div class=\"label-title\"" + ">" +
+
+                        "<p style=\"margin: 5px 0px 5px 0px;font-size:1.5em;\"" + ">" + "Emotion" + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Excited" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_excited" >' +
+                        "<i class=" + "\"fas fa-smile-beam fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Happy" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_happy" >' +
+                        "<i class=" + "\"fas fa-smile fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Sad" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_sad" >' +
+                        "<i class=" + "\"fas fa-frown fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Worried" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_worried" >' +
+                        "<i class=" + "\"fas fa-flushed fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + ">" +
+                        "<p>" + "Angry" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_angry" >' +
+                        "<i class=" + "\"fas fa-angry fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Positive" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_positive" >' +
+                        "<i class=" + "\"fas fa-thumbs-up fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Neutral" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_neutral" >' +
+                        "<i class=" + "\"far fa-thumbs-down fa-2x neutral label_icons\"" + " style=transform:rotate(-90deg)" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + ">" +
+                        "<p>" + "Negative" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_negative" >' +
+                        "<i class=" + "\"fas fa-thumbs-down fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>";
+
+                    labelColumn5Div.innerHTML = divCaption
+                } else if (id == "span_id_happy") {
+                    var labelColumn5Div = document.getElementById("labelcolumn5")
+
+                    var divCaption =
+                        "<div class=\"label-body\"" + "\">" +
+                        "<div class=\"label-title\"" + ">" +
+
+                        "<p style=\"margin: 5px 0px 5px 0px;font-size:1.5em;\"" + ">" + "Emotion" + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Excited" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_excited" >' +
+                        "<i class=" + "\"fas fa-smile-beam fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Happy" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_happy" >' +
+                        "<i class=" + "\"fas fa-smile fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Sad" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_sad" >' +
+                        "<i class=" + "\"fas fa-frown fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Worried" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_worried" >' +
+                        "<i class=" + "\"fas fa-flushed fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + ">" +
+                        "<p>" + "Angry" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_angry" >' +
+                        "<i class=" + "\"fas fa-angry fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Positive" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_positive" >' +
+                        "<i class=" + "\"fas fa-thumbs-up fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Neutral" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_neutral" >' +
+                        "<i class=" + "\"far fa-thumbs-down fa-2x neutral label_icons\"" + " style=transform:rotate(-90deg)" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + ">" +
+                        "<p>" + "Negative" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_negative" >' +
+                        "<i class=" + "\"fas fa-thumbs-down fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>";
+
+                    labelColumn5Div.innerHTML = divCaption
+                } else if (id == "span_id_sad") {
+                    var labelColumn5Div = document.getElementById("labelcolumn5")
+
+                    var divCaption =
+                        "<div class=\"label-body\"" + "\">" +
+                        "<div class=\"label-title\"" + ">" +
+
+                        "<p style=\"margin: 5px 0px 5px 0px;font-size:1.5em;\"" + ">" + "Emotion" + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Excited" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_excited" >' +
+                        "<i class=" + "\"fas fa-smile-beam fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Happy" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_happy" >' +
+                        "<i class=" + "\"fas fa-smile fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Sad" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_sad" >' +
+                        "<i class=" + "\"fas fa-frown fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Worried" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_worried" >' +
+                        "<i class=" + "\"fas fa-flushed fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + ">" +
+                        "<p>" + "Angry" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_angry" >' +
+                        "<i class=" + "\"fas fa-angry fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Positive" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_positive" >' +
+                        "<i class=" + "\"fas fa-thumbs-up fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Neutral" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_neutral" >' +
+                        "<i class=" + "\"far fa-thumbs-down fa-2x neutral label_icons\"" + " style=transform:rotate(-90deg)" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + ">" +
+                        "<p>" + "Negative" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_negative" >' +
+                        "<i class=" + "\"fas fa-thumbs-down fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>";
+
+                    labelColumn5Div.innerHTML = divCaption
+                } else if (id == "span_id_worried") {
+                    var labelColumn5Div = document.getElementById("labelcolumn5")
+
+                    var divCaption =
+                        "<div class=\"label-body\"" + "\">" +
+                        "<div class=\"label-title\"" + ">" +
+
+                        "<p style=\"margin: 5px 0px 5px 0px;font-size:1.5em;\"" + ">" + "Emotion" + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Excited" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_excited" >' +
+                        "<i class=" + "\"fas fa-smile-beam fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Happy" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_happy" >' +
+                        "<i class=" + "\"fas fa-smile fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Sad" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_sad" >' +
+                        "<i class=" + "\"fas fa-frown fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Worried" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_worried" >' +
+                        "<i class=" + "\"fas fa-flushed fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + ">" +
+                        "<p>" + "Angry" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_angry" >' +
+                        "<i class=" + "\"fas fa-angry fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Positive" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_positive" >' +
+                        "<i class=" + "\"fas fa-thumbs-up fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Neutral" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_neutral" >' +
+                        "<i class=" + "\"far fa-thumbs-down fa-2x neutral label_icons\"" + " style=transform:rotate(-90deg)" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + ">" +
+                        "<p>" + "Negative" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_negative" >' +
+                        "<i class=" + "\"fas fa-thumbs-down fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>";
+
+                    labelColumn5Div.innerHTML = divCaption
+                } else if (id == "span_id_angry") {
+                    var labelColumn5Div = document.getElementById("labelcolumn5")
+
+                    var divCaption =
+                        "<div class=\"label-body\"" + "\">" +
+                        "<div class=\"label-title\"" + ">" +
+
+                        "<p style=\"margin: 5px 0px 5px 0px;font-size:1.5em;\"" + ">" + "Emotion" + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Excited" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_excited" >' +
+                        "<i class=" + "\"fas fa-smile-beam fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Happy" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_happy" >' +
+                        "<i class=" + "\"fas fa-smile fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Sad" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_sad" >' +
+                        "<i class=" + "\"fas fa-frown fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Worried" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_worried" >' +
+                        "<i class=" + "\"fas fa-flushed fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + ">" +
+                        "<p>" + "Angry" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_angry" >' +
+                        "<i class=" + "\"fas fa-angry fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Positive" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_positive" >' +
+                        "<i class=" + "\"fas fa-thumbs-up fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Neutral" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_neutral" >' +
+                        "<i class=" + "\"far fa-thumbs-down fa-2x neutral label_icons\"" + " style=transform:rotate(-90deg)" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + ">" +
+                        "<p>" + "Negative" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_negative" >' +
+                        "<i class=" + "\"fas fa-thumbs-down fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>";
+
+                    labelColumn5Div.innerHTML = divCaption
+                } else if (id == "span_id_positive") {
+                    var labelColumn5Div = document.getElementById("labelcolumn5")
+
+                    var divCaption =
+                        "<div class=\"label-body\"" + "\">" +
+                        "<div class=\"label-title\"" + ">" +
+
+                        "<p style=\"margin: 5px 0px 5px 0px;font-size:1.5em;\"" + ">" + "Emotion" + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Excited" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_excited" >' +
+                        "<i class=" + "\"fas fa-smile-beam fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Happy" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_happy" >' +
+                        "<i class=" + "\"fas fa-smile fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Sad" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_sad" >' +
+                        "<i class=" + "\"fas fa-frown fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Worried" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_worried" >' +
+                        "<i class=" + "\"fas fa-flushed fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + ">" +
+                        "<p>" + "Angry" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_angry" >' +
+                        "<i class=" + "\"fas fa-angry fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Positive" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_positive" >' +
+                        "<i class=" + "\"fas fa-thumbs-up fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Neutral" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_neutral" >' +
+                        "<i class=" + "\"far fa-thumbs-down fa-2x neutral label_icons\"" + " style=transform:rotate(-90deg)" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + ">" +
+                        "<p>" + "Negative" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_negative" >' +
+                        "<i class=" + "\"fas fa-thumbs-down fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>";
+
+                    labelColumn5Div.innerHTML = divCaption
+                } else if (id == "span_id_neutral") {
+                    var labelColumn5Div = document.getElementById("labelcolumn5")
+
+                    var divCaption =
+                        "<div class=\"label-body\"" + "\">" +
+                        "<div class=\"label-title\"" + ">" +
+
+                        "<p style=\"margin: 5px 0px 5px 0px;font-size:1.5em;\"" + ">" + "Emotion" + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Excited" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_excited" >' +
+                        "<i class=" + "\"fas fa-smile-beam fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Happy" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_happy" >' +
+                        "<i class=" + "\"fas fa-smile fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Sad" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_sad" >' +
+                        "<i class=" + "\"fas fa-frown fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Worried" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_worried" >' +
+                        "<i class=" + "\"fas fa-flushed fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + ">" +
+                        "<p>" + "Angry" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_angry" >' +
+                        "<i class=" + "\"fas fa-angry fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Positive" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_positive" >' +
+                        "<i class=" + "\"fas fa-thumbs-up fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Neutral" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_neutral" >' +
+                        "<i class=" + "\"far fa-thumbs-down fa-2x neutral label_icons\"" + " style=transform:rotate(-90deg)" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + ">" +
+                        "<p>" + "Negative" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_negative" >' +
+                        "<i class=" + "\"fas fa-thumbs-down fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>";
+
+                    labelColumn5Div.innerHTML = divCaption
+                } else if (id == "span_id_negative") {
+                    var labelColumn5Div = document.getElementById("labelcolumn5")
+
+                    var divCaption =
+                        "<div class=\"label-body\"" + "\">" +
+                        "<div class=\"label-title\"" + ">" +
+
+                        "<p style=\"margin: 5px 0px 5px 0px;font-size:1.5em;\"" + ">" + "Emotion" + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Excited" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_excited" >' +
+                        "<i class=" + "\"fas fa-smile-beam fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Happy" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_happy" >' +
+                        "<i class=" + "\"fas fa-smile fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Sad" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_sad" >' +
+                        "<i class=" + "\"fas fa-frown fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Worried" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_worried" >' +
+                        "<i class=" + "\"fas fa-flushed fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + ">" +
+                        "<p>" + "Angry" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_angry" >' +
+                        "<i class=" + "\"fas fa-angry fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Positive" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_positive" >' +
+                        "<i class=" + "\"fas fa-thumbs-up fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Neutral" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_neutral" >' +
+                        "<i class=" + "\"far fa-thumbs-down fa-2x neutral label_icons\"" + " style=transform:rotate(-90deg)" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + ">" +
+                        "<p>" + "Negative" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_negative" >' +
+                        "<i class=" + "\"fas fa-thumbs-down fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>";
+
+                    labelColumn5Div.innerHTML = divCaption
+                }
+
+                console.log(id)
+                document.getElementById(id).setAttribute("style", "opacity:0.8");
+                $("#" + id).children().css("opacity", "0.8");
+
+                current_sort = ""
+                draw_view(x)
+
+                sort_opt_emo = 0;
+            } 
+            else if (sort_opt_emo == 0) {
                 this_emo = id.split("_")[2] + "_normalized"
 
                 current_sort = id.split("_")[2];
 
                 var x = (JSON.parse(JSON.stringify(raw_json)));
-                console.log(x)
+                // console.log(x)
                 var emo_agg = get_proposal_wise_emotion(x)
-                console.log(emo_agg)
+                // console.log(emo_agg)
                 emo_agg.sort((function (a, b) {
-                    console.log(parseFloat(b[this_emo]) - parseFloat(a[this_emo]))
+                    // console.log(parseFloat(b[this_emo]) - parseFloat(a[this_emo]))
                     return parseFloat(b[this_emo]) - parseFloat(a[this_emo])
                 }))
 
@@ -498,7 +1022,7 @@ function draw_view(json) {
                 }
                 draw_view(sorted_ideas)
                 prop_json = sorted_ideas;
-                document.getElementById("box_header").innerHTML = "Sorted by " + id.split("_")[2];
+                document.getElementById("box_header").innerHTML = "Sorted by " + id.split("_")[2] + " in descending order";
 
                 var myNode = document.getElementById("parentBox");
                 while (myNode.firstChild) {
@@ -511,19 +1035,1000 @@ function draw_view(json) {
                     // console.log("span_id_"+selected_sort[i])
                 }
 
+                if (id == "span_id_excited") {
+                    var labelColumn5Div = document.getElementById("labelcolumn5")
+
+                    var divCaption =
+                        "<div class=\"label-body\"" + "\">" +
+                        "<div class=\"label-title\"" + ">" +
+
+                        "<p style=\"margin: 5px 0px 5px 0px;font-size:1.5em;\"" + ">" + "Emotion" + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Excited" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_excited" >' +
+                        "<i class=" + "\"fas fa-smile-beam fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-up fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Happy" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_happy" >' +
+                        "<i class=" + "\"fas fa-smile fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Sad" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_sad" >' +
+                        "<i class=" + "\"fas fa-frown fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Worried" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_worried" >' +
+                        "<i class=" + "\"fas fa-flushed fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + ">" +
+                        "<p>" + "Angry" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_angry" >' +
+                        "<i class=" + "\"fas fa-angry fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Positive" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_positive" >' +
+                        "<i class=" + "\"fas fa-thumbs-up fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Neutral" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_neutral" >' +
+                        "<i class=" + "\"far fa-thumbs-down fa-2x neutral label_icons\"" + " style=transform:rotate(-90deg)" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + ">" +
+                        "<p>" + "Negative" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_negative" >' +
+                        "<i class=" + "\"fas fa-thumbs-down fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>";
+
+                    labelColumn5Div.innerHTML = divCaption
+                } else if (id == "span_id_happy") {
+                    var labelColumn5Div = document.getElementById("labelcolumn5")
+
+                    var divCaption =
+                        "<div class=\"label-body\"" + "\">" +
+                        "<div class=\"label-title\"" + ">" +
+
+                        "<p style=\"margin: 5px 0px 5px 0px;font-size:1.5em;\"" + ">" + "Emotion" + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Excited" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_excited" >' +
+                        "<i class=" + "\"fas fa-smile-beam fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Happy" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_happy" >' +
+                        "<i class=" + "\"fas fa-smile fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-up fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Sad" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_sad" >' +
+                        "<i class=" + "\"fas fa-frown fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Worried" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_worried" >' +
+                        "<i class=" + "\"fas fa-flushed fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + ">" +
+                        "<p>" + "Angry" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_angry" >' +
+                        "<i class=" + "\"fas fa-angry fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Positive" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_positive" >' +
+                        "<i class=" + "\"fas fa-thumbs-up fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Neutral" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_neutral" >' +
+                        "<i class=" + "\"far fa-thumbs-down fa-2x neutral label_icons\"" + " style=transform:rotate(-90deg)" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + ">" +
+                        "<p>" + "Negative" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_negative" >' +
+                        "<i class=" + "\"fas fa-thumbs-down fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>";
+
+                    labelColumn5Div.innerHTML = divCaption
+                } else if (id == "span_id_sad") {
+                    var labelColumn5Div = document.getElementById("labelcolumn5")
+
+                    var divCaption =
+                        "<div class=\"label-body\"" + "\">" +
+                        "<div class=\"label-title\"" + ">" +
+
+                        "<p style=\"margin: 5px 0px 5px 0px;font-size:1.5em;\"" + ">" + "Emotion" + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Excited" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_excited" >' +
+                        "<i class=" + "\"fas fa-smile-beam fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Happy" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_happy" >' +
+                        "<i class=" + "\"fas fa-smile fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Sad" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_sad" >' +
+                        "<i class=" + "\"fas fa-frown fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-up fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Worried" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_worried" >' +
+                        "<i class=" + "\"fas fa-flushed fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + ">" +
+                        "<p>" + "Angry" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_angry" >' +
+                        "<i class=" + "\"fas fa-angry fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Positive" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_positive" >' +
+                        "<i class=" + "\"fas fa-thumbs-up fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Neutral" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_neutral" >' +
+                        "<i class=" + "\"far fa-thumbs-down fa-2x neutral label_icons\"" + " style=transform:rotate(-90deg)" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + ">" +
+                        "<p>" + "Negative" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_negative" >' +
+                        "<i class=" + "\"fas fa-thumbs-down fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>";
+
+                    labelColumn5Div.innerHTML = divCaption
+                } else if (id == "span_id_worried") {
+                    var labelColumn5Div = document.getElementById("labelcolumn5")
+
+                    var divCaption =
+                        "<div class=\"label-body\"" + "\">" +
+                        "<div class=\"label-title\"" + ">" +
+
+                        "<p style=\"margin: 5px 0px 5px 0px;font-size:1.5em;\"" + ">" + "Emotion" + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Excited" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_excited" >' +
+                        "<i class=" + "\"fas fa-smile-beam fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Happy" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_happy" >' +
+                        "<i class=" + "\"fas fa-smile fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Sad" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_sad" >' +
+                        "<i class=" + "\"fas fa-frown fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Worried" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_worried" >' +
+                        "<i class=" + "\"fas fa-flushed fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-up fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + ">" +
+                        "<p>" + "Angry" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_angry" >' +
+                        "<i class=" + "\"fas fa-angry fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Positive" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_positive" >' +
+                        "<i class=" + "\"fas fa-thumbs-up fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Neutral" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_neutral" >' +
+                        "<i class=" + "\"far fa-thumbs-down fa-2x neutral label_icons\"" + " style=transform:rotate(-90deg)" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + ">" +
+                        "<p>" + "Negative" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_negative" >' +
+                        "<i class=" + "\"fas fa-thumbs-down fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>";
+
+                    labelColumn5Div.innerHTML = divCaption
+                } else if (id == "span_id_angry") {
+                    var labelColumn5Div = document.getElementById("labelcolumn5")
+
+                    var divCaption =
+                        "<div class=\"label-body\"" + "\">" +
+                        "<div class=\"label-title\"" + ">" +
+
+                        "<p style=\"margin: 5px 0px 5px 0px;font-size:1.5em;\"" + ">" + "Emotion" + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Excited" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_excited" >' +
+                        "<i class=" + "\"fas fa-smile-beam fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Happy" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_happy" >' +
+                        "<i class=" + "\"fas fa-smile fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Sad" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_sad" >' + 
+                        "<i class=" + "\"fas fa-frown fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Worried" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_worried" >' +
+                        "<i class=" + "\"fas fa-flushed fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + ">" +
+                        "<p>" + "Angry" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_angry" >' +
+                        "<i class=" + "\"fas fa-angry fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-up fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Positive" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_positive" >' +
+                        "<i class=" + "\"fas fa-thumbs-up fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Neutral" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_neutral" >' +
+                        "<i class=" + "\"far fa-thumbs-down fa-2x neutral label_icons\"" + " style=transform:rotate(-90deg)" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + ">" +
+                        "<p>" + "Negative" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_negative" >' +
+                        "<i class=" + "\"fas fa-thumbs-down fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>";
+
+                    labelColumn5Div.innerHTML = divCaption
+                } else if (id == "span_id_positive") {
+                    var labelColumn5Div = document.getElementById("labelcolumn5")
+
+                    var divCaption =
+                        "<div class=\"label-body\"" + "\">" +
+                        "<div class=\"label-title\"" + ">" +
+
+                        "<p style=\"margin: 5px 0px 5px 0px;font-size:1.5em;\"" + ">" + "Emotion" + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" + 
+                        "<p>" + "Excited" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_excited" >' +
+                        "<i class=" + "\"fas fa-smile-beam fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Happy" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_happy" >' +
+                        "<i class=" + "\"fas fa-smile fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Sad" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_sad" >' +
+                        "<i class=" + "\"fas fa-frown fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Worried" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_worried" >' +
+                        "<i class=" + "\"fas fa-flushed fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + ">" +
+                        "<p>" + "Angry" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_angry" >' +
+                        "<i class=" + "\"fas fa-angry fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Positive" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_positive" >' +
+                        "<i class=" + "\"fas fa-thumbs-up fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-up fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Neutral" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_neutral" >' +
+                        "<i class=" + "\"far fa-thumbs-down fa-2x neutral label_icons\"" + " style=transform:rotate(-90deg)" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + ">" +
+                        "<p>" + "Negative" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_negative" >' +
+                        "<i class=" + "\"fas fa-thumbs-down fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>";
+
+                    labelColumn5Div.innerHTML = divCaption
+                } else if (id == "span_id_neutral") {
+                    var labelColumn5Div = document.getElementById("labelcolumn5")
+
+                    var divCaption =
+                        "<div class=\"label-body\"" + "\">" +
+                        "<div class=\"label-title\"" + ">" +
+
+                        "<p style=\"margin: 5px 0px 5px 0px;font-size:1.5em;\"" + ">" + "Emotion" + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Excited" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_excited" >' +
+                        "<i class=" + "\"fas fa-smile-beam fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Happy" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_happy" >' +
+                        "<i class=" + "\"fas fa-smile fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Sad" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_sad" >' +
+                        "<i class=" + "\"fas fa-frown fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Worried" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_worried" >' +
+                        "<i class=" + "\"fas fa-flushed fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + ">" +
+                        "<p>" + "Angry" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_angry" >' +
+                        "<i class=" + "\"fas fa-angry fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Positive" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_positive" >' +
+                        "<i class=" + "\"fas fa-thumbs-up fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Neutral" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_neutral" >' +
+                        "<i class=" + "\"far fa-thumbs-down fa-2x neutral label_icons\"" + " style=transform:rotate(-90deg)" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-up fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + ">" +
+                        "<p>" + "Negative" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_negative" >' +
+                        "<i class=" + "\"fas fa-thumbs-down fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>";
+
+                    labelColumn5Div.innerHTML = divCaption
+                } else if (id == "span_id_negative") {
+                    var labelColumn5Div = document.getElementById("labelcolumn5")
+
+                    var divCaption =
+                        "<div class=\"label-body\"" + "\">" +
+                        "<div class=\"label-title\"" + ">" +
+
+                        "<p style=\"margin: 5px 0px 5px 0px;font-size:1.5em;\"" + ">" + "Emotion" + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Excited" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_excited" >' +
+                        "<i class=" + "\"fas fa-smile-beam fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Happy" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_happy" >' +
+                        "<i class=" + "\"fas fa-smile fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Sad" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_sad" >' +
+                        "<i class=" + "\"fas fa-frown fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Worried" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_worried" >' +
+                        "<i class=" + "\"fas fa-flushed fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + ">" +
+                        "<p>" + "Angry" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_angry" >' +
+                        "<i class=" + "\"fas fa-angry fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Positive" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_positive" >' +
+                        "<i class=" + "\"fas fa-thumbs-up fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Neutral" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_neutral" >' +
+                        "<i class=" + "\"far fa-thumbs-down fa-2x neutral label_icons\"" + " style=transform:rotate(-90deg)" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + ">" +
+                        "<p>" + "Negative" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_negative" >' +
+                        "<i class=" + "\"fas fa-thumbs-down fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-up fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>";
+
+                    labelColumn5Div.innerHTML = divCaption
+                }
+
                 console.log(id)
                 document.getElementById(id).setAttribute("style", "opacity:1.0");
                 $("#" + id).children().css("opacity", "1.0");
+
+                sort_opt_emo = 1;
+            } else if (sort_opt_emo == 1) {
+                this_emo = id.split("_")[2] + "_normalized"
+
+                current_sort = id.split("_")[2];
+
+                var x = (JSON.parse(JSON.stringify(raw_json)));
+                // console.log(x)
+                var emo_agg = get_proposal_wise_emotion(x)
+                // console.log(emo_agg)
+                emo_agg.sort((function (a, b) {
+                    // console.log(parseFloat(b[this_emo]) - parseFloat(a[this_emo]))
+                    return parseFloat(a[this_emo]) - parseFloat(b[this_emo])
+                }))
+
+                var id_keys = []
+                for (var i = 0; i < emo_agg.length; i++) {
+                    id_keys.push(emo_agg[i].key)
+                }
+
+                var show_this = []
+                for (var i = 0; i < id_keys.length; i++) {
+                    for (var j = 0; j < raw_json["ideas"].length; j++) {
+                        //console.log(json.ideas[j].id, id_keys[i])
+
+                        if (raw_json.ideas[j].id == id_keys[i]) {
+                            //console.log(json.ideas[i])
+                            show_this.push(raw_json.ideas[j])
+                        }
+                    }
+                }
+                sorted_ideas = {
+                    "ideas": show_this
+                }
+                draw_view(sorted_ideas)
+                prop_json = sorted_ideas;
+                document.getElementById("box_header").innerHTML = "Sorted by " + id.split("_")[2] + " in ascending order";
+
+                var myNode = document.getElementById("parentBox");
+                while (myNode.firstChild) {
+                    myNode.removeChild(myNode.firstChild);
+                }
+
+                //console.log(selected_sort)
+                for (var i = 0; i < selected_sort.length; i++) {
+                    document.getElementById("span_id_" + selected_sort[i]).setAttribute("style", "opacity:0.8")
+                    // console.log("span_id_"+selected_sort[i])
+                }
+
+                if (id == "span_id_excited") {
+                    var labelColumn5Div = document.getElementById("labelcolumn5")
+
+                    var divCaption =
+                        "<div class=\"label-body\"" + "\">" +
+                        "<div class=\"label-title\"" + ">" +
+
+                        "<p style=\"margin: 5px 0px 5px 0px;font-size:1.5em;\"" + ">" + "Emotion" + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Excited" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_excited" >' +
+                        "<i class=" + "\"fas fa-smile-beam fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-bars fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Happy" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_happy" >' +
+                        "<i class=" + "\"fas fa-smile fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Sad" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_sad" >' +
+                        "<i class=" + "\"fas fa-frown fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Worried" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_worried" >' +
+                        "<i class=" + "\"fas fa-flushed fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + ">" +
+                        "<p>" + "Angry" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_angry" >' +
+                        "<i class=" + "\"fas fa-angry fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Positive" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_positive" >' +
+                        "<i class=" + "\"fas fa-thumbs-up fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Neutral" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_neutral" >' +
+                        "<i class=" + "\"far fa-thumbs-down fa-2x neutral label_icons\"" + " style=transform:rotate(-90deg)" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + ">" +
+                        "<p>" + "Negative" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_negative" >' +
+                        "<i class=" + "\"fas fa-thumbs-down fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>";
+
+                    labelColumn5Div.innerHTML = divCaption
+                } else if (id == "span_id_happy") {
+                    var labelColumn5Div = document.getElementById("labelcolumn5")
+
+                    var divCaption =
+                        "<div class=\"label-body\"" + "\">" +
+                        "<div class=\"label-title\"" + ">" +
+
+                        "<p style=\"margin: 5px 0px 5px 0px;font-size:1.5em;\"" + ">" + "Emotion" + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Excited" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_excited" >' +
+                        "<i class=" + "\"fas fa-smile-beam fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Happy" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_happy" >' +
+                        "<i class=" + "\"fas fa-smile fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-bars fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Sad" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_sad" >' +
+                        "<i class=" + "\"fas fa-frown fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Worried" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_worried" >' +
+                        "<i class=" + "\"fas fa-flushed fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + ">" +
+                        "<p>" + "Angry" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_angry" >' +
+                        "<i class=" + "\"fas fa-angry fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Positive" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_positive" >' +
+                        "<i class=" + "\"fas fa-thumbs-up fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Neutral" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_neutral" >' +
+                        "<i class=" + "\"far fa-thumbs-down fa-2x neutral label_icons\"" + " style=transform:rotate(-90deg)" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + ">" +
+                        "<p>" + "Negative" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_negative" >' +
+                        "<i class=" + "\"fas fa-thumbs-down fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>";
+
+                    labelColumn5Div.innerHTML = divCaption
+                } else if (id == "span_id_sad") {
+                    var labelColumn5Div = document.getElementById("labelcolumn5")
+
+                    var divCaption =
+                        "<div class=\"label-body\"" + "\">" +
+                        "<div class=\"label-title\"" + ">" +
+
+                        "<p style=\"margin: 5px 0px 5px 0px;font-size:1.5em;\"" + ">" + "Emotion" + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Excited" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_excited" >' +
+                        "<i class=" + "\"fas fa-smile-beam fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Happy" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_happy" >' +
+                        "<i class=" + "\"fas fa-smile fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Sad" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_sad" >' +
+                        "<i class=" + "\"fas fa-frown fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-bars fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Worried" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_worried" >' +
+                        "<i class=" + "\"fas fa-flushed fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + ">" +
+                        "<p>" + "Angry" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_angry" >' +
+                        "<i class=" + "\"fas fa-angry fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Positive" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_positive" >' +
+                        "<i class=" + "\"fas fa-thumbs-up fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Neutral" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_neutral" >' +
+                        "<i class=" + "\"far fa-thumbs-down fa-2x neutral label_icons\"" + " style=transform:rotate(-90deg)" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + ">" +
+                        "<p>" + "Negative" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_negative" >' +
+                        "<i class=" + "\"fas fa-thumbs-down fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>";
+
+                    labelColumn5Div.innerHTML = divCaption
+                } else if (id == "span_id_worried") {
+                    var labelColumn5Div = document.getElementById("labelcolumn5")
+
+                    var divCaption =
+                        "<div class=\"label-body\"" + "\">" +
+                        "<div class=\"label-title\"" + ">" +
+
+                        "<p style=\"margin: 5px 0px 5px 0px;font-size:1.5em;\"" + ">" + "Emotion" + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Excited" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_excited" >' +
+                        "<i class=" + "\"fas fa-smile-beam fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Happy" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_happy" >' +
+                        "<i class=" + "\"fas fa-smile fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Sad" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_sad" >' +
+                        "<i class=" + "\"fas fa-frown fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Worried" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_worried" >' +
+                        "<i class=" + "\"fas fa-flushed fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-bars fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + ">" +
+                        "<p>" + "Angry" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_angry" >' +
+                        "<i class=" + "\"fas fa-angry fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Positive" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_positive" >' +
+                        "<i class=" + "\"fas fa-thumbs-up fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Neutral" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_neutral" >' +
+                        "<i class=" + "\"far fa-thumbs-down fa-2x neutral label_icons\"" + " style=transform:rotate(-90deg)" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + ">" +
+                        "<p>" + "Negative" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_negative" >' +
+                        "<i class=" + "\"fas fa-thumbs-down fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>";
+
+                    labelColumn5Div.innerHTML = divCaption
+                } else if (id == "span_id_angry") {
+                    var labelColumn5Div = document.getElementById("labelcolumn5")
+
+                    var divCaption =
+                        "<div class=\"label-body\"" + "\">" +
+                        "<div class=\"label-title\"" + ">" +
+
+                        "<p style=\"margin: 5px 0px 5px 0px;font-size:1.5em;\"" + ">" + "Emotion" + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Excited" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_excited" >' +
+                        "<i class=" + "\"fas fa-smile-beam fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Happy" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_happy" >' +
+                        "<i class=" + "\"fas fa-smile fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Sad" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_sad" >' +
+                        "<i class=" + "\"fas fa-frown fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Worried" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_worried" >' +
+                        "<i class=" + "\"fas fa-flushed fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + ">" +
+                        "<p>" + "Angry" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_angry" >' +
+                        "<i class=" + "\"fas fa-angry fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-bars fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Positive" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_positive" >' +
+                        "<i class=" + "\"fas fa-thumbs-up fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Neutral" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_neutral" >' +
+                        "<i class=" + "\"far fa-thumbs-down fa-2x neutral label_icons\"" + " style=transform:rotate(-90deg)" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + ">" +
+                        "<p>" + "Negative" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_negative" >' +
+                        "<i class=" + "\"fas fa-thumbs-down fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>";
+
+                    labelColumn5Div.innerHTML = divCaption
+                } else if (id == "span_id_positive") {
+                    var labelColumn5Div = document.getElementById("labelcolumn5")
+
+                    var divCaption =
+                        "<div class=\"label-body\"" + "\">" +
+                        "<div class=\"label-title\"" + ">" +
+
+                        "<p style=\"margin: 5px 0px 5px 0px;font-size:1.5em;\"" + ">" + "Emotion" + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Excited" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_excited" >' +
+                        "<i class=" + "\"fas fa-smile-beam fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Happy" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_happy" >' +
+                        "<i class=" + "\"fas fa-smile fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Sad" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_sad" >' +
+                        "<i class=" + "\"fas fa-frown fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Worried" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_worried" >' +
+                        "<i class=" + "\"fas fa-flushed fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + ">" +
+                        "<p>" + "Angry" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_angry" >' +
+                        "<i class=" + "\"fas fa-angry fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Positive" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_positive" >' +
+                        "<i class=" + "\"fas fa-thumbs-up fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-bars fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Neutral" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_neutral" >' +
+                        "<i class=" + "\"far fa-thumbs-down fa-2x neutral label_icons\"" + " style=transform:rotate(-90deg)" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + ">" +
+                        "<p>" + "Negative" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_negative" >' +
+                        "<i class=" + "\"fas fa-thumbs-down fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>";
+
+                    labelColumn5Div.innerHTML = divCaption
+                } else if (id == "span_id_neutral") {
+                    var labelColumn5Div = document.getElementById("labelcolumn5")
+
+                    var divCaption =
+                        "<div class=\"label-body\"" + "\">" +
+                        "<div class=\"label-title\"" + ">" +
+
+                        "<p style=\"margin: 5px 0px 5px 0px;font-size:1.5em;\"" + ">" + "Emotion" + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Excited" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_excited" >' +
+                        "<i class=" + "\"fas fa-smile-beam fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Happy" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_happy" >' +
+                        "<i class=" + "\"fas fa-smile fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Sad" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_sad" >' +
+                        "<i class=" + "\"fas fa-frown fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Worried" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_worried" >' +
+                        "<i class=" + "\"fas fa-flushed fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + ">" +
+                        "<p>" + "Angry" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_angry" >' +
+                        "<i class=" + "\"fas fa-angry fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Positive" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_positive" >' +
+                        "<i class=" + "\"fas fa-thumbs-up fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Neutral" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_neutral" >' +
+                        "<i class=" + "\"far fa-thumbs-down fa-2x neutral label_icons\"" + " style=transform:rotate(-90deg)" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-bars fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + ">" +
+                        "<p>" + "Negative" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_negative" >' +
+                        "<i class=" + "\"fas fa-thumbs-down fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>";
+
+                    labelColumn5Div.innerHTML = divCaption
+                } else if (id == "span_id_negative") {
+                    var labelColumn5Div = document.getElementById("labelcolumn5")
+
+                    var divCaption =
+                        "<div class=\"label-body\"" + "\">" +
+                        "<div class=\"label-title\"" + ">" +
+
+                        "<p style=\"margin: 5px 0px 5px 0px;font-size:1.5em;\"" + ">" + "Emotion" + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Excited" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_excited" >' +
+                        "<i class=" + "\"fas fa-smile-beam fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Happy" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_happy" >' +
+                        "<i class=" + "\"fas fa-smile fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Sad" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_sad" >' +
+                        "<i class=" + "\"fas fa-frown fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Worried" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_worried" >' +
+                        "<i class=" + "\"fas fa-flushed fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + ">" +
+                        "<p>" + "Angry" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_angry" >' +
+                        "<i class=" + "\"fas fa-angry fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Positive" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_positive" >' +
+                        "<i class=" + "\"fas fa-thumbs-up fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + "\">" +
+                        "<p>" + "Neutral" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_neutral" >' +
+                        "<i class=" + "\"far fa-thumbs-down fa-2x neutral label_icons\"" + " style=transform:rotate(-90deg)" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-emo-body\"" + ">" +
+                        "<p>" + "Negative" + "</p>" +
+                        "<p>" + '<span class="label-emo-button" id="span_id_negative" >' +
+                        "<i class=" + "\"fas fa-thumbs-down fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-bars fa-2x label_icons\"" + "></i>" +
+                        '</span>' + "</p>" + "</div>";
+
+                    labelColumn5Div.innerHTML = divCaption
+                }
+
+                console.log(id)
+                document.getElementById(id).setAttribute("style", "opacity:1.0");
+                $("#" + id).children().css("opacity", "1.0");
+
+                sort_opt_emo = 2;
             }
+
         });
-        // $('.emoticon_button').mouseover(function() {
-        //     var id = $(this).attr('id');
-        //     console.log('emotion mouseover',id)
-        // });
-
-        divMove();
-
-
+        // divMove();
     });
 
     // On click for sort icons by info
@@ -533,29 +2038,115 @@ function draw_view(json) {
             console.log("inside iconClick", id)
             this_info = "num_of_" + id.split("_")[2]
 
-            if (id.split("_")[2] == current_sort) {
-                current_sort = "";
-                selected_rows = Array.apply(null, Array(36));
-                console.log(raw_json)
-                draw_view(raw_json)
-                prop_json = raw_json;
+            // if (id.split("_")[2] == current_sort) {
+            //     current_sort = "";
+            //     selected_rows = Array.apply(null, Array(36));
+            //     console.log(raw_json)
+            //     draw_view(raw_json)
+            //     prop_json = raw_json;
 
-                for (var i = 0; i < selected_sort.length; i++) {
-                    document.getElementById("span_id_" + selected_sort[i]).setAttribute("style", "opacity:0.8")
-                    // console.log("span_id_"+selected_sort[i])
-                }
+            //     for (var i = 0; i < selected_sort.length; i++) {
+            //         document.getElementById("span_id_" + selected_sort[i]).setAttribute("style", "opacity:0.8")
+            //         // console.log("span_id_"+selected_sort[i])
+            //     }
+            //     logInteraction('click, sortby, ' + id.split("_")[2]);
+            //     selected_rows = Array.apply(null, Array(36));
+
+            //     document.getElementById("box_header").innerHTML = "";
+
+            //     selected_rows_stack = [];
+
+            //     var myNode = document.getElementById("parentBox");
+            //     while (myNode.firstChild) {
+            //         myNode.removeChild(myNode.firstChild);
+            //     }
+            // }
+
+            if (sort_opt == 2) {
                 logInteraction('click, sortby, ' + id.split("_")[2]);
-                selected_rows = Array.apply(null, Array(36));
 
-                document.getElementById("box_header").innerHTML = "";
+                if (id.split("_")[2] == "participants") {
+                    this_info = "num_of_commenters"
+                }
 
-                selected_rows_stack = [];
+                current_sort = id.split("_")[2];
+
+                var copy_json = JSON.parse(JSON.stringify(raw_json))
+
+                // copy_json["ideas"].sort((function (a, b) {
+                //     //     console.log(parseFloat(a[this_info]) - parseFloat(b[this_info]))
+                //     return parseFloat(a[this_info]) - parseFloat(b[this_info])
+                // }))
+
+                draw_view(copy_json)
+                document.getElementById("box_header").innerHTML = "Click on a Proposal, Topic or Emotionto see related comments";
 
                 var myNode = document.getElementById("parentBox");
                 while (myNode.firstChild) {
                     myNode.removeChild(myNode.firstChild);
                 }
-            } else {
+
+                //console.log(selected_sort)
+                for (var i = 0; i < selected_sort.length; i++) {
+                    document.getElementById("span_id_" + selected_sort[i]).setAttribute("style", "opacity:0.8")
+                    // console.log("span_id_"+selected_sort[i])
+                }
+
+                if (id == "span_id_comments") {
+                    var labelColumn2Div = document.getElementById("labelcolumn2")
+
+                    var divCaption =
+                        "<div class=\"label-body\"" + "\">" +
+                        "<div class=\"label-title\"" + ">" +
+                        "<p style=\"margin: 5px 0px 5px 0px;font-size:1.5em;text-align:left\"" + ">" + "\xa0" + "</p>" + "</div>" +
+                        "<div class=\"label-info-body\"" + ">" +
+                        "<p>" + "Participants" + "</p>" +
+                        "<p>" + '<span class="label-info-button" id="span_id_participants" >' +
+                        "<i class=" + "\"fas fa-user fa-lg label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-lg label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-info-body\"" + "\">" +
+                        "<p>" + "Comments" + "</p>" +
+                        "<p>" + '<span class="label-info-button" id="span_id_comments" >' +
+                        "<i class=" + "\"fas fa-comment-alt fa-lg label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-lg label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>";
+                    // "<div class=\"label-title-body\"" + ">" + "</p>" + "</div>"
+                    //    "<p style=\"margin: 5px 0px 5px 0px;font-size:3em;color:#337AB7\"" + ">" + "78\xa0" + "</p>" + "</div>";
+
+                    labelColumn2Div.innerHTML = divCaption
+                } else if (id == "span_id_participants") {
+                    var labelColumn2Div = document.getElementById("labelcolumn2")
+
+                    var divCaption =
+                        "<div class=\"label-body\"" + "\">" +
+                        "<div class=\"label-title\"" + ">" +
+                        "<p style=\"margin: 5px 0px 5px 0px;font-size:1.5em;text-align:left\"" + ">" + "\xa0" + "</p>" + "</div>" +
+                        "<div class=\"label-info-body\"" + ">" +
+                        "<p>" + "Participants" + "</p>" +
+                        "<p>" + '<span class="label-info-button" id="span_id_participants" >' +
+                        "<i class=" + "\"fas fa-user fa-lg label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-lg label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-info-body\"" + "\">" +
+                        "<p>" + "Comments" + "</p>" +
+                        "<p>" + '<span class="label-info-button" id="span_id_comments" >' +
+                        "<i class=" + "\"fas fa-comment-alt fa-lg label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-lg label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>";
+                    // "<div class=\"label-title-body\"" + ">" + "</p>" + "</div>"
+                    //    "<p style=\"margin: 5px 0px 5px 0px;font-size:3em;color:#337AB7\"" + ">" + "78\xa0" + "</p>" + "</div>";
+
+                    labelColumn2Div.innerHTML = divCaption
+                }
+
+                document.getElementById(id).setAttribute("style", "opacity:0.8");
+
+                console.log(id)
+
+                $("#" + id).children().css("opacity", "0.8");
+                selected_rows = Array.apply(null, Array(36));
+                prop_json = copy_json;
+
+                sort_opt = 0;
+
+            } else if (sort_opt == 0) {
                 logInteraction('click, sortby, ' + id.split("_")[2]);
 
                 if (id.split("_")[2] == "participants") {
@@ -572,7 +2163,7 @@ function draw_view(json) {
                 }))
 
                 draw_view(copy_json)
-                document.getElementById("box_header").innerHTML = "Sorted by number of " + id.split("_")[2];
+                document.getElementById("box_header").innerHTML = "Sorted by number of " + id.split("_")[2] + " in descending order";
 
                 var myNode = document.getElementById("parentBox");
                 while (myNode.firstChild) {
@@ -585,145 +2176,157 @@ function draw_view(json) {
                     // console.log("span_id_"+selected_sort[i])
                 }
 
+                if (id == "span_id_comments") {
+                    var labelColumn2Div = document.getElementById("labelcolumn2")
+
+                    var divCaption =
+                        "<div class=\"label-body\"" + "\">" +
+                        "<div class=\"label-title\"" + ">" +
+                        "<p style=\"margin: 5px 0px 5px 0px;font-size:1.5em;text-align:left\"" + ">" + "\xa0" + "</p>" + "</div>" +
+                        "<div class=\"label-info-body\"" + ">" +
+                        "<p>" + "Participants" + "</p>" +
+                        "<p>" + '<span class="label-info-button" id="span_id_participants" >' +
+                        "<i class=" + "\"fas fa-user fa-lg label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-lg label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-info-body\"" + "\">" +
+                        "<p>" + "Comments" + "</p>" +
+                        "<p>" + '<span class="label-info-button" id="span_id_comments" >' +
+                        "<i class=" + "\"fas fa-comment-alt fa-lg label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-up fa-lg label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>";
+                    // "<div class=\"label-title-body\"" + ">" + "</p>" + "</div>"
+                    //    "<p style=\"margin: 5px 0px 5px 0px;font-size:3em;color:#337AB7\"" + ">" + "78\xa0" + "</p>" + "</div>";
+
+                    labelColumn2Div.innerHTML = divCaption
+                } else if (id == "span_id_participants") {
+                    var labelColumn2Div = document.getElementById("labelcolumn2")
+
+                    var divCaption =
+                        "<div class=\"label-body\"" + "\">" +
+                        "<div class=\"label-title\"" + ">" +
+                        "<p style=\"margin: 5px 0px 5px 0px;font-size:1.5em;text-align:left\"" + ">" + "\xa0" + "</p>" + "</div>" +
+                        "<div class=\"label-info-body\"" + ">" +
+                        "<p>" + "Participants" + "</p>" +
+                        "<p>" + '<span class="label-info-button" id="span_id_participants" >' +
+                        "<i class=" + "\"fas fa-user fa-lg label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-up fa-lg label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-info-body\"" + "\">" +
+                        "<p>" + "Comments" + "</p>" +
+                        "<p>" + '<span class="label-info-button" id="span_id_comments" >' +
+                        "<i class=" + "\"fas fa-comment-alt fa-lg label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-lg label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>";
+                    // "<div class=\"label-title-body\"" + ">" + "</p>" + "</div>"
+                    //    "<p style=\"margin: 5px 0px 5px 0px;font-size:3em;color:#337AB7\"" + ">" + "78\xa0" + "</p>" + "</div>";
+
+                    labelColumn2Div.innerHTML = divCaption
+                }
+
                 document.getElementById(id).setAttribute("style", "opacity:1.0");
+
+                console.log(id)
+
                 $("#" + id).children().css("opacity", "1.0");
                 selected_rows = Array.apply(null, Array(36));
                 prop_json = copy_json;
+
+                sort_opt = 1;
+
+            } else if (sort_opt == 1) {
+
+                console.log("double")
+
+                logInteraction('click, sortby, ' + id.split("_")[2]);
+
+                if (id.split("_")[2] == "participants") {
+                    this_info = "num_of_commenters"
+                }
+
+                current_sort = id.split("_")[2];
+
+                var copy_json = JSON.parse(JSON.stringify(raw_json))
+
+                copy_json["ideas"].sort((function (a, b) {
+                    //     console.log(parseFloat(a[this_info]) - parseFloat(b[this_info]))
+                    return parseFloat(a[this_info]) - parseFloat(b[this_info])
+                }))
+
+                draw_view(copy_json)
+                document.getElementById("box_header").innerHTML = "Sorted by number of " + id.split("_")[2] + " in ascending order";
+
+                var myNode = document.getElementById("parentBox");
+                while (myNode.firstChild) {
+                    myNode.removeChild(myNode.firstChild);
+                }
+
+                //console.log(selected_sort)
+                for (var i = 0; i < selected_sort.length; i++) {
+                    document.getElementById("span_id_" + selected_sort[i]).setAttribute("style", "opacity:0.8")
+                    // console.log("span_id_"+selected_sort[i])
+                }
+
+                if (id == "span_id_comments") {
+                    var labelColumn2Div = document.getElementById("labelcolumn2")
+
+                    var divCaption =
+                        "<div class=\"label-body\"" + "\">" +
+                        "<div class=\"label-title\"" + ">" +
+                        "<p style=\"margin: 5px 0px 5px 0px;font-size:1.5em;text-align:left\"" + ">" + "\xa0" + "</p>" + "</div>" +
+                        "<div class=\"label-info-body\"" + ">" +
+                        "<p>" + "Participants" + "</p>" +
+                        "<p>" + '<span class="label-info-button" id="span_id_participants" >' +
+                        "<i class=" + "\"fas fa-user fa-lg label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-lg label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-info-body\"" + "\">" +
+                        "<p>" + "Comments" + "</p>" +
+                        "<p>" + '<span class="label-info-button" id="span_id_comments" >' +
+                        "<i class=" + "\"fas fa-comment-alt fa-lg label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-bars fa-lg label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>";
+                    // "<div class=\"label-title-body\"" + ">" + "</p>" + "</div>"
+                    //    "<p style=\"margin: 5px 0px 5px 0px;font-size:3em;color:#337AB7\"" + ">" + "78\xa0" + "</p>" + "</div>";
+
+                    labelColumn2Div.innerHTML = divCaption
+                }
+
+                if (id == "span_id_participants") {
+                    var labelColumn2Div = document.getElementById("labelcolumn2")
+
+                    var divCaption =
+                        "<div class=\"label-body\"" + "\">" +
+                        "<div class=\"label-title\"" + ">" +
+                        "<p style=\"margin: 5px 0px 5px 0px;font-size:1.5em;text-align:left\"" + ">" + "\xa0" + "</p>" + "</div>" +
+                        "<div class=\"label-info-body\"" + ">" +
+                        "<p>" + "Participants" + "</p>" +
+                        "<p>" + '<span class="label-info-button" id="span_id_participants" >' +
+                        "<i class=" + "\"fas fa-user fa-lg label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-bars fa-lg label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+                        "<div class=\"label-info-body\"" + "\">" +
+                        "<p>" + "Comments" + "</p>" +
+                        "<p>" + '<span class="label-info-button" id="span_id_comments" >' +
+                        "<i class=" + "\"fas fa-comment-alt fa-lg label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-lg label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>";
+                    // "<div class=\"label-title-body\"" + ">" + "</p>" + "</div>"
+                    //    "<p style=\"margin: 5px 0px 5px 0px;font-size:3em;color:#337AB7\"" + ">" + "78\xa0" + "</p>" + "</div>";
+
+                    labelColumn2Div.innerHTML = divCaption
+                }
+
+                document.getElementById(id).setAttribute("style", "opacity:1.0");
+
+                console.log(id)
+
+                $("#" + id).children().css("opacity", "1.0");
+                selected_rows = Array.apply(null, Array(36));
+                prop_json = copy_json;
+
+                sort_opt = 2;
             }
         });
-        // $('.emoticon_button').mouseover(function() {
-        //     var id = $(this).attr('id');
-        //     console.log('emotion mouseover',id)
-        // });
     });
-
-    // // On click for proposals
-    // $(document).ready(function () {
-    //     $('.ideaName').click(function () {
-    //         var id = $(this).attr('id');
-
-    //         logInteraction('click, idea, ' + id);
-
-    //         if (selected_rows[id]) {
-    //             selected_rows[id] = null;
-    //             selected_rows_stack.splice(selected_rows_stack.indexOf(id), 1);
-    //             document.getElementById(id).setAttribute("style", "background-color:none")
-    //         }
-    //         else {
-    //             selected_rows[id] = true;
-    //             selected_rows_stack.push(id)
-    //             document.getElementById(id).setAttribute("style", "background-color:#3DAADD")
-    //         }
-    //         var all_filtered_comment = []
-
-    //         // for (var i = 0; i < selected_rows.length; i++) {
-    //         //     if (selected_rows[i]) {
-    //         //         filterobj.idea_id = i
-    //         //         filterobj.emotion = null
-    //         //         filterobj.sentiment_final = null
-    //         //         filterobj.task_id = null
-    //         //         filterobj.topic = []
-    //         //         var temp_comments = get_filtered_comment(JSON.parse(JSON.stringify(raw_json)), filterobj)
-    //         //         all_filtered_comment.push(temp_comments.ideas[0])
-    //         //     }
-    //         // }
-
-    //         iterate = selected_rows_stack.slice(0, selected_rows_stack.length)
-    //         var copy_json = []; 
-
-    //         while (iterate.length > 0) {
-    //             x = iterate.pop()
-    //             filterobj.idea_id = x
-    //             filterobj.emotion = null
-    //             filterobj.sentiment_final = null
-    //             filterobj.task_id = null
-    //             filterobj.topic = []
-    //             var temp_comments = get_filtered_comment(JSON.parse(JSON.stringify(raw_json)), filterobj)
-    //             all_filtered_comment.push(temp_comments.ideas[0])
-
-    //             for(var t in prop_json["ideas"]){
-    //                 if(x == prop_json.ideas[t].id){
-    //                     copy_json.push(prop_json.ideas[t])
-    //                 }
-    //             }
-    //         }
-
-    //         for(var t in prop_json["ideas"]){
-    //             if(selected_rows_stack.indexOf(prop_json.ideas[t].id) > -1){
-    //                 continue;
-    //             }
-    //             else{
-    //                 copy_json.push(prop_json.ideas[t])
-    //             }
-    //         }
-
-    //         var new_view = {"ideas": copy_json}
-    //         var filtered_comment = { "ideas": all_filtered_comment }
-
-    //         //console.log(new_view)
-
-    //         //console.log(filtered_comment)
-    //         draw_filtered_comments(filtered_comment, new_view)
-    //         draw_view(new_view)
-    //         divMove();
-
-    //         for(var x = 0; x < selected_rows_stack.length; x++){
-    //             //console.log("here")
-    //             document.getElementById(selected_rows_stack[x]).setAttribute("style", "background-color:#3DAADD")
-    //         }
-
-    //         // if (!animate_trigger) {
-    //         //     document.getElementById(id).scrollIntoView({ block: 'center' });
-    //         // }
-
-    //         //console.log(check_empty())
-
-    //         if (check_empty() == true) {
-    //             document.getElementById("box_header").innerHTML = "Click on a Proposal, Topic, Emotion or Sentiment to see related comments"
-    //         }
-    //         else if (current_sort == "") {
-    //             document.getElementById("box_header").innerHTML = ""
-    //         }
-
-    //         if(current_sort != ""){
-    //             console.log(current_sort)
-    //             $( "#span_id_"+ current_sort ).children().css( "opacity", "1.0" );
-    //         }
-
-    //         //console.log(id)
-    //         if (animate_trigger) {
-    //             animatedDivs();
-    //         }
-    //         if (!selected_rows[id]) {
-    //             setTimeout(
-    //                 function () {
-    //                     //console.log('scroll');
-    //                     $('#parentBox').scrollTo(0);
-    //                 }, 100
-    //             )
-    //         }
-    //         else {
-    //             setTimeout(
-    //                 function () {
-    //                     //console.log('scroll');
-
-    //                     $('#parentBox').scrollTo($('#ideaDivId-' + id), 500);
-    //                 }, 100
-    //             )
-    //         }
-
-    //     });
-    //     // $('.emoticon_button').mouseover(function() {
-    //     //     var id = $(this).attr('id');
-    //     //     console.log('emotion mouseover',id)
-    //     // });
-    // });
 
     // On click for proposals
     $(document).ready(function () {
         $('.ideaName').click(function () {
 
-            if(selected_topic){
+            if (selected_topic) {
                 draw_view(json)
                 prev_row = ""
                 prev_topic = ""
@@ -739,6 +2342,7 @@ function draw_view(json) {
                 filterobj.emotion = null
                 filterobj.task_id = null
                 filterobj.topic = []
+                filterobj.cloudkey = null
                 filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(raw_json)), filterobj)
 
                 // console.log(filtered_comment)
@@ -795,7 +2399,7 @@ function draw_view(json) {
     $(document).ready(function () {
         $('.topicName').click(function () {
 
-            if(!selected_topic && selected_row){
+            if (!selected_topic && selected_row) {
 
                 draw_view(json)
                 selected_row = ""
@@ -817,7 +2421,7 @@ function draw_view(json) {
                 filterobj.emotion = null
                 filterobj.task_id = null
                 filterobj.topic = selected_topic
-
+                filterobj.cloudkey = null
                 filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(raw_json)), filterobj)
 
                 // console.log(filtered_comment)
@@ -833,9 +2437,7 @@ function draw_view(json) {
                 divMove();
                 prev_topic = id;
                 prev_row = selected_row;
-            } 
-            
-            else {
+            } else {
                 console.log("here")
                 var myNode = document.getElementById("parentBox");
                 while (myNode.firstChild) {
@@ -857,65 +2459,18 @@ function draw_view(json) {
         });
     });
 
-    // // On click for topics //
-    // $(document).ready(function () {
-    //     $('.topicName').click(function () {
-    //         var id = $(this).attr('id');
-    //         var split_str = id.split("_")
-    //         logInteraction('click, idea, ' + split_str[1], 'topic ', split_str[2]);
+    //On click for wcloud //
+    $(document).ready(function () {
+        $('.wcloud_button').click(function () {
+            var id = $(this).attr('id');
+            var split_str = id.split("_")
+            logInteraction('click, wcloud, ' + split_str[3]);
 
-    //         if (selected_topics[split_str[1]][split_str[2]]) {
-    //             var top_cnt = 0;
-    //             for (var x = 0; x < selected_topics[split_str[1]].length; x++) {
-    //                 console.log(selected_topics[split_str[1]][x], x)
-    //                 if (selected_topics[split_str[1]][x] == true) {
-    //                     top_cnt += 1;
-    //                 }
-    //             }
-    //             if (top_cnt == 1) {
-    //                 document.getElementById(id.split("_")[1]).setAttribute("style", "background-color:none")
-    //             }
+            // console.log(proposal_wise_cloudword_agg)
 
-    //             selected_topics[split_str[1]][split_str[2]] = null;
-    //             document.getElementById(id + "_id").setAttribute("style", "background-color:none")
-
-    //         } else {
-    //             selected_topics[split_str[1]][split_str[2]] = true;
-    //             console.log(id)
-    //             document.getElementById(id + "_id").setAttribute("style", "background-color:#3DAADD")
-    //             document.getElementById(id.split("_")[1]).setAttribute("style", "background-color:#3DAADD")
-    //         }
-
-    //         all_filtered_topics = []
-
-    //         for (var i = 0; i < selected_topics.length; i++) {
-    //             //console.log(filterobj.topic)
-    //             filterobj.idea_id = i
-    //             filterobj.emotion = null
-    //             filterobj.sentiment_final = null
-    //             filterobj.task_id = null
-    //             filterobj.topic = getAllIndexes(selected_topics[i], true)
-
-    //             if (filterobj.topic.length != 0) {
-    //                 var temp_comments = get_filtered_comment(JSON.parse(JSON.stringify(raw_json)), filterobj)
-    //                 all_filtered_topics.push(temp_comments.ideas[0])
-    //             }
-    //         }
-
-    //         var filtered_comment = {
-    //             "ideas": all_filtered_topics
-    //         }
-    //         console.log(filtered_comment)
-    //         draw_filtered_comments(filtered_comment, raw_json)
-    //         divMove();
-
-    //         if (check_empty() == true) {
-    //             document.getElementById("box_header").innerHTML = "Click on a Proposal, Topic, Emotion or Sentiment to see related comments"
-    //         } else {
-    //             document.getElementById("box_header").innerHTML = ""
-    //         }
-    //     });
-    // });
+            cloudclick(proposal_wise_cloudword_agg, ("wcloud_" + split_str[3]))
+        });
+    });
 
     // On click for refresh //
     $(document).ready(function () {
@@ -926,10 +2481,6 @@ function draw_view(json) {
             console.log("refreshing")
             //$("#parentBox").animate({ scrollTop: 0 }, 1000);
             draw_view(raw_json);
-            if (animate_trigger) {
-                animatedDivs();
-            }
-
         });
     });
 
@@ -941,12 +2492,133 @@ function draw_view(json) {
             console.log("refreshing")
             //$("#parentBox").animate({ scrollTop: 0 }, 1000);
             draw_view(raw_json);
-            if (animate_trigger) {
-                animatedDivs();
-            }
-
         });
     });
+}
+
+function cloudTippy(cloud_id) {
+    $(document).ready(function () {
+        tippy('#' + cloud_id, {
+            interactive: true,
+            role: 'menu',
+            arrow: true,
+            arrowType: 'sharp',
+            theme: 'light',
+            // `focus` is not suitable for buttons with dropdowns
+            trigger: 'click',
+            content: getCloudWords(cloud_id),
+            // Don't announce the tooltip's contents when expanded
+            aria: null,
+            // Important: the tooltip should be DIRECTLY after the reference element
+            // in the DOM source order, which is why it has its own wrapper element
+            appendTo: 'parent',
+            // Let the user know the popup has been expanded
+            onMount({
+                reference
+            }) {
+                reference.setAttribute('aria-expanded', 'true')
+            },
+            onHide({
+                reference
+            }) {
+                reference.setAttribute('aria-expanded', 'false')
+            },
+            onShow(tip) {
+                tip.set({
+                    trigger: 'mouseenter'
+                })
+            },
+            onHide(tip) {
+                tip.set({
+                    trigger: 'click'
+                })
+            }
+        });
+    });
+}
+
+function getCloudWords(cloud_id) {
+
+    // console.log("inside getcloud", cloud_id)
+    var emojiDiv =
+        "<div class=\"tippy-label-body\"" + "\">" +
+        "<div class=\"label-title\"" + " style=border:none;font-size:1.5em" + ">" + "<p> " + "Click on a word to see related comments" + "</p>" + "</div>" +
+        // '<div id=' + 'cloud_' + cloud_id.split('_')[3] + '" style="width: 300px; height: 200px;"></div>' +
+        "<div class=\"label-wcloud-body\"" + 'id=wcloud_' + cloud_id.split('_')[3] + ' style="width:300px; height: 50px;"></div>' +
+        // '<span class="wcloud_button" id="span_id_wcloud' + '" onclick="cloudclick(\'' + cloud_id + '\')">' +
+        // "<i class=" + "\"fas fa-cloud fa-4x\"" + "style=color:#2C485B" + "></i>" + "\xa0" + "</div>"
+        "</div>";
+
+    // console.log('wcloud_' + cloud_id.split('_')[3])
+
+    return emojiDiv;
+}
+
+// jQuery(document).ready(checkContainer);
+
+// function checkContainer() {
+//     if ($('#wcloud_4').length > 0) { //if the container is visible on the page
+//         cloudclick("#wcloud_4"); //Adds a grid to the html
+//     } else if ($('#wcloud_3').length > 0) {
+//         cloudclick('#wcloud_3');
+//     } else {
+//         setTimeout(checkContainer, 10); //wait 50 ms, then try again
+//     }
+// }
+
+function cloudclick(cloudwords, cloud) {
+    // $(document).ready(function($) {
+
+    words = []
+    id = cloud.split('_')[1]
+    // cloudhandle = "#wcloud_" + id
+    cloudhandle = "#" + cloud
+    // console.log(cloud, id, cloudhandle)
+
+    for (var i in cloudwords) {
+        if (cloudwords[i].key == id) {
+            console.log("inside", id)
+            for (var j in cloudwords[i].cloudwords) {
+                c_word = {
+                    text: cloudwords[i].cloudwords[j],
+                    weight: cloudwords[i].frequency[j],
+                    handlers: {
+                        click: function (res) {
+                            get_text(res.target.textContent, id)
+                            // console.log(res.target.textContent, i, j, id)
+                        }
+                    }
+                }
+                words.push(c_word)
+            }
+        }
+    }
+
+    // console.log("words", words)
+
+    var some_words_with_same_weight =
+        $(cloudhandle).jQCloud(words, {
+            width: 200,
+            height: 150
+        });
+}
+
+function get_text(key, id) {
+    console.log(key, id)
+
+    filterobj.idea_id = id
+    filterobj.emotion = null
+    filterobj.task_id = null
+    filterobj.topic = null
+    filterobj.cloudkey = key
+    filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(raw_json)), filterobj)
+
+    console.log(filtered_comment)
+
+    new_view = JSON.parse(JSON.stringify(prop_json))
+    draw_filtered_comments(filtered_comment, new_view)
+
+    divMove();
 }
 
 //functions for d3
@@ -1255,10 +2927,8 @@ function emotion_rows(salesData, svg_id, div_id, idea_id) {
 
         // document.getElementById(div_id.split("-")[0]).setAttribute("style", "outline:solid thin gray");
 
-        console.log("oneclick")
         var this_cell = d3.select(this)
         filterobj.idea_id = idea_id
-
         filterobj.emotion = d.key
 
         // remove outline from previous cell 
@@ -1273,14 +2943,9 @@ function emotion_rows(salesData, svg_id, div_id, idea_id) {
             filterobj.idea_id = null
             filterobj.emotion = null
             filterobj.topic = null
+            filterobj.cloudkey = null
             cellHistory.emo_switch = false
-            if (animate_trigger) {
-                animatedDivs();
-            }
         } else {
-            if (animate_trigger) {
-                animatedDivs();
-            }
             this_cell.attr("stroke", "black")
             this_cell.attr("id", "emo_cell")
             this_cell.attr("opacity", 1)
@@ -1307,8 +2972,8 @@ function emotion_rows(salesData, svg_id, div_id, idea_id) {
         }, 1000);
 
         if (check_empty() == true) {
-                // console.log(document.getElementById("box_header"))
-                document.getElementById("box_header").innerHTML = "No comments for emotion - " + d.key 
+            // console.log(document.getElementById("box_header"))
+            document.getElementById("box_header").innerHTML = "No comments for emotion - " + d.key
         }
 
         if (!filterobj.emotion) {
