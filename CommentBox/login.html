@@ -29,28 +29,28 @@
 
 </head>
 
-<body>
+<body onload="myFunction()">
 	<nav class="navbar navbar-expand-lg navbar-dark"
 		style="background-color:#2C485B;margin:0px;padding-top:0px; padding-bottom: 0px">
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="nav navbar-nav">
-				<a class="navbar-brand" href="main.html" title="Home">CommunityPulse</a>
+				<a class="navbar-brand" href="login.html" title="Home">CommunityPulse</a>
 				<button class="btn btn-primary navbar-btn" id="instr_button"
 					style="background-color:#2C485B; border:none" type="button" data-toggle="modal"
 					data-placement="bottom" title="User Guide" data-target="#instrModal">User Guide</button>
 				<p>&nbsp</p>
-				<button class="btn btn-primary navbar-btn" id="notes_all_button"
+				<button class="btn btn-primary navbar-btn" id="about_button"
+					style="background-color:#2C485B; border:none" type="button" data-toggle="modal"
+					data-placement="bottom" title="About" data-target="#aboutModal">About</button>
+				<p>&nbsp</p>
+				<!-- <button class="btn btn-primary navbar-btn" id="notes_all_button"
 					style="background-color:#2C485B; border:none" type="button" data-toggle="modal"
 					data-placement="bottom" title="Notes" data-target="#notesAllModal">Notes</button>
 				<p>&nbsp</p>
 				<button class="btn btn-primary navbar-btn" id="compare_button"
 					style="background-color:#2C485B; border:none" type="button" title="Compare"
 					onclick="triggerCompare()">Compare</button>
-				<p>&nbsp</p>
-				<button class="btn btn-primary navbar-btn" id="about_button"
-					style="background-color:#2C485B; border:none" type="button" data-toggle="modal"
-					data-placement="bottom" title="About" data-target="#aboutModal">About</button>
-				<p>&nbsp</p>
+				<p>&nbsp</p> -->
 			</ul>
 			<ul class="navbar-nav ml-auto">
 				<form class="navbar-form navbar-right">
@@ -290,27 +290,6 @@
 		</div>
 	</div>
 
-	<div class="modal fade" id="notesAllModal" tabindex="-2" role="dialog" aria-labelledby="notesAllModal"
-		aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="notesAllModalTitle">List of Notes</h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body" id="note_modal_body">
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-primary" style="background-color:#2C485B"
-						id="note_print">Print</button>
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				</div>
-			</div>
-		</div>
-	</div>
-
 	<div class="modal fade" tabindex="-1" id="aboutModal" role="dialog">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
@@ -336,65 +315,47 @@
 		</div>
 	</div>
 
-	<div id="parCompDiv" class="parentCompare">
-
-		<div class="modal fade" id="noteModal" role="dialog">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title">Save a Note</h5>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<div class="modal-body">
-						<form action="/action_page.php">
-							Note Title:<br>
-							<input id="note_title" type="text" name="note_title" value="">
-							<br>
-							Note Type:<br>
-							<input id="note_type" type="text" name="note_type" value="">
-							<br>
-							Note Text:<br>
-							<input id="note_text" type="text" name="note_text" value="">
-							<br>
-						</form>
-					</div>
-					<div class="modal-footer">
-						<input id="note_save_button" class="btn btn-primary" style="background-color:#2C485B"
-							type="button" value="Save">
-						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-					</div>
+	<div id="parLoginDiv" class="parentLogin">
+		<div class="login">
+			<div class="intro_message" style="text-align: center; font-weight: bold; margin-bottom:5%">
+				<p>Please login to access your data. Otherwise continue as guest to
+					explore <a href="https://cc.ucsd.edu/">CommunityCrit</a> data.</p>
+			</div>
+			<label for="inputUserName" class="col-lg-12 col-m-12 col-sm-12 col-form-label">Username</label>
+			<div class="col-lg-12 col-m-12 col-sm-12">
+				<input type="text" class="form-control" id="inputUserName" placeholder="" required>
+				<div class="invalidFeedback" id="usernameFeedback">
+				</div>
+			</div>
+			<label for="inputPassword" class="col-lg-12 col-m-12 col-sm-12 col-form-label">Password</label>
+			<div class="col-lg-12 col-m-12 col-sm-12">
+				<input type="password" class="form-control" id="inputPassword" placeholder="" required>
+				<div class="invalidFeedback" id="passwordFeedback">
 				</div>
 			</div>
 		</div>
-
-		<div id="compareLeftDiv" class="compare">
-			<div id="compareLeftDrop" class="compareDrop">
-			</div>
-			<div id="compareLeftHeader" class="compareHeader"></div>
-			<div id="compareLeftBody" class="compareBody">
-				<div id="compareLeftparentBox" class="comparebox">
-				</div>
-			</div>
-		</div>
-		<div id="compareRighttDiv" class="compare">
-			<div id="compareRightDrop" class="compareDrop">
-			</div>
-			<div id="compareRightHeader" class="compareHeader"></div>
-			<div id="compareRightBody" class="compareBody">
-				<div id="compareRightparentBox" class="comparebox">
-				</div>
-			</div>
+		<div class="login_buttons" style="margin-top:50px">
+			<button type="button" class="btn btn-primary" id="login-button"
+				style="background-color: #2C485B; width:200px; margin-top:5%">Login</button>
+			<button type="button" class="btn btn-secondary" id="guest-button"
+				style="width:200px; margin-top:5%">Continue as Guest</button>
 		</div>
 	</div>
+
 </body>
 
 </html>
 
+<script>
+	function myFunction() {
+		if (localStorage.getItem("username")) {
+			localStorage.setItem("username", "")
+		}
+	}
+</script>
+
 <script src="overview.js"></script>
 <script src="proposal_view.js"></script>
-<script src="agg_view.js"></script>
 <script src="js/highlight.js"></script>
 <script src="js/search.js"></script>
-<script src="compare.js"></script>
+<script src="login.js"></script>

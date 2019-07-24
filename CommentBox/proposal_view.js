@@ -1,12 +1,10 @@
 var currentJSON = null;
 
-var notes = [];
-
 var attributeObj = {
     Angry: "fa-angry fa-lg",
-    Worried: "fa-flushed fa-lg",
-    Sad: "fa-frown fa-lg",
-    Bored: "fa-meh fa-lg",
+    Concerned: "fa-flushed fa-lg",
+    Neutral: "fa-meh fa-lg",
+    // Bored: "fa-meh fa-lg",
     Happy: "fa-smile fa-lg",
     Excited: "fa-smile-beam fa-lg",
     negative: "fa-thumbs-down fa-lg",
@@ -91,7 +89,7 @@ function draw_proposal_wise_comments(json, idea_id) {
 
 // Get filtered comments
 function get_filtered_comment(json, filterobj) {
-    console.log("get filtered comment", filterobj)
+    // console.log("get filtered comment", filterobj)
     var ideas = []
     for (var i in json["ideas"]) {
         if (filterobj.idea_id != null && json.ideas[i].id != filterobj.idea_id) {
@@ -136,16 +134,16 @@ function get_filtered_comment(json, filterobj) {
                 //console.log(flag, topicFilter)
                 //console.log("yolo")
 
-                if (flag && filterobj.cloudkey != null) {
-                    // console.log("inside cloud loop", filterobj)
-                    if (!(json.ideas[i].tasks[j].comments[k].comment.includes(filterobj.cloudkey))) {
-                        // console.log(json.ideas[i].tasks[j].comments[k].comment)
-                        flag = false
+                // if (flag && filterobj.cloudkey != null) {
+                //     // console.log("inside cloud loop", filterobj)
+                //     if (!(json.ideas[i].tasks[j].comments[k].comment.includes(filterobj.cloudkey))) {
+                //         // console.log(json.ideas[i].tasks[j].comments[k].comment)
+                //         flag = false
 
-                        // console.log(json.ideas[i].tasks[j].comments[k].comment.includes(filterobj.cloudkey))
+                //         // console.log(json.ideas[i].tasks[j].comments[k].comment.includes(filterobj.cloudkey))
 
-                    }
-                }
+                //     }
+                // }
 
                 if (flag) {
                     comments.push(json.ideas[i].tasks[j].comments[k])
@@ -317,12 +315,12 @@ function draw_filtered_comments(filtered_comment, json) {
     $(document).ready(function () {
         $('.options_button').click(function () {
             var id = $(this).attr('id');
-            console.log('options clicked', id)
+            // console.log('options clicked', id)
             save_notes(id)
         });
     });
 
-    makeRevision(filterobj); //mjasim - call for save
+    // makeRevision(filterobj); //mjasim - call for save
 }
 
 // get time passed
@@ -407,8 +405,8 @@ function setTippy(commentID, json) {
 }
 
 function emojiMouseClick(id) {
-    console.log('emoji id ' + id);
-    console.log("inside emoclick");
+    // console.log('emoji id ' + id);
+    // console.log("inside emoclick");
 
     var all_ids = id.split("-");
 
@@ -425,12 +423,12 @@ function emojiMouseClick(id) {
                     currentJSON.ideas[i].tasks[j].comments[k].comment_id == all_ids[4]) {
 
                     var new_emo = all_ids[0].charAt(0).toUpperCase() + all_ids[0].slice(1);
-                    console.log("New Emotion ", String(new_emo));
+                    // console.log("New Emotion ", String(new_emo));
                     currentJSON.ideas[i].tasks[j].comments[k].emotion = new_emo;
 
-                    console.log(new_emo.toLowerCase());
+                    // console.log(new_emo.toLowerCase());
                     var awesome_emoticon = attributeObj[new_emo];
-                    console.log(awesome_emoticon);
+                    // console.log(awesome_emoticon);
                     var newEmotionButtonStr =
                         "<i class=" + "\"" + "fas " + awesome_emoticon + "\"" + "></i>" + "\xa0";
 
@@ -453,39 +451,39 @@ function getEmojiString(commentID) {
 
     var emojiDiv =
         "<div class=\"tippy-label-body\"" + "\">" +
-        "<div class=\"label-title\"" + " style=border:none;font-size:1.5em" + ">" + "<p> " + "Click on an icon to set as the new emotion" + "</p>" + "</div>" +
+        "<div class=\"label-title\"" + " style=border:none;font-size:1.0em" + ">" + "<p> " + "Click on an icon to set as the new emotion" + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + ">" +
-        "<p>" + "Excited" + "</p>" +
+        "<p style=font-size:0.7em>" + "Excited" + "</p>" +
         "<p>" + '<span class="label-emo-button" id="span_id_excited' + commentID + '" onclick="emojiMouseClick(\'' + 'excited-' + commentID + '\')">' +
-        "<i class=" + "\"fas fa-smile-beam fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<i class=" + "\"fas fa-smile-beam fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
-        "<p>" + "Happy" + "</p>" +
+        "<p style=font-size:0.7em>" + "Happy" + "</p>" +
         "<p>" + '<span class="label-emo-button" id="span_id_happy' + '" onclick="emojiMouseClick(\'' + 'happy-' + commentID + '\')">' +
-        "<i class=" + "\"fas fa-smile fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<i class=" + "\"fas fa-smile fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
-        "<p>" + "Sad" + "</p>" +
-        "<p>" + '<span class="label-emo-button" id="span_id_sad' + '" onclick="emojiMouseClick(\'' + 'sad-' + commentID + '\')">' +
-        "<i class=" + "\"fas fa-frown fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
-        "<div class=\"label-emo-body\"" + "\">" +
-        "<p>" + "Worried" + "</p>" +
-        "<p>" + '<span class="label-emo-button" id="span_id_worried' + '" onclick="emojiMouseClick(\'' + 'worried-' + commentID + '\')">' +
-        "<i class=" + "\"fas fa-flushed fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
-        "<div class=\"label-emo-body\"" + "\">" +
-        "<p>" + "Angry" + "</p>" +
-        "<p>" + '<span class="label-emo-button" id="span_id_angry' + '" onclick="emojiMouseClick(\'' + 'angry-' + commentID + '\')">' +
-        "<i class=" + "\"fas fa-angry fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
-        "<div class=\"label-emo-body\"" + "\">" +
-        "<p>" + "Negative" + "</p>" +
-        "<p>" + '<span class="label-emo-button" id="span_id_negative' + '" onclick="emojiMouseClick(\'' + 'negative-' + commentID + '\')">' +
-        "<i class=" + "\"fas fa-flushed fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
-        "<div class=\"label-emo-body\"" + "\">" +
-        "<p>" + "Neutral" + "</p>" +
+        "<p style=font-size:0.7em>" + "Neutral" + "</p>" +
         "<p>" + '<span class="label-emo-button" id="span_id_neutral' + '" onclick="emojiMouseClick(\'' + 'neutral-' + commentID + '\')">' +
-        "<i class=" + "\"fas fa-flushed fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<i class=" + "\"fas fa-meh fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-emo-body\"" + "\">" +
-        "<p>" + "Positive" + "</p>" +
-        "<p>" + '<span class="label-emo-button" id="span_id_positive' + '" onclick="emojiMouseClick(\'' + 'positive-' + commentID + '\')">' +
-        "<i class=" + "\"fas fa-flushed fa-3x\"" + "></i>" + '</span>' + "</p>" + "</div>";
+        "<p style=font-size:0.7em>" + "Concerned" + "</p>" +
+        "<p>" + '<span class="label-emo-button" id="span_id_concerned' + '" onclick="emojiMouseClick(\'' + 'concerned-' + commentID + '\')">' +
+        "<i class=" + "\"fas fa-flushed fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+        "<div class=\"label-emo-body\"" + "\">" +
+        "<p style=font-size:0.7em>" + "Angry" + "</p>" +
+        "<p>" + '<span class="label-emo-button" id="span_id_angry' + '" onclick="emojiMouseClick(\'' + 'angry-' + commentID + '\')">' +
+        "<i class=" + "\"fas fa-angry fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>";
+    // "<div class=\"label-emo-body\"" + "\">" +
+    // "<p style=font-size:0.7em>" + "Negative" + "</p>" +
+    // "<p>" + '<span class="label-emo-button" id="span_id_negative' + '" onclick="emojiMouseClick(\'' + 'negative-' + commentID + '\')">' +
+    // "<i class=" + "\"fas fa-flushed fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+    // "<div class=\"label-emo-body\"" + "\">" +
+    // "<p style=font-size:0.7em>" + "Neutral" + "</p>" +
+    // "<p>" + '<span class="label-emo-button" id="span_id_neutral' + '" onclick="emojiMouseClick(\'' + 'neutral-' + commentID + '\')">' +
+    // "<i class=" + "\"fas fa-flushed fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>" +
+    // "<div class=\"label-emo-body\"" + "\">" +
+    // "<p style=font-size:0.7em>" + "Positive" + "</p>" +
+    // "<p>" + '<span class="label-emo-button" id="span_id_positive' + '" onclick="emojiMouseClick(\'' + 'positive-' + commentID + '\')">' +
+    // "<i class=" + "\"fas fa-flushed fa-2x\"" + "></i>" + '</span>' + "</p>" + "</div>";
     return emojiDiv;
 }
 
@@ -524,7 +522,7 @@ function getEmojiString(commentID) {
 
 // save revisions
 function makeRevision(obj) {
-    console.log('make revision');
+    // console.log('make revision');
     // $.ajax({
     //     url: 'save_file.php',
     //     data: {myData: JSON.stringify(obj)},
@@ -567,13 +565,16 @@ function checkKeyphrase(prop_topic, all_topics) {
 function save_notes(id) {
 
     $('#noteModal').modal('show')
-    $('#note_save_button').on('click', function () {
-        //console.log(currentJSON)
-        var all_ids = id.split("-")
-        //console.log(all_ids)
+    $('#note_save_button').off('click').on('click', function () {
+
+        if (!localStorage.getItem("notes")) {
+            var notes = []
+            // console.log("inside")
+            localStorage.setItem("notes", JSON.stringify(notes))
+        } else
+            notes = JSON.parse(localStorage.getItem("notes") || null);
 
         var all_ids = id.split("-")
-        var new_note = ""
         count = 0
 
         logInteraction('click, revision, ' + 'idea, ' + all_ids[2] + ' task, ' + all_ids[3] + ' comment' + all_ids[4] + ' note');
@@ -581,31 +582,46 @@ function save_notes(id) {
         for (var i in currentJSON["ideas"]) {
             for (var j in currentJSON.ideas[i].tasks) {
                 for (var k in currentJSON.ideas[i].tasks[j].comments) {
-                    if (currentJSON.ideas[i].id == all_ids[2]) {
-                        if (currentJSON.ideas[i].tasks[j].id == all_ids[3]) {
-                            if (currentJSON.ideas[i].tasks[j].comments[k].comment_id == all_ids[4]) {
+                    if (currentJSON.ideas[i].id == all_ids[1]) {
+                        if (currentJSON.ideas[i].tasks[j].id == all_ids[2]) {
+                            if (currentJSON.ideas[i].tasks[j].comments[k].comment_id == all_ids[3]) {
                                 if (currentJSON.ideas[i].tasks[j].comments[k].quesion_id == null) {
-                                    new_note = "Proposal Title: " + currentJSON.ideas[i].name + "\n" +
-                                        "Task: " + currentJSON.ideas[i].tasks[j].name + "\n" +
-                                        "Comment: " + currentJSON.ideas[i].tasks[j].comments[k].comment + "\n" +
-                                        "Emotion " + currentJSON.ideas[i].tasks[j].comments[k].emotion + "\n"
+                                    var new_note = {
+                                        Title: currentJSON.ideas[i].name,
+                                        Task: currentJSON.ideas[i].tasks[j].name,
+                                        Comment: currentJSON.ideas[i].tasks[j].comments[k].comment,
+                                        Emotion: currentJSON.ideas[i].tasks[j].comments[k].emotion,
+                                        noteTitle: $('#note_title').val(),
+                                        noteType: $('#note_type').val(),
+                                        noteText: $('#note_text').val()
+                                    }
                                 } else {
-                                    new_note = "Proposal Title: " + currentJSON.ideas[i].name + "\n" +
-                                        "Task: " + currentJSON.ideas[i].tasks[j].name + "\n" +
-                                        "Question: " + currentJSON.ideas[i].tasks[j].comments[k].question + "\n" +
-                                        "Comment: " + currentJSON.ideas[i].tasks[j].comments[k].comment + "\n" +
-                                        "Emotion " + currentJSON.ideas[i].tasks[j].comments[k].emotion + "\n"
+                                    var new_note = {
+                                        Title: currentJSON.ideas[i].name,
+                                        Task: currentJSON.ideas[i].tasks[j].name,
+                                        Question: currentJSON.ideas[i].tasks[j].comments[k].question,
+                                        Comment: currentJSON.ideas[i].tasks[j].comments[k].comment,
+                                        Emotion: currentJSON.ideas[i].tasks[j].comments[k].emotion,
+                                        noteTitle: $('#note_title').val(),
+                                        noteType: $('#note_type').val(),
+                                        noteText: $('#note_text').val()
+                                    }
                                 }
                             }
-                            notes.push(new_note);
                         }
                     }
                 }
             }
         }
 
-        makeRevision(currentJSON);
-        raw_json = currentJSON;
+        notes.push(new_note);
+
+        // console.log(notes)
+
+        localStorage.setItem("notes", JSON.stringify(notes))
+
+        // makeRevision(currentJSON);
+        // raw_json = currentJSON;
 
         //console.log(currentJSON)
         $('#noteModal').modal('hide')
@@ -678,3 +694,45 @@ function save_notes(id) {
 //         }
 //     }
 // }
+
+now_notes = ""
+
+function get_note_body() {
+    note_body = document.getElementById("note_modal_body")
+
+    // console.log("called", note_all_html)
+
+    var note_all_html = ""
+
+    notes = JSON.parse(localStorage.getItem("notes") || null);
+
+    for (var i in notes) {
+        if (("Question" in notes[i])) {
+            note_all_html = note_all_html + "<p> - " + "Proposal Name: " + notes[i].Title + ", " + "Task Name: " + notes[i].Task + ", " + "Question: " + notes[i].Question + ", " + "Comment: " + notes[i].Comment + ", " + "Emotion: " + notes[i].Emotion + ", " + "Note Title: " + notes[i].noteTitle + ", " + "Note Type: " + notes[i].noteType + ", " + "Note Text: " + notes[i].noteText + "</p>"
+        } else {
+            note_all_html = note_all_html + "<p> - " + "Proposal Name: " + notes[i].Title + ", " + "Task Name: " + notes[i].Task + ", " + "Comment: " + notes[i].Comment + ", " + "Emotion: " + notes[i].Emotion + ", " + "Note Title: " + notes[i].noteTitle + ", " + "Note Type: " + notes[i].noteType + ", " + "Note Text: " + notes[i].noteText + "</p>"
+        }
+    }
+
+    note_body.innerHTML = note_all_html
+}
+
+$(document).ready(function () {
+    $('#notes_all_button').click(function () {
+        var id = $(this).attr('id');
+        // console.log('note clicked', id)
+
+        get_note_body();
+
+        $('#notesAllModal').on('show.bs.modal', function (event) {
+            $("#notesAllModal").off('shown.bs.modal');
+        });
+    });
+});
+
+$(document).ready(function () {
+    $('#note_print').click(function () {
+        var id = $(this).attr('id');
+        // console.log('note print', id)
+    });
+});

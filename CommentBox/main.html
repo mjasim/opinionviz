@@ -2,10 +2,12 @@
 <meta charset="utf-8">
 
 <head>
+
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
 		integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
 	</script>
+
 
 	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet"
@@ -19,17 +21,29 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
 		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
 	</script>
-	<!-- <script src="interaction_log.js"></script> -->
 
 	<script src="https://d3js.org/d3.v4.min.js" charset="utf-8"></script>
+	<script src="https://d3js.org/d3-color.v1.min.js"></script>
+	<script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
+	<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+
+	<script src="https://unpkg.com/tooltip.js/dist/umd/tooltip.min.js"></script>
+	<script src="https://unpkg.com/popper.js@1/dist/umd/popper.min.js"></script>
+	<script src="https://unpkg.com/tippy.js@4"></script>
+
+	<script src="//cdn.jsdelivr.net/npm/jquery.scrollto@2.1.2/jquery.scrollTo.min.js"></script>
 	<script src="interaction_log.js"></script>
+	<!-- <script src="http://mistic100.github.io/jQCloud/dist/jqcloud2/dist/jqcloud.js"></script> -->
+
 	<link rel="stylesheet" href="test.css">
+	<!-- <link rel="stylesheet" href="http://mistic100.github.io/jQCloud/dist/jqcloud2/dist/jqcloud.css"> -->
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
 		integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
 </head>
 
-<body>
+<body onload="myFunction()">
+
 	<nav class="navbar navbar-expand-lg navbar-dark"
 		style="background-color:#2C485B;margin:0px;padding-top:0px; padding-bottom: 0px">
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -290,6 +304,26 @@
 		</div>
 	</div>
 
+
+	<!-- <div class="modal fade" id="instrModal" tabindex="-1" role="dialog" aria-labelledby="instrModal" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="instrModalTitle">CommunityPulse User Guide</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<img class="img-responsive" style="margin:0 auto;" src="https://i.imgur.com/FieANdN.png" alt="">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div> -->
+
 	<div class="modal fade" id="notesAllModal" tabindex="-2" role="dialog" aria-labelledby="notesAllModal"
 		aria-hidden="true">
 		<div class="modal-dialog" role="document">
@@ -310,6 +344,7 @@
 			</div>
 		</div>
 	</div>
+
 
 	<div class="modal fade" tabindex="-1" id="aboutModal" role="dialog">
 		<div class="modal-dialog" role="document">
@@ -336,65 +371,120 @@
 		</div>
 	</div>
 
-	<div id="parCompDiv" class="parentCompare">
+	<div id="parDiv" class="parentDiv">
+		<!--<div>-->
+		<!--<button aria-haspopup="true" aria-expanded="false">Text</button>-->
+		<!--</div>-->
+		<div id="labelDiv" class="label"></div>
+		<!-- <div id="topDiv" class="top"></div> -->
+		<div id="aggregateDiv" class="aggregate">
+		</div>
+		<div class="container">
+			<!-- Trigger the modal with a button 
+			<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open
+				Modal</button> -->
 
-		<div class="modal fade" id="noteModal" role="dialog">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title">Save a Note</h5>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<div class="modal-body">
-						<form action="/action_page.php">
-							Note Title:<br>
-							<input id="note_title" type="text" name="note_title" value="">
-							<br>
-							Note Type:<br>
-							<input id="note_type" type="text" name="note_type" value="">
-							<br>
-							Note Text:<br>
-							<input id="note_text" type="text" name="note_text" value="">
-							<br>
-						</form>
-					</div>
-					<div class="modal-footer">
-						<input id="note_save_button" class="btn btn-primary" style="background-color:#2C485B"
-							type="button" value="Save">
-						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			<div class="modal fade" id="noteModal" role="dialog">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Save a Note</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<form action="/action_page.php">
+								Note Title:<br>
+								<input id="note_title" type="text" name="note_title" value="">
+								<br>
+								Note Type:<br>
+								<input id="note_type" type="text" name="note_type" value="">
+								<br>
+								Note Text:<br>
+								<input id="note_text" type="text" name="note_text" value="">
+								<br>
+							</form>
+						</div>
+						<div class="modal-footer">
+							<input id="note_save_button" class="btn btn-primary" style="background-color:#2C485B"
+								type="button" value="Save">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						</div>
 					</div>
 				</div>
 			</div>
+
+			<!-- Modal Criteria-->
+			<!-- 			
+			<div class="modal fade" id="criteriaModal" role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+							<h4 class="modal-title">Save as a criteria</h4>
+						</div>
+						<div class="modal-body">
+							<form action="/action_page.php">
+								Criteria Title:<br>
+								<input id="criteria_title" type="text" name="criteria_title" value="">
+								<br>
+								Criteria Type:<br>
+								<input id="criteria_type" type="text" name="criteria_type" value="">
+								<br>
+								Criteria Type:<br>
+								<input id="criteria_text" type="text" name="criteria_text" value="">
+								<br>
+							</form>
+						</div>
+						<div class="modal-footer">
+							<input id="criteria_save_button" class="btn btn-primary" type="button" value="Save">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div> -->
+
+			<!-- <div id="note_save">
+				<input type="button" name="note_button" onclick="f()">
+			</div> -->
 		</div>
 
-		<div id="compareLeftDiv" class="compare">
-			<div id="compareLeftDrop" class="compareDrop">
+		<!--<div id="comments" , class="comments"></div>
+		<div style="background-color:blueviolet; height:30vh; width: 100%"></div>
+		<button onclick="myFunction()">Try it</button>-->
+		<div class="parentHeader" id="parent_header">
+			<div class="boxHeader" id="box_header">
+				<p></p>
 			</div>
-			<div id="compareLeftHeader" class="compareHeader"></div>
-			<div id="compareLeftBody" class="compareBody">
-				<div id="compareLeftparentBox" class="comparebox">
-				</div>
+			<div><button class="boxheaderbutton" id="box_header_button_up" style="width:33px; height:33px"><i class="fas fa-angle-up"></i></button>
+			</div>
+			<div><button class="boxheaderbutton" id="box_header_button_down" style="width:33px; height:33px"><i class="fas fa-angle-down"></i></button>
 			</div>
 		</div>
-		<div id="compareRighttDiv" class="compare">
-			<div id="compareRightDrop" class="compareDrop">
-			</div>
-			<div id="compareRightHeader" class="compareHeader"></div>
-			<div id="compareRightBody" class="compareBody">
-				<div id="compareRightparentBox" class="comparebox">
-				</div>
-			</div>
+		<div id="parentBox" class="box">
 		</div>
 	</div>
 </body>
 
 </html>
 
+<script>
+	function myFunction() {
+		if (!localStorage.getItem("firstTime")) {
+			localStorage.setItem("firstTime", "no")
+			document.getElementById("instr_button").click();
+		}
+		if (localStorage.getItem("compare_1"))
+			localStorage.setItem("compare_1", "")
+		if (localStorage.getItem("compare_2"))
+			localStorage.setItem("compare_2", "")
+	}
+</script>
+
+<script src="login.js"></script>
 <script src="overview.js"></script>
 <script src="proposal_view.js"></script>
 <script src="agg_view.js"></script>
 <script src="js/highlight.js"></script>
 <script src="js/search.js"></script>
-<script src="compare.js"></script>

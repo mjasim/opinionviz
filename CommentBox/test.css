@@ -18,6 +18,52 @@ body {
 
 }
 
+.parentLogin{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    justify-content: start;
+    align-items: center;
+}
+
+.parentIntro{
+    display: flex;
+    flex-direction: row;
+    height: 95%;
+    width: 100%;
+    justify-content: start;
+    align-items: start;
+}
+
+.introLeft{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 55%;
+    justify-content: start;
+    align-items: flex-start;
+    padding: 5%;
+    margin-top: 5%;
+}
+
+.introRight{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 45%;
+    justify-content: start;
+    align-items: center;
+}
+
+.login{
+    height: 25%;
+    width: 50%;
+    margin-top:10%;
+    margin-left: 7%;
+    margin-right: 7%;
+}
+
 .parentCompare{
     display: flex;
     flex-direction: row;
@@ -39,12 +85,13 @@ body {
 .compareHeader{
     display: flex;
     flex-direction: row;
-    height: 10%;
+    height: 7%;
     width: 100%;
-    justify-content: start;
+    justify-content: center;
     align-items: center;
-    background-color: yellow;
-    border: thin solid #DEE5EA
+    background-color: #DEE5EA;
+    border: thin solid white;
+    padding:1%
 }
 
 .compareDrop{
@@ -61,15 +108,10 @@ body {
 .compareBody{
     display: flex;
     flex-direction: row;
-    height: 74%;
+    height: 77%;
     width: 100%;
     justify-content: start;
     align-items: center;
-    background-color: orange;
-    border: thin solid #DEE5EA;
-    overflow: scroll;
-    overflow-x: hidden;
-
 }
 
 .c_svg{
@@ -129,6 +171,7 @@ body {
     justify-content: flex-end;
 }
 
+
 .tippy-label-body{
     display: flex;
     flex-direction: row;
@@ -150,7 +193,11 @@ body {
 
 .label-info-body{
     width: 50%;
-    padding: 5px 0;
+    padding-bottom: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .fa-comment-alt.label_icons{
@@ -162,9 +209,22 @@ body {
 }
 
 .label-emo-body{
-    width: 12.5%;
-    padding: 5px 0;
+    width: 20%;
+    padding-bottom: 5px;
     opacity:1.0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.compare-label-emo-body{
+    width: 11.11%;
+    opacity:1.0;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
 }
 
 .label-wcloud-body{
@@ -204,6 +264,11 @@ body {
     background-color: #A9A9A9;
 }
 
+.l_column_selector{
+    width: 2%;
+    height: inherit;
+}
+
 .l_column0{
     width: 2%;
     height: inherit;
@@ -220,17 +285,17 @@ body {
 }
 
 .l_column3{
-    width: 20%;
+    width: 30%;
     height: inherit;
 }
 
-.l_column4{
+/* .l_column4{
     width: 10%;
     height: inherit;
-}
+} */
 
 .l_column5{
-    width: 45%;
+    width: 43%;
     height: inherit;
 }
 
@@ -241,10 +306,21 @@ body {
     justify-content: center;
 }
 
+.c_column_selector{
+    width: 2%;
+    height: inherit;
+    /* font-weight: bold; */
+    padding:0px 0px 0px 0px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
 .c_column0{
     width: 2%;
     height: inherit;
-    font-weight: bold;
+    /* font-weight: bold; */
     padding:0px 0px 0px 0px;
     display: flex;
     flex-direction: row;
@@ -254,8 +330,8 @@ body {
     width: 14%;
     height: inherit;
     border-color: black;
-    font-size: 1.2em;
-    font-weight: bold;
+    /* font-size: 1.2em;
+    font-weight: bold; */
     padding:3px 0px 0px 0px;
     display: flex;
     flex-direction: row;
@@ -272,13 +348,13 @@ body {
 }
 
 .c_column3{
-    width: 20%;
+    width: 30%;
     height: inherit;
     border-color: black;
-    padding:8px 0px 0px 8px;
+    padding:6px 0px 0px 5px;
 }
 
-.c_column4{
+/* .c_column4{
     width: 10%;
     height: inherit;
     border-color: black;
@@ -286,10 +362,10 @@ body {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-}
+} */
 
 .c_column5{
-    width: 45%;
+    width: 43%;
     height: inherit;
     border-color: black;
     padding: 2px 0px 0px 0px;
@@ -298,6 +374,14 @@ body {
 .box{
     width: 100%;
     height: 0px;
+    overflow: scroll;
+    transition: all .5s linear;
+    overflow-x:hidden;
+}
+
+.comparebox{
+    width: 100%;
+    height:100%;
     overflow: scroll;
     transition: all .5s linear;
     overflow-x:hidden;
@@ -317,9 +401,23 @@ body {
     padding: 0px 0px 0px 5px;
 }
 
+.parentHeader{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
 .boxHeader{
     background-color: #DEE5EA;
-    width: inherit;
+    width: 98%;
+    text-align: center;
+    font-weight: 700;
+    margin: 5px 0px 0px 0px;
+}
+
+.boxheaderbutton{
+    background-color: #DEE5EA;
+    width: 10%;
     text-align: center;
     font-weight: 700;
     margin: 5px 0px 0px 0px;
@@ -406,7 +504,7 @@ body {
 }
 
 .fa-meh{
-    color: #72B7B2;
+    color: #4C78BF;
     opacity: 0.7;
 }
 .fa-meh:hover{

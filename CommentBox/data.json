@@ -1,0 +1,158 @@
+[
+  {
+    "name": "Angry",
+    "show": true,
+    "color": "red",
+    "currentPopulation": 1,
+    "history": [
+      {
+        "year": 1910,
+        "population": 10
+      },
+      {
+        "year": 1920,
+        "population": 100
+      },
+      {
+        "year": 1930,
+        "population": 20
+      },
+      {
+        "year": 1940,
+        "population": 5
+      },
+      {
+        "year": 1950,
+        "population": 3
+      },
+      {
+        "year": 1960,
+        "population": 1
+      },
+      {
+        "year": 1970,
+        "population": 1
+      },
+      {
+        "year": 1980,
+        "population": 1
+      },
+      {
+        "year": 1990,
+        "population": 1
+      },
+      {
+        "year": 2000,
+        "population": 1
+      },
+      {
+        "year": 2010,
+        "population": 1
+      }
+    ]
+  },
+  {
+    "name": "Sad",
+    "show": true,
+    "color": "blue",
+    "currentPopulation": 3,
+    "history": [
+      {
+        "year": 1910,
+        "population": 3
+      },
+      {
+        "year": 1920,
+        "population": 3
+      },
+      {
+        "year": 1930,
+        "population": 3
+      },
+      {
+        "year": 1940,
+        "population": 3
+      },
+      {
+        "year": 1950,
+        "population": 3
+      },
+      {
+        "year": 1960,
+        "population": 3
+      },
+      {
+        "year": 1970,
+        "population": 3
+      },
+      {
+        "year": 1980,
+        "population": 3
+      },
+      {
+        "year": 1990,
+        "population": 3
+      },
+      {
+        "year": 2000,
+        "population": 3
+      },
+      {
+        "year": 2010,
+        "population": 3
+      }
+    ]
+  },
+  {
+    "name": "Happy",
+    "show": true,
+    "color": "green",
+    "currentPopulation": 10,
+    "history": [
+      {
+        "year": 1910,
+        "population": 1
+      },
+      {
+        "year": 1920,
+        "population": 1
+      },
+      {
+        "year": 1930,
+        "population": 2
+      },
+      {
+        "year": 1940,
+        "population": 3
+      },
+      {
+        "year": 1950,
+        "population": 4
+      },
+      {
+        "year": 1960,
+        "population": 10
+      },
+      {
+        "year": 1970,
+        "population": 50
+      },
+      {
+        "year": 1980,
+        "population": 60
+      },
+      {
+        "year": 1990,
+        "population": 70
+      },
+      {
+        "year": 2000,
+        "population": 20
+      },
+      {
+        "year": 2010,
+        "population": 10
+      }
+    ]
+  }
+]
