@@ -14,27 +14,44 @@ var attributeObj = {
 
 var image = "/images/avatar.jpg";
 
-var proposalIntro = {
-    1: "Build a tower in the center of El Nudillo. Sketches of tower concepts as shown.",
-    2: "I would love to see El Nudillo, the intersection of 14th Street and National Avenue, become a place for public creative expression. There are so many talented artists around this area, and if we could somehow commission one to make a sculpture or something, or maybe invite everyone to paint a mural one day, it could be an amazing way to make this space ours and bring the community together.",
-    3: "The intersection right now is basically just an empty lot. We could easily make it a roundabout with three crosswalks so that traffic from National Ave and Commercial St can still get around but so people can also use the open space in the center.",
-    4: "So many cities are beautified with fountains! Kids can play in them when it is hot outside, and any sort of water element attracts a crowd. A huge fountain at El Nudillo would make it a destination for people to visit. ",
-    6: "Love to see interactive rotating art with current cultural subjects. A place for exchanging ideas which helps the community grow together.",
-    10: "a densely landscaped small urban park. NO Large sculpture or gateway 'ART' archway JUST a BIG canopy tree and pervious ground cover with native grasses to soften",
-    14: "I want to see National Avenue between Imperial and Commercial closed to Auto traffic. I want to see MTS's property, the triangle parking lot bordered by National, 14th and Imperial, the lot with the Greyhound terminal and the parking area for busses to become a woonerf.",
-    15: "It would be brilliant if the entire length of 14th street was closed to motor traffic and was a truly pedestrian promenade. The only exception could be the small Free Ride carts that could transport people up and down the street. This would not only provide a pleasant safe space for people and pets to walk, but would also create space for outdoor seating, more trees and greenery, more and safer play areas, as well as food places with real sidewalk seating that is not disrupted by air pollution and motor noise",
-    22: "Instead of making a roundabout we can create a two story triangle platform to avoid a major infrastructure change. It is a platform that works with current traffic, but allows people to walk to get where they need, and creates a green space at the ground level. ",
-    23: "",
-    24: "A zipline from the top of a tower that allows people to see the view and connects El Nudillo to Balboa park. People can get up and look at the park. It creates a direct visual link to the Balboa park.",
-    25: "Many large cities like New York have a transit hub. We can create a station that ties to commercial and residential activities. Right now, the bus station is disconnected from the trolley. It should be a transit hub for bus, trolley, and bike traffic. ",
-    26: "El Nudillo is a front door for both Barrio Logan and East Village. It can be a gateway that reflects both neighborhoods, something that has both characteristics of the education district to the north and the Barrio to the south with a green space and murals.",
-    27: "We can create a public green path to connect the past to the future. Library and the dome represent the future, and the brewery represents the past. The brewery is one of the oldest warehouses in San Diego.They can work together to create a mass and a sense of place.",
-    31: "Address the homeless issue before spending on artistic projects or it is just a waste of money.",
-    32: "Stop using the term \"El Nudillo\". It is obnoxious and arrogant. You cannot create culture before it exists. Please adopt high-density zoning and let the people who occupy those spaces define FOR THEMSELVES what the area is called. ",
-    33: "The spires intersect to support three sky paths suspended by cables allowing complete access around the streets above transit modes passing below. The elevation of the paths remains consistent, approximately 16-18 feet above grade.",
-    34: "Named because the primary archway and supporting cables are reminiscent of this musical instrument. This suspension bridge’s sky paths slope through the air moving above the streets below. The lowest level begins approximately 14-16 feet above the street on the corner adjacent to the transit center.",
-    35: "Open Air Market - weekly activations, events, farmer's markets, etc."
-};
+if (localStorage.getItem("username") == "mjasim") {
+    var proposalIntro = {
+        1: "https://www.theguardian.com/business/2017/dec/24/new-york-retail-shops-amazon-rent",
+        2: "http://www.nydailynews.com/news/politics/majority-n-y-voters-support-legalizing-taxing-pot-poll-article-1.3660456",
+        3: "https://www.usnews.com/news/health-news/articles/2018-12-07/new-york-officials-ban-unvaccinated-children-from-school-amid-measles-outbreak",
+        4: "https://i.imgur.com/YQcND5y.jpg",
+        5: "http://www.nydailynews.com/new-york/bill-require-hotels-bed-bug-inspections-6-months-article-1.2890370",
+        6: "https://i.redd.it/mrvecxt5f8b01.jpg",
+        7: "https://i.redd.it/5mdjx1g0xm011.jpg",
+        8: "https://www.dslreports.com/shownews/New-York-State-to-Introduce-Net-Neutrality-Bill-140920",
+        9: "https://i.redd.it/ab1jv0avb2b21.jpg",
+        10: "https://www.nytimes.com/2019/02/14/nyregion/amazon-hq2-queens.html",
+        
+    };
+} else {
+    var proposalIntro = {
+        1: "Build a tower in the center of El Nudillo. Sketches of tower concepts as shown.",
+        2: "I would love to see El Nudillo, the intersection of 14th Street and National Avenue, become a place for public creative expression. There are so many talented artists around this area, and if we could somehow commission one to make a sculpture or something, or maybe invite everyone to paint a mural one day, it could be an amazing way to make this space ours and bring the community together.",
+        3: "The intersection right now is basically just an empty lot. We could easily make it a roundabout with three crosswalks so that traffic from National Ave and Commercial St can still get around but so people can also use the open space in the center.",
+        4: "So many cities are beautified with fountains! Kids can play in them when it is hot outside, and any sort of water element attracts a crowd. A huge fountain at El Nudillo would make it a destination for people to visit. ",
+        6: "Love to see interactive rotating art with current cultural subjects. A place for exchanging ideas which helps the community grow together.",
+        10: "a densely landscaped small urban park. NO Large sculpture or gateway 'ART' archway JUST a BIG canopy tree and pervious ground cover with native grasses to soften",
+        14: "I want to see National Avenue between Imperial and Commercial closed to Auto traffic. I want to see MTS's property, the triangle parking lot bordered by National, 14th and Imperial, the lot with the Greyhound terminal and the parking area for busses to become a woonerf.",
+        15: "It would be brilliant if the entire length of 14th street was closed to motor traffic and was a truly pedestrian promenade. The only exception could be the small Free Ride carts that could transport people up and down the street. This would not only provide a pleasant safe space for people and pets to walk, but would also create space for outdoor seating, more trees and greenery, more and safer play areas, as well as food places with real sidewalk seating that is not disrupted by air pollution and motor noise",
+        22: "Instead of making a roundabout we can create a two story triangle platform to avoid a major infrastructure change. It is a platform that works with current traffic, but allows people to walk to get where they need, and creates a green space at the ground level. ",
+        23: "",
+        24: "A zipline from the top of a tower that allows people to see the view and connects El Nudillo to Balboa park. People can get up and look at the park. It creates a direct visual link to the Balboa park.",
+        25: "Many large cities like New York have a transit hub. We can create a station that ties to commercial and residential activities. Right now, the bus station is disconnected from the trolley. It should be a transit hub for bus, trolley, and bike traffic. ",
+        26: "El Nudillo is a front door for both Barrio Logan and East Village. It can be a gateway that reflects both neighborhoods, something that has both characteristics of the education district to the north and the Barrio to the south with a green space and murals.",
+        27: "We can create a public green path to connect the past to the future. Library and the dome represent the future, and the brewery represents the past. The brewery is one of the oldest warehouses in San Diego.They can work together to create a mass and a sense of place.",
+        31: "Address the homeless issue before spending on artistic projects or it is just a waste of money.",
+        32: "Stop using the term \"El Nudillo\". It is obnoxious and arrogant. You cannot create culture before it exists. Please adopt high-density zoning and let the people who occupy those spaces define FOR THEMSELVES what the area is called. ",
+        33: "The spires intersect to support three sky paths suspended by cables allowing complete access around the streets above transit modes passing below. The elevation of the paths remains consistent, approximately 16-18 feet above grade.",
+        34: "Named because the primary archway and supporting cables are reminiscent of this musical instrument. This suspension bridge’s sky paths slope through the air moving above the streets below. The lowest level begins approximately 14-16 feet above the street on the corner adjacent to the transit center.",
+        35: "Open Air Market - weekly activations, events, farmer's markets, etc."
+    };
+}
+
 
 // Draw proposal-wise comments inside commentBox
 function draw_proposal_wise_comments(json, idea_id) {
@@ -123,6 +140,7 @@ function get_filtered_comment(json, filterobj) {
                     for (var l = 0; l < filterobj.topic.length; l++) {
                         var flag = true
                         var topicFilter = json.ideas[i].topic_keyphrases[filterobj.topic[l]].topic_keyphrase
+
                         if (!checkKeyphrase(topicFilter, json.ideas[i].tasks[j].comments[k].findTopicLabels)) {
                             flag = false
                         } else {
@@ -190,6 +208,17 @@ function draw_filtered_comments(filtered_comment, json) {
     var divComment = []
     var topicFilter = ""
     var prevQuestionId = ""
+    var comment_count = 0
+    var users = []
+
+    for (var i in filtered_comment["ideas"]) {
+        for (var j in filtered_comment.ideas[i].tasks) {
+            for (var k in filtered_comment.ideas[i].tasks[j].comments) {
+                comment_count = comment_count + 1
+                users.push(filtered_comment.ideas[i].tasks[j].comments[k].user_id)
+            }
+        }
+    }
 
     for (var i in filtered_comment["ideas"]) {
         divIdea[i] = document.createElement("div")
@@ -202,12 +231,12 @@ function draw_filtered_comments(filtered_comment, json) {
             '<span class="commenters_button" id="span_id_opt" >' +
             "<i class=" + "\"fas fa-user fa-lg\"" + "></i>" +
             '</span>' + "\xa0" +
-            '<span class="commenters_number" id="span_id_opt" >' + filtered_comment.ideas[i].num_of_commenters +
+            '<span class="commenters_number" id="span_id_opt" >' + new Set(users).size +
             '</span>' + "\xa0" +
             '<span class="comments_button" id="span_id_opt" >' +
             "<i class=" + "\"fas fa-comment-alt fa-lg\"" + "></i>" +
             '</span>' + "\xa0" +
-            '<span class="comments_number" id="span_id_opt" >' + filtered_comment.ideas[i].num_of_comments +
+            '<span class="comments_number" id="span_id_opt" >' + comment_count +
             '</span>' + "\xa0" +
             "</p>" +
             '</div>' +
@@ -284,7 +313,7 @@ function draw_filtered_comments(filtered_comment, json) {
                     "<div class=\"comment-author\">" +
                     "<div style='float: left; padding-right: 5px;;'>" +
                     "<img src=\"" + image + "\" width='24px' style='border-radius: 50%;'/></div>" +
-                    "<div style='padding-top: 5px'><div style='float: left;'>" + " Author name" + "</div>" +
+                    "<div style='padding-top: 5px'><div style='float: left;'>" + " User-" + filtered_comment.ideas[i].tasks[j].comments[k].user_id + "</div>" +
                     '<div style="color: #888;"' + '>' + " &nbsp;&nbsp; posted on " + filtered_comment.ideas[i].tasks[j].comments[k].post_time + '</div></div>' +
                     "</div>" +
                     "<div class=\"comment-body\"" + "\">" +
@@ -550,10 +579,14 @@ function makeRevision(obj) {
 // check keyphrases for topics
 function checkKeyphrase(prop_topic, all_topics) {
     var split_topics = all_topics.split(",")
+
+    // console.log(split_topics)
+
     for (var i = 0; i < split_topics.length; i++) {
         another_split = split_topics[i].split("_")
         for (var j = 0; j < another_split.length; j++) {
             if (prop_topic.replace(/\s/g, '') == another_split[j].replace(/\s/g, '')) {
+                // console.log(prop_topic.replace(/\s/g, ''))
                 return true;
             }
         }

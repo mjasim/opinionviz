@@ -33,7 +33,15 @@ compare_filter_obj = {
 selected_idea_left = ""
 selected_idea_right = ""
 
-d3.json("communitycrit_revised.json", function (err, myjson) {
+for (var i in whitelist) {
+    if (whitelist[i].username == localStorage.getItem("username")) {
+        filepath = whitelist[i].file
+    }
+}
+
+// console.log(filepath)
+
+d3.json(filepath, function (err, myjson) {
     raw_json = JSON.parse(JSON.stringify(myjson))
     prop_json = JSON.parse(JSON.stringify(myjson))
     currentJSON_compare = JSON.parse(JSON.stringify(myjson))
@@ -245,12 +253,25 @@ function draw_filtered_comments_compare(filtered_comment, json, sideparent) {
     while (myNode.firstChild) {
         myNode.removeChild(myNode.firstChild);
     }
+
+    var comment_count = 0
+    var users = []
+
     var divIdea = []
     var divQuestion = []
     var divTask = []
     var divComment = []
     var topicFilter = ""
     var prevQuestionId = ""
+
+    for (var i in filtered_comment["ideas"]) {
+        for (var j in filtered_comment.ideas[i].tasks) {
+            for (var k in filtered_comment.ideas[i].tasks[j].comments) {
+                comment_count = comment_count + 1
+                users.push(filtered_comment.ideas[i].tasks[j].comments[k].user_id)
+            }
+        }
+    }
 
     for (var i in filtered_comment["ideas"]) {
         divIdea[i] = document.createElement("div")
@@ -263,12 +284,12 @@ function draw_filtered_comments_compare(filtered_comment, json, sideparent) {
             '<span class="commenters_button" id="span_id_opt" >' +
             "<i class=" + "\"fas fa-user fa-lg\"" + "></i>" +
             '</span>' + "\xa0" +
-            '<span class="commenters_number" id="span_id_opt" >' + filtered_comment.ideas[i].num_of_commenters +
+            '<span class="commenters_number" id="span_id_opt" >' + new Set(users).size +
             '</span>' + "\xa0" +
             '<span class="comments_button" id="span_id_opt" >' +
             "<i class=" + "\"fas fa-comment-alt fa-lg\"" + "></i>" +
             '</span>' + "\xa0" +
-            '<span class="comments_number" id="span_id_opt" >' + filtered_comment.ideas[i].num_of_comments +
+            '<span class="comments_number" id="span_id_opt" >' + comment_count +
             '</span>' + "\xa0" +
             "</p>" +
             '</div>' +

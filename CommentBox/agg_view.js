@@ -57,20 +57,20 @@ function divMove() {
             document.getElementById("aggregateDiv").setAttribute("style", "height:74%")
     } else if (check_empty() == false) {
         if (document.getElementById("parentBox"))
-            document.getElementById("parentBox").setAttribute("style", "height:60vh")
+            document.getElementById("parentBox").setAttribute("style", "height:55vh")
         if (document.getElementById("aggregateDiv"))
             document.getElementById("aggregateDiv").setAttribute("style", "height:20vh")
         //document.getElementById(filterobj.idea_id).parentElement.parentElement.scrollIntoView({ block: 'start' });
     }
 }
 
-for (var i in whitelist){
+for (var i in whitelist) {
     if (whitelist[i].username == localStorage.getItem("username")) {
         filepath = whitelist[i].file
     }
 }
 
-console.log(filepath)
+// console.log(filepath)
 
 d3.json(filepath, function (err, myjson) {
     raw_json = JSON.parse(JSON.stringify(myjson))
@@ -111,14 +111,16 @@ function draw_view(json) {
         }
     }
 
-    var numberOfRows = 19;
-    var numberOfColumns = 7;
+    // console.log(json)
 
     var proposal_names = get_proposal_names(json)
     var proposal_wise_emotion_agg = get_proposal_wise_emotion(json)
     var proposal_wise_serial = get_serial_number(json)
     var proposal_wise_topic_agg = get_proposal_wise_topic(json)
     // var proposal_wise_cloudword_agg = get_proposal_wise_cloudwords(json)
+
+    var numberOfRows = proposal_names.length;
+    var numberOfColumns = 7;
 
     // backup data
     this.data = json
@@ -194,12 +196,12 @@ function draw_view(json) {
         "<p style=\"margin: 5px 0px 5px 0px;font-size:1em;text-align:left\"" + ">" + "\xa0" + "</p>" + "</div>" +
         "<div class=\"label-info-body\" style=\"font-size:0.7em\"" + ">" +
         "Participants" +
-        "<p title=\"Sort the proposals by number of participants\"" + ">" + '<span class="label-info-button" id="span_id_participants" >' +
+        "<p title=\"Sort the proposals by number of participants in descending order\"" + ">" + '<span class="label-info-button" id="span_id_participants" >' +
         "<i class=" + "\"fas fa-user fa-2x label_icons\"" + "></i>" + "\xa0" +
         "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>" +
         "<div class=\"label-info-body\" style=\"font-size:0.7em\"" + "\">" +
         "Comments" +
-        "<p title=\"Sort the proposals by number of comments\"" + ">" + '<span class="label-info-button" id="span_id_comments" >' +
+        "<p title=\"Sort the proposals by number of comments in descending order\"" + ">" + '<span class="label-info-button" id="span_id_comments" >' +
         "<i class=" + "\"fas fa-comment-alt fa-2x label_icons\"" + "></i>" + "\xa0" +
         "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>";
     // "<div class=\"label-title-body\"" + ">" + "</p>" + "</div>"
@@ -252,12 +254,26 @@ function draw_view(json) {
 
     //============================ label column 4 end ==========================//
 
-    // =========================== label column 5 ===============================//
 
-    // labels and icons for emotions
     var labelColumn5Div = document.createElement("div")
     labelColumn5Div.id = "labelcolumn5"
     labelColumn5Div.className = "l_column5"
+
+    var divCaption =
+        "<div class=\"label-body\"" + "\">" +
+        "<div class=\"label-title\"" + ">" +
+        "<p style=\"margin: 5px 0px 5px 0px;font-size:1.0em;text-align:left; font-weight:bold; cursor:default\"" + ">" + "\xa0" + "</p>" + "</div>";
+
+    labelColumn5Div.innerHTML = divCaption
+    if (labelElement)
+        labelElement.appendChild(labelColumn5Div)
+
+    // =========================== label column 5 ===============================//
+
+    // labels and icons for emotions
+    var labelcolumn6Div = document.createElement("div")
+    labelcolumn6Div.id = "labelcolumn6"
+    labelcolumn6Div.className = "l_column6"
 
     var divCaption =
         "<div class=\"label-body\"" + "\">" +
@@ -268,7 +284,7 @@ function draw_view(json) {
         "<div class=\"label-emo-body\" style=\"font-size:0.7em\"" + "\">" +
         // "<p style=\"font-size:0.7em;\">" + "Excited" + "</p>" +
         "Excited" +
-        "<p title=\"Sort the proposals by emotion - Excited\">" + '<span class="label-emo-button" id="span_id_excited" >' +
+        "<p title=\"Sort the proposals by emotion - Excited in descending order\">" + '<span class="label-emo-button" id="span_id_excited" >' +
         "<i class=" + "\"fas fa-smile-beam fa-2x label_icons\"" + "></i>" + "\xa0" +
         "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
         '</span>' + "</p>" + "</div>" +
@@ -276,7 +292,7 @@ function draw_view(json) {
         "<div class=\"label-emo-body\" style=\"font-size:0.7em\"" + "\">" +
         // "<p style=\"font-size:0.7em;\">" + "Happy" + "</p>" +
         "Happy" +
-        "<p title=\"Sort the proposals by emotion - Happy\">" + '<span class="label-emo-button" id="span_id_happy" >' +
+        "<p title=\"Sort the proposals by emotion - Happy in descending order\">" + '<span class="label-emo-button" id="span_id_happy" >' +
         "<i class=" + "\"fas fa-smile fa-2x label_icons\"" + "></i>" + "\xa0" +
         "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
         '</span>' + "</p>" + "</div>" +
@@ -284,7 +300,7 @@ function draw_view(json) {
         "<div class=\"label-emo-body\" style=\"font-size:0.7em\"" + "\">" +
         // "<p style=\"font-size:0.7em;\">" + "Neutral" + "</p>" +
         "Neutral" +
-        "<p title=\"Sort the proposals by emotion - Neutral\">" + '<span class="label-emo-button" id="span_id_neutral" >' +
+        "<p title=\"Sort the proposals by emotion - Neutral in descending order\">" + '<span class="label-emo-button" id="span_id_neutral" >' +
         "<i class=" + "\"fas fa-meh fa-2x label_icons\"" + "></i>" + "\xa0" +
         "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
         '</span>' + "</p>" + "</div>" +
@@ -292,7 +308,7 @@ function draw_view(json) {
         "<div class=\"label-emo-body\" style=\"font-size:0.7em\"" + "\">" +
         // "<p style=\"font-size:0.7em;\">" + "Concerned" + "</p>" +
         "Concerned" +
-        "<p title=\"Sort the proposals by emotion - Concerned\">" + '<span class="label-emo-button" id="span_id_concerned" >' +
+        "<p title=\"Sort the proposals by emotion - Concerned in descending order\">" + '<span class="label-emo-button" id="span_id_concerned" >' +
         "<i class=" + "\"fas fa-flushed fa-2x label_icons\"" + "></i>" + "\xa0" +
         "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
         '</span>' + "</p>" + "</div>" +
@@ -300,7 +316,7 @@ function draw_view(json) {
         "<div class=\"label-emo-body\" style=\"font-size:0.7em\"" + ">" +
         // "<p style=\"font-size:0.7em;\">" + "Angry" + "</p>" +
         "Angry" +
-        "<p title=\"Sort the proposals by emotion - Angry\">" + '<span class="label-emo-button" id="span_id_angry" >' +
+        "<p title=\"Sort the proposals by emotion - Angry in descending order\">" + '<span class="label-emo-button" id="span_id_angry" >' +
         "<i class=" + "\"fas fa-angry fa-2x label_icons\"" + "></i>" + "\xa0" +
         "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
         '</span>' + "</p>" + "</div>";
@@ -329,12 +345,10 @@ function draw_view(json) {
     // "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
     // '</span>' + "</p>" + "</div>";
 
-    labelColumn5Div.innerHTML = divCaption
+    labelcolumn6Div.innerHTML = divCaption
     if (labelElement)
-        labelElement.appendChild(labelColumn5Div)
+        labelElement.appendChild(labelcolumn6Div)
     //setTippy("span_id_angry", null);
-
-    console.log(json)
 
     // =========================== label column 5 end ===========================//
 
@@ -344,6 +358,8 @@ function draw_view(json) {
     for (var i = 0; i < numberOfRows; i++) {
         var tempRowDiv = document.createElement("div")
         tempRowDiv.id = "row" + i
+
+        // console.log(proposal_names[i])
 
         var tempColumnSelectorDiv = document.createElement("div")
         tempColumnSelectorDiv.id = "row" + i + "-column_selector"
@@ -455,7 +471,7 @@ function draw_view(json) {
             topic_row_length += proposal_wise_topic_agg[i][j].topic_keyphrase.length
             //console.log(proposal_wise_topic_agg[i][j].topic_keyphrase, topic_row_length)
             if (column3) {
-                if (topic_row_length > column3.clientWidth / 11) {
+                if (topic_row_length > column3.clientWidth / 9) {
                     break;
                 } else {
                     divTopicName = divTopicName +
@@ -488,16 +504,40 @@ function draw_view(json) {
 
         //============================ column 4 end =====================//
 
-        //============================ column 5 =========================//
+        var column5 = document.getElementById("row" + i + "-column5")
+
+        var column5HTML =
+            '<div class="col-lg-12 col-m-12 col-sm-12">' +
+            '<select class="form-control topic_down" id="all_topics_' + proposal_names[i].idea_id + "\"" +
+            ' style="height:28px;font-size:0.8em;font-weight:bold;background-color:#F5F8FA;border-color:#337AB7">' +
+            '<option value="">All</option>';
+
+        // for (var k in proposal_wise_topic_agg[i]) {
+        //     console.log(proposal_wise_topic_agg[i])
+        //     column5HTML += '<option>' + proposal_wise_topic_agg[j][k].topic_keyphrase + '</option>'
+        // }
+
+        all_topics = proposal_wise_topic_agg[i]
+
+        for (var j in all_topics) {
+            column5HTML += '<option>' + all_topics[j].topic_keyphrase + '</option>'
+        }
+
+        column5HTML = column5HTML + '</select>' + '</div>' + '</div>';
+
+        if(column5)
+            column5.innerHTML = column5HTML
+
+        //============================ column 6 =========================//
 
         // column with proposal wise emotions
-        var column5 = document.getElementById("row" + i + "-column5")
-        var svg_id = "svg" + "row" + i + "-column5"
+        var column6 = document.getElementById("row" + i + "-column6")
+        var svg_id = "svg" + "row" + i + "-column6"
         send_data = []
         send_data.push(proposal_wise_emotion_agg[i])
         // console.log(send_data)
-        if (column5)
-            emotion_rows(send_data, svg_id, column5.id, proposal_names[i].idea_id)
+        if (column6)
+            emotion_rows(send_data, svg_id, column6.id, proposal_names[i].idea_id)
 
 
         //============================end of column 4==================//
@@ -507,7 +547,7 @@ function draw_view(json) {
     $(document).ready(function () {
         $('.label-emo-button').click(function () {
             var id = $(this).attr('id');
-            console.log("inside iconClick", id)
+            // console.log("inside iconClick", id)
 
             // if (id.split("_")[2] == current_sort) {
             //     current_sort = "";
@@ -585,7 +625,7 @@ function draw_view(json) {
                 }
 
                 if (id == "span_id_excited") {
-                    var labelColumn5Div = document.getElementById("labelcolumn5")
+                    var labelcolumn6Div = document.getElementById("labelcolumn6")
 
                     var divCaption =
                         "<div class=\"label-body\"" + "\">" +
@@ -594,31 +634,31 @@ function draw_view(json) {
                         "<p style=\"margin: 5px 0px 5px 0px;font-size:1em;\"" + ">" + "Emotion" + "</p>" + "</div>" +
                         "<div class=\"label-emo-body\" style=\"font-size:0.7em\"" + "\">" +
                         "Excited" +
-                        "<p>" + '<span class="label-emo-button" id="span_id_excited" >' +
+                        "<p title=\"Sort the proposals by emotion - Excited in descending order\">" + '<span class="label-emo-button" id="span_id_excited" >' +
                         "<i class=" + "\"fas fa-smile-beam fa-2x label_icons\"" + "></i>" + "\xa0" +
                         "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
                         '</span>' + "</p>" + "</div>" +
                         "<div class=\"label-emo-body\" style=\"font-size:0.7em\"" + "\">" +
                         "Happy" +
-                        "<p>" + '<span class="label-emo-button" id="span_id_happy" >' +
+                        "<p title=\"Sort the proposals by emotion - Happy in descending order\">" + '<span class="label-emo-button" id="span_id_happy" >' +
                         "<i class=" + "\"fas fa-smile fa-2x label_icons\"" + "></i>" + "\xa0" +
                         "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
                         '</span>' + "</p>" + "</div>" +
                         "<div class=\"label-emo-body\" style=\"font-size:0.7em\"" + "\">" +
                         "Neutral" +
-                        "<p>" + '<span class="label-emo-button" id="span_id_neutral" >' +
+                        "<p title=\"Sort the proposals by emotion - Neutral in descending order\">" + '<span class="label-emo-button" id="span_id_neutral" >' +
                         "<i class=" + "\"fas fa-meh fa-2x label_icons\"" + "></i>" + "\xa0" +
                         "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
                         '</span>' + "</p>" + "</div>" +
                         "<div class=\"label-emo-body\" style=\"font-size:0.7em\"" + "\">" +
                         "Concerned" +
-                        "<p>" + '<span class="label-emo-button" id="span_id_concerned" >' +
+                        "<p title=\"Sort the proposals by emotion - Concerned in descending order\">" + '<span class="label-emo-button" id="span_id_concerned" >' +
                         "<i class=" + "\"fas fa-flushed fa-2x label_icons\"" + "></i>" + "\xa0" +
                         "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
                         '</span>' + "</p>" + "</div>" +
                         "<div class=\"label-emo-body\" style=\"font-size:0.7em\"" + ">" +
                         "Angry" +
-                        "<p>" + '<span class="label-emo-button" id="span_id_angry" >' +
+                        "<p title=\"Sort the proposals by emotion - Angry in descending order\">" + '<span class="label-emo-button" id="span_id_angry" >' +
                         "<i class=" + "\"fas fa-angry fa-2x label_icons\"" + "></i>" + "\xa0" +
                         "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
                         '</span>' + "</p>" + "</div>";
@@ -641,9 +681,9 @@ function draw_view(json) {
                     // "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
                     // '</span>' + "</p>" + "</div>";
 
-                    labelColumn5Div.innerHTML = divCaption
+                    labelcolumn6Div.innerHTML = divCaption
                 } else if (id == "span_id_happy") {
-                    var labelColumn5Div = document.getElementById("labelcolumn5")
+                    var labelcolumn6Div = document.getElementById("labelcolumn6")
 
                     var divCaption =
                         "<div class=\"label-body\"" + "\">" +
@@ -652,7 +692,7 @@ function draw_view(json) {
                         "<p style=\"margin: 5px 0px 5px 0px;font-size:1em;\"" + ">" + "Emotion" + "</p>" + "</div>" +
                         "<div class=\"label-emo-body\" style=\"font-size:0.7em\"" + "\">" +
                         "Excited" +
-                        "<p>" + '<span class="label-emo-button" id="span_id_excited" >' +
+                        "<p title=\"Sort the proposals by emotion - Excited in descending order\">" + '<span class="label-emo-button" id="span_id_excited" >' +
                         "<i class=" + "\"fas fa-smile-beam fa-2x label_icons\"" + "></i>" + "\xa0" +
                         "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
                         '</span>' + "</p>" + "</div>" +
@@ -699,9 +739,9 @@ function draw_view(json) {
                     // "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
                     // '</span>' + "</p>" + "</div>";
 
-                    labelColumn5Div.innerHTML = divCaption
+                    labelcolumn6Div.innerHTML = divCaption
                 } else if (id == "span_id_neutral") {
-                    var labelColumn5Div = document.getElementById("labelcolumn5")
+                    var labelcolumn6Div = document.getElementById("labelcolumn6")
 
                     var divCaption =
                         "<div class=\"label-body\"" + "\">" +
@@ -710,7 +750,7 @@ function draw_view(json) {
                         "<p style=\"margin: 5px 0px 5px 0px;font-size:1em;\"" + ">" + "Emotion" + "</p>" + "</div>" +
                         "<div class=\"label-emo-body\" style=\"font-size:0.7em\"" + "\">" +
                         "Excited" +
-                        "<p>" + '<span class="label-emo-button" id="span_id_excited" >' +
+                        "<p title=\"Sort the proposals by emotion - Excited in descending order\">" + '<span class="label-emo-button" id="span_id_excited" >' +
                         "<i class=" + "\"fas fa-smile-beam fa-2x label_icons\"" + "></i>" + "\xa0" +
                         "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
                         '</span>' + "</p>" + "</div>" +
@@ -757,9 +797,9 @@ function draw_view(json) {
                     // "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
                     // '</span>' + "</p>" + "</div>";
 
-                    labelColumn5Div.innerHTML = divCaption
+                    labelcolumn6Div.innerHTML = divCaption
                 } else if (id == "span_id_concerned") {
-                    var labelColumn5Div = document.getElementById("labelcolumn5")
+                    var labelcolumn6Div = document.getElementById("labelcolumn6")
 
                     var divCaption =
                         "<div class=\"label-body\"" + "\">" +
@@ -768,7 +808,7 @@ function draw_view(json) {
                         "<p style=\"margin: 5px 0px 5px 0px;font-size:1em;\"" + ">" + "Emotion" + "</p>" + "</div>" +
                         "<div class=\"label-emo-body\" style=\"font-size:0.7em\"" + "\">" +
                         "Excited" +
-                        "<p>" + '<span class="label-emo-button" id="span_id_excited" >' +
+                        "<p title=\"Sort the proposals by emotion - Excited in descending order\">" + '<span class="label-emo-button" id="span_id_excited" >' +
                         "<i class=" + "\"fas fa-smile-beam fa-2x label_icons\"" + "></i>" + "\xa0" +
                         "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
                         '</span>' + "</p>" + "</div>" +
@@ -815,9 +855,9 @@ function draw_view(json) {
                     // "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
                     // '</span>' + "</p>" + "</div>";
 
-                    labelColumn5Div.innerHTML = divCaption
+                    labelcolumn6Div.innerHTML = divCaption
                 } else if (id == "span_id_angry") {
-                    var labelColumn5Div = document.getElementById("labelcolumn5")
+                    var labelcolumn6Div = document.getElementById("labelcolumn6")
 
                     var divCaption =
                         "<div class=\"label-body\"" + "\">" +
@@ -826,7 +866,7 @@ function draw_view(json) {
                         "<p style=\"margin: 5px 0px 5px 0px;font-size:1em;\"" + ">" + "Emotion" + "</p>" + "</div>" +
                         "<div class=\"label-emo-body\" style=\"font-size:0.7em\"" + "\">" +
                         "Excited" +
-                        "<p>" + '<span class="label-emo-button" id="span_id_excited" >' +
+                        "<p title=\"Sort the proposals by emotion - Excited in descending order\">" + '<span class="label-emo-button" id="span_id_excited" >' +
                         "<i class=" + "\"fas fa-smile-beam fa-2x label_icons\"" + "></i>" + "\xa0" +
                         "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
                         '</span>' + "</p>" + "</div>" +
@@ -873,9 +913,9 @@ function draw_view(json) {
                     // "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
                     // '</span>' + "</p>" + "</div>";
 
-                    labelColumn5Div.innerHTML = divCaption
+                    labelcolumn6Div.innerHTML = divCaption
                 } else if (id == "span_id_positive") {
-                    var labelColumn5Div = document.getElementById("labelcolumn5")
+                    var labelcolumn6Div = document.getElementById("labelcolumn6")
 
                     var divCaption =
                         "<div class=\"label-body\"" + "\">" +
@@ -884,7 +924,7 @@ function draw_view(json) {
                         "<p style=\"margin: 5px 0px 5px 0px;font-size:1em;\"" + ">" + "Emotion" + "</p>" + "</div>" +
                         "<div class=\"label-emo-body\" style=\"font-size:0.7em\"" + "\">" +
                         "Excited" +
-                        "<p>" + '<span class="label-emo-button" id="span_id_excited" >' +
+                        "<p title=\"Sort the proposals by emotion - Excited in descending order\">" + '<span class="label-emo-button" id="span_id_excited" >' +
                         "<i class=" + "\"fas fa-smile-beam fa-2x label_icons\"" + "></i>" + "\xa0" +
                         "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
                         '</span>' + "</p>" + "</div>" +
@@ -931,9 +971,9 @@ function draw_view(json) {
                     // "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
                     // '</span>' + "</p>" + "</div>";
 
-                    labelColumn5Div.innerHTML = divCaption
+                    labelcolumn6Div.innerHTML = divCaption
                 } else if (id == "span_id_neutral") {
-                    var labelColumn5Div = document.getElementById("labelcolumn5")
+                    var labelcolumn6Div = document.getElementById("labelcolumn6")
 
                     var divCaption =
                         "<div class=\"label-body\"" + "\">" +
@@ -942,7 +982,7 @@ function draw_view(json) {
                         "<p style=\"margin: 5px 0px 5px 0px;font-size:1em;\"" + ">" + "Emotion" + "</p>" + "</div>" +
                         "<div class=\"label-emo-body\" style=\"font-size:0.7em\"" + "\">" +
                         "Excited" +
-                        "<p>" + '<span class="label-emo-button" id="span_id_excited" >' +
+                        "<p title=\"Sort the proposals by emotion - Excited in descending order\">" + '<span class="label-emo-button" id="span_id_excited" >' +
                         "<i class=" + "\"fas fa-smile-beam fa-2x label_icons\"" + "></i>" + "\xa0" +
                         "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
                         '</span>' + "</p>" + "</div>" +
@@ -989,9 +1029,9 @@ function draw_view(json) {
                     // "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
                     // '</span>' + "</p>" + "</div>";
 
-                    labelColumn5Div.innerHTML = divCaption
+                    labelcolumn6Div.innerHTML = divCaption
                 } else if (id == "span_id_negative") {
-                    var labelColumn5Div = document.getElementById("labelcolumn5")
+                    var labelcolumn6Div = document.getElementById("labelcolumn6")
 
                     var divCaption =
                         "<div class=\"label-body\"" + "\">" +
@@ -1000,7 +1040,7 @@ function draw_view(json) {
                         "<p style=\"margin: 5px 0px 5px 0px;font-size:1em;\"" + ">" + "Emotion" + "</p>" + "</div>" +
                         "<div class=\"label-emo-body\" style=\"font-size:0.7em\"" + "\">" +
                         "Excited" +
-                        "<p>" + '<span class="label-emo-button" id="span_id_excited" >' +
+                        "<p title=\"Sort the proposals by emotion - Excited in descending order\">" + '<span class="label-emo-button" id="span_id_excited" >' +
                         "<i class=" + "\"fas fa-smile-beam fa-2x label_icons\"" + "></i>" + "\xa0" +
                         "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
                         '</span>' + "</p>" + "</div>" +
@@ -1047,10 +1087,10 @@ function draw_view(json) {
                     // "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
                     // '</span>' + "</p>" + "</div>";
 
-                    labelColumn5Div.innerHTML = divCaption
+                    labelcolumn6Div.innerHTML = divCaption
                 }
 
-                console.log(id)
+                // console.log(id)
                 document.getElementById(id).setAttribute("style", "opacity:0.8");
                 $("#" + id).children().css("opacity", "0.8");
 
@@ -1066,7 +1106,7 @@ function draw_view(json) {
                 var x = (JSON.parse(JSON.stringify(raw_json)));
                 // console.log(x)
                 var emo_agg = get_proposal_wise_emotion(x)
-                console.log(emo_agg)
+                // console.log(emo_agg)
                 emo_agg.sort((function (a, b) {
                     // console.log(parseFloat(b[this_emo]) - parseFloat(a[this_emo]))
                     return parseFloat(b[this_emo]) - parseFloat(a[this_emo])
@@ -1107,7 +1147,7 @@ function draw_view(json) {
                 }
 
                 if (id == "span_id_excited") {
-                    var labelColumn5Div = document.getElementById("labelcolumn5")
+                    var labelcolumn6Div = document.getElementById("labelcolumn6")
 
                     var divCaption =
                         "<div class=\"label-body\"" + "\">" +
@@ -1163,9 +1203,9 @@ function draw_view(json) {
                     // "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
                     // '</span>' + "</p>" + "</div>";
 
-                    labelColumn5Div.innerHTML = divCaption
+                    labelcolumn6Div.innerHTML = divCaption
                 } else if (id == "span_id_happy") {
-                    var labelColumn5Div = document.getElementById("labelcolumn5")
+                    var labelcolumn6Div = document.getElementById("labelcolumn6")
 
                     var divCaption =
                         "<div class=\"label-body\"" + "\">" +
@@ -1221,9 +1261,9 @@ function draw_view(json) {
                     // "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
                     // '</span>' + "</p>" + "</div>";
 
-                    labelColumn5Div.innerHTML = divCaption
+                    labelcolumn6Div.innerHTML = divCaption
                 } else if (id == "span_id_neutral") {
-                    var labelColumn5Div = document.getElementById("labelcolumn5")
+                    var labelcolumn6Div = document.getElementById("labelcolumn6")
 
                     var divCaption =
                         "<div class=\"label-body\"" + "\">" +
@@ -1279,9 +1319,9 @@ function draw_view(json) {
                     // "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
                     // '</span>' + "</p>" + "</div>";
 
-                    labelColumn5Div.innerHTML = divCaption
+                    labelcolumn6Div.innerHTML = divCaption
                 } else if (id == "span_id_concerned") {
-                    var labelColumn5Div = document.getElementById("labelcolumn5")
+                    var labelcolumn6Div = document.getElementById("labelcolumn6")
 
                     var divCaption =
                         "<div class=\"label-body\"" + "\">" +
@@ -1337,9 +1377,9 @@ function draw_view(json) {
                     // "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
                     // '</span>' + "</p>" + "</div>";
 
-                    labelColumn5Div.innerHTML = divCaption
+                    labelcolumn6Div.innerHTML = divCaption
                 } else if (id == "span_id_angry") {
-                    var labelColumn5Div = document.getElementById("labelcolumn5")
+                    var labelcolumn6Div = document.getElementById("labelcolumn6")
 
                     var divCaption =
                         "<div class=\"label-body\"" + "\">" +
@@ -1395,9 +1435,9 @@ function draw_view(json) {
                     // "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
                     // '</span>' + "</p>" + "</div>";
 
-                    labelColumn5Div.innerHTML = divCaption
+                    labelcolumn6Div.innerHTML = divCaption
                 } else if (id == "span_id_positive") {
-                    var labelColumn5Div = document.getElementById("labelcolumn5")
+                    var labelcolumn6Div = document.getElementById("labelcolumn6")
 
                     var divCaption =
                         "<div class=\"label-body\"" + "\">" +
@@ -1453,9 +1493,9 @@ function draw_view(json) {
                     // "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
                     // '</span>' + "</p>" + "</div>";
 
-                    labelColumn5Div.innerHTML = divCaption
+                    labelcolumn6Div.innerHTML = divCaption
                 } else if (id == "span_id_neutral") {
-                    var labelColumn5Div = document.getElementById("labelcolumn5")
+                    var labelcolumn6Div = document.getElementById("labelcolumn6")
 
                     var divCaption =
                         "<div class=\"label-body\"" + "\">" +
@@ -1511,9 +1551,9 @@ function draw_view(json) {
                     // "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
                     // '</span>' + "</p>" + "</div>";
 
-                    labelColumn5Div.innerHTML = divCaption
+                    labelcolumn6Div.innerHTML = divCaption
                 } else if (id == "span_id_negative") {
-                    var labelColumn5Div = document.getElementById("labelcolumn5")
+                    var labelcolumn6Div = document.getElementById("labelcolumn6")
 
                     var divCaption =
                         "<div class=\"label-body\"" + "\">" +
@@ -1569,10 +1609,10 @@ function draw_view(json) {
                     // "<i class=" + "\"fas fa-sort-amount-up fa-2x label_icons\"" + "></i>" +
                     // '</span>' + "</p>" + "</div>";
 
-                    labelColumn5Div.innerHTML = divCaption
+                    labelcolumn6Div.innerHTML = divCaption
                 }
 
-                console.log(id)
+                // console.log(id)
                 document.getElementById(id).setAttribute("style", "opacity:1.0");
                 $("#" + id).children().css("opacity", "1.0");
 
@@ -1626,7 +1666,7 @@ function draw_view(json) {
                 }
 
                 if (id == "span_id_excited") {
-                    var labelColumn5Div = document.getElementById("labelcolumn5")
+                    var labelcolumn6Div = document.getElementById("labelcolumn6")
 
                     var divCaption =
                         "<div class=\"label-body\"" + "\">" +
@@ -1682,9 +1722,9 @@ function draw_view(json) {
                     // "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
                     // '</span>' + "</p>" + "</div>";
 
-                    labelColumn5Div.innerHTML = divCaption
+                    labelcolumn6Div.innerHTML = divCaption
                 } else if (id == "span_id_happy") {
-                    var labelColumn5Div = document.getElementById("labelcolumn5")
+                    var labelcolumn6Div = document.getElementById("labelcolumn6")
 
                     var divCaption =
                         "<div class=\"label-body\"" + "\">" +
@@ -1740,9 +1780,9 @@ function draw_view(json) {
                     // "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
                     // '</span>' + "</p>" + "</div>";
 
-                    labelColumn5Div.innerHTML = divCaption
+                    labelcolumn6Div.innerHTML = divCaption
                 } else if (id == "span_id_neutral") {
-                    var labelColumn5Div = document.getElementById("labelcolumn5")
+                    var labelcolumn6Div = document.getElementById("labelcolumn6")
 
                     var divCaption =
                         "<div class=\"label-body\"" + "\">" +
@@ -1798,9 +1838,9 @@ function draw_view(json) {
                     // "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
                     // '</span>' + "</p>" + "</div>";
 
-                    labelColumn5Div.innerHTML = divCaption
+                    labelcolumn6Div.innerHTML = divCaption
                 } else if (id == "span_id_concerned") {
-                    var labelColumn5Div = document.getElementById("labelcolumn5")
+                    var labelcolumn6Div = document.getElementById("labelcolumn6")
 
                     var divCaption =
                         "<div class=\"label-body\"" + "\">" +
@@ -1856,9 +1896,9 @@ function draw_view(json) {
                     // "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
                     // '</span>' + "</p>" + "</div>";
 
-                    labelColumn5Div.innerHTML = divCaption
+                    labelcolumn6Div.innerHTML = divCaption
                 } else if (id == "span_id_angry") {
-                    var labelColumn5Div = document.getElementById("labelcolumn5")
+                    var labelcolumn6Div = document.getElementById("labelcolumn6")
 
                     var divCaption =
                         "<div class=\"label-body\"" + "\">" +
@@ -1914,9 +1954,9 @@ function draw_view(json) {
                     // "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
                     // '</span>' + "</p>" + "</div>";
 
-                    labelColumn5Div.innerHTML = divCaption
+                    labelcolumn6Div.innerHTML = divCaption
                 } else if (id == "span_id_positive") {
-                    var labelColumn5Div = document.getElementById("labelcolumn5")
+                    var labelcolumn6Div = document.getElementById("labelcolumn6")
 
                     var divCaption =
                         "<div class=\"label-body\"" + "\">" +
@@ -1972,9 +2012,9 @@ function draw_view(json) {
                     // "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
                     // '</span>' + "</p>" + "</div>";
 
-                    labelColumn5Div.innerHTML = divCaption
+                    labelcolumn6Div.innerHTML = divCaption
                 } else if (id == "span_id_neutral") {
-                    var labelColumn5Div = document.getElementById("labelcolumn5")
+                    var labelcolumn6Div = document.getElementById("labelcolumn6")
 
                     var divCaption =
                         "<div class=\"label-body\"" + "\">" +
@@ -2030,9 +2070,9 @@ function draw_view(json) {
                     // "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
                     // '</span>' + "</p>" + "</div>";
 
-                    labelColumn5Div.innerHTML = divCaption
+                    labelcolumn6Div.innerHTML = divCaption
                 } else if (id == "span_id_negative") {
-                    var labelColumn5Div = document.getElementById("labelcolumn5")
+                    var labelcolumn6Div = document.getElementById("labelcolumn6")
 
                     var divCaption =
                         "<div class=\"label-body\"" + "\">" +
@@ -2088,10 +2128,10 @@ function draw_view(json) {
                     // "<i class=" + "\"fas fa-bars fa-2x label_icons\"" + "></i>" +
                     // '</span>' + "</p>" + "</div>";
 
-                    labelColumn5Div.innerHTML = divCaption
+                    labelcolumn6Div.innerHTML = divCaption
                 }
 
-                console.log(id)
+                // console.log(id)
                 document.getElementById(id).setAttribute("style", "opacity:1.0");
                 $("#" + id).children().css("opacity", "1.0");
 
@@ -2106,7 +2146,7 @@ function draw_view(json) {
     $(document).ready(function () {
         $('.label-info-button').click(function () {
             var id = $(this).attr('id');
-            console.log("inside iconClick", id)
+            // console.log("inside iconClick", id)
             this_info = "num_of_" + id.split("_")[2]
 
             // if (id.split("_")[2] == current_sort) {
@@ -2209,7 +2249,7 @@ function draw_view(json) {
 
                 document.getElementById(id).setAttribute("style", "opacity:0.8");
 
-                console.log(id)
+                // console.log(id)
 
                 $("#" + id).children().css("opacity", "0.8");
                 selected_rows = Array.apply(null, Array(36));
@@ -2293,7 +2333,7 @@ function draw_view(json) {
 
                 document.getElementById(id).setAttribute("style", "opacity:1.0");
 
-                console.log(id)
+                // console.log(id)
 
                 $("#" + id).children().css("opacity", "1.0");
                 selected_rows = Array.apply(null, Array(36));
@@ -2303,7 +2343,7 @@ function draw_view(json) {
 
             } else if (sort_opt == 1) {
 
-                console.log("double")
+                // console.log("double")
 
                 logInteraction('click, sortby, ' + id.split("_")[2]);
 
@@ -2382,7 +2422,7 @@ function draw_view(json) {
 
                 document.getElementById(id).setAttribute("style", "opacity:1.0");
 
-                console.log(id)
+                // console.log(id)
 
                 $("#" + id).children().css("opacity", "1.0");
                 selected_rows = Array.apply(null, Array(36));
@@ -2430,7 +2470,7 @@ function draw_view(json) {
                 prev_row = selected_row;
             } else {
 
-                console.log("here", selected_row, prev_row)
+                // console.log("here", selected_row, prev_row)
                 var myNode = document.getElementById("parentBox");
                 while (myNode.firstChild) {
                     myNode.removeChild(myNode.firstChild);
@@ -2454,7 +2494,7 @@ function draw_view(json) {
             }
 
             if (current_sort != "") {
-                console.log(current_sort)
+                // console.log(current_sort)
                 $("#span_id_" + current_sort).children().css("opacity", "1.0");
             }
         });
@@ -2482,68 +2522,7 @@ function draw_view(json) {
             // }
 
             var id = $(this).attr('id');
-            var split_str = id.split("_")
-            logInteraction('click, idea, ' + split_str[1], 'topic ', split_str[2]);
-
-            selected_topic = split_str[2]
-
-            console.log(id, prev_topic)
-
-            if (id != prev_topic) {
-                filterobj.idea_id = split_str[1]
-                filterobj.emotion = null
-                filterobj.task_id = null
-                filterobj.topic = selected_topic
-                // filterobj.cloudkey = null
-                filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(raw_json)), filterobj)
-
-                // console.log(filtered_comment)
-
-                new_view = JSON.parse(JSON.stringify(prop_json))
-                draw_filtered_comments(filtered_comment, new_view)
-                document.getElementById(id + "_id").setAttribute("style", "background-color:#3DAADD")
-                // document.getElementById(selected_row).setAttribute("style", "background-color:#3DAADD")
-                if (prev_topic) {
-                    document.getElementById(prev_topic + "_id").setAttribute("style", "background-color:none")
-                }
-
-                divMove();
-                prev_topic = id;
-                prev_row = split_str[1];
-            } else {
-                if (!selected_row)
-                    filterobj.idea_id = null
-                prev_topic = ""
-                selected_topic = ""
-                filterobj.topic = null
-                document.getElementById(id + "_id").setAttribute("style", "background-color:none")
-
-                console.log("here", filterobj)
-
-                var myNode = document.getElementById("parentBox");
-                while (myNode.firstChild) {
-                    myNode.removeChild(myNode.firstChild);
-                }
-
-                new_view = JSON.parse(JSON.stringify(prop_json))
-                if (selected_row) {
-                    filterobj.idea_id = selected_row
-                    draw_filtered_comments(filtered_comment, new_view)
-                } else
-                    divMove();
-
-                // selected_topic = ""
-                // selected_row = ""
-                // prev_row = ""
-
-                filterobj = {}
-            }
-
-            if (check_empty() == true) {
-                document.getElementById("box_header").innerHTML = "Click on a Proposal, Topic or Emotion to see related comments"
-            } else {
-                document.getElementById("box_header").innerHTML = ""
-            }
+            show_topics(id, false)
         });
     });
 
@@ -2566,7 +2545,7 @@ function draw_view(json) {
             logInteraction('click, refresh');
             location.reload(true);
 
-            console.log("refreshing")
+            // console.log("refreshing")
             //$("#parentBox").animate({ scrollTop: 0 }, 1000);
             draw_view(raw_json);
         });
@@ -2577,7 +2556,7 @@ function draw_view(json) {
             logInteraction('click, cpRefresh');
             location.reload(true);
 
-            console.log("refreshing")
+            // console.log("refreshing")
             //$("#parentBox").animate({ scrollTop: 0 }, 1000);
             draw_view(raw_json);
         });
@@ -2709,12 +2688,81 @@ function draw_view(json) {
 //     divMove();
 // }
 
+function show_topics(id, drop) {
+    var split_str = id.split("_")
+    logInteraction('click, idea, ' + split_str[1], 'topic ', split_str[2]);
+
+    selected_topic = split_str[2]
+
+    // console.log(id, prev_topic)
+
+    if (id != prev_topic) {
+        filterobj.idea_id = split_str[1]
+        filterobj.emotion = null
+        filterobj.task_id = null
+        filterobj.topic = selected_topic
+        // filterobj.cloudkey = null
+        filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(raw_json)), filterobj)
+
+        // console.log(filtered_comment)
+
+        new_view = JSON.parse(JSON.stringify(prop_json))
+        draw_filtered_comments(filtered_comment, new_view)
+        if (drop == false) {
+            document.getElementById(id + "_id").setAttribute("style", "background-color:#3DAADD")
+        }
+        // document.getElementById(selected_row).setAttribute("style", "background-color:#3DAADD")
+        if (prev_topic && drop == false) {
+            document.getElementById(prev_topic + "_id").setAttribute("style", "background-color:none")
+        }
+
+        divMove();
+        prev_topic = id;
+        prev_row = split_str[1];
+    } else {
+        if (!selected_row)
+            filterobj.idea_id = null
+        prev_topic = ""
+        selected_topic = ""
+        filterobj.topic = null
+        document.getElementById(id + "_id").setAttribute("style", "background-color:none")
+
+        // console.log("here", filterobj)
+
+        var myNode = document.getElementById("parentBox");
+        while (myNode.firstChild) {
+            myNode.removeChild(myNode.firstChild);
+        }
+
+        new_view = JSON.parse(JSON.stringify(prop_json))
+
+        if (selected_row) {
+            // console.log(selected_row, "srow")
+            filterobj.idea_id = selected_row
+            filtered_comment = get_filtered_comment(new_view, filterobj)
+            draw_filtered_comments(filtered_comment, new_view)
+        } else
+            divMove();
+
+        // selected_topic = ""
+        // selected_row = ""
+        // prev_row = ""
+
+        filterobj = {}
+    }
+
+    if (check_empty() == true) {
+        document.getElementById("box_header").innerHTML = "Click on a Proposal, Topic or Emotion to see related comments"
+    } else {
+        document.getElementById("box_header").innerHTML = ""
+    }
+}
+
 function triggerCompare() {
     window.open('compare.html', '_self')
 }
 
 function triggerLogin() {
-    console.log("beleh")
     window.open('login.html', '_self')
 }
 
@@ -3024,7 +3072,7 @@ function emotion_rows(salesData, svg_id, div_id, idea_id) {
 
         // document.getElementById(div_id.split("-")[0]).setAttribute("style", "outline:solid thin gray");
 
-        console.log(filterobj)
+        // console.log(filterobj)
 
         var this_cell = d3.select(this)
         filterobj.idea_id = idea_id
@@ -3050,11 +3098,11 @@ function emotion_rows(salesData, svg_id, div_id, idea_id) {
             cellHistory.emo_switch = true
         }
 
-        console.log(filterobj)
+        // console.log(filterobj)
 
         var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(raw_json)), filterobj)
 
-        console.log(filtered_comment)
+        // console.log(filtered_comment)
 
         draw_filtered_comments(filtered_comment, raw_json)
         if (check_empty() == true) {
@@ -3175,18 +3223,18 @@ $(document).on('change', '.check_box', function () {
         }
 
         if (compare_1 && !compare_2) {
-            console.log("1 !2")
+            // console.log("1 !2")
             localStorage.setItem("compare_2", id);
             compare_2 = id
         }
 
         if (!compare_1) {
-            console.log("!1")
+            // console.log("!1")
             localStorage.setItem("compare_1", id);
             compare_1 = id
         }
 
-        console.log("1 2", compare_1, compare_2)
+        // console.log("1 2", compare_1, compare_2)
     }
     if (!this.checked) {
         // checkbox is checked
@@ -3211,10 +3259,9 @@ $(document).on('change', '.check_box', function () {
     }
 });
 
-
 $(document).ready(function () {
     $('#box_header_button_down').click(function () {
-        console.log("down")
+        // console.log("down")
         if (document.getElementById("parentBox"))
             document.getElementById("parentBox").setAttribute("style", "height:0px")
         if (document.getElementById("aggregateDiv"))
@@ -3224,9 +3271,40 @@ $(document).ready(function () {
 
 $(document).ready(function () {
     $('#box_header_button_up').click(function () {
-        if(!check_empty()){
-            document.getElementById("parentBox").setAttribute("style", "height:60vh")
+        if (!check_empty()) {
+            document.getElementById("parentBox").setAttribute("style", "height:55vh")
             document.getElementById("aggregateDiv").setAttribute("style", "height:20vh")
         }
     });
+});
+
+$(document).on('change', '.topic_down', function () {
+
+    var pos = 0
+    var topic = ""
+    id = $(this).attr('id')
+    id_input = id.split('_')[2]
+    topic_input = $("#" + id).val();
+    x = get_proposal_wise_topic(raw_json)
+    sn = get_serial_number(raw_json)
+    for (var i in sn) {
+        // console.log(sn[i].idea_id, id.split('_')[2])
+        if (sn[i].idea_id == id_input) {
+            pos = parseInt(sn[i].serial_number) - 1
+        }
+    }
+
+    props = x[pos]
+
+    for (var i in props) {
+        // console.log(props[i].topic_keyphrase, topic_input)
+        if (props[i].topic_keyphrase == topic_input) {
+            topic = i
+        }
+    }
+
+    topic_parameter = "topic_" + id_input + "_" + topic
+    // console.log(topic_parameter)
+
+    show_topics(topic_parameter, true)
 });

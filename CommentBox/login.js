@@ -3,7 +3,7 @@ var x = "";
 whitelist = [{
         username: "mjasim",
         password: "mjasim",
-        file: "communitycrit_revised.json"
+        file: "nyc_final.json"
     },
     {
         username: "guest",
@@ -17,7 +17,7 @@ function validate_form(formId, feedbackId, feedbackMessage) {
     if (document.getElementById(formId).checkValidity()) {
         document.getElementById(feedbackId).innerHTML = "";
         value = $("#" + formId).val();
-        console.log(value);
+        // console.log(value);
     } else {
         document.getElementById(feedbackId).innerHTML = '<i class="fas fa-times-circle" style="color:red"></i>' + "\xa0" + feedbackMessage;
         x = x + 1;

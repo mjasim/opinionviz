@@ -285,7 +285,7 @@ body {
 }
 
 .l_column3{
-    width: 30%;
+    width: 25%;
     height: inherit;
 }
 
@@ -295,7 +295,12 @@ body {
 } */
 
 .l_column5{
-    width: 43%;
+    width: 8%;
+    height: inherit;
+}
+
+.l_column6{
+    width: 40%;
     height: inherit;
 }
 
@@ -348,7 +353,7 @@ body {
 }
 
 .c_column3{
-    width: 30%;
+    width: 25%;
     height: inherit;
     border-color: black;
     padding:6px 0px 0px 5px;
@@ -365,7 +370,16 @@ body {
 } */
 
 .c_column5{
-    width: 43%;
+    width: 8%;
+    height: inherit;
+    border-color: black;
+    padding:4px 0px 0px 5px;
+    display: flex;
+    flex-direction: row;
+}
+
+.c_column6{
+    width: 40%;
     height: inherit;
     border-color: black;
     padding: 2px 0px 0px 0px;

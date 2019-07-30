@@ -14,13 +14,14 @@ function get_serial_number(json) {
 
 function get_proposal_names(json) {
     var proposal_names = []
-    //console.log(json)
     for (var i in json["ideas"]) {
         proposal_names.push({
             idea_id: json.ideas[i].id,
             idea_name: json.ideas[i].name
         })
     }
+    // console.log(proposal_names)
+
     return proposal_names;
 }
 
@@ -29,8 +30,9 @@ function get_proposal_wise_topic(json) {
     var proposal_topic_agg = [];
     for (var i in json["ideas"]) {
         var topics = json.ideas[i].topic_keyphrases
+        // console.log(topics)
         topics.sort((function (a, b) {
-            return a.topic_keyphrase.length - b.topic_keyphrase.length
+            return b.keyphrase_score - a.keyphrase_score
         }))
 
         proposal_topic_agg.push(topics)
@@ -245,7 +247,6 @@ function get_all_proposal_emotion(json) {
 
 $("div[id^='myModal']").each(function () {
 
-    console.log("Damn")
     var currentModal = $(this);
 
     //click next
