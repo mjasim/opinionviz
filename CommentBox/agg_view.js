@@ -118,9 +118,11 @@ function draw_view(json) {
     var proposal_wise_serial = get_serial_number(json)
     var proposal_wise_topic_agg = get_proposal_wise_topic(json)
     // var proposal_wise_cloudword_agg = get_proposal_wise_cloudwords(json)
+    var proposal_wise_dates = get_proposal_wise_dates(json)
+
 
     var numberOfRows = proposal_names.length;
-    var numberOfColumns = 7;
+    var numberOfColumns = 8;
 
     // backup data
     this.data = json
@@ -268,7 +270,7 @@ function draw_view(json) {
     if (labelElement)
         labelElement.appendChild(labelColumn5Div)
 
-    // =========================== label column 5 ===============================//
+    // =========================== label column 6 ===============================//
 
     // labels and icons for emotions
     var labelcolumn6Div = document.createElement("div")
@@ -350,7 +352,22 @@ function draw_view(json) {
         labelElement.appendChild(labelcolumn6Div)
     //setTippy("span_id_angry", null);
 
-    // =========================== label column 5 end ===========================//
+    // =========================== label column 6 end ===========================//
+
+    var labelcolumn7Div = document.createElement("div")
+    labelcolumn7Div.id = "labelcolumn7"
+    labelcolumn7Div.className = "l_column7"
+
+    var divCaption =
+        "<div class=\"label-body\"" + "\">" +
+        "<div class=\"label-title\"" + ">" +
+
+        "<p style=\"margin: 5px 0px 5px 0px;font-size:1em; text-align:center; font-weight:bold; cursor:default\"" + "title=\"Click on a chart see the line chart progression\"" + ">" + "Lines" + "</p>" + "</div>";
+
+    labelcolumn7Div.innerHTML = divCaption
+    if (labelElement)
+        labelElement.appendChild(labelcolumn7Div)
+
 
     // Aggregate div fillup
     var titles = []
@@ -525,7 +542,7 @@ function draw_view(json) {
 
         column5HTML = column5HTML + '</select>' + '</div>' + '</div>';
 
-        if(column5)
+        if (column5)
             column5.innerHTML = column5HTML
 
         //============================ column 6 =========================//
@@ -540,7 +557,22 @@ function draw_view(json) {
             emotion_rows(send_data, svg_id, column6.id, proposal_names[i].idea_id)
 
 
-        //============================end of column 4==================//
+        //============================end of column 6==================//
+
+        var column7 = document.getElementById("row" + i + "-column7")
+        var svg_id = "svg" + "row" + i + "-column7"
+        // console.log(send_data)
+
+        var column7HTML =
+            '<button class="btn btn-primary lines_button" id="lines_' + proposal_names[i].idea_id + "\"" +
+            ' style="height:80%; width:100%; background-color:#F5F8FA;border-color:#337AB7;color: black; font-size:0.8em;">' + "Chart for proposal " + proposal_names[i].idea_id +
+            '</button>';
+
+        if (column7) {
+            column7.innerHTML = column7HTML
+        }
+
+
     }
 
     // On click for sort icons by emotion
@@ -2539,29 +2571,156 @@ function draw_view(json) {
     //     });
     // });
 
-    // On click for refresh //
     $(document).ready(function () {
-        $('#refresh_button').click(function () {
-            logInteraction('click, refresh');
-            location.reload(true);
+        $('.lines_button').click(function () {
+            var id = $(this).attr('id')
+            var idea_num = ''
 
-            // console.log("refreshing")
-            //$("#parentBox").animate({ scrollTop: 0 }, 1000);
-            draw_view(raw_json);
-        });
-    });
+            idea_id = id.split("_")[1]
 
-    $(document).ready(function () {
-        $('#cp_refresh').click(function () {
-            logInteraction('click, cpRefresh');
-            location.reload(true);
+            date_history = []
 
-            // console.log("refreshing")
-            //$("#parentBox").animate({ scrollTop: 0 }, 1000);
-            draw_view(raw_json);
+            for (var i in prop_json['ideas']) {
+                if (prop_json['ideas'][i].id == idea_id) {
+                    idea_num = i
+                }
+            }
+
+            for (var t in proposal_wise_dates) {
+                if (proposal_wise_dates[t].id == idea_id) {
+                    console.log(idea_id)
+
+                    for (var i in proposal_wise_dates[t].dates) {
+                        c_excited = 0, c_happy = 0, c_neutral = 0, c_concerned = 0, c_angry = 0;
+                        for (var j in prop_json.ideas[idea_num].tasks) {
+                            for (var k in prop_json.ideas[idea_num].tasks[j].comments) {
+                                if (prop_json.ideas[idea_num].tasks[j].comments[k].post_time.split(" ")[0] == proposal_wise_dates[t].dates[i]) {
+                                    if (prop_json.ideas[idea_num].tasks[j].comments[k].emotion == "Excited") {
+                                        c_excited = c_excited + 1
+                                    }
+                                    if (prop_json.ideas[idea_num].tasks[j].comments[k].emotion == "Happy") {
+                                        c_happy = c_happy + 1
+                                    }
+                                    if (prop_json.ideas[idea_num].tasks[j].comments[k].emotion == "Neutral") {
+                                        c_neutral = c_neutral + 1
+                                    }
+                                    if (prop_json.ideas[idea_num].tasks[j].comments[k].emotion == "Concerned") {
+                                        c_concerned = c_concerned + 1
+                                    }
+                                    if (prop_json.ideas[idea_num].tasks[j].comments[k].emotion == "Angry") {
+                                        c_angry = c_angry + 1
+                                    }
+                                }
+                            }
+                        }
+
+                        temp = {
+                            "date": proposal_wise_dates[idea_num].dates[i],
+                            "comments": c_excited + c_happy + c_neutral + c_concerned + c_angry,
+                            "Excited": c_excited,
+                            "Happy": c_happy,
+                            "Neutral": c_neutral,
+                            "Concerned": c_concerned,
+                            "Angry": c_angry,
+                        }
+
+                        date_history.push(temp)
+                    }
+                }
+            }
+
+            date_history = date_history.sort(function (a, b) {
+                return new Date(b.date) - new Date(a.date);
+            });
+
+            max_val = 0
+            for (var i in date_history) {
+                if (date_history[i].comments > max_val) {
+                    max_val = date_history[i].comments
+                }
+            }
+
+            line_data = [{
+                "color": "black",
+                "maxval": max_val,
+                "history": date_history
+            }]
+
+            filterobj.idea_id = idea_id
+            filterobj.emotion = null
+            filterobj.topic = null
+            filterobj.tasks = null
+
+            var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(prop_json)), filterobj)
+            console.log(filtered_comment)
+            draw_line(filtered_comment, line_data, idea_id)
+
         });
     });
 }
+
+function draw_line(filtered_comment, line_data, idea_id) {
+    // console.log('draw filter comment', filtered_comment, json);
+    var myNode = document.getElementById("parentBox");
+    while (myNode.firstChild) {
+        myNode.removeChild(myNode.firstChild);
+    }
+
+    var divIdea = []
+    var comment_count = 0
+    var users = []
+
+    for (var i in filtered_comment["ideas"]) {
+        for (var j in filtered_comment.ideas[i].tasks) {
+            for (var k in filtered_comment.ideas[i].tasks[j].comments) {
+                comment_count = comment_count + 1
+                users.push(filtered_comment.ideas[i].tasks[j].comments[k].user_id)
+            }
+        }
+    }
+
+    for (var i in filtered_comment["ideas"]) {
+        divIdea[i] = document.createElement("div")
+        divIdea[i].className = "ideaDiv";
+        divIdea[i].id = "ideaDivId-" + filtered_comment.ideas[i].id;
+        //var node = document.createTextNode(filtered_comment.ideas[i].name);
+        //divIdea[i].appendChild(node)
+        var divIdeaHTML = '<div style=\"display:flex;align-items:flex-end"\"> <h1 class="search_enable" style=margin-left:5px;>' + filtered_comment.ideas[i].name + '</h1>' +
+            "<p>" + "\xa0\xa0\xa0" +
+            '<span class="commenters_button" id="span_id_opt" >' +
+            "<i class=" + "\"fas fa-user fa-lg\"" + "></i>" +
+            '</span>' + "\xa0" +
+            '<span class="commenters_number" id="span_id_opt" >' + new Set(users).size +
+            '</span>' + "\xa0" +
+            '<span class="comments_button" id="span_id_opt" >' +
+            "<i class=" + "\"fas fa-comment-alt fa-lg\"" + "></i>" +
+            '</span>' + "\xa0" +
+            '<span class="comments_number" id="span_id_opt" >' + comment_count +
+            '</span>' + "\xa0" +
+            "</p>" +
+            '</div>' +
+            "<div class=\"comment-body\"" + "\">" +
+            '<p style=margin-left:10px>' + proposalIntro[filtered_comment.ideas[i].id] + '</p>';
+        divIdea[i].innerHTML = divIdeaHTML;
+        var element = document.getElementById("parentBox")
+        element.appendChild(divIdea[i])
+    }
+
+    fulllineDiv = document.createElement("div")
+    fulllineDiv.className = "lineDiv";
+    fulllineDiv.id = "lineDivId"
+
+    fulllineDiv.innerHTML =
+    "<div id='tooltip' style='position:absolute;background-color:lightgray;padding:5px'></div>";
+
+    var element = document.getElementById("parentBox")
+    element.appendChild(fulllineDiv)
+
+    line_full_draw(line_data)
+
+    divMove()
+}
+
 
 // function cloudTippy(cloud_id) {
 //     $(document).ready(function () {
@@ -3308,3 +3467,156 @@ $(document).on('change', '.topic_down', function () {
 
     show_topics(topic_parameter, true)
 });
+
+var states, tipBox;
+var x, y;
+var tooltip, tooltipLine;
+var tooltip_text = ""
+
+function line_full_draw(line_data) {
+
+    var mainDiv = "#lineDivId";
+    var column = document.getElementById('lineDivId')
+
+    // Define margins, dimensions, and some line colors
+    const margin = {
+        top: 3,
+        right: 10,
+        bottom: 3,
+        left: 10,
+    };
+
+    // const width = 500 - margin.left - margin.right;
+    // const height = 300 - margin.top - margin.bottom;
+
+    var width = column.clientWidth - margin.left - margin.right
+    var height = column.clientHeight - margin.top - margin.bottom
+
+    // console.log(width, height)
+
+    var parseTime = d3.timeParse("%m/%d/%Y");
+
+    // set the ranges
+    x = d3.scaleTime().range([0, column.clientWidth - margin.left - margin.right]);
+    y = d3.scaleLinear().range([column.clientHeight - margin.top - margin.bottom, 0]);
+    const line = d3.line().x(d => x(d.date)).y(d => y(d.comments));
+
+    var svg_id = 'svg_id'
+    var chart = d3.select(mainDiv)
+        .append("svg")
+        .attr("id", svg_id)
+        .attr("height", height)
+        .attr("width", width)
+        .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+
+    tooltip = d3.select('#tooltip');
+    tooltipLine = chart.append('line');
+
+    // chart.append('g')
+    // .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+    states = JSON.parse(JSON.stringify(line_data))
+
+    console.log(states)
+
+    // format the data
+    states[0].history.forEach(function (d) {
+        d.date = parseTime(d.date);
+        d.comments = +d.comments;
+    });
+
+    x.domain(d3.extent(states[0].history, function (d) {
+        return d.date;
+    }));
+    y.domain([0, d3.max(states[0].history, function (d) {
+        return d.comments;
+    })]);
+
+    const xAxis = d3.axisBottom(x);
+    const yAxis = d3.axisLeft(y);
+    chart.append('g')
+    .attr('transform', 'translate(' + '25' + ',' + '25' + ')')
+    .call(yAxis);
+    chart.append('g')
+    .attr('transform', 'translate(' + '0' + ',' + (height - 25) + ')')
+    .call(xAxis);
+    chart.append('text').html('Community reactions over time').attr('x', width/2 - 150 ).attr('y', 50);
+
+    chart.selectAll()
+        .data(states).enter()
+        .append('path')
+        .attr('fill', 'none')
+        .attr('stroke', d => d.color)
+        .attr('stroke-width', 2)
+        .datum(d => d.history)
+        .attr('d', line);
+
+    chart.selectAll()
+        .data(states).enter()
+        .append('text')
+        .html(d => d.name)
+        .attr('fill', d => d.color)
+        .attr('alignment-baseline', 'middle')
+        .attr('x', width)
+        .attr('dx', '.7em')
+        .attr('y', d => y(d.maxval))
+        .attr('dy', '.7em');
+
+
+    // chart.selectAll()
+    //     .data(states)
+    //     .enter().append("circle")
+    //     .attr("r", 5)
+    //     .datum(d => d.history)
+
+    tipBox = chart.append('rect')
+        .attr('width', column.clientWidth - margin.left - margin.right)
+        .attr('height', column.clientHeight - margin.top - margin.bottom)
+        .attr('opacity', 0)
+        .on('mousemove', drawTooltip)
+        .on('mouseout', removeTooltip);
+}
+
+function removeTooltip() {
+    if (tooltip) tooltip.style('display', 'none');
+    if (tooltipLine) tooltipLine.attr('stroke', 'none');
+}
+
+function drawTooltip() {
+
+    this_date = x.invert(d3.mouse(tipBox.node())[0]).toLocaleDateString("en-US");
+
+    // const year = Math.floor((x.invert(d3.mouse(tipBox.node())[0]) + 5) / 10) * 10;
+    // states.sort((a, b) => {
+    //   return b.history.find(h => h.year == year).population - a.history.find(h => h.year == year).population;
+    // })  
+
+    // tooltipLine.attr('stroke', 'black')
+    //   .attr('x1', x(year))
+    //   .attr('x2', x(year))
+    //   .attr('y1', 0)
+    //   .attr('y2', height);
+
+    tooltip.html(this_date)
+        .style('display', 'block')
+        .style('left', d3.event.pageX + 20)
+        .style('top', d3.event.pageY - 20)
+        .selectAll()
+        .data(states).enter()
+        .append('div')
+        .style('color', d => d.color)
+        .html(function (d) {
+
+            if (d.history.find(h => h.date.toLocaleDateString("en-US") == this_date)) {
+                tooltip_text = 'Excited: ' + d.history.find(h => h.date.toLocaleDateString("en-US") == this_date).Excited + '<br>' +
+                    'Happy: ' + d.history.find(h => h.date.toLocaleDateString("en-US") == this_date).Happy + '<br>' +
+                    'Neutral:' + d.history.find(h => h.date.toLocaleDateString("en-US") == this_date).Neutral + '<br>' +
+                    'Concerned: ' + d.history.find(h => h.date.toLocaleDateString("en-US") == this_date).Concerned + '<br>' +
+                    'Angry: ' + d.history.find(h => h.date.toLocaleDateString("en-US") == this_date).Angry;
+                return tooltip_text
+
+            } else
+                return tooltip_text
+
+        })
+}

@@ -245,20 +245,39 @@ function get_all_proposal_emotion(json) {
     return proposal_emotion_agg;
 }
 
-$("div[id^='myModal']").each(function () {
+function get_proposal_wise_dates(json) {
+    date_agg = []
+    for (var i in json["ideas"]) {
+        var proposal_wise_dates = [];
+        for (var j in json.ideas[i].tasks) {
+            for (var k in json.ideas[i].tasks[j].comments) {
+                date = json.ideas[i].tasks[j].comments[k].post_time.split(" ")[0]
+                proposal_wise_dates.push(date)
+            }
+        }
 
-    var currentModal = $(this);
+        date_agg.push({
+            "id": json.ideas[i].id,
+            "dates": Array.from(new Set(proposal_wise_dates))
+        })
+    }
 
-    //click next
-    currentModal.find('.btn-next').click(function () {
-        currentModal.modal('hide');
-        currentModal.closest("div[id^='myModal']").nextAll("div[id^='myModal']").first().modal('show');
-    });
+    return date_agg
+}
 
-    //click prev
-    currentModal.find('.btn-prev').click(function () {
-        currentModal.modal('hide');
-        currentModal.closest("div[id^='myModal']").prevAll("div[id^='myModal']").first().modal('show');
-    });
+// $("div[id^='myModal']").each(function () {
 
-});
+//     var currentModal = $(this);
+
+//     //click next
+//     currentModal.find('.btn-next').click(function () {
+//         currentModal.modal('hide');
+//         currentModal.closest("div[id^='myModal']").nextAll("div[id^='myModal']").first().modal('show');
+//     });
+
+//     //click prev
+//     currentModal.find('.btn-prev').click(function () {
+//         currentModal.modal('hide');
+//         currentModal.closest("div[id^='myModal']").prevAll("div[id^='myModal']").first().modal('show');
+//     });
+// });

@@ -1,157 +1,84 @@
 [
   {
-    "name": "Angry",
-    "show": true,
-    "color": "red",
-    "currentPopulation": 1,
+    "color": "black",
+    "currentPopulation": 37253956,
     "history": [
       {
         "year": 1910,
-        "population": 10
+        "population": 2377549,
+		"angry": 1000,
+		"sad": 100,
+		"happy": 2000
       },
       {
         "year": 1920,
-        "population": 100
+        "population": 3426861,
+		"angry": 100,
+		"sad": 100,
+		"happy": 200
       },
       {
         "year": 1930,
-        "population": 20
+        "population": 5677251,
+		"angry": 100,
+		"sad": 100,
+		"happy": 200
       },
       {
         "year": 1940,
-        "population": 5
+        "population": 6907387,
+		"angry": 100,
+		"sad": 100,
+		"happy": 200
       },
       {
         "year": 1950,
-        "population": 3
+        "population": 10586223,
+		"angry": 100,
+		"sad": 100,
+		"happy": 200
       },
       {
         "year": 1960,
-        "population": 1
+        "population": 15717204,
+		"angry": 100,
+		"sad": 100,
+		"happy": 200
       },
       {
         "year": 1970,
-        "population": 1
+        "population": 19953134,
+		"angry": 100,
+		"sad": 100,
+		"happy": 200
       },
       {
         "year": 1980,
-        "population": 1
+        "population": 23667902,
+		"angry": 100,
+		"sad": 100,
+		"happy": 200
       },
       {
         "year": 1990,
-        "population": 1
+        "population": 29760021,
+		"angry": 100,
+		"sad": 100,
+		"happy": 200
       },
       {
         "year": 2000,
-        "population": 1
+        "population": 33871648,
+		"angry": 100,
+		"sad": 100,
+		"happy": 200
       },
       {
         "year": 2010,
-        "population": 1
-      }
-    ]
-  },
-  {
-    "name": "Sad",
-    "show": true,
-    "color": "blue",
-    "currentPopulation": 3,
-    "history": [
-      {
-        "year": 1910,
-        "population": 3
-      },
-      {
-        "year": 1920,
-        "population": 3
-      },
-      {
-        "year": 1930,
-        "population": 3
-      },
-      {
-        "year": 1940,
-        "population": 3
-      },
-      {
-        "year": 1950,
-        "population": 3
-      },
-      {
-        "year": 1960,
-        "population": 3
-      },
-      {
-        "year": 1970,
-        "population": 3
-      },
-      {
-        "year": 1980,
-        "population": 3
-      },
-      {
-        "year": 1990,
-        "population": 3
-      },
-      {
-        "year": 2000,
-        "population": 3
-      },
-      {
-        "year": 2010,
-        "population": 3
-      }
-    ]
-  },
-  {
-    "name": "Happy",
-    "show": true,
-    "color": "green",
-    "currentPopulation": 10,
-    "history": [
-      {
-        "year": 1910,
-        "population": 1
-      },
-      {
-        "year": 1920,
-        "population": 1
-      },
-      {
-        "year": 1930,
-        "population": 2
-      },
-      {
-        "year": 1940,
-        "population": 3
-      },
-      {
-        "year": 1950,
-        "population": 4
-      },
-      {
-        "year": 1960,
-        "population": 10
-      },
-      {
-        "year": 1970,
-        "population": 50
-      },
-      {
-        "year": 1980,
-        "population": 60
-      },
-      {
-        "year": 1990,
-        "population": 70
-      },
-      {
-        "year": 2000,
-        "population": 20
-      },
-      {
-        "year": 2010,
-        "population": 10
+        "population": 37253956,
+		"angry": 100,
+		"sad": 100,
+		"happy": 200
       }
     ]
   }

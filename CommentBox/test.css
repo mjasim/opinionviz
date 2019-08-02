@@ -300,9 +300,15 @@ body {
 }
 
 .l_column6{
-    width: 40%;
+    width: 30%;
     height: inherit;
 }
+
+.l_column7{
+    width: 10%;
+    height: inherit;
+}
+
 
 .participantInfoColumn{
     width: 50%;
@@ -379,7 +385,14 @@ body {
 }
 
 .c_column6{
-    width: 40%;
+    width: 30%;
+    height: inherit;
+    border-color: black;
+    padding: 2px 0px 0px 0px;
+}
+
+.c_column7{
+    width: 10%;
     height: inherit;
     border-color: black;
     padding: 2px 0px 0px 0px;
@@ -440,6 +453,16 @@ body {
 .taskDiv{
     color:Black;
     margin: 0 auto;
+}
+
+.lineDiv{
+    background-color: #DEE5EA;
+    margin-left: 10%;
+    margin-right: 10%;
+    padding: 5px 5px;
+    border-radius: 5px;
+    height: 300px;
+    width: 80%;
 }
 
 .taskDiv h2{
@@ -861,3 +884,6 @@ body {
   cursor:pointer;
 }
 
+.data-circle {
+	fill: #3C92BA;     
+}
