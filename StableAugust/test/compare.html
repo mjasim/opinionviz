@@ -1,0 +1,401 @@
+<html>
+<meta charset="utf-8">
+
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+		integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+	</script>
+
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet"
+		href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+	</script>
+	<!-- <script src="interaction_log.js"></script> -->
+
+	<script src="https://d3js.org/d3.v4.min.js" charset="utf-8"></script>
+	<script src="interaction_log.js"></script>
+	<link rel="stylesheet" href="test.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+		integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+</head>
+
+<body>
+	<nav class="navbar navbar-expand-lg navbar-dark"
+		style="background-color:#2C485B;margin:0px;padding-top:0px; padding-bottom: 0px">
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="nav navbar-nav">
+				<a class="navbar-brand" href="main.html" title="Home">CommunityPulse</a>
+				<button class="btn btn-primary navbar-btn" id="instr_button"
+					style="background-color:#2C485B; border:none" type="button" data-toggle="modal"
+					data-placement="bottom" title="User Guide" data-target="#instrModal">User Guide</button>
+				<p>&nbsp</p>
+				<button class="btn btn-primary navbar-btn" id="notes_all_button"
+					style="background-color:#2C485B; border:none" type="button" data-toggle="modal"
+					data-placement="bottom" title="Notes" data-target="#notesAllModal">Notes</button>
+				<p>&nbsp</p>
+				<button class="btn btn-primary navbar-btn" id="compare_button"
+					style="background-color:#2C485B; border:none" type="button" title="Compare"
+					onclick="triggerCompare()">Compare</button>
+				<p>&nbsp</p>
+				<button class="btn btn-primary navbar-btn" id="about_button"
+					style="background-color:#2C485B; border:none" type="button" data-toggle="modal"
+					data-placement="bottom" title="About" data-target="#aboutModal">About</button>
+				<p>&nbsp</p>
+			</ul>
+			<ul class="navbar-nav ml-auto">
+				<form class="navbar-form navbar-right">
+					<div class="input-group">
+						<input type="text" class="form-control" style="margin-top:7%" id="mysearch" placeholder="Search"
+							name="search">
+					</div>
+				</form>
+			</ul>
+		</div>
+	</nav>
+
+	<div class="modal fade" tabindex="-1" id="instrModal" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">CommunityPulse User Guide</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<p>Welcome to the CoomunityPulse user guide. Click <b>Next</b> to learn about the features of
+						CommunityPulse. Click <b>Close</b> to exit the user guide.</p>
+					<img class="img-fluid" style="margin:0 auto; width: 100%" src="images/user_guide_1.jpg" alt="">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" style="background-color:#2C485B"
+						id="instr_page_1_next" data-target="#instrModal2" data-toggle="modal" data-dismiss="modal"
+						data-placement="bottom">Next</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" tabindex="-1" id="instrModal2" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Selecting a Proposal</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<p>Click on a proposal to explore the related comments. The red box shows a <b>selected</b>
+						proposal. Once
+						selected, the proposal name will turn blue. Click on the proposal again, to <b>unselect</b> it.
+					</p>
+					<img class="img-fluid" style="margin:0 auto; width: 100%" src="images/user_guide_proposal.jpg"
+						alt="">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" style="background-color:#2C485B"
+						id="instr_page_2_back" data-target="#instrModal" data-toggle="modal" data-dismiss="modal"
+						data-placement="bottom">Back</button>
+					<button type="button" class="btn btn-primary" style="background-color:#2C485B"
+						id="instr_page_2_next" data-target="#instrModal3" data-toggle="modal" data-dismiss="modal"
+						data-placement="bottom">Next</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" tabindex="-1" id="instrModal3" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Selecting a Topic</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<p><b>Click</b> on a topic of a proposal to explore comments related to that topic only. The red box
+						shows
+						a <b>selected</b> topic. Once
+						selected, the topic name will turn blue. <b>Click</b> on the proposal again, to <b>unselect</b>
+						it.</p>
+					<img class="img-fluid" style="margin:0 auto; width: 100%" src="images/user_guide_topicjpg.jpg"
+						alt="">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" style="background-color:#2C485B"
+						id="instr_page_3_back" data-target="#instrModal2" data-toggle="modal" data-dismiss="modal"
+						data-placement="bottom">Back</button>
+					<button type="button" class="btn btn-primary" style="background-color:#2C485B"
+						id="instr_page_3_next" data-target="#instrModal4" data-toggle="modal" data-dismiss="modal"
+						data-placement="bottom">Next</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" tabindex="-1" id="instrModal4" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Sorting by Emotion</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<p><b>Click</b> on the emoticons to <b>sort</b> the proposals by emotion. You can <b>Click</b> for
+						(<b>descending
+							<i class="fas fa-sort-amount-down"></i></b>), (<b>ascending <i
+								class="fas fa-sort-amount-up"></i></b>) and (<b>no <i class="fas fa-bars"></i></b>)
+						sort. The red box shows sorting by emotion - Excited</p>
+					<img class="img-fluid" style="margin:0 auto; width: 100%" src="images/user_guide_sort.jpg" alt="">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" style="background-color:#2C485B"
+						id="instr_page_4_back" data-target="#instrModal3" data-toggle="modal" data-dismiss="modal"
+						data-placement="bottom">Back</button>
+					<button type="button" class="btn btn-primary" style="background-color:#2C485B"
+						id="instr_page_4_next" data-target="#instrModal5" data-toggle="modal" data-dismiss="modal"
+						data-placement="bottom">Next</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" tabindex="-1" id="instrModal5" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Filtering by Emotion</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<p><b>Click</b> on the emotion bars of a proposal to explore comments related to that emotion only.
+						The red
+						box shows a proposal's comments filtered by the emotion - Happy.</p>
+					<img class="img-fluid" style="margin:0 auto; width: 100%" src="images/user_guide_filter.jpg" alt="">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" style="background-color:#2C485B"
+						id="instr_page_5_back" data-target="#instrModal4" data-toggle="modal" data-dismiss="modal"
+						data-placement="bottom">Back</button>
+					<button type="button" class="btn btn-primary" style="background-color:#2C485B"
+						id="instr_page_5_next" data-target="#instrModal6" data-toggle="modal" data-dismiss="modal"
+						data-placement="bottom">Next</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" tabindex="-1" id="instrModal6" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Revision</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<p>The emotion for each comment is identified using machine learning. If you do not agree with it,
+						you can revise the emotion category. <b>Hover</b> on the emoticon below the comment to bring up
+						the revision panel. Then <b>click</b> on the emotion you think is correct. The red box shows the
+						emotion
+						below the comment. The green box shows the comment is revised from Excited to Concerned.</p>
+					<img class="img-fluid" style="margin:0 auto; width: 100%" src="images/revision.jpg" alt="">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" style="background-color:#2C485B"
+						id="instr_page_6_back" data-target="#instrModal5" data-toggle="modal" data-dismiss="modal"
+						data-placement="bottom">Back</button>
+					<button type="button" class="btn btn-primary" style="background-color:#2C485B"
+						id="instr_page_6_next" data-target="#instrModal7" data-toggle="modal" data-dismiss="modal"
+						data-placement="bottom">Next</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" tabindex="-1" id="instrModal7" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Compare</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<p>You can <b>select</b> up to two proposals for a side-by side comparison. <b>Click</b> on
+						checkboxes to <b>select</b> proposals. Then <b>Click</b> on the <b>Compare</b> button in
+						the navigation bar. The red box shows selecting proposals and the green box shows the
+						Compare button. </p>
+					<img class="img-fluid" style="margin:0 auto; width: 100%" src="images/compare.jpg" alt="">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" style="background-color:#2C485B"
+						id="instr_page_7_back" data-target="#instrModal6" data-toggle="modal" data-dismiss="modal"
+						data-placement="bottom">Back</button>
+					<button type="button" class="btn btn-primary" style="background-color:#2C485B"
+						id="instr_page_7_next" data-target="#instrModal8" data-toggle="modal" data-dismiss="modal"
+						data-placement="bottom">Next</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" tabindex="-1" id="instrModal8" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">User Guide</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<p>This is the end of our user guide. If you want to see this guide again, <b>click</b> on the
+						<b>User Guide</b> button in the navigation bar. The red box shows the <b>User Guide</b> button.
+					</p>
+					<img class="img-fluid" style="margin:0 auto; width: 100%" src="images/instr.jpg" alt="">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" style="background-color:#2C485B"
+						id="instr_page_8_back" data-target="#instrModal7" data-toggle="modal" data-dismiss="modal"
+						data-placement="bottom">Back</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="notesAllModal" tabindex="-2" role="dialog" aria-labelledby="notesAllModal"
+		aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="notesAllModalTitle">List of Notes</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body" id="note_modal_body">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" style="background-color:#2C485B"
+						id="note_print">Print</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" tabindex="-1" id="aboutModal" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">About</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<p>CommunityPulse is an ongoing research project aiming at facilitating multi-level exploration of
+						large-scale community input. If you want to explore the data collected from your community
+						engagement/initiative using CommunityPulse, please contact the following.</p>
+					<br><a href="mailto:mjasim@cs.umass.edu" style="color:#2C485B">mjasim@cs.umass.edu</a>
+					<br><a href="mailto:nmahyar@cs.umass.edu" style="color:#2C485B">nmahyar@cs.umass.edu</a>
+					<br><a href="mailto:enamulh@yorku.ca" style="color:#2C485B">enamulh@yorku.ca</a>
+					<br><a href="mailto:asarv@cs.umass.edu" style="color:#2C485B">asarv@cs.umass.edu</a>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="parCompDiv" class="parentCompare">
+
+		<div class="modal fade" id="noteModal" role="dialog">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Save a Note</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<form action="/action_page.php">
+							Note Title:<br>
+							<input id="note_title" type="text" name="note_title" value="">
+							<br>
+							Note Type:<br>
+							<input id="note_type" type="text" name="note_type" value="">
+							<br>
+							Note Text:<br>
+							<input id="note_text" type="text" name="note_text" value="">
+							<br>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<input id="note_save_button" class="btn btn-primary" style="background-color:#2C485B"
+							type="button" value="Save">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="compareLeftDiv" class="compare">
+			<div id="compareLeftDrop" class="compareDrop">
+			</div>
+			<div id="compareLeftHeader" class="compareHeader"></div>
+			<div id="compareLeftBody" class="compareBody">
+				<div id="compareLeftparentBox" class="comparebox">
+				</div>
+			</div>
+		</div>
+		<div id="compareRighttDiv" class="compare">
+			<div id="compareRightDrop" class="compareDrop">
+			</div>
+			<div id="compareRightHeader" class="compareHeader"></div>
+			<div id="compareRightBody" class="compareBody">
+				<div id="compareRightparentBox" class="comparebox">
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>
+
+<script src="login.js"></script>
+<script src="overview.js"></script>
+<script src="proposal_view.js"></script>
+<script src="agg_view.js"></script>
+<script src="js/highlight.js"></script>
+<script src="js/search.js"></script>
+<script src="compare.js"></script>

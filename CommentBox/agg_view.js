@@ -11,6 +11,8 @@ var filterobj = {
 
 filepath = ""
 
+lineOn = ""
+
 var selected_sort = ["participants", "comments", "angry", "concerned", "neutral", "happy", "excited"];
 var current_sort = ""
 var sort_opt = 0
@@ -120,6 +122,7 @@ function draw_view(json) {
     // var proposal_wise_cloudword_agg = get_proposal_wise_cloudwords(json)
     var proposal_wise_dates = get_proposal_wise_dates(json)
 
+    console.log(proposal_wise_dates)
 
     var numberOfRows = proposal_names.length;
     var numberOfColumns = 8;
@@ -257,18 +260,18 @@ function draw_view(json) {
     //============================ label column 4 end ==========================//
 
 
-    var labelColumn5Div = document.createElement("div")
-    labelColumn5Div.id = "labelcolumn5"
-    labelColumn5Div.className = "l_column5"
+    // var labelColumn5Div = document.createElement("div")
+    // labelColumn5Div.id = "labelcolumn5"
+    // labelColumn5Div.className = "l_column5"
 
-    var divCaption =
-        "<div class=\"label-body\"" + "\">" +
-        "<div class=\"label-title\"" + ">" +
-        "<p style=\"margin: 5px 0px 5px 0px;font-size:1.0em;text-align:left; font-weight:bold; cursor:default\"" + ">" + "\xa0" + "</p>" + "</div>";
+    // var divCaption =
+    //     "<div class=\"label-body\"" + "\">" +
+    //     "<div class=\"label-title\"" + ">" +
+    //     "<p style=\"margin: 5px 0px 5px 0px;font-size:1.0em;text-align:left; font-weight:bold; cursor:default\"" + ">" + "\xa0" + "</p>" + "</div>";
 
-    labelColumn5Div.innerHTML = divCaption
-    if (labelElement)
-        labelElement.appendChild(labelColumn5Div)
+    // labelColumn5Div.innerHTML = divCaption
+    // if (labelElement)
+    //     labelElement.appendChild(labelColumn5Div)
 
     // =========================== label column 6 ===============================//
 
@@ -354,19 +357,19 @@ function draw_view(json) {
 
     // =========================== label column 6 end ===========================//
 
-    var labelcolumn7Div = document.createElement("div")
-    labelcolumn7Div.id = "labelcolumn7"
-    labelcolumn7Div.className = "l_column7"
+    // var labelcolumn7Div = document.createElement("div")
+    // labelcolumn7Div.id = "labelcolumn7"
+    // labelcolumn7Div.className = "l_column7"
 
-    var divCaption =
-        "<div class=\"label-body\"" + "\">" +
-        "<div class=\"label-title\"" + ">" +
+    // var divCaption =
+    //     "<div class=\"label-body\"" + "\">" +
+    //     "<div class=\"label-title\"" + ">" +
 
-        "<p style=\"margin: 5px 0px 5px 0px;font-size:1em; text-align:center; font-weight:bold; cursor:default\"" + "title=\"Click on a chart see the line chart progression\"" + ">" + "Lines" + "</p>" + "</div>";
+    //     "<p style=\"margin: 5px 0px 5px 0px;font-size:1em; text-align:center; font-weight:bold; cursor:default\"" + "title=\"Click on a chart see the line chart progression\"" + ">" + "Lines" + "</p>" + "</div>";
 
-    labelcolumn7Div.innerHTML = divCaption
-    if (labelElement)
-        labelElement.appendChild(labelcolumn7Div)
+    // labelcolumn7Div.innerHTML = divCaption
+    // if (labelElement)
+    //     labelElement.appendChild(labelcolumn7Div)
 
 
     // Aggregate div fillup
@@ -412,7 +415,24 @@ function draw_view(json) {
         //console.log(proposal_names[i]);
         //============================ column 1=========================//
 
+        // // console.log(send_data)
+
+        // var column7HTML =
+        //     '<div class="lines_button" id="lines_' + proposal_names[i].idea_id + "\"" +
+        //     // ' style="height:80%; width:98%; background-color:#F5F8FA;border-color:#337AB7;color: black; font-size:0.8em;">' + 
+        //     //  + "Chart for proposal " + proposal_names[i].idea_id +
+        //     '</div>';
+
+        // if (column7) {
+        //     column7.innerHTML = column7HTML
+        //     line_inline_draw(('lines_' + proposal_names[i].idea_id), ('lines_' + proposal_names[i].idea_id), svg_id, proposal_wise_dates)
+        // }
+
+
+        // console.log(proposal_names[i].idea_id)
+
         // column with all proposal names
+        var svg_lines_id = "svg_lines_" + proposal_names[i].idea_id;
         var column1 = document.getElementById("row" + i + "-column1")
         if (proposal_names[i].idea_name.length < 18) {
 
@@ -420,10 +440,11 @@ function draw_view(json) {
             //console.log(proposal_names[i].idea_name.length)
             var divIdeaName =
                 "<div class=\"idea-Name\" " + "\">" +
-
                 //'<div  class="btn btn-primary btn-block ideaName" id="' + proposal_names[i].idea_id + '">' + proposal_names[i].idea_name + "</div>";
                 //'<div  class="ideaName" id="' + proposal_names[i].idea_id + '">' + '<p class="search_enable" style="margin:0px 0px 0px 0px; word-wrap:break-word; text-align: left">' + proposal_names[i].idea_name + "</p></div>";
-                '<div><span class="badge badge-warning ideaName" id="' + proposal_names[i].idea_id + '" data-toggle="tooltip" data-placement="bottom">' + proposal_names[i].idea_name + '</span></div></div>'
+                '<div class= "idea-Name-inside" style=\"width:100%; height:100%\" ><span class="badge badge-warning ideaName" id="' + proposal_names[i].idea_id + '" data-toggle="tooltip" data-placement="bottom">' + proposal_names[i].idea_name + '</span>' +
+                '<div style=\"width:50%; height:100%;margin-left:5px;margin-top:2px\" class="lines_button" id="lines_' + proposal_names[i].idea_id + "\"" + '</div>' +
+                '</div>';
         } else {
             var sentence_length = 0;
             var sentence = ""
@@ -432,7 +453,7 @@ function draw_view(json) {
                 sentence_length += all_words[x].length
                 //console.log(sentence_length, all_words[x])
                 if (column1) {
-                    if (sentence_length > column1.clientWidth / 10) {
+                    if (sentence_length > column1.clientWidth / 15) {
                         sentence += "..."
                         break;
                     } else {
@@ -444,11 +465,14 @@ function draw_view(json) {
             var divIdeaName =
                 "<div class=\"idea-Name\"" + "\">" +
                 //'<div  class="btn btn-primary btn-block ideaName" id="' + proposal_names[i].idea_id + '">' + proposal_names[i].idea_name + "</div>";
-                '<div><span class="badge badge-warning ideaName" id="' + proposal_names[i].idea_id + '"data-toggle="tooltip" data-placement="bottom">' + sentence + '</span></div></div>'
+                '<div class= "idea-Name-inside" style=\"width:100%; height:100%;\" ><span class="badge badge-warning ideaName" id="' + proposal_names[i].idea_id + '" data-toggle="tooltip" data-placement="bottom">' + sentence + '</span>' +
+                '<div style=\"width:50%; height:100%;margin-left:5px;margin-top:2px\" class="lines_button" id="lines_' + proposal_names[i].idea_id + "\"" + '</div>' +
+                '</div>';
         }
         if (column1) {
             column1.innerHTML = divIdeaName
             column1.setAttribute("title", proposal_names[i].idea_name)
+            line_inline_draw(('lines_' + proposal_names[i].idea_id), ('lines_' + proposal_names[i].idea_id), svg_lines_id, proposal_wise_dates)
         }
 
         //============================end of column 1==================//
@@ -488,7 +512,7 @@ function draw_view(json) {
             topic_row_length += proposal_wise_topic_agg[i][j].topic_keyphrase.length
             //console.log(proposal_wise_topic_agg[i][j].topic_keyphrase, topic_row_length)
             if (column3) {
-                if (topic_row_length > column3.clientWidth / 9) {
+                if (topic_row_length > column3.clientWidth / 11) {
                     break;
                 } else {
                     divTopicName = divTopicName +
@@ -498,6 +522,21 @@ function draw_view(json) {
             }
         }
         topic_row_length = 0
+
+        divTopicName = divTopicName +
+            '<div  class="topicNameAll" id="topic_' + proposal_names[i].idea_id + "_" + 'all' + '\">' +
+            '<div class="col-lg-12 col-m-12 col-sm-12" style="padding:1px">' +
+            '<select class="form-control topic_down" id="all_topics_' + proposal_names[i].idea_id + "\"" +
+            ' style="height:24px;width:50px;font-size:0.8em;font-weight:bold;background-color:#F5F8FA;border-color:#337AB7; padding:0">' +
+            '<option value="">...</option>';
+
+        all_topics = proposal_wise_topic_agg[i]
+
+        for (var j in all_topics) {
+            divTopicName += '<option>' + all_topics[j].topic_keyphrase + '</option>'
+        }
+
+        divTopicName = divTopicName + '</select>' + '</div>' + '</div>';
 
         if (column3)
             column3.innerHTML = divTopicName
@@ -521,29 +560,29 @@ function draw_view(json) {
 
         //============================ column 4 end =====================//
 
-        var column5 = document.getElementById("row" + i + "-column5")
+        // var column5 = document.getElementById("row" + i + "-column5")
 
-        var column5HTML =
-            '<div class="col-lg-12 col-m-12 col-sm-12">' +
-            '<select class="form-control topic_down" id="all_topics_' + proposal_names[i].idea_id + "\"" +
-            ' style="height:28px;font-size:0.8em;font-weight:bold;background-color:#F5F8FA;border-color:#337AB7">' +
-            '<option value="">All</option>';
+        // var column5HTML =
+        //     '<div class="col-lg-12 col-m-12 col-sm-12">' +
+        //     '<select class="form-control topic_down" id="all_topics_' + proposal_names[i].idea_id + "\"" +
+        //     ' style="height:28px;font-size:0.8em;font-weight:bold;background-color:#F5F8FA;border-color:#337AB7";>' +
+        //     '<option value="">All</option>';
 
-        // for (var k in proposal_wise_topic_agg[i]) {
-        //     console.log(proposal_wise_topic_agg[i])
-        //     column5HTML += '<option>' + proposal_wise_topic_agg[j][k].topic_keyphrase + '</option>'
+        // // for (var k in proposal_wise_topic_agg[i]) {
+        // //     console.log(proposal_wise_topic_agg[i])
+        // //     column5HTML += '<option>' + proposal_wise_topic_agg[j][k].topic_keyphrase + '</option>'
+        // // }
+
+        // all_topics = proposal_wise_topic_agg[i]
+
+        // for (var j in all_topics) {
+        //     column5HTML += '<option>' + all_topics[j].topic_keyphrase + '</option>'
         // }
 
-        all_topics = proposal_wise_topic_agg[i]
+        // column5HTML = column5HTML + '</select>' + '</div>' + '</div>';
 
-        for (var j in all_topics) {
-            column5HTML += '<option>' + all_topics[j].topic_keyphrase + '</option>'
-        }
-
-        column5HTML = column5HTML + '</select>' + '</div>' + '</div>';
-
-        if (column5)
-            column5.innerHTML = column5HTML
+        // if (column5)
+        //     column5.innerHTML = column5HTML
 
         //============================ column 6 =========================//
 
@@ -559,20 +598,20 @@ function draw_view(json) {
 
         //============================end of column 6==================//
 
-        var column7 = document.getElementById("row" + i + "-column7")
-        var svg_id = "svg" + "row" + i + "-column7"
-        // console.log(send_data)
+        // var column7 = document.getElementById("row" + i + "-column7")
+        // var svg_id = "svg_lines_" + proposal_names[i].idea_id;
+        // // console.log(send_data)
 
-        var column7HTML =
-            '<button class="btn btn-primary lines_button" id="lines_' + proposal_names[i].idea_id + "\"" +
-            ' style="height:80%; width:100%; background-color:#F5F8FA;border-color:#337AB7;color: black; font-size:0.8em;">' + "Chart for proposal " + proposal_names[i].idea_id +
-            '</button>';
+        // var column7HTML =
+        //     '<div class="lines_button" id="lines_' + proposal_names[i].idea_id + "\"" +
+        //     // ' style="height:80%; width:98%; background-color:#F5F8FA;border-color:#337AB7;color: black; font-size:0.8em;">' + 
+        //     //  + "Chart for proposal " + proposal_names[i].idea_id +
+        //     '</div>';
 
-        if (column7) {
-            column7.innerHTML = column7HTML
-        }
-
-
+        // if (column7) {
+        //     column7.innerHTML = column7HTML
+        //     line_inline_draw(column7.id, ('lines_' + proposal_names[i].idea_id), svg_id, proposal_wise_dates)
+        // }
     }
 
     // On click for sort icons by emotion
@@ -1127,6 +1166,7 @@ function draw_view(json) {
                 $("#" + id).children().css("opacity", "0.8");
 
                 current_sort = ""
+                prop_json = x;
                 draw_view(x)
 
                 sort_opt_emo = 0;
@@ -1163,8 +1203,10 @@ function draw_view(json) {
                 sorted_ideas = {
                     "ideas": show_this
                 }
-                draw_view(sorted_ideas)
+
                 prop_json = sorted_ideas;
+                draw_view(sorted_ideas)
+
                 document.getElementById("box_header").innerHTML = "Sorted by " + id.split("_")[2] + " in descending order";
 
                 var myNode = document.getElementById("parentBox");
@@ -1682,8 +1724,9 @@ function draw_view(json) {
                 sorted_ideas = {
                     "ideas": show_this
                 }
-                draw_view(sorted_ideas)
+
                 prop_json = sorted_ideas;
+                draw_view(sorted_ideas)
                 document.getElementById("box_header").innerHTML = "Sorted by " + id.split("_")[2] + " in ascending order";
 
                 var myNode = document.getElementById("parentBox");
@@ -2529,6 +2572,10 @@ function draw_view(json) {
                 // console.log(current_sort)
                 $("#span_id_" + current_sort).children().css("opacity", "1.0");
             }
+
+            $("#parentBox").animate({
+                scrollTop: 0
+            }, 1000);
         });
     });
 
@@ -2555,6 +2602,9 @@ function draw_view(json) {
 
             var id = $(this).attr('id');
             show_topics(id, false)
+            $("#parentBox").animate({
+                scrollTop: 0
+            }, 1000);
         });
     });
 
@@ -2571,95 +2621,264 @@ function draw_view(json) {
     //     });
     // });
 
+    // On click for lines
     $(document).ready(function () {
-        $('.lines_button').click(function () {
+        $('.svg_inline').click(function () {
+
             var id = $(this).attr('id')
             var idea_num = ''
 
-            idea_id = id.split("_")[1]
-
-            date_history = []
-
-            for (var i in prop_json['ideas']) {
-                if (prop_json['ideas'][i].id == idea_id) {
-                    idea_num = i
+            if (lineOn == id) {
+                var myNode = document.getElementById("parentBox");
+                while (myNode.firstChild) {
+                    myNode.removeChild(myNode.firstChild);
                 }
-            }
 
-            for (var t in proposal_wise_dates) {
-                if (proposal_wise_dates[t].id == idea_id) {
-                    console.log(idea_id)
+                lineOn = ""
+                document.getElementById(id).setAttribute("style", "border:none")
 
-                    for (var i in proposal_wise_dates[t].dates) {
-                        c_excited = 0, c_happy = 0, c_neutral = 0, c_concerned = 0, c_angry = 0;
-                        for (var j in prop_json.ideas[idea_num].tasks) {
-                            for (var k in prop_json.ideas[idea_num].tasks[j].comments) {
-                                if (prop_json.ideas[idea_num].tasks[j].comments[k].post_time.split(" ")[0] == proposal_wise_dates[t].dates[i]) {
-                                    if (prop_json.ideas[idea_num].tasks[j].comments[k].emotion == "Excited") {
-                                        c_excited = c_excited + 1
-                                    }
-                                    if (prop_json.ideas[idea_num].tasks[j].comments[k].emotion == "Happy") {
-                                        c_happy = c_happy + 1
-                                    }
-                                    if (prop_json.ideas[idea_num].tasks[j].comments[k].emotion == "Neutral") {
-                                        c_neutral = c_neutral + 1
-                                    }
-                                    if (prop_json.ideas[idea_num].tasks[j].comments[k].emotion == "Concerned") {
-                                        c_concerned = c_concerned + 1
-                                    }
-                                    if (prop_json.ideas[idea_num].tasks[j].comments[k].emotion == "Angry") {
-                                        c_angry = c_angry + 1
+                divMove()
+            } else {
+                // console.log(id)
+
+                draw_view(prop_json)
+
+                lineOn = id;
+                document.getElementById(id).setAttribute("style", "border:solid thin #2C485B; border-radius:5px")
+
+                idea_id = id.split("_")[2]
+
+                date_history = []
+
+                for (var i in prop_json['ideas']) {
+                    if (prop_json['ideas'][i].id == idea_id) {
+                        idea_num = i
+                    }
+                }
+
+                for (var t in proposal_wise_dates) {
+                    if (proposal_wise_dates[t].id == idea_id) {
+                        console.log(idea_id)
+
+                        for (var i in proposal_wise_dates[t].dates) {
+                            c_excited = 0, c_happy = 0, c_neutral = 0, c_concerned = 0, c_angry = 0;
+                            for (var j in prop_json.ideas[idea_num].tasks) {
+                                for (var k in prop_json.ideas[idea_num].tasks[j].comments) {
+                                    if (prop_json.ideas[idea_num].tasks[j].comments[k].post_time.split(" ")[0] == proposal_wise_dates[t].dates[i]) {
+                                        if (prop_json.ideas[idea_num].tasks[j].comments[k].emotion == "Excited") {
+                                            c_excited = c_excited + 1
+                                        }
+                                        if (prop_json.ideas[idea_num].tasks[j].comments[k].emotion == "Happy") {
+                                            c_happy = c_happy + 1
+                                        }
+                                        if (prop_json.ideas[idea_num].tasks[j].comments[k].emotion == "Neutral") {
+                                            c_neutral = c_neutral + 1
+                                        }
+                                        if (prop_json.ideas[idea_num].tasks[j].comments[k].emotion == "Concerned") {
+                                            c_concerned = c_concerned + 1
+                                        }
+                                        if (prop_json.ideas[idea_num].tasks[j].comments[k].emotion == "Angry") {
+                                            c_angry = c_angry + 1
+                                        }
                                     }
                                 }
                             }
-                        }
 
-                        temp = {
-                            "date": proposal_wise_dates[idea_num].dates[i],
-                            "comments": c_excited + c_happy + c_neutral + c_concerned + c_angry,
-                            "Excited": c_excited,
-                            "Happy": c_happy,
-                            "Neutral": c_neutral,
-                            "Concerned": c_concerned,
-                            "Angry": c_angry,
-                        }
+                            temp = {
+                                "date": proposal_wise_dates[idea_num].dates[i],
+                                "comments": c_excited + c_happy + c_neutral + c_concerned + c_angry,
+                                "Excited": c_excited,
+                                "Happy": c_happy,
+                                "Neutral": c_neutral,
+                                "Concerned": c_concerned,
+                                "Angry": c_angry,
+                            }
 
-                        date_history.push(temp)
+                            date_history.push(temp)
+                        }
                     }
                 }
-            }
 
-            date_history = date_history.sort(function (a, b) {
-                return new Date(b.date) - new Date(a.date);
-            });
+                date_history = date_history.sort(function (a, b) {
+                    return new Date(b.date) - new Date(a.date);
+                });
 
-            max_val = 0
-            for (var i in date_history) {
-                if (date_history[i].comments > max_val) {
-                    max_val = date_history[i].comments
+                max_val = 0
+                for (var i in date_history) {
+                    if (date_history[i].comments > max_val) {
+                        max_val = date_history[i].comments
+                    }
                 }
+
+                line_data = [{
+                    "color": "black",
+                    "maxval": max_val,
+                    "history": date_history
+                }]
+
+                filterobj.idea_id = idea_id
+                filterobj.emotion = null
+                filterobj.topic = null
+                filterobj.tasks = null
+
+                var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(prop_json)), filterobj)
+                // console.log(filtered_comment, idea_id)
+                draw_line(filtered_comment, line_data, idea_id)
             }
-
-            line_data = [{
-                "color": "black",
-                "maxval": max_val,
-                "history": date_history
-            }]
-
-            filterobj.idea_id = idea_id
-            filterobj.emotion = null
-            filterobj.topic = null
-            filterobj.tasks = null
-
-            var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(prop_json)), filterobj)
-            console.log(filtered_comment)
-            draw_line(filtered_comment, line_data, idea_id)
-
         });
     });
 }
 
-function draw_line(filtered_comment, line_data, idea_id) {
+function line_inline_draw(divid, id, svg_id, proposal_wise_dates) {
+    var idea_num = ''
+    idea_id = svg_id.split("_")[2]
+
+    date_history = []
+
+    for (var i in prop_json['ideas']) {
+        if (prop_json['ideas'][i].id == idea_id) {
+            idea_num = i
+        }
+    }
+
+    for (var t in proposal_wise_dates) {
+        if (proposal_wise_dates[t].id == idea_id) {
+            // console.log(idea_id)
+
+            for (var i in proposal_wise_dates[t].dates) {
+                c_excited = 0, c_happy = 0, c_neutral = 0, c_concerned = 0, c_angry = 0;
+                for (var j in prop_json.ideas[idea_num].tasks) {
+                    for (var k in prop_json.ideas[idea_num].tasks[j].comments) {
+                        if (prop_json.ideas[idea_num].tasks[j].comments[k].post_time.split(" ")[0] == proposal_wise_dates[t].dates[i]) {
+                            if (prop_json.ideas[idea_num].tasks[j].comments[k].emotion == "Excited") {
+                                c_excited = c_excited + 1
+                            }
+                            if (prop_json.ideas[idea_num].tasks[j].comments[k].emotion == "Happy") {
+                                c_happy = c_happy + 1
+                            }
+                            if (prop_json.ideas[idea_num].tasks[j].comments[k].emotion == "Neutral") {
+                                c_neutral = c_neutral + 1
+                            }
+                            if (prop_json.ideas[idea_num].tasks[j].comments[k].emotion == "Concerned") {
+                                c_concerned = c_concerned + 1
+                            }
+                            if (prop_json.ideas[idea_num].tasks[j].comments[k].emotion == "Angry") {
+                                c_angry = c_angry + 1
+                            }
+                        }
+                    }
+                }
+
+                temp = {
+                    "date": proposal_wise_dates[idea_num].dates[i],
+                    "comments": c_excited + c_happy + c_neutral + c_concerned + c_angry,
+                    "Excited": c_excited,
+                    "Happy": c_happy,
+                    "Neutral": c_neutral,
+                    "Concerned": c_concerned,
+                    "Angry": c_angry,
+                }
+
+                date_history.push(temp)
+            }
+        }
+    }
+
+    date_history = date_history.sort(function (a, b) {
+        return new Date(b.date) - new Date(a.date);
+    });
+
+    max_val = 0
+    for (var i in date_history) {
+        if (date_history[i].comments > max_val) {
+            max_val = date_history[i].comments
+        }
+    }
+
+    line_data = [{
+        "color": "black",
+        "maxval": max_val,
+        "history": date_history
+    }]
+
+    var mainDiv = "#" + divid;
+    var column = document.getElementById(divid)
+
+    // console.log(column)
+
+    // Define margins, dimensions, and some line colors
+    const margin = {
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0,
+    };
+
+    var width = column.clientWidth - margin.left - margin.right - 10
+    var height = column.clientHeight - margin.top - margin.bottom - 10
+
+    // console.log(width, height)
+
+    var parseTime = d3.timeParse("%m/%d/%Y");
+
+    // set the ranges
+    x = d3.scaleTime().range([0, column.clientWidth - margin.left - margin.right - 20]);
+    y = d3.scaleLinear().range([column.clientHeight - margin.top - margin.bottom - 20, 0]);
+    const line = d3.line().x(d => x(d.date)).y(d => y(d.comments));
+
+    var chart = d3.select(mainDiv)
+        .append("svg")
+        .attr("id", svg_id)
+        .attr("class", "svg_inline")
+        .attr("height", height)
+        .attr("width", width)
+        .append("g")
+        .attr('transform', 'translate(' + (margin.left + 5) + ',' + (margin.top + 5) + ')')
+
+    // tooltip = d3.select('#tooltip');
+    tooltipLine = chart.append('line');
+
+    // chart.append('g')
+    // .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+    states = JSON.parse(JSON.stringify(line_data))
+
+    // console.log(tooltipLine)
+
+    // format the data
+    states[0].history.forEach(function (d) {
+        d.date = parseTime(d.date);
+        d.comments = +d.comments;
+    });
+
+    x.domain(d3.extent(states[0].history, function (d) {
+        return d.date;
+    }));
+    y.domain([0, d3.max(states[0].history, function (d) {
+        return d.comments;
+    })]);
+
+    // const xAxis = d3.axisBottom(x);
+    // const yAxis = d3.axisLeft(y);
+    // // chart.append('g')
+    // // .attr('transform', 'translate(' + '25' + ',' + '25' + ')')
+    // chart.append('g').attr('transform', 'translate(' + '0' + ',' + (height - 70) + ')').call(xAxis);
+    // chart.append('g').call(yAxis);
+    // chart.append('text').html('Community reactions over time').attr('x', width / 2 - 150).attr('y', -20);
+
+    chart.selectAll()
+        .data(states).enter()
+        .append('path')
+        .attr('fill', 'none')
+        .attr('stroke', '#2C485B')
+        .attr('stroke-width', 2)
+        .datum(d => d.history)
+        .attr('d', line);
+}
+
+
+
+function draw_line(filtered_comment, line_data) {
     // console.log('draw filter comment', filtered_comment, json);
     var myNode = document.getElementById("parentBox");
     while (myNode.firstChild) {
@@ -2711,7 +2930,7 @@ function draw_line(filtered_comment, line_data, idea_id) {
     fulllineDiv.id = "lineDivId"
 
     fulllineDiv.innerHTML =
-    "<div id='tooltip' style='position:absolute;background-color:lightgray;padding:5px'></div>";
+        "<div id='tooltip' style='position:absolute;background-color:lightgray;padding:5px'></div>";
 
     var element = document.getElementById("parentBox")
     element.appendChild(fulllineDiv)
@@ -3466,6 +3685,9 @@ $(document).on('change', '.topic_down', function () {
     // console.log(topic_parameter)
 
     show_topics(topic_parameter, true)
+    $("#parentBox").animate({
+        scrollTop: 0
+    }, 1000);
 });
 
 var states, tipBox;
@@ -3480,25 +3702,25 @@ function line_full_draw(line_data) {
 
     // Define margins, dimensions, and some line colors
     const margin = {
-        top: 3,
-        right: 10,
-        bottom: 3,
-        left: 10,
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0,
     };
 
     // const width = 500 - margin.left - margin.right;
     // const height = 300 - margin.top - margin.bottom;
 
-    var width = column.clientWidth - margin.left - margin.right
-    var height = column.clientHeight - margin.top - margin.bottom
+    var width = column.clientWidth - margin.left - margin.right - 30
+    var height = column.clientHeight - margin.top - margin.bottom - 30
 
-    // console.log(width, height)
+    console.log(column)
 
     var parseTime = d3.timeParse("%m/%d/%Y");
 
     // set the ranges
-    x = d3.scaleTime().range([0, column.clientWidth - margin.left - margin.right]);
-    y = d3.scaleLinear().range([column.clientHeight - margin.top - margin.bottom, 0]);
+    x = d3.scaleTime().range([0, column.clientWidth - margin.left - margin.right - 100]);
+    y = d3.scaleLinear().range([column.clientHeight - margin.top - margin.bottom - 100, 0]);
     const line = d3.line().x(d => x(d.date)).y(d => y(d.comments));
 
     var svg_id = 'svg_id'
@@ -3507,7 +3729,8 @@ function line_full_draw(line_data) {
         .attr("id", svg_id)
         .attr("height", height)
         .attr("width", width)
-        .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+        .append("g")
+        .attr('transform', 'translate(' + (margin.left + 50) + ',' + (margin.top + 50) + ')')
 
     tooltip = d3.select('#tooltip');
     tooltipLine = chart.append('line');
@@ -3534,33 +3757,31 @@ function line_full_draw(line_data) {
 
     const xAxis = d3.axisBottom(x);
     const yAxis = d3.axisLeft(y);
-    chart.append('g')
-    .attr('transform', 'translate(' + '25' + ',' + '25' + ')')
-    .call(yAxis);
-    chart.append('g')
-    .attr('transform', 'translate(' + '0' + ',' + (height - 25) + ')')
-    .call(xAxis);
-    chart.append('text').html('Community reactions over time').attr('x', width/2 - 150 ).attr('y', 50);
+    // chart.append('g')
+    // .attr('transform', 'translate(' + '25' + ',' + '25' + ')')
+    chart.append('g').attr('transform', 'translate(' + '0' + ',' + (height - 70) + ')').call(xAxis);
+    chart.append('g').call(yAxis);
+    chart.append('text').html('Community reactions over time').attr('x', width / 2 - 150).attr('y', -20);
 
     chart.selectAll()
         .data(states).enter()
         .append('path')
         .attr('fill', 'none')
-        .attr('stroke', d => d.color)
+        .attr('stroke', '#2C485B')
         .attr('stroke-width', 2)
         .datum(d => d.history)
         .attr('d', line);
 
-    chart.selectAll()
-        .data(states).enter()
-        .append('text')
-        .html(d => d.name)
-        .attr('fill', d => d.color)
-        .attr('alignment-baseline', 'middle')
-        .attr('x', width)
-        .attr('dx', '.7em')
-        .attr('y', d => y(d.maxval))
-        .attr('dy', '.7em');
+    // chart.selectAll()
+    //     .data(states).enter()
+    //     .append('text')
+    //     .html(d => d.name)
+    //     .attr('fill', d => d.color)
+    //     .attr('alignment-baseline', 'middle')
+    //     .attr('x', width)
+    //     .attr('dx', '.7em')
+    //     .attr('y', d => y(d.maxval))
+    //     .attr('dy', '.7em');
 
 
     // chart.selectAll()
@@ -3570,8 +3791,8 @@ function line_full_draw(line_data) {
     //     .datum(d => d.history)
 
     tipBox = chart.append('rect')
-        .attr('width', column.clientWidth - margin.left - margin.right)
-        .attr('height', column.clientHeight - margin.top - margin.bottom)
+        .attr('width', column.clientWidth - margin.left - margin.right - 100)
+        .attr('height', column.clientHeight - margin.top - margin.bottom - 100)
         .attr('opacity', 0)
         .on('mousemove', drawTooltip)
         .on('mouseout', removeTooltip);
@@ -3597,16 +3818,24 @@ function drawTooltip() {
     //   .attr('y1', 0)
     //   .attr('y2', height);
 
+    tooltipLine.attr('stroke', 'black')
+        .attr('x1', x(x.invert(d3.mouse(tipBox.node())[0])))
+        .attr('x2', x(x.invert(d3.mouse(tipBox.node())[0])))
+        .attr('y1', 0)
+        .attr('y2', 200);
+
     tooltip.html(this_date)
         .style('display', 'block')
+        .style('background-color', '#2C485B')
+        .style('color', 'white')
         .style('left', d3.event.pageX + 20)
         .style('top', d3.event.pageY - 20)
         .selectAll()
         .data(states).enter()
         .append('div')
         .style('color', d => d.color)
+        .style('background-color', '#F5F8FA')
         .html(function (d) {
-
             if (d.history.find(h => h.date.toLocaleDateString("en-US") == this_date)) {
                 tooltip_text = 'Excited: ' + d.history.find(h => h.date.toLocaleDateString("en-US") == this_date).Excited + '<br>' +
                     'Happy: ' + d.history.find(h => h.date.toLocaleDateString("en-US") == this_date).Happy + '<br>' +

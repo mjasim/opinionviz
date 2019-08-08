@@ -437,11 +437,12 @@ function build_compare_bars(json, selected_idea, side) {
         compare_filter_obj.topic = []
         compare_filter_obj.cloudkey = null
         filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(raw_json)), compare_filter_obj)
-        // console.log(filtered_comment, "left")
-        draw_filtered_comments_compare(filtered_comment, json, "compareLeftparentBox")
+        // console.log(compare_filter_obj, "left")
 
-        emotion_rows_compare(send_data, svg_id, header_div.id, id, "compareLeftparentBox")
-
+        if (compare_filter_obj.idea_id) {
+            draw_filtered_comments_compare(filtered_comment, json, "compareLeftparentBox")
+            emotion_rows_compare(send_data, svg_id, header_div.id, id, "compareLeftparentBox")
+        }
     } else {
         var header_div = document.getElementById("compareRightHeader")
         while (header_div.firstChild) {
@@ -460,12 +461,131 @@ function build_compare_bars(json, selected_idea, side) {
         compare_filter_obj.cloudkey = null
         filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(raw_json)), compare_filter_obj)
         // console.log(filtered_comment, "right")
-        draw_filtered_comments_compare(filtered_comment, json, "compareRightparentBox")
 
-        emotion_rows_compare(send_data, svg_id, header_div.id, id, "compareRightparentBox")
+        if (compare_filter_obj.idea_id) {
+            draw_filtered_comments_compare(filtered_comment, json, "compareRightparentBox")
+            emotion_rows_compare(send_data, svg_id, header_div.id, id, "compareRightparentBox")
+        }
+    }
+}
+
+function build_compare_topics(json, selected_idea, side) {
+
+    compare_proposal_wise_topic_agg = get_proposal_wise_topic(JSON.parse(JSON.stringify(json)))
+
+    compare_proposal_names = get_proposal_names(JSON.parse(JSON.stringify(json)))
+    for (var i in compare_proposal_names) {
+        if (compare_proposal_names[i].idea_name == selected_idea) {
+            var id = compare_proposal_names[i].idea_id
+            serial_num = i;
+        }
     }
 
+    if (side == "left") {
+        var header_topic_div = document.getElementById("compareLeftTopic")
+        while (header_topic_div.firstChild) {
+            header_topic_div.removeChild(header_topic_div.firstChild);
+        }
 
+        var divTopicName = "<div class=\"comparetopic-body\" id=\"cmptopbodyleft\"" + "\">"
+        var topic_length = 0
+
+        for (var j = 0; j < compare_proposal_wise_topic_agg[serial_num].length; j++) {
+            topic_length += compare_proposal_wise_topic_agg[serial_num][j].topic_keyphrase.length
+            //console.log(proposal_wise_topic_agg[i][j].topic_keyphrase, topic_row_length)
+            if (header_topic_div) {
+                if (topic_length > header_topic_div.clientWidth / 11) {
+                    break;
+                } else {
+                    divTopicName = divTopicName +
+                        '<div  class="comparetopicName" id="comparetopic_' + compare_proposal_names[serial_num].idea_id + "_" + j + '\">' +
+                        '<span class="badge badge-warning comparetopic-name" id="comparetopic_' + compare_proposal_names[serial_num].idea_id + "_" + j + "_id\">" + compare_proposal_wise_topic_agg[serial_num][j].topic_keyphrase + '</span></div>'
+                }
+            }
+        }
+        topic_length = 0
+
+        divTopicName = divTopicName +
+            '<div  class="comparetopicNameAll" id="comparetopic_' + compare_proposal_names[serial_num].idea_id + "_" + 'all' + '\">' +
+            '<div class="col-lg-12 col-m-12 col-sm-12" style="padding:1px">' +
+            '<select class="form-control comparetopic_down" id="compareall_topics_' + compare_proposal_names[serial_num].idea_id + "\"" +
+            ' style="height:24px;width:50px;font-size:0.8em;font-weight:bold;background-color:#F5F8FA;border-color:#337AB7; padding:0">' +
+            '<option value="">...</option>';
+
+        all_topics = compare_proposal_wise_topic_agg[serial_num]
+
+        for (var j in all_topics) {
+            divTopicName += '<option>' + all_topics[j].topic_keyphrase + '</option>'
+        }
+
+        divTopicName = divTopicName + '</select>' + '</div>' + '</div>';
+
+        if (header_topic_div)
+            header_topic_div.innerHTML = divTopicName
+
+    } else {
+        var header_topic_div = document.getElementById("compareRightTopic")
+        while (header_topic_div.firstChild) {
+            header_topic_div.removeChild(header_topic_div.firstChild);
+        }
+
+        var divTopicName = "<div class=\"comparetopic-body\" id=\"cmptopbodyright\"" + "\">"
+        var topic_length = 0
+
+        for (var j = 0; j < compare_proposal_wise_topic_agg[serial_num].length; j++) {
+            topic_length += compare_proposal_wise_topic_agg[serial_num][j].topic_keyphrase.length
+            //console.log(proposal_wise_topic_agg[i][j].topic_keyphrase, topic_row_length)
+            if (header_topic_div) {
+                if (topic_length > header_topic_div.clientWidth / 11) {
+                    break;
+                } else {
+                    divTopicName = divTopicName +
+                        '<div  class="comparetopicName" id="comparetopic_' + compare_proposal_names[serial_num].idea_id + "_" + j + '\">' +
+                        '<span class="badge badge-warning comparetopic-name" id="comparetopic_' + compare_proposal_names[serial_num].idea_id + "_" + j + "_id\">" + compare_proposal_wise_topic_agg[serial_num][j].topic_keyphrase + '</span></div>'
+                }
+            }
+        }
+        topic_length = 0
+
+        divTopicName = divTopicName +
+            '<div  class="comparetopicNameAll" id="comparetopic_' + compare_proposal_names[serial_num].idea_id + "_" + 'all' + '\">' +
+            '<div class="col-lg-12 col-m-12 col-sm-12" style="padding:1px">' +
+            '<select class="form-control comparetopic_down" id="compareall_topics_' + compare_proposal_names[serial_num].idea_id + "\"" +
+            ' style="height:24px;width:50px;font-size:0.8em;font-weight:bold;background-color:#F5F8FA;border-color:#337AB7; padding:0">' +
+            '<option value="">...</option>';
+
+        all_topics = compare_proposal_wise_topic_agg[serial_num]
+
+        for (var j in all_topics) {
+            divTopicName += '<option>' + all_topics[j].topic_keyphrase + '</option>'
+        }
+
+        divTopicName = divTopicName + '</select>' + '</div>' + '</div>';
+
+        if (header_topic_div)
+            header_topic_div.innerHTML = divTopicName
+    }
+
+    $(document).ready(function () {
+        $('.comparetopicName').click(function () {
+
+            // if (!selected_topic && selected_row) {
+
+            //     // draw_view(json)
+            //     selected_row = ""
+            //     prev_row = ""
+            //     prev_topic = ""
+            // }
+
+            var id = $(this).attr('id');
+            var sideparent = $(this).parent().parent().attr('id');
+
+            if (sideparent == "compareLeftTopic")
+                compare_show_topics(id, false, "left")
+            else
+                compare_show_topics(id, false, "right")
+        });
+    });
 }
 
 $(document).ready(function () {
@@ -474,6 +594,7 @@ $(document).ready(function () {
         // console.log(selected_idea_left)
         // build_compare_header((JSON.parse(JSON.stringify(prop_json))), selected_idea_left, "left")
         build_compare_bars((JSON.parse(JSON.stringify(prop_json))), selected_idea_left, "left")
+        build_compare_topics((JSON.parse(JSON.stringify(prop_json))), selected_idea_left, "left")
     });
 });
 
@@ -483,6 +604,8 @@ $(document).ready(function () {
         // console.log(selected_idea_right)
         // build_compare_header((JSON.parse(JSON.stringify(prop_json))), selected_idea_right, "right")
         build_compare_bars((JSON.parse(JSON.stringify(prop_json))), selected_idea_right, "right")
+        build_compare_topics((JSON.parse(JSON.stringify(prop_json))), selected_idea_right, "right")
+
     });
 });
 
@@ -577,7 +700,7 @@ function emotion_rows_compare(salesData, svg_id, div_id, idea_id, sideparent) {
         },
 
         width = +svg.attr("width") - 2,
-        height = +svg.attr("height");
+        height = +svg.attr("height") - 2;
     if (width < 0) {
         width = 0;
     }
@@ -1034,3 +1157,149 @@ function save_notes_compare(id) {
         $('#noteModal').modal('hide')
     });
 }
+
+selected_topic = ""
+prev_topic = ""
+
+function compare_show_topics(id, drop, sideparent) {
+
+    if (sideparent == "left") {
+        var split_str = id.split("_")
+        logInteraction('click, idea, ' + split_str[1], 'topic ', split_str[2]);
+
+        selected_topic = split_str[2]
+
+        // console.log(id, prev_topic)
+
+        if (id != prev_topic) {
+            filterobj.idea_id = split_str[1]
+            filterobj.emotion = null
+            filterobj.task_id = null
+            filterobj.topic = selected_topic
+            // filterobj.cloudkey = null
+            filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(raw_json)), filterobj)
+
+            // console.log(filtered_comment)
+
+            new_view = JSON.parse(JSON.stringify(prop_json))
+            draw_filtered_comments_compare(filtered_comment, new_view, "compareLeftparentBox")
+            if (drop == false) {
+                document.getElementById(id + "_id").setAttribute("style", "background-color:#3DAADD")
+            }
+            if (prev_topic && drop == false) {
+                document.getElementById(prev_topic + "_id").setAttribute("style", "background-color:none")
+            }
+
+            prev_topic = id;
+            prev_row = split_str[1];
+        } else {
+            filterobj.idea_id = split_str[1]
+            prev_topic = ""
+            selected_topic = ""
+            filterobj.topic = null
+            document.getElementById(id + "_id").setAttribute("style", "background-color:none")
+
+            // console.log("here", filterobj)
+
+            var myNode = document.getElementById("compareLeftparentBox");
+            while (myNode.firstChild) {
+                myNode.removeChild(myNode.firstChild);
+            }
+
+            new_view = JSON.parse(JSON.stringify(prop_json))
+
+            filtered_comment = get_filtered_comment(new_view, filterobj)
+            draw_filtered_comments_compare(filtered_comment, new_view, "compareLeftparentBox")
+
+            filterobj = {}
+        }
+    } else {
+        var split_str = id.split("_")
+        logInteraction('click, idea, ' + split_str[1], 'topic ', split_str[2]);
+
+        selected_topic = split_str[2]
+
+        // console.log(id, prev_topic)
+
+        if (id != prev_topic) {
+            filterobj.idea_id = split_str[1]
+            filterobj.emotion = null
+            filterobj.task_id = null
+            filterobj.topic = selected_topic
+            // filterobj.cloudkey = null
+            filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(raw_json)), filterobj)
+
+            // console.log(filtered_comment)
+
+            new_view = JSON.parse(JSON.stringify(prop_json))
+            draw_filtered_comments_compare(filtered_comment, new_view, "compareRightparentBox")
+            if (drop == false) {
+                document.getElementById(id + "_id").setAttribute("style", "background-color:#3DAADD")
+            }
+            if (prev_topic && drop == false) {
+                document.getElementById(prev_topic + "_id").setAttribute("style", "background-color:none")
+            }
+
+            prev_topic = id;
+            prev_row = split_str[1];
+        } else {
+            filterobj.idea_id = split_str[1]
+            prev_topic = ""
+            selected_topic = ""
+            filterobj.topic = null
+            document.getElementById(id + "_id").setAttribute("style", "background-color:none")
+
+            // console.log("here", filterobj)
+
+            var myNode = document.getElementById("compareRightparentBox");
+            while (myNode.firstChild) {
+                myNode.removeChild(myNode.firstChild);
+            }
+
+            new_view = JSON.parse(JSON.stringify(prop_json))
+
+            filtered_comment = get_filtered_comment(new_view, filterobj)
+            draw_filtered_comments_compare(filtered_comment, new_view, "compareRightparentBox")
+
+            filterobj = {}
+        }
+    }
+}
+
+
+$(document).on('change', '.comparetopic_down', function () {
+
+    var pos = 0
+    var topic = ""
+    id = $(this).attr('id')
+
+    var sideparent = $(this).parent().parent().parent().attr('id')
+
+    id_input = id.split('_')[2]
+    topic_input = $("#" + id).val();
+    x = get_proposal_wise_topic(raw_json)
+    sn = get_serial_number(raw_json)
+    for (var i in sn) {
+        // console.log(sn[i].idea_id, id.split('_')[2])
+        if (sn[i].idea_id == id_input) {
+            pos = parseInt(sn[i].serial_number) - 1
+        }
+    }
+
+    props = x[pos]
+
+    for (var i in props) {
+        // console.log(props[i].topic_keyphrase, topic_input)
+        if (props[i].topic_keyphrase == topic_input) {
+            topic = i
+        }
+    }
+
+    topic_parameter = "topic_" + id_input + "_" + topic
+    console.log(topic_parameter)
+
+    if (sideparent == "cmptopbodyleft")
+        compare_show_topics(topic_parameter, true, "left")
+    else
+        compare_show_topics(topic_parameter, true, "right")
+});

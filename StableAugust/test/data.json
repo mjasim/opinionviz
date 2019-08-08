@@ -1,0 +1,85 @@
+[
+  {
+    "color": "black",
+    "currentPopulation": 37253956,
+    "history": [
+      {
+        "year": 1910,
+        "population": 2377549,
+		"angry": 1000,
+		"sad": 100,
+		"happy": 2000
+      },
+      {
+        "year": 1920,
+        "population": 3426861,
+		"angry": 100,
+		"sad": 100,
+		"happy": 200
+      },
+      {
+        "year": 1930,
+        "population": 5677251,
+		"angry": 100,
+		"sad": 100,
+		"happy": 200
+      },
+      {
+        "year": 1940,
+        "population": 6907387,
+		"angry": 100,
+		"sad": 100,
+		"happy": 200
+      },
+      {
+        "year": 1950,
+        "population": 10586223,
+		"angry": 100,
+		"sad": 100,
+		"happy": 200
+      },
+      {
+        "year": 1960,
+        "population": 15717204,
+		"angry": 100,
+		"sad": 100,
+		"happy": 200
+      },
+      {
+        "year": 1970,
+        "population": 19953134,
+		"angry": 100,
+		"sad": 100,
+		"happy": 200
+      },
+      {
+        "year": 1980,
+        "population": 23667902,
+		"angry": 100,
+		"sad": 100,
+		"happy": 200
+      },
+      {
+        "year": 1990,
+        "population": 29760021,
+		"angry": 100,
+		"sad": 100,
+		"happy": 200
+      },
+      {
+        "year": 2000,
+        "population": 33871648,
+		"angry": 100,
+		"sad": 100,
+		"happy": 200
+      },
+      {
+        "year": 2010,
+        "population": 37253956,
+		"angry": 100,
+		"sad": 100,
+		"happy": 200
+      }
+    ]
+  }
+]

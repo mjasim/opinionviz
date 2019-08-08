@@ -1,0 +1,115 @@
+<html>
+<meta charset="utf-8">
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+    </script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+    </script>
+    <!-- <script src="interaction_log.js"></script> -->
+
+    <script src="https://d3js.org/d3.v4.min.js" charset="utf-8"></script>
+    <script src="interaction_log.js"></script>
+    <link rel="stylesheet" href="test.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+        integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark"
+        style="background-color:#2C485B;margin:0px;padding-top:0px; padding-bottom: 0px">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="nav navbar-nav">
+                <a class="navbar-brand" href="index.html" title="Home">CommunityPulse</a>
+                <button class="btn btn-primary navbar-btn" id="about_button"
+                    style="background-color:#2C485B; border:none" type="button" data-toggle="modal"
+                    data-placement="bottom" title="About" data-target="#aboutModal">About</button>
+                <p>&nbsp</p>
+                <!-- <button class="btn btn-primary navbar-btn" id="notes_all_button"
+					style="background-color:#2C485B; border:none" type="button" data-toggle="modal"
+					data-placement="bottom" title="Notes" data-target="#notesAllModal">Notes</button>
+				<p>&nbsp</p>
+				<button class="btn btn-primary navbar-btn" id="compare_button"
+					style="background-color:#2C485B; border:none" type="button" title="Compare"
+					onclick="triggerCompare()">Compare</button>
+				<p>&nbsp</p> -->
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                <form class="navbar-form navbar-right">
+                    <div class="input-group">
+                        <input type="text" class="form-control" style="margin-top:7%" id="mysearch" placeholder="Search"
+                            name="search">
+                    </div>
+                </form>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="modal fade" tabindex="-1" id="aboutModal" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">About</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>CommunityPulse is an ongoing research project aiming at facilitating multi-level exploration of
+                        large-scale community input. If you want to explore the data collected from your community
+                        engagement/initiative using CommunityPulse, please contact the following.</p>
+                        <br><a href="mailto:mjasim@cs.umass.edu" style="color:#2C485B">mjasim@cs.umass.edu</a>
+                        <br><a href="mailto:nmahyar@cs.umass.edu" style="color:#2C485B">nmahyar@cs.umass.edu</a>
+                        <br><a href="mailto:enamulh@yorku.ca" style="color:#2C485B">enamulh@yorku.ca</a>
+                        <br><a href="mailto:asarv@cs.umass.edu" style="color:#2C485B">asarv@cs.umass.edu</a>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="parIntroDiv" class="parentIntro">
+        <div id=introLeftDiv class="introLeft">
+            <h1>CommunityPulse allows multi-level exploration of community input</h1>
+            <p></p>
+            <h5>As the community engagement increases, it becomes
+                difficult to sift through and understand large number of community input to make decisions.</h5>
+            <p></p>
+            <h5>CommunityPulse surfaces community reactions, identifies key points of opinions, and allows exploration
+                of multifaceted comments by combining text analysis and visual analytics wrapped in an interactive
+                interface. </h5>
+            <p></p>
+			<h5>Interested? Click below and get exploring!</h5>
+            <button type="button" id=intro_go_button class="btn btn-secondary"
+                style="background-color:#2C485B; width:200px; margin-top:20px" onclick="triggerLogin()">Get Started</button>
+        </div>
+        <div id=introRightDiv class="introRight"
+            style="background-image: url(images/intro2.jpg); background-size: cover; opacity:0.9">
+        </div>
+    </div>
+</body>
+
+</html>
+
+<script src="overview.js"></script>
+<script src="agg_view.js"></script>
+<script src="proposal_view.js"></script>
+<script src="js/highlight.js"></script>
+<script src="js/search.js"></script>
+<script src="login.js"></script>
