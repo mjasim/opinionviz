@@ -122,7 +122,7 @@ function draw_view(json) {
     // var proposal_wise_cloudword_agg = get_proposal_wise_cloudwords(json)
     var proposal_wise_dates = get_proposal_wise_dates(json)
 
-    console.log(proposal_wise_dates)
+    // console.log(proposal_wise_dates)
 
     var numberOfRows = proposal_names.length;
     var numberOfColumns = 8;
@@ -2622,111 +2622,111 @@ function draw_view(json) {
     // });
 
     // On click for lines
-    $(document).ready(function () {
-        $('.svg_inline').click(function () {
+    // $(document).ready(function () {
+    //     $('.svg_inline').click(function () {
 
-            var id = $(this).attr('id')
-            var idea_num = ''
+    //         var id = $(this).attr('id')
+    //         var idea_num = ''
 
-            if (lineOn == id) {
-                var myNode = document.getElementById("parentBox");
-                while (myNode.firstChild) {
-                    myNode.removeChild(myNode.firstChild);
-                }
+    //         if (lineOn == id) {
+    //             var myNode = document.getElementById("parentBox");
+    //             while (myNode.firstChild) {
+    //                 myNode.removeChild(myNode.firstChild);
+    //             }
 
-                lineOn = ""
-                document.getElementById(id).setAttribute("style", "border:none")
+    //             lineOn = ""
+    //             document.getElementById(id).setAttribute("style", "border:none")
 
-                divMove()
-            } else {
-                // console.log(id)
+    //             divMove()
+    //         } else {
+    //             // console.log(id)
 
-                draw_view(prop_json)
+    //             draw_view(prop_json)
 
-                lineOn = id;
-                document.getElementById(id).setAttribute("style", "border:solid thin #2C485B; border-radius:5px")
+    //             lineOn = id;
+    //             document.getElementById(id).setAttribute("style", "border:solid thin #2C485B; border-radius:5px")
 
-                idea_id = id.split("_")[2]
+    //             idea_id = id.split("_")[2]
 
-                date_history = []
+    //             date_history = []
 
-                for (var i in prop_json['ideas']) {
-                    if (prop_json['ideas'][i].id == idea_id) {
-                        idea_num = i
-                    }
-                }
+    //             for (var i in prop_json['ideas']) {
+    //                 if (prop_json['ideas'][i].id == idea_id) {
+    //                     idea_num = i
+    //                 }
+    //             }
 
-                for (var t in proposal_wise_dates) {
-                    if (proposal_wise_dates[t].id == idea_id) {
-                        console.log(idea_id)
+    //             for (var t in proposal_wise_dates) {
+    //                 if (proposal_wise_dates[t].id == idea_id) {
+    //                     console.log(idea_id)
 
-                        for (var i in proposal_wise_dates[t].dates) {
-                            c_excited = 0, c_happy = 0, c_neutral = 0, c_concerned = 0, c_angry = 0;
-                            for (var j in prop_json.ideas[idea_num].tasks) {
-                                for (var k in prop_json.ideas[idea_num].tasks[j].comments) {
-                                    if (prop_json.ideas[idea_num].tasks[j].comments[k].post_time.split(" ")[0] == proposal_wise_dates[t].dates[i]) {
-                                        if (prop_json.ideas[idea_num].tasks[j].comments[k].emotion == "Excited") {
-                                            c_excited = c_excited + 1
-                                        }
-                                        if (prop_json.ideas[idea_num].tasks[j].comments[k].emotion == "Happy") {
-                                            c_happy = c_happy + 1
-                                        }
-                                        if (prop_json.ideas[idea_num].tasks[j].comments[k].emotion == "Neutral") {
-                                            c_neutral = c_neutral + 1
-                                        }
-                                        if (prop_json.ideas[idea_num].tasks[j].comments[k].emotion == "Concerned") {
-                                            c_concerned = c_concerned + 1
-                                        }
-                                        if (prop_json.ideas[idea_num].tasks[j].comments[k].emotion == "Angry") {
-                                            c_angry = c_angry + 1
-                                        }
-                                    }
-                                }
-                            }
+    //                     for (var i in proposal_wise_dates[t].dates) {
+    //                         c_excited = 0, c_happy = 0, c_neutral = 0, c_concerned = 0, c_angry = 0;
+    //                         for (var j in prop_json.ideas[idea_num].tasks) {
+    //                             for (var k in prop_json.ideas[idea_num].tasks[j].comments) {
+    //                                 if (prop_json.ideas[idea_num].tasks[j].comments[k].post_time.split(" ")[0] == proposal_wise_dates[t].dates[i]) {
+    //                                     if (prop_json.ideas[idea_num].tasks[j].comments[k].emotion == "Excited") {
+    //                                         c_excited = c_excited + 1
+    //                                     }
+    //                                     if (prop_json.ideas[idea_num].tasks[j].comments[k].emotion == "Happy") {
+    //                                         c_happy = c_happy + 1
+    //                                     }
+    //                                     if (prop_json.ideas[idea_num].tasks[j].comments[k].emotion == "Neutral") {
+    //                                         c_neutral = c_neutral + 1
+    //                                     }
+    //                                     if (prop_json.ideas[idea_num].tasks[j].comments[k].emotion == "Concerned") {
+    //                                         c_concerned = c_concerned + 1
+    //                                     }
+    //                                     if (prop_json.ideas[idea_num].tasks[j].comments[k].emotion == "Angry") {
+    //                                         c_angry = c_angry + 1
+    //                                     }
+    //                                 }
+    //                             }
+    //                         }
 
-                            temp = {
-                                "date": proposal_wise_dates[idea_num].dates[i],
-                                "comments": c_excited + c_happy + c_neutral + c_concerned + c_angry,
-                                "Excited": c_excited,
-                                "Happy": c_happy,
-                                "Neutral": c_neutral,
-                                "Concerned": c_concerned,
-                                "Angry": c_angry,
-                            }
+    //                         temp = {
+    //                             "date": proposal_wise_dates[idea_num].dates[i],
+    //                             "comments": c_excited + c_happy + c_neutral + c_concerned + c_angry,
+    //                             "Excited": c_excited,
+    //                             "Happy": c_happy,
+    //                             "Neutral": c_neutral,
+    //                             "Concerned": c_concerned,
+    //                             "Angry": c_angry,
+    //                         }
 
-                            date_history.push(temp)
-                        }
-                    }
-                }
+    //                         date_history.push(temp)
+    //                     }
+    //                 }
+    //             }
 
-                date_history = date_history.sort(function (a, b) {
-                    return new Date(b.date) - new Date(a.date);
-                });
+    //             date_history = date_history.sort(function (a, b) {
+    //                 return new Date(b.date) - new Date(a.date);
+    //             });
 
-                max_val = 0
-                for (var i in date_history) {
-                    if (date_history[i].comments > max_val) {
-                        max_val = date_history[i].comments
-                    }
-                }
+    //             max_val = 0
+    //             for (var i in date_history) {
+    //                 if (date_history[i].comments > max_val) {
+    //                     max_val = date_history[i].comments
+    //                 }
+    //             }
 
-                line_data = [{
-                    "color": "black",
-                    "maxval": max_val,
-                    "history": date_history
-                }]
+    //             line_data = [{
+    //                 "color": "black",
+    //                 "maxval": max_val,
+    //                 "history": date_history
+    //             }]
 
-                filterobj.idea_id = idea_id
-                filterobj.emotion = null
-                filterobj.topic = null
-                filterobj.tasks = null
+    //             filterobj.idea_id = idea_id
+    //             filterobj.emotion = null
+    //             filterobj.topic = null
+    //             filterobj.tasks = null
 
-                var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(prop_json)), filterobj)
-                // console.log(filtered_comment, idea_id)
-                draw_line(filtered_comment, line_data, idea_id)
-            }
-        });
-    });
+    //             var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(prop_json)), filterobj)
+    //             // console.log(filtered_comment, idea_id)
+    //             draw_line(filtered_comment, line_data, idea_id)
+    //         }
+    //     });
+    // });
 }
 
 function line_inline_draw(divid, id, svg_id, proposal_wise_dates) {
@@ -2940,6 +2940,113 @@ function draw_line(filtered_comment, line_data) {
     divMove()
 }
 
+var states, tipBox;
+var x, y;
+var tooltip, tooltipLine;
+var tooltip_text = ""
+
+function draw_line_in_header(line_data, divid, svg_id) {
+
+    console.log("made id")
+
+    var mainDiv = "#" + divid;
+    var column = document.getElementById(divid)
+
+    // Define margins, dimensions, and some line colors
+    const margin = {
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0,
+    };
+
+    // const width = 500 - margin.left - margin.right;
+    // const height = 300 - margin.top - margin.bottom;
+
+    var width = column.clientWidth - margin.left - margin.right - 3
+    var height = column.clientHeight - margin.top - margin.bottom - 3
+
+    console.log(column)
+
+    var parseTime = d3.timeParse("%m/%d/%Y");
+
+    // set the ranges
+    x = d3.scaleTime().range([0, column.clientWidth - margin.left - margin.right - 10]);
+    y = d3.scaleLinear().range([column.clientHeight - margin.top - margin.bottom - 10, 0]);
+    const line = d3.line().x(d => x(d.date)).y(d => y(d.comments));
+
+    var chart = d3.select(mainDiv)
+        .append("svg")
+        .attr("id", svg_id)
+        .attr("height", height)
+        .attr("width", width)
+        .append("g")
+        .attr('transform', 'translate(' + (margin.left + 5) + ',' + (margin.top + 5) + ')')
+
+    tooltip = d3.select('#tooltip');
+    tooltipLine = chart.append('line');
+
+    states = JSON.parse(JSON.stringify(line_data))
+
+    console.log(states)
+
+    // format the data
+    states[0].history.forEach(function (d) {
+        d.date = parseTime(d.date);
+        d.comments = +d.comments;
+    });
+
+    x.domain(d3.extent(states[0].history, function (d) {
+        return d.date;
+    }));
+    y.domain([0, d3.max(states[0].history, function (d) {
+        return d.comments;
+    })]);
+
+    const xAxis = d3.axisBottom(x);
+    const yAxis = d3.axisLeft(y);
+    // chart.append('g')
+    // // .attr('transform', 'translate(' + '25' + ',' + '25' + ')')
+    // chart.append('g').attr('transform', 'translate(' + '0' + ',' + (height - 70) + ')').call(xAxis);
+    // chart.append('g').call(yAxis);
+    // chart.append('text').html('Community reactions over time').attr('x', width / 2 - 150).attr('y', -20);
+
+    chart.selectAll()
+        .data(states).enter()
+        .append('path')
+        .attr('fill', 'none')
+        .attr('stroke', '#2C485B')
+        .attr('stroke-width', 2)
+        .datum(d => d.history)
+        .attr('d', line);
+
+    // chart.selectAll()
+    //     .data(states).enter()
+    //     .append('text')
+    //     .html(d => d.name)
+    //     .attr('fill', d => d.color)
+    //     .attr('alignment-baseline', 'middle')
+    //     .attr('x', width)
+    //     .attr('dx', '.7em')
+    //     .attr('y', d => y(d.maxval))
+    //     .attr('dy', '.7em');
+
+
+    // chart.selectAll()
+    //     .data(states)
+    //     .enter().append("circle")
+    //     .attr("r", 5)
+    //     .datum(d => d.history)
+
+    tipBox = chart.append('rect')
+        .attr('width', column.clientWidth - margin.left - margin.right - 10)
+        .attr('height', column.clientHeight - margin.top - margin.bottom - 10)
+        .attr('opacity', 0)
+        // .attr('style', 'z-index:500')
+        .on('mousemove', drawTooltip)
+        .on('mouseout', removeTooltip);
+
+}
 
 // function cloudTippy(cloud_id) {
 //     $(document).ready(function () {
@@ -3690,11 +3797,6 @@ $(document).on('change', '.topic_down', function () {
     }, 1000);
 });
 
-var states, tipBox;
-var x, y;
-var tooltip, tooltipLine;
-var tooltip_text = ""
-
 function line_full_draw(line_data) {
 
     var mainDiv = "#lineDivId";
@@ -3839,7 +3941,7 @@ function drawTooltip() {
             if (d.history.find(h => h.date.toLocaleDateString("en-US") == this_date)) {
                 tooltip_text = 'Excited: ' + d.history.find(h => h.date.toLocaleDateString("en-US") == this_date).Excited + '<br>' +
                     'Happy: ' + d.history.find(h => h.date.toLocaleDateString("en-US") == this_date).Happy + '<br>' +
-                    'Neutral:' + d.history.find(h => h.date.toLocaleDateString("en-US") == this_date).Neutral + '<br>' +
+                    'Neutral: ' + d.history.find(h => h.date.toLocaleDateString("en-US") == this_date).Neutral + '<br>' +
                     'Concerned: ' + d.history.find(h => h.date.toLocaleDateString("en-US") == this_date).Concerned + '<br>' +
                     'Angry: ' + d.history.find(h => h.date.toLocaleDateString("en-US") == this_date).Angry;
                 return tooltip_text

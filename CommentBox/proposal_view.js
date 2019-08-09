@@ -26,7 +26,7 @@ if (localStorage.getItem("username") == "mjasim") {
         8: "https://www.dslreports.com/shownews/New-York-State-to-Introduce-Net-Neutrality-Bill-140920",
         9: "https://i.redd.it/ab1jv0avb2b21.jpg",
         10: "https://www.nytimes.com/2019/02/14/nyregion/amazon-hq2-queens.html",
-        
+
     };
 } else {
     var proposalIntro = {
@@ -186,6 +186,92 @@ function get_filtered_comment(json, filterobj) {
     return filtered_comment
 }
 
+function draw_line_calc(idea_id, svg_id, proposal_wise_dates, prop_json) {
+    console.log("here here", idea_id, svg_id, proposal_wise_dates)
+
+    date_history = []
+
+    for (var i in prop_json['ideas']) {
+        if (prop_json['ideas'][i].id == idea_id) {
+            idea_num = i
+        }
+    }
+
+    for (var t in proposal_wise_dates) {
+        if (proposal_wise_dates[t].id == idea_id) {
+            console.log(idea_id)
+
+            for (var i in proposal_wise_dates[t].dates) {
+                c_excited = 0, c_happy = 0, c_neutral = 0, c_concerned = 0, c_angry = 0;
+                for (var j in prop_json.ideas[idea_num].tasks) {
+                    for (var k in prop_json.ideas[idea_num].tasks[j].comments) {
+                        if (prop_json.ideas[idea_num].tasks[j].comments[k].post_time.split(" ")[0] == proposal_wise_dates[t].dates[i]) {
+                            if (prop_json.ideas[idea_num].tasks[j].comments[k].emotion == "Excited") {
+                                c_excited = c_excited + 1
+                            }
+                            if (prop_json.ideas[idea_num].tasks[j].comments[k].emotion == "Happy") {
+                                c_happy = c_happy + 1
+                            }
+                            if (prop_json.ideas[idea_num].tasks[j].comments[k].emotion == "Neutral") {
+                                c_neutral = c_neutral + 1
+                            }
+                            if (prop_json.ideas[idea_num].tasks[j].comments[k].emotion == "Concerned") {
+                                c_concerned = c_concerned + 1
+                            }
+                            if (prop_json.ideas[idea_num].tasks[j].comments[k].emotion == "Angry") {
+                                c_angry = c_angry + 1
+                            }
+                        }
+                    }
+                }
+
+                temp = {
+                    "date": proposal_wise_dates[idea_num].dates[i],
+                    "comments": c_excited + c_happy + c_neutral + c_concerned + c_angry,
+                    "Excited": c_excited,
+                    "Happy": c_happy,
+                    "Neutral": c_neutral,
+                    "Concerned": c_concerned,
+                    "Angry": c_angry,
+                }
+
+                date_history.push(temp)
+            }
+        }
+    }
+
+    date_history = date_history.sort(function (a, b) {
+        return new Date(b.date) - new Date(a.date);
+    });
+
+    max_val = 0
+    for (var i in date_history) {
+        if (date_history[i].comments > max_val) {
+            max_val = date_history[i].comments
+        }
+    }
+
+    line_data = [{
+        "color": "black",
+        "maxval": max_val,
+        "history": date_history
+    }]
+
+    divid = "headerlines_" + idea_id
+
+    // filterobj.idea_id = idea_id
+    // filterobj.emotion = null
+    // filterobj.topic = null
+    // filterobj.tasks = null
+
+    var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(prop_json)), filterobj)
+    console.log(filtered_comment, idea_id)
+
+    draw_line_in_header(line_data, divid, svg_id)
+    // draw_line(filtered_comment, line_data)
+}
+
+
 function draw_filtered_comments(filtered_comment, json) {
     // console.log('draw filter comment', filtered_comment, json);
     var myNode = document.getElementById("parentBox");
@@ -211,6 +297,8 @@ function draw_filtered_comments(filtered_comment, json) {
     var comment_count = 0
     var users = []
 
+    var proposal_wise_dates = get_proposal_wise_dates(json)
+
     for (var i in filtered_comment["ideas"]) {
         for (var j in filtered_comment.ideas[i].tasks) {
             for (var k in filtered_comment.ideas[i].tasks[j].comments) {
@@ -221,12 +309,13 @@ function draw_filtered_comments(filtered_comment, json) {
     }
 
     for (var i in filtered_comment["ideas"]) {
+        var svg_lines_id = "svg_lines_" + filtered_comment.ideas[i].id;
         divIdea[i] = document.createElement("div")
         divIdea[i].className = "ideaDiv";
         divIdea[i].id = "ideaDivId-" + filtered_comment.ideas[i].id;
         //var node = document.createTextNode(filtered_comment.ideas[i].name);
         //divIdea[i].appendChild(node)
-        var divIdeaHTML = '<div style=\"display:flex;align-items:flex-end"\"> <h1 class="search_enable" style=margin-left:5px;>' + filtered_comment.ideas[i].name + '</h1>' +
+        var divIdeaHTML = '<div style=\"display:flex;flex-direction:row;align-items:flex-start"\"><div style=\"width:60%\"><div style=\"display:flex;align-items:flex-end"\"> <h1 class="search_enable" style=margin-left:5px;>' + filtered_comment.ideas[i].name + '</h1>' +
             "<p>" + "\xa0\xa0\xa0" +
             '<span class="commenters_button" id="span_id_opt" >' +
             "<i class=" + "\"fas fa-user fa-lg\"" + "></i>" +
@@ -241,10 +330,16 @@ function draw_filtered_comments(filtered_comment, json) {
             "</p>" +
             '</div>' +
             "<div class=\"comment-body\"" + "\">" +
-            '<p style=margin-left:10px>' + proposalIntro[filtered_comment.ideas[i].id] + '</p>';
+            '<p style=margin-left:10px>' + proposalIntro[filtered_comment.ideas[i].id] + '</p>' + '</div></div>' +
+            '<div style=\"width:35%;height:70px;margin:5px; margin-left:15px\" class="lines_view" id="headerlines_' + filtered_comment.ideas[i].id + "\">" +
+            '<div id=\"tooltip\" style=\"position:absolute;background-color:lightgray;padding:5px\">' + '</div>' + 
+            '</div>';
         divIdea[i].innerHTML = divIdeaHTML;
         var element = document.getElementById("parentBox")
         element.appendChild(divIdea[i])
+
+        draw_line_calc(filtered_comment.ideas[i].id, svg_lines_id, proposal_wise_dates, JSON.parse(JSON.stringify(json)))
+
         for (var j in filtered_comment.ideas[i].tasks) {
             divTask[j] = document.createElement("div")
             divTask[j].className = "taskDiv"
