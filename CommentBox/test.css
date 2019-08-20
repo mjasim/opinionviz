@@ -207,6 +207,16 @@ body {
     padding: 5px 0;
 }
 
+.label-line-body{
+    width: 100%;
+    padding-bottom: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
 .label-info-body{
     width: 50%;
     padding-bottom: 5px;
@@ -291,7 +301,7 @@ body {
 }
 
 .l_column1{
-    width: 15%;
+    width: 10%;
     height: inherit;
 }
 
@@ -301,6 +311,11 @@ body {
 }
 
 .l_column3{
+    width: 9%;
+    height: inherit;
+}
+
+.l_column4{
     width: 30%;
     height: inherit;
 }
@@ -316,7 +331,7 @@ body {
 } */
 
 .l_column6{
-    width: 42%;
+    width: 38%;
     height: inherit;
 }
 /* 
@@ -354,7 +369,7 @@ body {
 }
 
 .c_column1{
-    width: 15%;
+    width: 10%;
     height: inherit;
     border-color: black;
     /* font-size: 1.2em;
@@ -368,13 +383,20 @@ body {
     width: 9%;
     height: inherit;
     border-color: black;
+    padding: 2px 0px 0px 0px;
+}
+
+.c_column3{
+    width: 9%;
+    height: inherit;
+    border-color: black;
     padding:8px 0px 0px 0px;
     display: flex;
     flex-direction: row;
     justify-content: center;
 }
 
-.c_column3{
+.c_column4{
     width: 30%;
     height: inherit;
     border-color: black;
@@ -401,7 +423,7 @@ body {
 } */
 
 .c_column6{
-    width: 42%;
+    width: 38%;
     height: inherit;
     border-color: black;
     padding: 2px 0px 0px 0px;
@@ -610,6 +632,14 @@ body {
 .fa-thumbs-down.neutral{
     color: gray;
     opacity: 1.0;
+}
+
+.fa-chart-line.label_icons{
+    opacity: 0.7
+}
+
+.fa-chart-line.label_icons:hover{
+    opacity: 1.0
 }
 
 .fa-sort-amount-down.label_icons{

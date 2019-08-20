@@ -46,14 +46,14 @@ d3.json(filepath, function (err, myjson) {
     prop_json = JSON.parse(JSON.stringify(myjson))
     currentJSON_compare = JSON.parse(JSON.stringify(myjson))
 
-    build_compare_drop(raw_json)
+    build_compare_drop()
 });
 
 function build_compare_drop() {
 
     // console.log(localStorage.getItem("compare_1"), localStorage.getItem("compare_2"))
 
-    compare_proposal_names = get_proposal_names(JSON.parse(JSON.stringify(prop_json)))
+    compare_proposal_names = get_proposal_names(JSON.parse(JSON.stringify(raw_json)))
 
     if (localStorage.getItem("compare_1"))
         var x = localStorage.getItem("compare_1").split("_")[1]
@@ -247,6 +247,90 @@ function build_compare_drop() {
 //     }
 // }
 
+// Get filtered comments
+function get_filtered_comment_compare(json, filterobj) {
+    // console.log("get filtered comment compare", filterobj, json)
+    var ideas = []
+    for (var i in json["ideas"]) {
+        if (filterobj.idea_id != null && json.ideas[i].id != filterobj.idea_id) {
+            continue
+        }
+        var tasks = []
+        for (var j in json.ideas[i].tasks) {
+
+            if (filterobj.task_id != null && json.ideas[i].tasks[j].id != filterobj.task_id) {
+                continue
+            }
+
+            var comments = []
+            for (var k in json.ideas[i].tasks[j].comments) {
+
+                // if (filterobj.topic != null) {
+                //     var topicFilter = json.ideas[i].topic_keyphrases[filterobj.topic].topic_keyphrase
+                // }
+                var flag = true
+                if (flag && filterobj.emotion != null && json.ideas[i].tasks[j].comments[k].emotion.toLowerCase() != filterobj.emotion.toLowerCase()) {
+                    flag = false
+                }
+                // if (flag && filterobj.sentiment_final != null && (json.ideas[i].tasks[j].comments[k].sentiment_final).toLowerCase() != filterobj.sentiment_final.toLowerCase()) {
+                //     flag = false
+                // }
+                // if (flag && filterobj.topic != null && !checkKeyphrase(topicFilter, json.ideas[i].tasks[j].comments[k].findTopicLabels)) {
+                //     flag = false
+                // }
+
+                if (flag && filterobj.topic != null) {
+                    for (var l = 0; l < filterobj.topic.length; l++) {
+                        var flag = true
+                        var topicFilter = json.ideas[i].topic_keyphrases[filterobj.topic[l]].topic_keyphrase
+
+                        // console.log(topicFilter)
+
+                        if (!checkKeyphrase(topicFilter, json.ideas[i].tasks[j].comments[k].findTopicLabels)) {
+                            flag = false
+                        } else {
+                            //console.log(flag, topicFilter, json.ideas[i].tasks[j].comments[k].comment)
+                            //comments.push(json.ideas[i].tasks[j].comments[k])
+                        }
+                    }
+                }
+                //console.log(flag, topicFilter)
+                //console.log("yolo")
+
+                // if (flag && filterobj.cloudkey != null) {
+                //     // console.log("inside cloud loop", filterobj)
+                //     if (!(json.ideas[i].tasks[j].comments[k].comment.includes(filterobj.cloudkey))) {
+                //         // console.log(json.ideas[i].tasks[j].comments[k].comment)
+                //         flag = false
+
+                //         // console.log(json.ideas[i].tasks[j].comments[k].comment.includes(filterobj.cloudkey))
+
+                //     }
+                // }
+
+                if (flag) {
+                    comments.push(json.ideas[i].tasks[j].comments[k])
+                    // console.log("yolo")
+                }
+            }
+            if (comments.length) {
+                var tempTask = json.ideas[i].tasks[j]
+                tempTask.comments = comments
+                tasks.push(tempTask)
+            }
+        }
+        if (tasks.length) {
+            var tempidea = json.ideas[i]
+            tempidea.tasks = tasks
+            ideas.push(tempidea)
+        }
+    }
+    var filtered_comment = {
+        "ideas": ideas
+    }
+    return filtered_comment
+}
+
 function draw_filtered_comments_compare(filtered_comment, json, sideparent) {
     // console.log('draw filter comment compare', filtered_comment, json, sideparent);
     var myNode = document.getElementById(sideparent);
@@ -436,7 +520,7 @@ function build_compare_bars(json, selected_idea, side) {
         compare_filter_obj.task_id = null
         compare_filter_obj.topic = []
         compare_filter_obj.cloudkey = null
-        filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(raw_json)), compare_filter_obj)
+        filtered_comment = get_filtered_comment_compare(JSON.parse(JSON.stringify(raw_json)), compare_filter_obj)
         // console.log(compare_filter_obj, "left")
 
         if (compare_filter_obj.idea_id) {
@@ -459,7 +543,7 @@ function build_compare_bars(json, selected_idea, side) {
         compare_filter_obj.task_id = null
         compare_filter_obj.topic = []
         compare_filter_obj.cloudkey = null
-        filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(raw_json)), compare_filter_obj)
+        filtered_comment = get_filtered_comment_compare(JSON.parse(JSON.stringify(raw_json)), compare_filter_obj)
         // console.log(filtered_comment, "right")
 
         if (compare_filter_obj.idea_id) {
@@ -471,9 +555,9 @@ function build_compare_bars(json, selected_idea, side) {
 
 function build_compare_topics(json, selected_idea, side) {
 
-    compare_proposal_wise_topic_agg = get_proposal_wise_topic(JSON.parse(JSON.stringify(json)))
+    compare_proposal_wise_topic_agg = get_proposal_wise_topic(json)
 
-    compare_proposal_names = get_proposal_names(JSON.parse(JSON.stringify(json)))
+    compare_proposal_names = get_proposal_names(json)
     for (var i in compare_proposal_names) {
         if (compare_proposal_names[i].idea_name == selected_idea) {
             var id = compare_proposal_names[i].idea_id
@@ -498,17 +582,17 @@ function build_compare_topics(json, selected_idea, side) {
                     break;
                 } else {
                     divTopicName = divTopicName +
-                        '<div  class="comparetopicName" id="comparetopic_' + compare_proposal_names[serial_num].idea_id + "_" + j + '\">' +
-                        '<span class="badge badge-warning comparetopic-name" id="comparetopic_' + compare_proposal_names[serial_num].idea_id + "_" + j + "_id\">" + compare_proposal_wise_topic_agg[serial_num][j].topic_keyphrase + '</span></div>'
+                        '<div  class="comparetopicName" id="leftcomparetopic_' + compare_proposal_names[serial_num].idea_id + "_" + j + '\">' +
+                        '<span class="badge badge-warning comparetopic-name" id="leftcomparetopic_' + compare_proposal_names[serial_num].idea_id + "_" + j + "_id\">" + compare_proposal_wise_topic_agg[serial_num][j].topic_keyphrase + '</span></div>'
                 }
             }
         }
         topic_length = 0
 
         divTopicName = divTopicName +
-            '<div  class="comparetopicNameAll" id="comparetopic_' + compare_proposal_names[serial_num].idea_id + "_" + 'all' + '\">' +
+            '<div  class="comparetopicNameAll" id="leftcomparetopic_' + compare_proposal_names[serial_num].idea_id + "_" + 'all' + '\">' +
             '<div class="col-lg-12 col-m-12 col-sm-12" style="padding:1px">' +
-            '<select class="form-control comparetopic_down" id="compareall_topics_' + compare_proposal_names[serial_num].idea_id + "\"" +
+            '<select class="form-control comparetopic_down" id="leftcompareall_topics_' + compare_proposal_names[serial_num].idea_id + "\"" +
             ' style="height:24px;width:50px;font-size:0.8em;font-weight:bold;background-color:#F5F8FA;border-color:#337AB7; padding:0">' +
             '<option value="">...</option>';
 
@@ -540,17 +624,17 @@ function build_compare_topics(json, selected_idea, side) {
                     break;
                 } else {
                     divTopicName = divTopicName +
-                        '<div  class="comparetopicName" id="comparetopic_' + compare_proposal_names[serial_num].idea_id + "_" + j + '\">' +
-                        '<span class="badge badge-warning comparetopic-name" id="comparetopic_' + compare_proposal_names[serial_num].idea_id + "_" + j + "_id\">" + compare_proposal_wise_topic_agg[serial_num][j].topic_keyphrase + '</span></div>'
+                        '<div  class="comparetopicName" id="rightcomparetopic_' + compare_proposal_names[serial_num].idea_id + "_" + j + '\">' +
+                        '<span class="badge badge-warning comparetopic-name" id="rightcomparetopic_' + compare_proposal_names[serial_num].idea_id + "_" + j + "_id\">" + compare_proposal_wise_topic_agg[serial_num][j].topic_keyphrase + '</span></div>'
                 }
             }
         }
         topic_length = 0
 
         divTopicName = divTopicName +
-            '<div  class="comparetopicNameAll" id="comparetopic_' + compare_proposal_names[serial_num].idea_id + "_" + 'all' + '\">' +
+            '<div  class="comparetopicNameAll" id="rightcomparetopic_' + compare_proposal_names[serial_num].idea_id + "_" + 'all' + '\">' +
             '<div class="col-lg-12 col-m-12 col-sm-12" style="padding:1px">' +
-            '<select class="form-control comparetopic_down" id="compareall_topics_' + compare_proposal_names[serial_num].idea_id + "\"" +
+            '<select class="form-control comparetopic_down" id="rightcompareall_topics_' + compare_proposal_names[serial_num].idea_id + "\"" +
             ' style="height:24px;width:50px;font-size:0.8em;font-weight:bold;background-color:#F5F8FA;border-color:#337AB7; padding:0">' +
             '<option value="">...</option>';
 
@@ -567,8 +651,9 @@ function build_compare_topics(json, selected_idea, side) {
     }
 
     $(document).ready(function () {
-        $('.comparetopicName').click(function () {
-
+        $('.comparetopicName').click(function (event) {
+            event.stopImmediatePropagation();
+            console.log("clicked")
             // if (!selected_topic && selected_row) {
 
             //     // draw_view(json)
@@ -580,10 +665,43 @@ function build_compare_topics(json, selected_idea, side) {
             var id = $(this).attr('id');
             var sideparent = $(this).parent().parent().attr('id');
 
-            if (sideparent == "compareLeftTopic")
-                compare_show_topics(id, false, "left")
-            else
-                compare_show_topics(id, false, "right")
+            var pos = 0
+            var topic = ""
+
+            id_input = id.split('_')[1]
+            topic_input = $(this).text()
+            x = get_proposal_wise_topic(raw_json)
+            sn = get_serial_number(raw_json)
+            for (var i in sn) {
+                // console.log(sn[i].idea_id, id.split('_')[1])
+                if (sn[i].idea_id == id_input) {
+                    pos = parseInt(sn[i].serial_number) - 1
+                }
+            }
+        
+            props = x[pos]
+        
+            // console.log("fix", topic_input)
+
+            for (var i in props) {
+                // console.log(props[i].topic_keyphrase, topic_input)
+                if (props[i].topic_keyphrase == topic_input) {
+                    topic = i
+                }
+            }
+
+            // console.log(sideparent)
+
+            if (sideparent == "compareLeftTopic"){
+                topic_parameter = "leftcomparetopic_" + id_input + "_" + topic
+                compare_show_topics(topic_parameter, false, "left")
+                document.getElementById("leftcompareall_topics_" + id_input).selectedIndex = 0;
+            }
+            else{
+                topic_parameter = "rightcomparetopic_" + id_input + "_" + topic
+                compare_show_topics(topic_parameter, false, "right")
+                document.getElementById("rightcompareall_topics_" + id_input).selectedIndex = 0;
+            }
         });
     });
 }
@@ -593,8 +711,10 @@ $(document).ready(function () {
         selected_idea_left = $("#leftIdeaSelect").val();
         // console.log(selected_idea_left)
         // build_compare_header((JSON.parse(JSON.stringify(prop_json))), selected_idea_left, "left")
-        build_compare_bars((JSON.parse(JSON.stringify(prop_json))), selected_idea_left, "left")
-        build_compare_topics((JSON.parse(JSON.stringify(prop_json))), selected_idea_left, "left")
+        build_compare_bars((JSON.parse(JSON.stringify(raw_json))), selected_idea_left, "left")
+        build_compare_topics((JSON.parse(JSON.stringify(raw_json))), selected_idea_left, "left")
+        selected_topic_left = ""
+        prev_topic_left = ""
     });
 });
 
@@ -603,8 +723,10 @@ $(document).ready(function () {
         selected_idea_right = $("#rightIdeaSelect").val();
         // console.log(selected_idea_right)
         // build_compare_header((JSON.parse(JSON.stringify(prop_json))), selected_idea_right, "right")
-        build_compare_bars((JSON.parse(JSON.stringify(prop_json))), selected_idea_right, "right")
-        build_compare_topics((JSON.parse(JSON.stringify(prop_json))), selected_idea_right, "right")
+        build_compare_bars((JSON.parse(JSON.stringify(raw_json))), selected_idea_right, "right")
+        build_compare_topics((JSON.parse(JSON.stringify(raw_json))), selected_idea_right, "right")
+        selected_topic_right = ""
+        prev_topic_right = ""
 
     });
 });
@@ -950,7 +1072,7 @@ function emotion_rows_compare(salesData, svg_id, div_id, idea_id, sideparent) {
 
             //console.log(filterobj)
 
-            var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(raw_json)), compare_filter_obj)
+            var filtered_comment = get_filtered_comment_compare(JSON.parse(JSON.stringify(raw_json)), compare_filter_obj)
             draw_filtered_comments_compare(filtered_comment, raw_json, sideparent)
 
             compare_cellHistoryLeft.prev_emo_cell = this_cell
@@ -984,7 +1106,7 @@ function emotion_rows_compare(salesData, svg_id, div_id, idea_id, sideparent) {
 
             //console.log(filterobj)
 
-            var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(raw_json)), compare_filter_obj)
+            var filtered_comment = get_filtered_comment_compare(JSON.parse(JSON.stringify(raw_json)), compare_filter_obj)
             draw_filtered_comments_compare(filtered_comment, raw_json, sideparent)
 
             compare_cellHistoryRight.prev_emo_cell = this_cell
@@ -1158,8 +1280,10 @@ function save_notes_compare(id) {
     });
 }
 
-selected_topic = ""
-prev_topic = ""
+selected_topic_left = ""
+prev_topic_left = ""
+selected_topic_right = ""
+prev_topic_right = ""
 
 function compare_show_topics(id, drop, sideparent) {
 
@@ -1167,36 +1291,37 @@ function compare_show_topics(id, drop, sideparent) {
         var split_str = id.split("_")
         logInteraction('click, idea, ' + split_str[1], 'topic ', split_str[2]);
 
-        selected_topic = split_str[2]
+        selected_topic_left = split_str[2]
 
-        // console.log(id, prev_topic)
+        console.log(id, prev_topic_left)
+        // console.log(id)
 
-        if (id != prev_topic) {
-            filterobj.idea_id = split_str[1]
-            filterobj.emotion = null
-            filterobj.task_id = null
-            filterobj.topic = selected_topic
+        if (id != prev_topic_left) {
+            compare_filter_obj.idea_id = split_str[1]
+            compare_filter_obj.emotion = null
+            compare_filter_obj.task_id = null
+            compare_filter_obj.topic = selected_topic_left
             // filterobj.cloudkey = null
-            filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(raw_json)), filterobj)
+            filtered_comment = get_filtered_comment_compare(JSON.parse(JSON.stringify(raw_json)), compare_filter_obj)
 
             // console.log(filtered_comment)
 
-            new_view = JSON.parse(JSON.stringify(prop_json))
+            new_view = JSON.parse(JSON.stringify(raw_json))
             draw_filtered_comments_compare(filtered_comment, new_view, "compareLeftparentBox")
-            if (drop == false) {
+            if (drop == false && document.getElementById(id + "_id")) {
                 document.getElementById(id + "_id").setAttribute("style", "background-color:#3DAADD")
             }
-            if (prev_topic && drop == false) {
-                document.getElementById(prev_topic + "_id").setAttribute("style", "background-color:none")
+            if (prev_topic_left && drop == false && document.getElementById(prev_topic_left + "_id")) {
+                document.getElementById(prev_topic_left + "_id").setAttribute("style", "background-color:none")
             }
 
-            prev_topic = id;
+            prev_topic_left = id;
             prev_row = split_str[1];
         } else {
-            filterobj.idea_id = split_str[1]
-            prev_topic = ""
-            selected_topic = ""
-            filterobj.topic = null
+            compare_filter_obj.idea_id = split_str[1]
+            prev_topic_left = ""
+            selected_topic_left = ""
+            compare_filter_obj.topic = null
             document.getElementById(id + "_id").setAttribute("style", "background-color:none")
 
             // console.log("here", filterobj)
@@ -1206,47 +1331,49 @@ function compare_show_topics(id, drop, sideparent) {
                 myNode.removeChild(myNode.firstChild);
             }
 
-            new_view = JSON.parse(JSON.stringify(prop_json))
+            new_view = JSON.parse(JSON.stringify(raw_json))
 
-            filtered_comment = get_filtered_comment(new_view, filterobj)
+            filtered_comment = get_filtered_comment_compare(new_view, compare_filter_obj)
             draw_filtered_comments_compare(filtered_comment, new_view, "compareLeftparentBox")
 
-            filterobj = {}
+            compare_filter_obj = {}
         }
     } else {
         var split_str = id.split("_")
         logInteraction('click, idea, ' + split_str[1], 'topic ', split_str[2]);
 
-        selected_topic = split_str[2]
+        selected_topic_right = split_str[2]
 
-        // console.log(id, prev_topic)
+        console.log(id, prev_topic_right)
+        // console.log(selected_topic_right)
 
-        if (id != prev_topic) {
-            filterobj.idea_id = split_str[1]
-            filterobj.emotion = null
-            filterobj.task_id = null
-            filterobj.topic = selected_topic
+        if (id != prev_topic_right) {
+
+            compare_filter_obj.idea_id = split_str[1]
+            compare_filter_obj.emotion = null
+            compare_filter_obj.task_id = null
+            compare_filter_obj.topic = selected_topic_right
             // filterobj.cloudkey = null
-            filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(raw_json)), filterobj)
+            filtered_comment = get_filtered_comment_compare(JSON.parse(JSON.stringify(raw_json)), compare_filter_obj)
 
             // console.log(filtered_comment)
 
-            new_view = JSON.parse(JSON.stringify(prop_json))
+            new_view = JSON.parse(JSON.stringify(raw_json))
             draw_filtered_comments_compare(filtered_comment, new_view, "compareRightparentBox")
-            if (drop == false) {
+            if (drop == false && document.getElementById(id + "_id")) {
                 document.getElementById(id + "_id").setAttribute("style", "background-color:#3DAADD")
             }
-            if (prev_topic && drop == false) {
-                document.getElementById(prev_topic + "_id").setAttribute("style", "background-color:none")
+            if (prev_topic_right && drop == false && document.getElementById(prev_topic_right + "_id")) {
+                document.getElementById(prev_topic_right + "_id").setAttribute("style", "background-color:none")
             }
 
-            prev_topic = id;
+            prev_topic_right = id;
             prev_row = split_str[1];
         } else {
-            filterobj.idea_id = split_str[1]
-            prev_topic = ""
-            selected_topic = ""
-            filterobj.topic = null
+            compare_filter_obj.idea_id = split_str[1]
+            prev_topic_right = ""
+            selected_topic_right = ""
+            compare_filter_obj.topic = null
             document.getElementById(id + "_id").setAttribute("style", "background-color:none")
 
             // console.log("here", filterobj)
@@ -1256,12 +1383,12 @@ function compare_show_topics(id, drop, sideparent) {
                 myNode.removeChild(myNode.firstChild);
             }
 
-            new_view = JSON.parse(JSON.stringify(prop_json))
+            new_view = JSON.parse(JSON.stringify(raw_json))
 
-            filtered_comment = get_filtered_comment(new_view, filterobj)
+            filtered_comment = get_filtered_comment_compare(new_view, compare_filter_obj)
             draw_filtered_comments_compare(filtered_comment, new_view, "compareRightparentBox")
 
-            filterobj = {}
+            compare_filter_obj = {}
         }
     }
 }
@@ -1295,11 +1422,20 @@ $(document).on('change', '.comparetopic_down', function () {
         }
     }
 
-    topic_parameter = "topic_" + id_input + "_" + topic
-    console.log(topic_parameter)
+    // console.log(prev_topic)
 
-    if (sideparent == "cmptopbodyleft")
+    if (sideparent == "cmptopbodyleft"){
+        if(prev_topic_left && document.getElementById(prev_topic_left + "_id"))
+            document.getElementById(prev_topic_left + "_id").setAttribute("style", "background-color:none")
+        topic_parameter = "leftcomparetopic_" + id_input + "_" + topic
         compare_show_topics(topic_parameter, true, "left")
-    else
+    }
+        
+    else{
+        if(prev_topic_right && document.getElementById(prev_topic_right + "_id"))
+            document.getElementById(prev_topic_right + "_id").setAttribute("style", "background-color:none")
+        topic_parameter = "rightcomparetopic_" + id_input + "_" + topic
         compare_show_topics(topic_parameter, true, "right")
+    }
+        
 });

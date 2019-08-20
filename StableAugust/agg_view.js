@@ -2706,11 +2706,11 @@ function show_topics(id, drop) {
 
         new_view = JSON.parse(JSON.stringify(prop_json))
         draw_filtered_comments(filtered_comment, new_view)
-        if (drop == false) {
+        if (drop == false && document.getElementById(id + "_id")) {
             document.getElementById(id + "_id").setAttribute("style", "background-color:#3DAADD")
         }
         // document.getElementById(selected_row).setAttribute("style", "background-color:#3DAADD")
-        if (prev_topic && drop == false) {
+        if (prev_topic && drop == false && document.getElementById(prev_topic + "_id")) {
             document.getElementById(prev_topic + "_id").setAttribute("style", "background-color:none")
         }
 
@@ -3304,6 +3304,9 @@ $(document).on('change', '.topic_down', function () {
 
     topic_parameter = "topic_" + id_input + "_" + topic
     console.log(topic_parameter)
+
+	if(prev_topic && document.getElementById(prev_topic + "_id"))
+        document.getElementById(prev_topic + "_id").setAttribute("style", "background-color:none")
 
     show_topics(topic_parameter, true)
 });

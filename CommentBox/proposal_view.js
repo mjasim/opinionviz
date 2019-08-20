@@ -187,7 +187,7 @@ function get_filtered_comment(json, filterobj) {
 }
 
 function draw_line_calc(idea_id, svg_id, proposal_wise_dates, prop_json) {
-    console.log("here here", idea_id, svg_id, proposal_wise_dates)
+    // console.log("here here", idea_id, svg_id, proposal_wise_dates)
 
     date_history = []
 
@@ -199,7 +199,7 @@ function draw_line_calc(idea_id, svg_id, proposal_wise_dates, prop_json) {
 
     for (var t in proposal_wise_dates) {
         if (proposal_wise_dates[t].id == idea_id) {
-            console.log(idea_id)
+            // console.log(idea_id)
 
             for (var i in proposal_wise_dates[t].dates) {
                 c_excited = 0, c_happy = 0, c_neutral = 0, c_concerned = 0, c_angry = 0;
@@ -265,7 +265,7 @@ function draw_line_calc(idea_id, svg_id, proposal_wise_dates, prop_json) {
     // filterobj.tasks = null
 
     var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(prop_json)), filterobj)
-    console.log(filtered_comment, idea_id)
+    // console.log(filtered_comment, idea_id)
 
     draw_line_in_header(line_data, divid, svg_id)
     // draw_line(filtered_comment, line_data)

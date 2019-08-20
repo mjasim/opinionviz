@@ -125,7 +125,7 @@ function draw_view(json) {
     // console.log(proposal_wise_dates)
 
     var numberOfRows = proposal_names.length;
-    var numberOfColumns = 8;
+    var numberOfColumns = 7;
 
     // backup data
     this.data = json
@@ -178,22 +178,43 @@ function draw_view(json) {
     var divCaption =
         "<div class=\"label-body\"" + "\">" +
         "<div class=\"label-title\"" + "title=\"Click on a proposal name from the list below to explore, or select the checkbox to compare upto two proposals\"" + ">" +
-        "<p style=\"margin: 5px 0px 5px 0px;font-size:1.0em;text-align:left; font-weight:bold; cursor:default\"" + ">" + "\xa0 Proposals (19)" + "</p>" + "</div>";
+        "<p style=\"margin: 5px 0px 5px 0px;font-size:1.0em;text-align:left; font-weight:bold; cursor:default\"" + ">" + "\xa0 Proposals" + "</p>" + "</div>";
     //    "<p style=\"margin: 5px 0px 5px 0px;font-size:3em;color:#337AB7\"" + ">" + "19\xa0" + "</p>" + "</div>"
 
     labelColumn1Div.innerHTML = divCaption
     if (labelElement)
         labelElement.appendChild(labelColumn1Div)
 
-    // =========================== label column 1 end ===========================//
+    // =========================== label column 2 ===============================//
 
-
-    // ========================= label column 2 =================================//
-
-    // label and search bars for info
     var labelColumn2Div = document.createElement("div")
     labelColumn2Div.id = "labelcolumn2"
     labelColumn2Div.className = "l_column2"
+
+    var divCaption =
+        "<div class=\"label-body\"" + "\">" +
+        "<div class=\"label-title\"" + ">" +
+        "<p style=\"margin: 5px 0px 5px 0px;font-size:1em;text-align:left\"" + ">" + "\xa0" + "</p>" + "</div>" +
+        "<div class=\"label-line-body\" style=\"font-size:0.7em\"" + ">" +
+        "Timeline" +
+        "<p title=\"Sort the proposals by the duration of the discussion\"" + ">" + '<span class="label-info-button" id="span_id_participants" >' +
+        "<i class=" + "\"fas fa-chart-line fa-2x label_icons\"" + "></i>" + "\xa0" +
+        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>" 
+
+    labelColumn2Div.innerHTML = divCaption
+    if (labelElement)
+        labelElement.appendChild(labelColumn2Div)
+
+
+    // =========================== label column 1 end ===========================//
+
+
+    // ========================= label column 3 =================================//
+
+    // label and search bars for info
+    var labelColumn3Div = document.createElement("div")
+    labelColumn3Div.id = "labelcolumn3"
+    labelColumn3Div.className = "l_column3"
 
     var divCaption =
         "<div class=\"label-body\"" + "\">" +
@@ -212,29 +233,29 @@ function draw_view(json) {
     // "<div class=\"label-title-body\"" + ">" + "</p>" + "</div>"
     //    "<p style=\"margin: 5px 0px 5px 0px;font-size:3em;color:#337AB7\"" + ">" + "78\xa0" + "</p>" + "</div>";
 
-    labelColumn2Div.innerHTML = divCaption
+    labelColumn3Div.innerHTML = divCaption
     if (labelElement)
-        labelElement.appendChild(labelColumn2Div)
+        labelElement.appendChild(labelColumn3Div)
 
     //========================== label column 2 end =============================//
 
     //============================ label column 3 =========================//
 
     // label and search bars for topics
-    var labelColumn3Div = document.createElement("div")
-    labelColumn3Div.id = "labelcolumn3"
-    labelColumn3Div.className = "l_column3"
+    var labelColumn4Div = document.createElement("div")
+    labelColumn4Div.id = "labelcolumn4"
+    labelColumn4Div.className = "l_column4"
 
     var divCaption =
         "<div class=\"label-body\"" + "\">" +
         "<div class=\"label-title\"" + ">" +
-        "<p style=\"margin: 5px 0px 5px 0px;font-size:1em;text-align:left;margin-left:10px;cursor:default;font-weight:bold\"" + "title=\"Click on a topic to explore related comments\"" + ">" + "Topics (60)" + "</p>" + "</div>" +
+        "<p style=\"margin: 5px 0px 5px 0px;font-size:1em;text-align:left;margin-left:10px;cursor:default;font-weight:bold\"" + "title=\"Click on a topic to explore related comments\"" + ">" + "Topics" + "</p>" + "</div>" +
         "<div class=\"label-title-body\"" + ">" + "</p>" + "</div>"
     //    "<p style=\"margin: 5px 0px 5px 0px;font-size:3em;color:#337AB7\"" + ">" + "78\xa0" + "</p>" + "</div>";
 
-    labelColumn3Div.innerHTML = divCaption
+    labelColumn4Div.innerHTML = divCaption
     if (labelElement)
-        labelElement.appendChild(labelColumn3Div)
+        labelElement.appendChild(labelColumn4Div)
 
     //============================ label column 3 end =====================//
 
@@ -325,30 +346,6 @@ function draw_view(json) {
         "<i class=" + "\"fas fa-angry fa-2x label_icons\"" + "></i>" + "\xa0" +
         "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
         '</span>' + "</p>" + "</div>";
-
-    // "<div class=\"label-emo-body\" style=\"font-size:0.7em\"" + "\">" +
-    // // "<p style=\"font-size:0.7em;\">" + "Positive" + "</p>" +
-    // "Positive" +
-    // "<p>" + '<span class="label-emo-button" id="span_id_positive" >' +
-    // "<i class=" + "\"fas fa-thumbs-up fa-2x label_icons\"" + "></i>" + "\xa0" +
-    // "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
-    // '</span>' + "</p>" + "</div>" +
-
-    // "<div class=\"label-emo-body\" style=\"font-size:0.7em\"" + "\">" +
-    // // "<p style=\"font-size:0.7em;\">" + "Neutral" + "</p>" +
-    // "Neutral" +
-    // "<p>" + '<span class="label-emo-button" id="span_id_neutral" >' +
-    // "<i class=" + "\"far fa-thumbs-down fa-2x neutral label_icons\"" + " style=transform:rotate(-90deg)" + "></i>" + "\xa0" +
-    // "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
-    // '</span>' + "</p>" + "</div>" +
-
-    // "<div class=\"label-emo-body\" style=\"font-size:0.7em\"" + ">" +
-    // // "<p style=\"font-size:0.7em;\">" + "Negative" + "</p>" +
-    // "Negative" +
-    // "<p>" + '<span class="label-emo-button" id="span_id_negative" >' +
-    // "<i class=" + "\"fas fa-thumbs-down fa-2x label_icons\"" + "></i>" + "\xa0" +
-    // "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" +
-    // '</span>' + "</p>" + "</div>";
 
     labelcolumn6Div.innerHTML = divCaption
     if (labelElement)
@@ -441,9 +438,9 @@ function draw_view(json) {
             var divIdeaName =
                 "<div class=\"idea-Name\" " + "\">" +
                 //'<div  class="btn btn-primary btn-block ideaName" id="' + proposal_names[i].idea_id + '">' + proposal_names[i].idea_name + "</div>";
-                //'<div  class="ideaName" id="' + proposal_names[i].idea_id + '">' + '<p class="search_enable" style="margin:0px 0px 0px 0px; word-wrap:break-word; text-align: left">' + proposal_names[i].idea_name + "</p></div>";
+                // '<div  class="ideaName" id="' + proposal_names[i].idea_id + '">' + '<p class="search_enable" style="margin:0px 0px 0px 0px; word-wrap:break-word; text-align: left">' + proposal_names[i].idea_name + "</p></div>";
                 '<div class= "idea-Name-inside" style=\"width:100%; height:100%\" ><span class="badge badge-warning ideaName" id="' + proposal_names[i].idea_id + '" data-toggle="tooltip" data-placement="bottom">' + proposal_names[i].idea_name + '</span>' +
-                '<div style=\"width:50%; height:100%;margin-left:5px;margin-top:2px\" class="lines_button" id="lines_' + proposal_names[i].idea_id + "\"" + '</div>' +
+                // '<div style=\"width:50%; height:100%;margin-left:5px;margin-top:2px\" class="lines_button" id="lines_' + proposal_names[i].idea_id + "\"" + '</div>' +
                 '</div>';
         } else {
             var sentence_length = 0;
@@ -453,7 +450,7 @@ function draw_view(json) {
                 sentence_length += all_words[x].length
                 //console.log(sentence_length, all_words[x])
                 if (column1) {
-                    if (sentence_length > column1.clientWidth / 15) {
+                    if (sentence_length > column1.clientWidth / 10) {
                         sentence += "..."
                         break;
                     } else {
@@ -464,23 +461,34 @@ function draw_view(json) {
 
             var divIdeaName =
                 "<div class=\"idea-Name\"" + "\">" +
-                //'<div  class="btn btn-primary btn-block ideaName" id="' + proposal_names[i].idea_id + '">' + proposal_names[i].idea_name + "</div>";
+                // '<div  class="btn btn-primary btn-block ideaName" id="' + proposal_names[i].idea_id + '">' + proposal_names[i].idea_name + "</div>";
                 '<div class= "idea-Name-inside" style=\"width:100%; height:100%;\" ><span class="badge badge-warning ideaName" id="' + proposal_names[i].idea_id + '" data-toggle="tooltip" data-placement="bottom">' + sentence + '</span>' +
-                '<div style=\"width:50%; height:100%;margin-left:5px;margin-top:2px\" class="lines_button" id="lines_' + proposal_names[i].idea_id + "\"" + '</div>' +
+                // '<div style=\"width:50%; height:100%;margin-left:5px;margin-top:2px\" class="lines_button" id="lines_' + proposal_names[i].idea_id + "\"" + '</div>' +
                 '</div>';
         }
         if (column1) {
             column1.innerHTML = divIdeaName
             column1.setAttribute("title", proposal_names[i].idea_name)
+            // line_inline_draw(('lines_' + proposal_names[i].idea_id), ('lines_' + proposal_names[i].idea_id), svg_lines_id, proposal_wise_dates)
+        }
+
+        //============================end of column 1==================/
+
+
+        // column with all proposal lines
+        var svg_lines_id = "svg_lines_" + proposal_names[i].idea_id;
+        var column2 = document.getElementById("row" + i + "-column2")
+        var divIdeaName =
+                '<div style=\"width:100%; height:100%;margin-left:5px;margin-top:2px\" class="lines_button" id="lines_' + proposal_names[i].idea_id + "\"" + '</div>';
+        if (column2) {
+            column2.innerHTML = divIdeaName
+            // column2.setAttribute("title", proposal_names[i].idea_name)
             line_inline_draw(('lines_' + proposal_names[i].idea_id), ('lines_' + proposal_names[i].idea_id), svg_lines_id, proposal_wise_dates)
         }
 
-        //============================end of column 1==================//
-
-
         // column with proposal wise stats
         var divTopicName = "<div class=\"info-body\"" + "\">"
-        var column2 = document.getElementById("row" + i + "-column2")
+        var column3 = document.getElementById("row" + i + "-column3")
         //console.log(proposal_wise_topic_agg)
 
         var buttons = "<div class='participantInfoColumn'>" + "\xa0" +
@@ -496,8 +504,8 @@ function draw_view(json) {
             '</span>' +
             "</div>";
 
-        if (column2)
-            column2.innerHTML = buttons
+        if (column3)
+            column3.innerHTML = buttons
 
 
         //============================ column 3 =========================//
@@ -506,13 +514,13 @@ function draw_view(json) {
 
         // column with proposal wise topics
         var divTopicName = "<div class=\"topic-body\"" + "\">"
-        var column3 = document.getElementById("row" + i + "-column3")
+        var column4 = document.getElementById("row" + i + "-column4")
         //console.log(proposal_wise_topic_agg)
         for (var j = 0; j < proposal_wise_topic_agg[i].length; j++) {
             topic_row_length += proposal_wise_topic_agg[i][j].topic_keyphrase.length
             //console.log(proposal_wise_topic_agg[i][j].topic_keyphrase, topic_row_length)
-            if (column3) {
-                if (topic_row_length > column3.clientWidth / 11) {
+            if (column4) {
+                if (topic_row_length > column4.clientWidth / 11) {
                     break;
                 } else {
                     divTopicName = divTopicName +
@@ -538,8 +546,8 @@ function draw_view(json) {
 
         divTopicName = divTopicName + '</select>' + '</div>' + '</div>';
 
-        if (column3)
-            column3.innerHTML = divTopicName
+        if (column4)
+            column4.innerHTML = divTopicName
 
         //============================ column 3 end =====================//
 
@@ -2221,8 +2229,10 @@ function draw_view(json) {
     $(document).ready(function () {
         $('.label-info-button').click(function () {
             var id = $(this).attr('id');
-            // console.log("inside iconClick", id)
+            console.log("inside iconClick", id)
             this_info = "num_of_" + id.split("_")[2]
+
+            console.log(sort_opt)
 
             // if (id.split("_")[2] == current_sort) {
             //     current_sort = "";
@@ -2259,12 +2269,14 @@ function draw_view(json) {
 
                 var copy_json = JSON.parse(JSON.stringify(raw_json))
 
+                prop_json = copy_json;
+                draw_view(prop_json)
+
                 // copy_json["ideas"].sort((function (a, b) {
                 //     //     console.log(parseFloat(a[this_info]) - parseFloat(b[this_info]))
                 //     return parseFloat(a[this_info]) - parseFloat(b[this_info])
                 // }))
 
-                draw_view(copy_json)
                 document.getElementById("box_header").innerHTML = "Click on a Proposal, Topic or Emotion to see related comments";
 
                 var myNode = document.getElementById("parentBox");
@@ -2272,14 +2284,14 @@ function draw_view(json) {
                     myNode.removeChild(myNode.firstChild);
                 }
 
-                //console.log(selected_sort)
+                // console.log(current_sort)
                 for (var i = 0; i < selected_sort.length; i++) {
                     document.getElementById("span_id_" + selected_sort[i]).setAttribute("style", "opacity:0.8")
                     // console.log("span_id_"+selected_sort[i])
                 }
 
                 if (id == "span_id_comments") {
-                    var labelColumn2Div = document.getElementById("labelcolumn2")
+                    var labelColumn3Div = document.getElementById("labelcolumn3")
 
                     var divCaption =
                         "<div class=\"label-body\"" + "\">" +
@@ -2300,7 +2312,7 @@ function draw_view(json) {
 
                     labelColumn2Div.innerHTML = divCaption
                 } else if (id == "span_id_participants") {
-                    var labelColumn2Div = document.getElementById("labelcolumn2")
+                    var labelColumn3Div = document.getElementById("labelcolumn3")
 
                     var divCaption =
                         "<div class=\"label-body\"" + "\">" +
@@ -2319,7 +2331,7 @@ function draw_view(json) {
                     // "<div class=\"label-title-body\"" + ">" + "</p>" + "</div>"
                     //    "<p style=\"margin: 5px 0px 5px 0px;font-size:3em;color:#337AB7\"" + ">" + "78\xa0" + "</p>" + "</div>";
 
-                    labelColumn2Div.innerHTML = divCaption
+                    labelColumn3Div.innerHTML = divCaption
                 }
 
                 document.getElementById(id).setAttribute("style", "opacity:0.8");
@@ -2329,7 +2341,6 @@ function draw_view(json) {
                 $("#" + id).children().css("opacity", "0.8");
                 selected_rows = Array.apply(null, Array(36));
                 prop_json = copy_json;
-
                 sort_opt = 0;
 
             } else if (sort_opt == 0) {
@@ -2348,7 +2359,9 @@ function draw_view(json) {
                     return parseFloat(b[this_info]) - parseFloat(a[this_info])
                 }))
 
-                draw_view(copy_json)
+                prop_json = copy_json;
+                draw_view(prop_json)
+
                 document.getElementById("box_header").innerHTML = "Sorted by number of " + id.split("_")[2] + " in descending order";
 
                 var myNode = document.getElementById("parentBox");
@@ -2363,7 +2376,7 @@ function draw_view(json) {
                 }
 
                 if (id == "span_id_comments") {
-                    var labelColumn2Div = document.getElementById("labelcolumn2")
+                    var labelColumn3Div = document.getElementById("labelcolumn3")
 
                     var divCaption =
                         "<div class=\"label-body\"" + "\">" +
@@ -2382,9 +2395,9 @@ function draw_view(json) {
                     // "<div class=\"label-title-body\"" + ">" + "</p>" + "</div>"
                     //    "<p style=\"margin: 5px 0px 5px 0px;font-size:3em;color:#337AB7\"" + ">" + "78\xa0" + "</p>" + "</div>";
 
-                    labelColumn2Div.innerHTML = divCaption
+                    labelColumn3Div.innerHTML = divCaption
                 } else if (id == "span_id_participants") {
-                    var labelColumn2Div = document.getElementById("labelcolumn2")
+                    var labelColumn3Div = document.getElementById("labelcolumn3")
 
                     var divCaption =
                         "<div class=\"label-body\"" + "\">" +
@@ -2403,7 +2416,7 @@ function draw_view(json) {
                     // "<div class=\"label-title-body\"" + ">" + "</p>" + "</div>"
                     //    "<p style=\"margin: 5px 0px 5px 0px;font-size:3em;color:#337AB7\"" + ">" + "78\xa0" + "</p>" + "</div>";
 
-                    labelColumn2Div.innerHTML = divCaption
+                    labelColumn3Div.innerHTML = divCaption
                 }
 
                 document.getElementById(id).setAttribute("style", "opacity:1.0");
@@ -2413,6 +2426,7 @@ function draw_view(json) {
                 $("#" + id).children().css("opacity", "1.0");
                 selected_rows = Array.apply(null, Array(36));
                 prop_json = copy_json;
+                // draw_view(prop_json)
 
                 sort_opt = 1;
 
@@ -2435,7 +2449,9 @@ function draw_view(json) {
                     return parseFloat(a[this_info]) - parseFloat(b[this_info])
                 }))
 
-                draw_view(copy_json)
+                prop_json = copy_json;
+                draw_view(prop_json)
+
                 document.getElementById("box_header").innerHTML = "Sorted by number of " + id.split("_")[2] + " in ascending order";
 
                 var myNode = document.getElementById("parentBox");
@@ -2450,7 +2466,7 @@ function draw_view(json) {
                 }
 
                 if (id == "span_id_comments") {
-                    var labelColumn2Div = document.getElementById("labelcolumn2")
+                    var labelColumn3Div = document.getElementById("labelcolumn3")
 
                     var divCaption =
                         "<div class=\"label-body\"" + "\">" +
@@ -2469,11 +2485,11 @@ function draw_view(json) {
                     // "<div class=\"label-title-body\"" + ">" + "</p>" + "</div>"
                     //    "<p style=\"margin: 5px 0px 5px 0px;font-size:3em;color:#337AB7\"" + ">" + "78\xa0" + "</p>" + "</div>";
 
-                    labelColumn2Div.innerHTML = divCaption
+                    labelColumn3Div.innerHTML = divCaption
                 }
 
                 if (id == "span_id_participants") {
-                    var labelColumn2Div = document.getElementById("labelcolumn2")
+                    var labelColumn3Div = document.getElementById("labelcolumn3")
 
                     var divCaption =
                         "<div class=\"label-body\"" + "\">" +
@@ -2492,7 +2508,7 @@ function draw_view(json) {
                     // "<div class=\"label-title-body\"" + ">" + "</p>" + "</div>"
                     //    "<p style=\"margin: 5px 0px 5px 0px;font-size:3em;color:#337AB7\"" + ">" + "78\xa0" + "</p>" + "</div>";
 
-                    labelColumn2Div.innerHTML = divCaption
+                    labelColumn3Div.innerHTML = divCaption
                 }
 
                 document.getElementById(id).setAttribute("style", "opacity:1.0");
@@ -2601,6 +2617,8 @@ function draw_view(json) {
             // }
 
             var id = $(this).attr('id');
+            var id_input = id.split('_')[1]
+            document.getElementById("all_topics_" + id_input).selectedIndex = 0;
             show_topics(id, false)
             $("#parentBox").animate({
                 scrollTop: 0
@@ -2723,7 +2741,7 @@ function draw_view(json) {
 
     //             var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(prop_json)), filterobj)
     //             // console.log(filtered_comment, idea_id)
-    //             draw_line(filtered_comment, line_data, idea_id)
+    //             // draw_line(filtered_comment, line_data, idea_id)
     //         }
     //     });
     // });
@@ -2876,8 +2894,6 @@ function line_inline_draw(divid, id, svg_id, proposal_wise_dates) {
         .attr('d', line);
 }
 
-
-
 function draw_line(filtered_comment, line_data) {
     // console.log('draw filter comment', filtered_comment, json);
     var myNode = document.getElementById("parentBox");
@@ -2947,8 +2963,6 @@ var tooltip_text = ""
 
 function draw_line_in_header(line_data, divid, svg_id) {
 
-    console.log("made id")
-
     var mainDiv = "#" + divid;
     var column = document.getElementById(divid)
 
@@ -2966,7 +2980,7 @@ function draw_line_in_header(line_data, divid, svg_id) {
     var width = column.clientWidth - margin.left - margin.right - 3
     var height = column.clientHeight - margin.top - margin.bottom - 3
 
-    console.log(column)
+    // console.log(column)
 
     var parseTime = d3.timeParse("%m/%d/%Y");
 
@@ -2988,7 +3002,7 @@ function draw_line_in_header(line_data, divid, svg_id) {
 
     states = JSON.parse(JSON.stringify(line_data))
 
-    console.log(states)
+    // console.log(states)
 
     // format the data
     states[0].history.forEach(function (d) {
@@ -3045,7 +3059,6 @@ function draw_line_in_header(line_data, divid, svg_id) {
         // .attr('style', 'z-index:500')
         .on('mousemove', drawTooltip)
         .on('mouseout', removeTooltip);
-
 }
 
 // function cloudTippy(cloud_id) {
@@ -3193,17 +3206,18 @@ function show_topics(id, drop) {
 
         new_view = JSON.parse(JSON.stringify(prop_json))
         draw_filtered_comments(filtered_comment, new_view)
-        if (drop == false) {
+        if (drop == false && document.getElementById(id + "_id")) {
             document.getElementById(id + "_id").setAttribute("style", "background-color:#3DAADD")
         }
         // document.getElementById(selected_row).setAttribute("style", "background-color:#3DAADD")
-        if (prev_topic && drop == false) {
+        if (prev_topic && drop == false && document.getElementById(prev_topic + "_id")) {
             document.getElementById(prev_topic + "_id").setAttribute("style", "background-color:none")
         }
 
         divMove();
         prev_topic = id;
         prev_row = split_str[1];
+
     } else {
         if (!selected_row)
             filterobj.idea_id = null
@@ -3789,8 +3803,14 @@ $(document).on('change', '.topic_down', function () {
     }
 
     topic_parameter = "topic_" + id_input + "_" + topic
-    // console.log(topic_parameter)
+    console.log(topic_parameter)
 
+    if(prev_topic && document.getElementById(prev_topic + "_id"))
+        document.getElementById(prev_topic + "_id").setAttribute("style", "background-color:none")
+
+    selected_topic = ""
+    prev_topic = ""
+    
     show_topics(topic_parameter, true)
     $("#parentBox").animate({
         scrollTop: 0
