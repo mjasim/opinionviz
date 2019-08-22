@@ -106,7 +106,7 @@ function draw_proposal_wise_comments(json, idea_id) {
 
 // Get filtered comments
 function get_filtered_comment(json, filterobj) {
-    // console.log("get filtered comment", filterobj)
+    // console.log("get filtered comment", filterobj, json)
     var ideas = []
     for (var i in json["ideas"]) {
         if (filterobj.idea_id != null && json.ideas[i].id != filterobj.idea_id) {
@@ -135,6 +135,10 @@ function get_filtered_comment(json, filterobj) {
                 // if (flag && filterobj.topic != null && !checkKeyphrase(topicFilter, json.ideas[i].tasks[j].comments[k].findTopicLabels)) {
                 //     flag = false
                 // }
+
+                if(flag && filterobj.date && json.ideas[i].tasks[j].comments[k].post_time.split(' ')[0] != filterobj.date){
+                    flag = false
+                }
 
                 if (flag && filterobj.topic != null) {
                     for (var l = 0; l < filterobj.topic.length; l++) {
@@ -187,7 +191,7 @@ function get_filtered_comment(json, filterobj) {
 }
 
 function draw_line_calc(idea_id, svg_id, proposal_wise_dates, prop_json) {
-    // console.log("here here", idea_id, svg_id, proposal_wise_dates)
+    // console.log("here here", idea_id, proposal_wise_dates)
 
     date_history = []
 
@@ -199,7 +203,6 @@ function draw_line_calc(idea_id, svg_id, proposal_wise_dates, prop_json) {
 
     for (var t in proposal_wise_dates) {
         if (proposal_wise_dates[t].id == idea_id) {
-            // console.log(idea_id)
 
             for (var i in proposal_wise_dates[t].dates) {
                 c_excited = 0, c_happy = 0, c_neutral = 0, c_concerned = 0, c_angry = 0;
@@ -259,12 +262,14 @@ function draw_line_calc(idea_id, svg_id, proposal_wise_dates, prop_json) {
 
     divid = "headerlines_" + idea_id
 
+    console.log(line_data)
+
     // filterobj.idea_id = idea_id
     // filterobj.emotion = null
     // filterobj.topic = null
     // filterobj.tasks = null
 
-    var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(prop_json)), filterobj)
+    // var filtered_comment = get_filtered_comment(JSON.parse(JSON.stringify(prop_json)), filterobj)
     // console.log(filtered_comment, idea_id)
 
     draw_line_in_header(line_data, divid, svg_id)
@@ -337,6 +342,8 @@ function draw_filtered_comments(filtered_comment, json) {
         divIdea[i].innerHTML = divIdeaHTML;
         var element = document.getElementById("parentBox")
         element.appendChild(divIdea[i])
+
+        // console.log(proposal_wise_dates)
 
         draw_line_calc(filtered_comment.ideas[i].id, svg_lines_id, proposal_wise_dates, JSON.parse(JSON.stringify(json)))
 

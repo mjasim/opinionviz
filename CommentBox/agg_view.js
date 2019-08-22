@@ -4,7 +4,7 @@ var filterobj = {
     idea_id: null,
     task_id: null,
     topic: [],
-    // cloudkey: null
+    date: null
 }
 
 // selected_cloud = "";
@@ -197,9 +197,9 @@ function draw_view(json) {
         "<p style=\"margin: 5px 0px 5px 0px;font-size:1em;text-align:left\"" + ">" + "\xa0" + "</p>" + "</div>" +
         "<div class=\"label-line-body\" style=\"font-size:0.7em\"" + ">" +
         "Timeline" +
-        "<p title=\"Sort the proposals by the duration of the discussion\"" + ">" + '<span class="label-info-button" id="span_id_participants" >' +
+        "<p title=\"Sort the proposals by the duration of the discussion\"" + ">" + '<span class="label-lines-button" id="span_id_lines" >' +
         "<i class=" + "\"fas fa-chart-line fa-2x label_icons\"" + "></i>" + "\xa0" +
-        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>" 
+        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>"
 
     labelColumn2Div.innerHTML = divCaption
     if (labelElement)
@@ -479,7 +479,7 @@ function draw_view(json) {
         var svg_lines_id = "svg_lines_" + proposal_names[i].idea_id;
         var column2 = document.getElementById("row" + i + "-column2")
         var divIdeaName =
-                '<div style=\"width:100%; height:100%;margin-left:5px;margin-top:2px\" class="lines_button" id="lines_' + proposal_names[i].idea_id + "\"" + '</div>';
+            '<div style=\"width:100%; height:100%;margin-left:5px;margin-top:2px\" class="lines_button" id="lines_' + proposal_names[i].idea_id + "\"" + '</div>';
         if (column2) {
             column2.innerHTML = divIdeaName
             // column2.setAttribute("title", proposal_names[i].idea_name)
@@ -2234,30 +2234,6 @@ function draw_view(json) {
 
             console.log(sort_opt)
 
-            // if (id.split("_")[2] == current_sort) {
-            //     current_sort = "";
-            //     selected_rows = Array.apply(null, Array(36));
-            //     console.log(raw_json)
-            //     draw_view(raw_json)
-            //     prop_json = raw_json;
-
-            //     for (var i = 0; i < selected_sort.length; i++) {
-            //         document.getElementById("span_id_" + selected_sort[i]).setAttribute("style", "opacity:0.8")
-            //         // console.log("span_id_"+selected_sort[i])
-            //     }
-            //     logInteraction('click, sortby, ' + id.split("_")[2]);
-            //     selected_rows = Array.apply(null, Array(36));
-
-            //     document.getElementById("box_header").innerHTML = "";
-
-            //     selected_rows_stack = [];
-
-            //     var myNode = document.getElementById("parentBox");
-            //     while (myNode.firstChild) {
-            //         myNode.removeChild(myNode.firstChild);
-            //     }
-            // }
-
             if (sort_opt == 2) {
                 logInteraction('click, sortby, ' + id.split("_")[2]);
 
@@ -2271,11 +2247,6 @@ function draw_view(json) {
 
                 prop_json = copy_json;
                 draw_view(prop_json)
-
-                // copy_json["ideas"].sort((function (a, b) {
-                //     //     console.log(parseFloat(a[this_info]) - parseFloat(b[this_info]))
-                //     return parseFloat(a[this_info]) - parseFloat(b[this_info])
-                // }))
 
                 document.getElementById("box_header").innerHTML = "Click on a Proposal, Topic or Emotion to see related comments";
 
@@ -2310,7 +2281,7 @@ function draw_view(json) {
                     // "<div class=\"label-title-body\"" + ">" + "</p>" + "</div>"
                     //    "<p style=\"margin: 5px 0px 5px 0px;font-size:3em;color:#337AB7\"" + ">" + "78\xa0" + "</p>" + "</div>";
 
-                    labelColumn2Div.innerHTML = divCaption
+                    labelColumn3Div.innerHTML = divCaption
                 } else if (id == "span_id_participants") {
                     var labelColumn3Div = document.getElementById("labelcolumn3")
 
@@ -2568,7 +2539,7 @@ function draw_view(json) {
                 }
 
                 document.getElementById(id).setAttribute("style", "background-color:none")
-                draw_view(json)
+                // draw_view(json)
                 divMove();
                 selected_row = ""
                 prev_row = ""
@@ -2594,6 +2565,187 @@ function draw_view(json) {
             }, 1000);
         });
     });
+
+    // On click for sort icons by lines
+    $(document).ready(function () {
+        $('.label-lines-button').click(function () {
+            var id = $(this).attr('id');
+            console.log("inside iconClick", id)
+            this_info = "duration"
+
+            console.log(sort_opt)
+
+            if (sort_opt == 2) {
+                logInteraction('click, sortby, ' + id.split("_")[2]);
+
+                current_sort = id.split("_")[2];
+
+                var copy_json = JSON.parse(JSON.stringify(raw_json))
+
+                prop_json = copy_json;
+                draw_view(prop_json)
+
+                document.getElementById("box_header").innerHTML = "Click on a Proposal, Topic or Emotion to see related comments";
+
+                var myNode = document.getElementById("parentBox");
+                while (myNode.firstChild) {
+                    myNode.removeChild(myNode.firstChild);
+                }
+
+                // console.log(current_sort)
+                for (var i = 0; i < selected_sort.length; i++) {
+                    document.getElementById("span_id_" + selected_sort[i]).setAttribute("style", "opacity:0.8")
+                    // console.log("span_id_"+selected_sort[i])
+                }
+
+                if (id == "span_id_lines") {
+
+                    var labelColumn2Div = document.getElementById("labelcolumn2")
+                
+                    var divCaption =
+                        "<div class=\"label-body\"" + "\">" +
+                        "<div class=\"label-title\"" + ">" +
+                        "<p style=\"margin: 5px 0px 5px 0px;font-size:1em;text-align:left\"" + ">" + "\xa0" + "</p>" + "</div>" +
+                        "<div class=\"label-line-body\" style=\"font-size:0.7em\"" + ">" +
+                        "Timeline" +
+                        "<p title=\"Sort the proposals by the duration of the discussion\"" + ">" + '<span class="label-lines-button" id="span_id_lines" >' +
+                        "<i class=" + "\"fas fa-chart-line fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-down fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>"
+                
+                    labelColumn2Div.innerHTML = divCaption
+                }
+
+                document.getElementById(id).setAttribute("style", "opacity:0.8");
+
+                // console.log(id)
+
+                $("#" + id).children().css("opacity", "0.8");
+                selected_rows = Array.apply(null, Array(36));
+                prop_json = copy_json;
+                sort_opt = 0;
+
+            } else if (sort_opt == 0) {
+                logInteraction('click, sortby, ' + id.split("_")[2]);
+
+
+                this_info = "duration"
+
+                current_sort = id.split("_")[2];
+
+                var copy_json = JSON.parse(JSON.stringify(raw_json))
+
+                copy_json["ideas"].sort((function (a, b) {
+                    //     console.log(parseFloat(a[this_info]) - parseFloat(b[this_info]))
+                    return parseFloat(b[this_info]) - parseFloat(a[this_info])
+                }))
+
+                prop_json = copy_json;
+                draw_view(prop_json)
+
+                document.getElementById("box_header").innerHTML = "Sorted by duration of discusssion in descending order";
+
+                var myNode = document.getElementById("parentBox");
+                while (myNode.firstChild) {
+                    myNode.removeChild(myNode.firstChild);
+                }
+
+                //console.log(selected_sort)
+                for (var i = 0; i < selected_sort.length; i++) {
+                    document.getElementById("span_id_" + selected_sort[i]).setAttribute("style", "opacity:0.8")
+                    // console.log("span_id_"+selected_sort[i])
+                }
+
+                if (id == "span_id_lines") {
+
+                    var labelColumn2Div = document.getElementById("labelcolumn2")
+                
+                    var divCaption =
+                        "<div class=\"label-body\"" + "\">" +
+                        "<div class=\"label-title\"" + ">" +
+                        "<p style=\"margin: 5px 0px 5px 0px;font-size:1em;text-align:left\"" + ">" + "\xa0" + "</p>" + "</div>" +
+                        "<div class=\"label-line-body\" style=\"font-size:0.7em\"" + ">" +
+                        "Timeline" +
+                        "<p title=\"Sort the proposals by the duration of the discussion\"" + ">" + '<span class="label-lines-button" id="span_id_lines" >' +
+                        "<i class=" + "\"fas fa-chart-line fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-sort-amount-up fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>"
+                
+                    labelColumn2Div.innerHTML = divCaption
+                }
+
+                document.getElementById(id).setAttribute("style", "opacity:1.0");
+
+                // console.log(id)
+
+                $("#" + id).children().css("opacity", "1.0");
+                selected_rows = Array.apply(null, Array(36));
+                prop_json = copy_json;
+                // draw_view(prop_json)
+
+                sort_opt = 1;
+
+            } else if (sort_opt == 1) {
+
+                // console.log("double")
+
+                logInteraction('click, sortby, ' + id.split("_")[2]);
+
+                this_info = "duration"
+
+                current_sort = id.split("_")[2];
+
+                var copy_json = JSON.parse(JSON.stringify(raw_json))
+
+                copy_json["ideas"].sort((function (a, b) {
+                    //     console.log(parseFloat(a[this_info]) - parseFloat(b[this_info]))
+                    return parseFloat(a[this_info]) - parseFloat(b[this_info])
+                }))
+
+                prop_json = copy_json;
+                draw_view(prop_json)
+
+                document.getElementById("box_header").innerHTML = "Sorted by duration of discussion in ascending order";
+
+                var myNode = document.getElementById("parentBox");
+                while (myNode.firstChild) {
+                    myNode.removeChild(myNode.firstChild);
+                }
+
+                //console.log(selected_sort)
+                for (var i = 0; i < selected_sort.length; i++) {
+                    document.getElementById("span_id_" + selected_sort[i]).setAttribute("style", "opacity:0.8")
+                    // console.log("span_id_"+selected_sort[i])
+                }
+
+                if (id == "span_id_lines") {
+
+                    var labelColumn2Div = document.getElementById("labelcolumn2")
+                
+                    var divCaption =
+                        "<div class=\"label-body\"" + "\">" +
+                        "<div class=\"label-title\"" + ">" +
+                        "<p style=\"margin: 5px 0px 5px 0px;font-size:1em;text-align:left\"" + ">" + "\xa0" + "</p>" + "</div>" +
+                        "<div class=\"label-line-body\" style=\"font-size:0.7em\"" + ">" +
+                        "Timeline" +
+                        "<p title=\"Sort the proposals by the duration of the discussion\"" + ">" + '<span class="label-lines-button" id="span_id_lines" >' +
+                        "<i class=" + "\"fas fa-chart-line fa-2x label_icons\"" + "></i>" + "\xa0" +
+                        "<i class=" + "\"fas fa-bars fa-2x label_icons\"" + "></i>" + '</span>' + "</p>" + "</div>"
+                
+                    labelColumn2Div.innerHTML = divCaption
+                }
+
+                document.getElementById(id).setAttribute("style", "opacity:1.0");
+
+                // console.log(id)
+
+                $("#" + id).children().css("opacity", "1.0");
+                selected_rows = Array.apply(null, Array(36));
+                prop_json = copy_json;
+
+                sort_opt = 2;
+            }
+        });
+    });
+
 
     function getAllIndexes(arr, val) {
         var indexes = [],
@@ -2816,8 +2968,19 @@ function line_inline_draw(divid, id, svg_id, proposal_wise_dates) {
     line_data = [{
         "color": "black",
         "maxval": max_val,
+        "duration": 0,
         "history": date_history
     }]
+
+
+    date_min_max = d3.extent(date_history, function (d) {
+        new_date = new Date(d.date);
+        return new_date;
+    });
+
+    const diffTime = Math.abs(date_min_max[1].getTime() - date_min_max[0].getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) * 3;
+    // console.log(diffDays / 3);
 
     var mainDiv = "#" + divid;
     var column = document.getElementById(divid)
@@ -2832,7 +2995,7 @@ function line_inline_draw(divid, id, svg_id, proposal_wise_dates) {
         left: 0,
     };
 
-    var width = column.clientWidth - margin.left - margin.right - 10
+    var width = column.clientWidth - margin.left - margin.right - 90 + diffDays
     var height = column.clientHeight - margin.top - margin.bottom - 10
 
     // console.log(width, height)
@@ -2840,7 +3003,7 @@ function line_inline_draw(divid, id, svg_id, proposal_wise_dates) {
     var parseTime = d3.timeParse("%m/%d/%Y");
 
     // set the ranges
-    x = d3.scaleTime().range([0, column.clientWidth - margin.left - margin.right - 20]);
+    x = d3.scaleTime().range([0, column.clientWidth - margin.left - margin.right - 90 + diffDays]);
     y = d3.scaleLinear().range([column.clientHeight - margin.top - margin.bottom - 20, 0]);
     const line = d3.line().x(d => x(d.date)).y(d => y(d.comments));
 
@@ -2870,7 +3033,7 @@ function line_inline_draw(divid, id, svg_id, proposal_wise_dates) {
     });
 
     x.domain(d3.extent(states[0].history, function (d) {
-        return d.date;
+        return new Date(d.date);
     }));
     y.domain([0, d3.max(states[0].history, function (d) {
         return d.comments;
@@ -2960,8 +3123,11 @@ var states, tipBox;
 var x, y;
 var tooltip, tooltipLine;
 var tooltip_text = ""
+var last_date = null;
 
 function draw_line_in_header(line_data, divid, svg_id) {
+
+    // console.log(line_data)
 
     var mainDiv = "#" + divid;
     var column = document.getElementById(divid)
@@ -2977,16 +3143,16 @@ function draw_line_in_header(line_data, divid, svg_id) {
     // const width = 500 - margin.left - margin.right;
     // const height = 300 - margin.top - margin.bottom;
 
-    var width = column.clientWidth - margin.left - margin.right - 3
-    var height = column.clientHeight - margin.top - margin.bottom - 3
+    var width = column.clientWidth - margin.left - margin.right + 30
+    var height = column.clientHeight - margin.top - margin.bottom + 30
 
-    // console.log(column)
+    // console.log(states)
 
     var parseTime = d3.timeParse("%m/%d/%Y");
 
     // set the ranges
-    x = d3.scaleTime().range([0, column.clientWidth - margin.left - margin.right - 10]);
-    y = d3.scaleLinear().range([column.clientHeight - margin.top - margin.bottom - 10, 0]);
+    x = d3.scaleTime().range([0, column.clientWidth - margin.left - margin.right - 20]);
+    y = d3.scaleLinear().range([column.clientHeight - margin.top - margin.bottom - 0, 0]);
     const line = d3.line().x(d => x(d.date)).y(d => y(d.comments));
 
     var chart = d3.select(mainDiv)
@@ -2995,7 +3161,7 @@ function draw_line_in_header(line_data, divid, svg_id) {
         .attr("height", height)
         .attr("width", width)
         .append("g")
-        .attr('transform', 'translate(' + (margin.left + 5) + ',' + (margin.top + 5) + ')')
+        .attr('transform', 'translate(' + (margin.left + 15) + ',' + (margin.top + 5) + ')')
 
     tooltip = d3.select('#tooltip');
     tooltipLine = chart.append('line');
@@ -3017,12 +3183,12 @@ function draw_line_in_header(line_data, divid, svg_id) {
         return d.comments;
     })]);
 
-    const xAxis = d3.axisBottom(x);
-    const yAxis = d3.axisLeft(y);
-    // chart.append('g')
-    // // .attr('transform', 'translate(' + '25' + ',' + '25' + ')')
-    // chart.append('g').attr('transform', 'translate(' + '0' + ',' + (height - 70) + ')').call(xAxis);
-    // chart.append('g').call(yAxis);
+    const xAxis = d3.axisBottom(x).ticks(3);
+    const yAxis = d3.axisLeft(y).ticks(3);
+    chart.append('g')
+    // .attr('transform', 'translate(' + '25' + ',' + '25' + ')')
+    chart.append('g').attr('transform', 'translate(' + '0' + ',' + (height - 30) + ')').call(xAxis);
+    chart.append('g').call(yAxis);
     // chart.append('text').html('Community reactions over time').attr('x', width / 2 - 150).attr('y', -20);
 
     chart.selectAll()
@@ -3032,7 +3198,7 @@ function draw_line_in_header(line_data, divid, svg_id) {
         .attr('stroke', '#2C485B')
         .attr('stroke-width', 2)
         .datum(d => d.history)
-        .attr('d', line);
+        .attr('d', line)
 
     // chart.selectAll()
     //     .data(states).enter()
@@ -3053,12 +3219,12 @@ function draw_line_in_header(line_data, divid, svg_id) {
     //     .datum(d => d.history)
 
     tipBox = chart.append('rect')
-        .attr('width', column.clientWidth - margin.left - margin.right - 10)
-        .attr('height', column.clientHeight - margin.top - margin.bottom - 10)
+        .attr('width', column.clientWidth - margin.left - margin.right - 20)
+        .attr('height', column.clientHeight - margin.top - margin.bottom - 2)
         .attr('opacity', 0)
-        // .attr('style', 'z-index:500')
         .on('mousemove', drawTooltip)
-        .on('mouseout', removeTooltip);
+        .on('mouseout', removeTooltip)
+        .on('click', line_click);
 }
 
 // function cloudTippy(cloud_id) {
@@ -3805,12 +3971,12 @@ $(document).on('change', '.topic_down', function () {
     topic_parameter = "topic_" + id_input + "_" + topic
     console.log(topic_parameter)
 
-    if(prev_topic && document.getElementById(prev_topic + "_id"))
+    if (prev_topic && document.getElementById(prev_topic + "_id"))
         document.getElementById(prev_topic + "_id").setAttribute("style", "background-color:none")
 
     selected_topic = ""
     prev_topic = ""
-    
+
     show_topics(topic_parameter, true)
     $("#parentBox").animate({
         scrollTop: 0
@@ -3970,4 +4136,23 @@ function drawTooltip() {
                 return tooltip_text
 
         })
+}
+
+function line_click() {
+    this_date = x.invert(d3.mouse(tipBox.node())[0]).toLocaleDateString("en-US");
+    filterobj.idea_id = selected_row
+    filterobj.emotion = null
+    filterobj.topic = []
+    if (states[0].history.find(h => h.date.toLocaleDateString("en-US") == this_date))
+    {
+        filterobj.date = this_date
+        last_date = this_date
+    }
+    else
+        filterobj.date = last_date
+
+    console.log(last_date)
+    date_filtered = get_filtered_comment(JSON.parse(JSON.stringify(prop_json)), filterobj)
+    new_view = JSON.parse(JSON.stringify(prop_json))
+    draw_filtered_comments(date_filtered, new_view)
 }

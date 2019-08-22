@@ -952,6 +952,10 @@ body {
     opacity: 0.8
 }
 
+.label-lines-button{
+    opacity: 0.8
+}
+
 .label-info-button:hover{
   opacity: 1.0;
   cursor:pointer;

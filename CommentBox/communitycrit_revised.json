@@ -6,6 +6,7 @@
             "id": "1",
             "num_of_comments": "36",
             "num_of_commenters": "10",
+            "duration": 26,
             "topic_keyphrases": [
                 {
                     "topic_keyphrase": "Help",
@@ -1049,6 +1050,7 @@
             "id": "2",
             "num_of_comments": "23",
             "num_of_commenters": "9",
+            "duration": 27,
             "topic_keyphrases": [
                 {
                     "topic_keyphrase": "pride",
@@ -1751,6 +1753,7 @@
             "id": "3",
             "num_of_comments": "26",
             "num_of_commenters": "9",
+            "duration": 23,
             "topic_keyphrases": [
                 {
                     "topic_keyphrase": "space",
@@ -2533,6 +2536,7 @@
             "id": "4",
             "num_of_comments": "26",
             "num_of_commenters": "9",
+            "duration": 23,
             "topic_keyphrases": [
                 {
                     "topic_keyphrase": "type",
@@ -3322,6 +3326,7 @@
             "id": "6",
             "num_of_comments": "28",
             "num_of_commenters": "10",
+            "duration": 20,
             "topic_keyphrases": [
                 {
                     "topic_keyphrase": "East Village",
@@ -4144,6 +4149,7 @@
             "id": "10",
             "num_of_comments": "16",
             "num_of_commenters": "8",
+            "duration": 19,
             "topic_keyphrases": [
                 {
                     "topic_keyphrase": "park",
@@ -4651,6 +4657,7 @@
             "id": "14",
             "num_of_comments": "20",
             "num_of_commenters": "7",
+            "duration": 9,
             "topic_keyphrases": [
                 {
                     "topic_keyphrase": "San Diego",
@@ -5249,6 +5256,7 @@
             "id": "15",
             "num_of_comments": "25",
             "num_of_commenters": "11",
+            "duration": 17,
             "topic_keyphrases": [
                 {
                     "topic_keyphrase": "bike path",
@@ -5997,6 +6005,7 @@
             "id": "22",
             "num_of_comments": "34",
             "num_of_commenters": "12",
+            "duration": 9,
             "topic_keyphrases": [
                 {
                     "topic_keyphrase": "East Village",
@@ -6961,6 +6970,7 @@
             "id": "23",
             "num_of_comments": "1",
             "num_of_commenters": "1",
+            "duration": 0,
             "topic_keyphrases": [
                 {
                     "topic_keyphrase": "platforms afford",
@@ -7013,6 +7023,7 @@
             "id": "24",
             "num_of_comments": "21",
             "num_of_commenters": "7",
+            "duration": 10,
             "topic_keyphrases": [
                 {
                     "topic_keyphrase": "safety",
@@ -7643,6 +7654,7 @@
             "id": "25",
             "num_of_comments": "21",
             "num_of_commenters": "8",
+            "duration": 8,
             "topic_keyphrases": [
                 {
                     "topic_keyphrase": "area idea",
@@ -8271,6 +8283,7 @@
             "id": "26",
             "num_of_comments": "7",
             "num_of_commenters": "3",
+            "duration": 8,
             "topic_keyphrases": [
                 {
                     "topic_keyphrase": "Sense",
@@ -8521,6 +8534,7 @@
             "id": "27",
             "num_of_comments": "19",
             "num_of_commenters": "6",
+            "duration": 8,
             "topic_keyphrases": [
                 {
                     "topic_keyphrase": "area",
@@ -9096,6 +9110,7 @@
             "id": "31",
             "num_of_comments": "6",
             "num_of_commenters": "2",
+            "duration": 5,
             "topic_keyphrases": [
                 {
                     "topic_keyphrase": "Dennis",
@@ -9308,6 +9323,7 @@
             "id": "32",
             "num_of_comments": "3",
             "num_of_commenters": "1",
+            "duration": 0,
             "topic_keyphrases": [
                 {
                     "topic_keyphrase": "community decision",
@@ -9428,6 +9444,7 @@
             "id": "33",
             "num_of_comments": "4",
             "num_of_commenters": "2",
+            "duration": 3,
             "topic_keyphrases": [
                 {
                     "topic_keyphrase": "area crime",
@@ -9574,6 +9591,7 @@
             "id": "34",
             "num_of_comments": "5",
             "num_of_commenters": "2",
+            "duration": 3,
             "topic_keyphrases": [
                 {
                     "topic_keyphrase": "pedestrians",
@@ -9752,6 +9770,7 @@
             "id": "35",
             "num_of_comments": "23",
             "num_of_commenters": "7",
+            "duration": 5,
             "topic_keyphrases": [
                 {
                     "topic_keyphrase": "great idea",
